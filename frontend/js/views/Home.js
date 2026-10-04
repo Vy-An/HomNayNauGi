@@ -227,19 +227,36 @@ const Home = {
 
         const renderSlotMachine = () => {
             slotMachineContainer.innerHTML = `
-            <div class="w-full max-w-4xl mx-auto px-2 sm:px-4">
-              <div class="flex items-center justify-center gap-2">
+            <div class="relative w-full min-h-[450px]">
+                <!-- Video Intro Layer -->
+                <div id="gacha-video-layer" class="absolute inset-0 z-50 flex items-center justify-center transition-all duration-1000 cursor-pointer group">
+                    <video id="pachinko-video" class="h-[400px] md:h-[480px] w-auto max-w-full rounded-3xl shadow-2xl object-contain transition-transform duration-[1500ms]" muted playsinline preload="auto">
+                        <source src="./assets/videos/Pachinko.mp4" type="video/mp4">
+                    </video>
+                    <div id="video-overlay-hint" class="absolute inset-0 flex items-center justify-center bg-black/20 group-hover:bg-black/10 transition-colors rounded-3xl">
+                        <div class="bg-primary/90 text-white font-bold px-6 py-3 rounded-full backdrop-blur-md text-lg shadow-lg flex items-center gap-2 transform group-hover:scale-110 transition-transform">
+                            <i class="fa-solid fa-play"></i> Bấm để khởi động
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Actual Gacha UI Layer -->
+                <div id="gacha-ui-layer" class="w-full max-w-4xl mx-auto px-2 sm:px-4 opacity-0 scale-95 pointer-events-none transition-all duration-1000">
+                  <div class="flex items-center justify-center gap-2">
                 <!-- Main Machine Body -->
                 <div class="w-full bg-gradient-to-b from-green-500 via-green-600 to-primary rounded-3xl p-3 sm:p-6 border-4 border-amber-400 shadow-[0_20px_50px_rgba(27,94,32,0.4),0_0_30px_rgba(245,158,11,0.3)] relative overflow-hidden">
                   
                     <div class="relative mb-4 sm:mb-6 rounded-2xl bg-gradient-to-r from-yellow-400 via-amber-300 to-yellow-400 p-1 shadow-md">
                     <div class="bg-white rounded-xl py-3 px-4 flex items-center justify-center border border-yellow-200">
-                        <div class="flex items-center gap-2">
+                        <div class="flex items-center gap-2 flex-1">
                             <i class="fa-solid fa-dice text-2xl text-orange-500"></i>
                             <h2 class="text-sm sm:text-lg md:text-xl font-black tracking-widest text-orange-600 uppercase">
                                 MÁY CHỌN MÓN
                             </h2>
                         </div>
+                        <button id="zoom-out-btn" class="ml-auto flex items-center justify-center w-8 h-8 rounded-full bg-gray-100 hover:bg-gray-200 text-gray-500 transition-colors" title="Thu nhỏ lại">
+                            <i class="fa-solid fa-magnifying-glass-minus"></i>
+                        </button>
                     </div>
                   </div>
 
@@ -273,11 +290,56 @@ const Home = {
                   </span>
                 </div>
               </div>
+              </div>
             </div>
             `;
 
             const spinBtn = document.getElementById('spin-btn');
             if (spinBtn) spinBtn.addEventListener('click', handleSpin);
+
+            const videoLayer = document.getElementById('gacha-video-layer');
+            const pachinkoVideo = document.getElementById('pachinko-video');
+            const uiLayer = document.getElementById('gacha-ui-layer');
+            const videoHint = document.getElementById('video-overlay-hint');
+            const zoomOutBtn = document.getElementById('zoom-out-btn');
+
+            let isZoomedIn = false;
+
+            const showGachaUI = () => {
+                if (!videoLayer || isZoomedIn) return;
+                isZoomedIn = true;
+                videoLayer.classList.add('opacity-0', 'scale-105', 'pointer-events-none');
+                uiLayer.classList.remove('opacity-0', 'scale-95', 'pointer-events-none');
+                uiLayer.classList.add('opacity-100', 'scale-100');
+            };
+
+            const resetToVideo = () => {
+                if (!videoLayer || !isZoomedIn) return;
+                isZoomedIn = false;
+                uiLayer.classList.remove('opacity-100', 'scale-100');
+                uiLayer.classList.add('opacity-0', 'scale-95', 'pointer-events-none');
+                
+                videoLayer.classList.remove('opacity-0', 'scale-105', 'pointer-events-none');
+                
+                if (pachinkoVideo) {
+                    pachinkoVideo.pause();
+                    pachinkoVideo.currentTime = 0;
+                    videoHint.classList.remove('opacity-0');
+                }
+            };
+
+            if (pachinkoVideo) {
+                pachinkoVideo.addEventListener('ended', showGachaUI);
+                videoLayer.addEventListener('click', () => {
+                    if(isZoomedIn) return;
+                    videoHint.classList.add('opacity-0');
+                    pachinkoVideo.play().catch(() => showGachaUI()); // If play fails, just show UI
+                });
+            } else {
+                showGachaUI();
+            }
+
+            if (zoomOutBtn) zoomOutBtn.addEventListener('click', resetToVideo);
 
             const lever = document.getElementById('slot-lever');
             if (lever) {
