@@ -4,18 +4,35 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Hôm Nay Ăn Gì</title>
+    <!-- Google Fonts: Nunito -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="css/style.css">
+    <style>
+        /* Ẩn thanh cuộn dọc và ngang nhưng vẫn cho phép lướt */
+        ::-webkit-scrollbar {
+            display: none;
+        }
+        * {
+            -ms-overflow-style: none;  /* IE and Edge */
+            scrollbar-width: none;  /* Firefox */
+        }
+    </style>
 </head>
-<body>
-    <!-- Thanh điều hướng sẽ được render vào đây bởi Javascript -->
+<body class="bg-background text-text-main font-sans antialiased min-h-screen flex flex-col">
+    <!-- Thanh điều hướng -->
     <div id="navbar-container"></div>
 
-    <!-- Nội dung chính của các trang sẽ thay đổi tại đây -->
-    <main id="app-content">
-        <p style="text-align: center; padding: 20px;">Đang tải nội dung...</p>
+    <!-- Nội dung chính -->
+    <main id="app-content" class="flex-grow">
+        <p class="text-center py-10 text-text-muted">Đang tải nội dung...</p>
     </main>
 
-    <!-- Lưu ý type="module" để dùng được lệnh import/export -->
+    <!-- Footer -->
+    <div id="footer-container"></div>
+
     <script type="module" src="js/app.js"></script>
 </body>
 </html>
