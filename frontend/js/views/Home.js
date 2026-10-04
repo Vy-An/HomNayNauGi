@@ -218,137 +218,43 @@ const Home = {
         const modalContent = document.getElementById('gacha-modal-content');
 
         const generateReelHTML = (reelNum) => `
-            <div class="relative flex-1 h-[160px] md:h-[200px] overflow-hidden bg-[#fbfdf7] rounded-2xl border-2 border-green-200/80 shadow-inner">
-              <div class="absolute inset-x-0 top-0 h-10 bg-gradient-to-b from-[#fbfdf7]/90 via-[#fbfdf7]/50 to-transparent z-20 pointer-events-none"></div>
-              <div class="absolute inset-x-0 bottom-0 h-10 bg-gradient-to-t from-[#fbfdf7]/90 via-[#fbfdf7]/50 to-transparent z-20 pointer-events-none"></div>
+            <div class="relative flex-1 h-full overflow-hidden bg-white rounded-md sm:rounded-xl">
+              <div class="absolute inset-x-0 top-0 h-6 bg-gradient-to-b from-white/95 to-transparent z-20 pointer-events-none"></div>
+              <div class="absolute inset-x-0 bottom-0 h-6 bg-gradient-to-t from-white/95 to-transparent z-20 pointer-events-none"></div>
               <div id="reel-${reelNum}" class="w-full flex flex-col will-change-transform"></div>
             </div>
         `;
 
         const renderSlotMachine = () => {
             slotMachineContainer.innerHTML = `
-            <div class="relative w-full min-h-[450px]">
-                <!-- Video Intro Layer -->
-                <div id="gacha-video-layer" class="absolute inset-0 z-50 flex items-center justify-center transition-all duration-1000 cursor-pointer group">
-                    <video id="pachinko-video" class="h-[400px] md:h-[480px] w-auto max-w-full rounded-3xl shadow-2xl object-contain transition-transform duration-[1500ms]" muted playsinline preload="auto">
-                        <source src="./assets/videos/Pachinko.mp4" type="video/mp4">
-                    </video>
-                    <div id="video-overlay-hint" class="absolute inset-0 flex items-center justify-center bg-black/20 group-hover:bg-black/10 transition-colors rounded-3xl">
-                        <div class="bg-primary/90 text-white font-bold px-6 py-3 rounded-full backdrop-blur-md text-lg shadow-lg flex items-center gap-2 transform group-hover:scale-110 transition-transform">
-                            <i class="fa-solid fa-play"></i> Bấm để khởi động
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Actual Gacha UI Layer -->
-                <div id="gacha-ui-layer" class="w-full max-w-4xl mx-auto px-2 sm:px-4 opacity-0 scale-95 pointer-events-none transition-all duration-1000">
-                  <div class="flex items-center justify-center gap-2">
-                <!-- Main Machine Body -->
-                <div class="w-full bg-gradient-to-b from-green-500 via-green-600 to-primary rounded-3xl p-3 sm:p-6 border-4 border-amber-400 shadow-[0_20px_50px_rgba(27,94,32,0.4),0_0_30px_rgba(245,158,11,0.3)] relative overflow-hidden">
-                  
-                    <div class="relative mb-4 sm:mb-6 rounded-2xl bg-gradient-to-r from-yellow-400 via-amber-300 to-yellow-400 p-1 shadow-md">
-                    <div class="bg-white rounded-xl py-3 px-4 flex items-center justify-center border border-yellow-200">
-                        <div class="flex items-center gap-2 flex-1">
-                            <i class="fa-solid fa-dice text-2xl text-orange-500"></i>
-                            <h2 class="text-sm sm:text-lg md:text-xl font-black tracking-widest text-orange-600 uppercase">
-                                MÁY CHỌN MÓN
-                            </h2>
-                        </div>
-                        <button id="zoom-out-btn" class="ml-auto flex items-center justify-center w-8 h-8 rounded-full bg-gray-100 hover:bg-gray-200 text-gray-500 transition-colors" title="Thu nhỏ lại">
-                            <i class="fa-solid fa-magnifying-glass-minus"></i>
-                        </button>
-                    </div>
-                  </div>
-
-                  <div class="relative bg-[#ebf5e9] rounded-2xl p-2 sm:p-4 border-2 border-green-700/30 shadow-inner">
-                    <div class="absolute inset-x-0 top-1/2 -translate-y-1/2 h-[155px] md:h-[195px] border-y-4 border-orange-400/60 bg-orange-400/10 pointer-events-none z-10 payline-glow rounded-lg shadow-[0_0_15px_rgba(249,115,22,0.2)]"></div>
+            <div class="relative w-full flex justify-center min-h-[400px]">
+                <div class="relative z-50 w-full max-w-lg lg:max-w-xl mx-auto aspect-square bg-[url('/assets/images/gacha-machine-square.jpg')] bg-cover bg-center rounded-3xl overflow-hidden shadow-2xl">
                     
-                    <div class="grid grid-cols-3 gap-2 sm:gap-4 relative z-0">
-                      ${generateReelHTML(1)}
-                      ${generateReelHTML(2)}
-                      ${generateReelHTML(3)}
+                    <!-- Title Overlay -->
+                    <div class="absolute top-[8%] w-full text-center flex flex-col items-center justify-center select-none pointer-events-none z-10">
+                        <h2 class="text-3xl sm:text-4xl md:text-5xl font-black text-transparent bg-clip-text bg-gradient-to-b from-yellow-200 via-yellow-400 to-yellow-600 filter drop-shadow-[0_4px_4px_rgba(0,0,0,0.6)]" style="-webkit-text-stroke: 1px #854d0e;">HÔM NAY ĂN GÌ?</h2>
+                        <p class="text-[9px] sm:text-xs md:text-sm font-bold text-yellow-500 tracking-[0.2em] mt-1 filter drop-shadow-[0_2px_2px_rgba(0,0,0,0.8)]">MENU PRINTER - EDITION</p>
                     </div>
-                  </div>
 
-                  <div class="flex flex-col items-center justify-center mt-6">
-                    <button id="spin-btn" ${isSpinning ? 'disabled' : ''} class="group relative inline-flex items-center justify-center gap-3 px-8 py-4 md:px-12 md:py-5 text-lg md:text-2xl font-black tracking-wider uppercase rounded-2xl transition-all border-b-[6px] ${isSpinning ? 'bg-slate-700 text-slate-400 cursor-not-allowed border-slate-900 border-b-0 translate-y-[6px]' : 'bg-orange-500 text-white hover:bg-orange-400 border-orange-700 active:border-b-0 active:translate-y-[6px] spin-shadow'}">
-                        ${isSpinning ? '<i class="fa-solid fa-fire-burner fa-bounce text-2xl"></i> <span>ĐANG NẤU...</span>' : '<span>QUAY NGAY</span> <i class="fa-solid fa-dice"></i>'}
+                    <!-- The 3 Reels positioned over the image's screen -->
+                    <div class="absolute top-[29.5%] left-[12%] w-[76%] h-[41%] flex gap-[3.5%] items-center justify-between z-10">
+                        ${generateReelHTML(1)}
+                        ${generateReelHTML(2)}
+                        ${generateReelHTML(3)}
+                    </div>
+                    
+                    <!-- Invisible Spin Button Over the image's physical button -->
+                    <button id="spin-btn" class="absolute bottom-[4%] left-[40.5%] w-[19%] h-[19%] rounded-full pointer-events-auto hover:bg-white/20 active:bg-black/20 transition-colors z-20 flex items-center justify-center cursor-pointer" title="Quay Ngay" ${isSpinning ? 'disabled' : ''}>
+                        ${isSpinning ? '<i class="fa-solid fa-spinner fa-spin text-white text-3xl"></i>' : ''}
                     </button>
-                  </div>
+                    
+                    ${isSpinning ? '<div class="absolute inset-0 bg-black/10 pointer-events-auto z-30"></div>' : ''}
                 </div>
-
-                <!-- Slot Physical Lever (Desktop) -->
-                <div id="slot-lever" class="hidden lg:flex flex-col items-center select-none cursor-pointer group" title="Kéo cần gạt để quay!">
-                  <div class="w-8 h-20 bg-gradient-to-r from-zinc-700 via-zinc-800 to-zinc-900 rounded-r-xl border-y-2 border-r-2 border-zinc-600 shadow-xl flex items-center justify-center relative">
-                    <div class="w-5 h-5 rounded-full bg-gradient-to-br from-zinc-300 via-zinc-500 to-zinc-800 border border-zinc-400 shadow-inner"></div>
-                    <div id="lever-arm" class="absolute left-4 bottom-10 w-3 bg-gradient-to-r from-zinc-300 via-slate-100 to-zinc-400 rounded-full origin-bottom transition-all duration-300 shadow-lg h-36 -rotate-12 group-hover:-rotate-6">
-                      <div id="lever-knob" class="absolute -top-5 -left-3 w-9 h-9 rounded-full bg-gradient-to-tr from-red-600 via-rose-500 to-orange-400 border-2 border-yellow-200 shadow-[0_0_15px_rgba(239,68,68,0.7)] transition-transform duration-200 group-hover:scale-110"></div>
-                    </div>
-                  </div>
-                  <span class="text-[11px] font-bold text-amber-400/80 mt-1 uppercase tracking-wider">
-                    KÉO CẦN
-                  </span>
-                </div>
-              </div>
-              </div>
             </div>
             `;
 
             const spinBtn = document.getElementById('spin-btn');
             if (spinBtn) spinBtn.addEventListener('click', handleSpin);
-
-            const videoLayer = document.getElementById('gacha-video-layer');
-            const pachinkoVideo = document.getElementById('pachinko-video');
-            const uiLayer = document.getElementById('gacha-ui-layer');
-            const videoHint = document.getElementById('video-overlay-hint');
-            const zoomOutBtn = document.getElementById('zoom-out-btn');
-
-            let isZoomedIn = false;
-
-            const showGachaUI = () => {
-                if (!videoLayer || isZoomedIn) return;
-                isZoomedIn = true;
-                videoLayer.classList.add('opacity-0', 'scale-105', 'pointer-events-none');
-                uiLayer.classList.remove('opacity-0', 'scale-95', 'pointer-events-none');
-                uiLayer.classList.add('opacity-100', 'scale-100');
-            };
-
-            const resetToVideo = () => {
-                if (!videoLayer || !isZoomedIn) return;
-                isZoomedIn = false;
-                uiLayer.classList.remove('opacity-100', 'scale-100');
-                uiLayer.classList.add('opacity-0', 'scale-95', 'pointer-events-none');
-                
-                videoLayer.classList.remove('opacity-0', 'scale-105', 'pointer-events-none');
-                
-                if (pachinkoVideo) {
-                    pachinkoVideo.pause();
-                    pachinkoVideo.currentTime = 0;
-                    videoHint.classList.remove('opacity-0');
-                }
-            };
-
-            if (pachinkoVideo) {
-                pachinkoVideo.addEventListener('ended', showGachaUI);
-                videoLayer.addEventListener('click', () => {
-                    if(isZoomedIn) return;
-                    videoHint.classList.add('opacity-0');
-                    pachinkoVideo.play().catch(() => showGachaUI()); // If play fails, just show UI
-                });
-            } else {
-                showGachaUI();
-            }
-
-            if (zoomOutBtn) zoomOutBtn.addEventListener('click', resetToVideo);
-
-            const lever = document.getElementById('slot-lever');
-            if (lever) {
-                lever.addEventListener('click', () => {
-                    if (isSpinning) return;
-                    handleLeverAnimation();
-                    handleSpin();
-                });
-            }
         };
 
         const handleLeverAnimation = () => {
@@ -380,8 +286,7 @@ const Home = {
                 `;
             }).join('');
         };
-
-        const showResultModal = (dish) => {
+        const showResultModal = (dish, onBack = null) => {
             const ingredients = dish.ingredients || [
                 '300g gạo tấm', '2 miếng sườn cốt lết', '100g bì heo trộn thính',
                 '1 phần chả trứng hấp', 'Mỡ hành, đồ chua', 'Nước mắm chua ngọt'
@@ -398,48 +303,47 @@ const Home = {
                     <img src="${dish.image}" class="w-full h-full object-cover" />
                     <!-- Close button on image -->
                     <button id="close-modal-x" class="absolute top-4 right-4 w-8 h-8 flex items-center justify-center bg-black/50 hover:bg-black/80 text-white rounded-full backdrop-blur-sm transition z-10">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+                        <i class="fa-solid fa-times"></i>
                     </button>
-                    <!-- Gradient overlay at bottom of image -->
-                    <div class="absolute inset-x-0 bottom-0 h-24 bg-gradient-to-t from-[#f6faeb] to-transparent pointer-events-none"></div>
+                    <!-- Gradient Overlay -->
+                    <div class="absolute inset-0 bg-gradient-to-t from-white via-transparent to-transparent pointer-events-none"></div>
                 </div>
                 
-                <div class="px-6 pb-6 pt-2 overflow-y-auto custom-scrollbar flex-1">
-                    
-                    <!-- Tags -->
+                <div class="p-5 sm:p-8 pt-0 relative z-10 -mt-6">
+                    <!-- Badges -->
                     <div class="flex flex-wrap gap-2 mb-3">
-                        <span class="px-3 py-1 bg-orange-500 text-white text-[10px] sm:text-xs font-bold rounded-full">Món Việt</span>
-                        <span class="px-3 py-1 bg-yellow-800 text-white text-[10px] sm:text-xs font-bold rounded-full">Bữa trưa</span>
-                        <span class="px-3 py-1 bg-green-700 text-white text-[10px] sm:text-xs font-bold rounded-full flex items-center gap-1"><i class="fa-solid fa-fire"></i> 650 kcal</span>
+                        <span class="px-3 py-1 bg-orange-500 text-white text-xs font-bold rounded-full shadow-sm">Món Việt</span>
+                        <span class="px-3 py-1 bg-green-700 text-white text-xs font-bold rounded-full shadow-sm">Bữa trưa</span>
+                        <span class="px-3 py-1 bg-green-500 text-white text-xs font-bold rounded-full shadow-sm flex items-center gap-1"><i class="fa-solid fa-fire text-[10px]"></i> 650 kcal</span>
                     </div>
                     
-                    <h2 class="text-2xl sm:text-3xl font-black text-primary mb-6">${dish.name}</h2>
+                    <h2 class="text-2xl sm:text-3xl font-black text-green-900 mb-6 leading-tight">${dish.name}</h2>
                     
-                    <!-- Nguyên Liệu -->
-                    <div class="mb-6">
-                        <h3 class="text-base font-bold text-orange-600 mb-3 flex items-center gap-2 uppercase tracking-wide">
-                            <i class="fa-solid fa-wand-magic-sparkles text-xl"></i> NGUYÊN LIỆU CHUẨN BỊ
+                    <!-- Ingredients -->
+                    <div class="mb-8">
+                        <h3 class="text-base font-black text-orange-600 mb-4 flex items-center gap-2 uppercase tracking-wide">
+                            <i class="fa-solid fa-wand-magic-sparkles"></i> Nguyên liệu chuẩn bị
                         </h3>
-                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
                             ${ingredients.map(ing => `
-                                <div class="bg-white border border-green-100 rounded-xl p-3 flex items-center gap-3 shadow-sm">
-                                    <div class="w-2 h-2 rounded-full bg-orange-500 flex-shrink-0"></div>
+                                <div class="flex items-center gap-3 bg-white p-3 rounded-xl border border-green-100 shadow-sm">
+                                    <div class="w-2 h-2 rounded-full bg-orange-400"></div>
                                     <span class="text-sm font-medium text-gray-700">${ing}</span>
                                 </div>
                             `).join('')}
                         </div>
                     </div>
                     
-                    <!-- Các Bước Thực Hiện -->
-                    <div class="mb-6">
-                        <h3 class="text-base font-bold text-orange-600 mb-3 flex items-center gap-2 uppercase tracking-wide">
-                            <i class="fa-solid fa-clock text-xl"></i> CÁC BƯỚC THỰC HIỆN
+                    <!-- Steps -->
+                    <div>
+                        <h3 class="text-base font-black text-orange-600 mb-4 flex items-center gap-2 uppercase tracking-wide">
+                            <i class="fa-solid fa-clock"></i> Các bước thực hiện
                         </h3>
-                        <div class="space-y-3">
-                            ${steps.map((step, idx) => `
-                                <div class="bg-white border border-green-100 rounded-2xl p-4 flex gap-3 shadow-sm items-start">
-                                    <div class="w-6 h-6 rounded-full bg-orange-500 text-white text-xs font-bold flex items-center justify-center flex-shrink-0 mt-0.5">
-                                        ${idx + 1}
+                        <div class="space-y-4">
+                            ${steps.map((step, index) => `
+                                <div class="flex gap-4">
+                                    <div class="flex-shrink-0 w-8 h-8 rounded-full bg-green-100 text-green-700 font-black flex items-center justify-center border-2 border-green-200">
+                                        ${index + 1}
                                     </div>
                                     <p class="text-sm text-gray-700 leading-relaxed font-medium">${step}</p>
                                 </div>
@@ -454,7 +358,7 @@ const Home = {
                             <span>Lưu món ăn</span>
                         </button>
                         <button id="close-modal-btn" class="w-full sm:w-auto px-8 py-3 bg-orange-500 hover:bg-orange-600 text-white font-bold rounded-xl transition shadow-md">
-                            Đóng
+                            ${onBack ? '<i class="fa-solid fa-arrow-left mr-2"></i> Quay lại danh sách' : 'Đóng'}
                         </button>
                     </div>
                     
@@ -472,11 +376,94 @@ const Home = {
 
             const closeFn = (e) => {
                 if(e) e.preventDefault();
+                if (onBack) onBack();
+                else hideModal();
+            };
+            const closeXFn = (e) => {
+                if(e) e.preventDefault();
+                hideModal(); // X button always fully closes
+            }
+            
+            // Clean event listeners to prevent duplicates if called multiple times
+            const closeBtn = document.getElementById('close-modal-btn');
+            const closeX = document.getElementById('close-modal-x');
+            const newCloseBtn = closeBtn.cloneNode(true);
+            const newCloseX = closeX.cloneNode(true);
+            closeBtn.parentNode.replaceChild(newCloseBtn, closeBtn);
+            closeX.parentNode.replaceChild(newCloseX, closeX);
+
+            newCloseBtn.addEventListener('click', closeFn);
+            newCloseX.addEventListener('click', closeXFn);
+        };
+
+        const showMultipleResultsModal = (dishes) => {
+            modalContent.innerHTML = `
+                <div class="p-6 bg-white rounded-3xl max-h-[85vh] overflow-y-auto w-full relative">
+                    <div class="flex justify-between items-center mb-6">
+                        <h2 class="text-2xl font-black text-green-900">Thực Đơn Của Bạn (${dishes.length} món)</h2>
+                        <button id="close-modal-x" class="w-8 h-8 flex items-center justify-center bg-gray-100 hover:bg-gray-200 text-gray-600 rounded-full transition">
+                            <i class="fa-solid fa-times"></i>
+                        </button>
+                    </div>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        ${dishes.map((dish, idx) => `
+                            <div class="result-card cursor-pointer border border-green-100 rounded-2xl overflow-hidden shadow-sm hover:shadow-md transition-all duration-300 group bg-green-50/30 hover:bg-white hover:-translate-y-1" data-idx="${idx}">
+                                <div class="h-32 w-full overflow-hidden relative">
+                                    <img src="${dish.image}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+                                    <div class="absolute inset-0 bg-black/10 group-hover:bg-transparent transition-colors"></div>
+                                </div>
+                                <div class="p-4 relative">
+                                    <h3 class="font-bold text-lg text-green-900 group-hover:text-primary transition-colors line-clamp-1 pr-8">${dish.name}</h3>
+                                    <p class="text-sm text-gray-500 mt-1"><i class="fa-regular fa-clock mr-1 text-orange-400"></i> ${dish.time}</p>
+                                    <div class="absolute right-4 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-orange-100 text-orange-500 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+                                        <i class="fa-solid fa-chevron-right"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        `).join('')}
+                    </div>
+                    <div class="mt-6 flex justify-center">
+                        <button id="close-modal-btn" class="px-8 py-3 bg-green-600 hover:bg-green-700 text-white font-bold rounded-xl transition shadow-md w-full sm:w-auto">
+                            Đóng lại
+                        </button>
+                    </div>
+                </div>
+            `;
+            
+            modal.classList.remove('hidden');
+            modal.classList.add('flex', 'opacity-100', 'pointer-events-auto');
+            modal.classList.remove('opacity-0', 'pointer-events-none');
+            setTimeout(() => {
+                modalContent.classList.remove('scale-95');
+                modalContent.classList.add('scale-100');
+            }, 10);
+
+            const closeFn = (e) => {
+                if(e) e.preventDefault();
                 hideModal();
             };
-            document.getElementById('close-modal-btn').addEventListener('click', closeFn);
-            document.getElementById('close-modal-x').addEventListener('click', closeFn);
+            
+            const closeBtn = document.getElementById('close-modal-btn');
+            const closeX = document.getElementById('close-modal-x');
+            const newCloseBtn = closeBtn.cloneNode(true);
+            const newCloseX = closeX.cloneNode(true);
+            closeBtn.parentNode.replaceChild(newCloseBtn, closeBtn);
+            closeX.parentNode.replaceChild(newCloseX, closeX);
+
+            newCloseBtn.addEventListener('click', closeFn);
+            newCloseX.addEventListener('click', closeFn);
+            
+            const cards = modalContent.querySelectorAll('.result-card');
+            cards.forEach(card => {
+                card.addEventListener('click', () => {
+                    const idx = card.getAttribute('data-idx');
+                    showResultModal(dishes[idx], () => {
+                        showMultipleResultsModal(dishes);
+                    });
+                });
+            });
         };
+
 
         const hideModal = () => {
             modal.classList.add('opacity-0', 'pointer-events-none');
@@ -503,14 +490,22 @@ const Home = {
             reel2Items = Array.from({length: 40}, () => dummyFoods[Math.floor(Math.random() * dummyFoods.length)]);
             reel3Items = Array.from({length: 50}, () => dummyFoods[Math.floor(Math.random() * dummyFoods.length)]);
 
-            const resultDish = dummyFoods[Math.floor(Math.random() * dummyFoods.length)];
+            const quantityVal = document.querySelector('input[name="quantity"]:checked')?.value || "1";
+            let numDishes = parseInt(quantityVal);
+            if (numDishes === 3) numDishes = Math.floor(Math.random() * 3) + 3; // 3 to 5
+            
+            const resultDishes = [];
+            for(let i=0; i<numDishes; i++) {
+                resultDishes.push(dummyFoods[Math.floor(Math.random() * dummyFoods.length)]);
+            }
+
             const targetIdx1 = reel1Items.length - 2;
             const targetIdx2 = reel2Items.length - 2;
             const targetIdx3 = reel3Items.length - 2;
 
-            reel1Items[targetIdx1] = resultDish;
-            reel2Items[targetIdx2] = resultDish;
-            reel3Items[targetIdx3] = resultDish;
+            reel1Items[targetIdx1] = resultDishes[0];
+            reel2Items[targetIdx2] = resultDishes[1] || resultDishes[0];
+            reel3Items[targetIdx3] = resultDishes[2] || resultDishes[0];
 
             populateReelContent('reel-1', reel1Items);
             populateReelContent('reel-2', reel2Items);
@@ -557,7 +552,11 @@ const Home = {
                 nr2.style.transition = 'none'; nr2.style.transform = `translateY(-${targetIdx2 * ITEM_HEIGHT}px)`;
                 nr3.style.transition = 'none'; nr3.style.transform = `translateY(-${targetIdx3 * ITEM_HEIGHT}px)`;
 
-                showResultModal(resultDish);
+                if (numDishes === 1) {
+                    showResultModal(resultDishes[0]);
+                } else {
+                    showMultipleResultsModal(resultDishes);
+                }
             }, 2550);
         };
 
