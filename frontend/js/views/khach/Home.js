@@ -1,5 +1,5 @@
-import { fetchAPI } from '../api.js';
-import FoodCard from '../components/FoodCard.js';
+import { fetchAPI } from '../../api.js';
+import FoodCard from '../../components/FoodCard.js';
 
 const dummyFoods = [
     { id: 1, name: 'Thịt Kho Trứng & Canh Chua', image: 'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=60', time: '45 phút', likes: '2.5k', author: { name: 'Mẹ Bông' }, description: 'Mâm cơm truyền thống đậm đà hương vị quê hương, ăn là ghiền.' },
