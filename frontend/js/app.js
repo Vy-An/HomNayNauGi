@@ -1,11 +1,11 @@
 import Navbar from './components/Navbar.js';
 import Footer from './components/Footer.js';
-import Home from './views/Home.js';
-import Admin from './views/Admin.js';
-import FoodList from './views/FoodList.js';
-import FoodDetail from './views/FoodDetail.js';
-import Community from './views/Community.js';
-import Login from './views/Login.js';
+import Home from './views/khach/Home.js';
+import Admin from './views/admin/Admin.js';
+import FoodList from './views/khach/FoodList.js';
+import FoodDetail from './views/khach/FoodDetail.js';
+import Community from './views/khach/Community.js';
+import Login from './views/khach/Login.js';
 
 // Hệ thống Router định tuyến
 const routes = {
@@ -27,6 +27,9 @@ const router = async () => {
     if (path.startsWith('/mon-an/')) {
         page = FoodDetail;
         params = path.split('/')[2]; // Lấy ID
+    } else if (path.startsWith('/admin')) {
+        page = Admin;
+        params = path.split('/')[2] || 'dashboard'; // /admin/users -> users, mặc định là dashboard
     } else {
         page = routes[path] || Home;
     }

@@ -73,11 +73,11 @@ const FoodList = {
                             
                             <!-- Phân trang (Pagination Mockup) -->
                             <div class="flex justify-center gap-2 mt-12">
-                                <button class="w-10 h-10 rounded-lg flex items-center justify-center bg-gray-100 text-gray-500 hover:bg-gray-200 transition">❮</button>
+                                <button class="w-10 h-10 rounded-lg flex items-center justify-center bg-gray-100 text-gray-500 hover:bg-gray-200 transition"><i class="fa-solid fa-chevron-left"></i></button>
                                 <button class="w-10 h-10 rounded-lg flex items-center justify-center bg-primary text-white font-bold shadow-md">1</button>
                                 <button class="w-10 h-10 rounded-lg flex items-center justify-center bg-white border border-gray-200 text-text-main hover:bg-gray-50 transition">2</button>
                                 <button class="w-10 h-10 rounded-lg flex items-center justify-center bg-white border border-gray-200 text-text-main hover:bg-gray-50 transition">3</button>
-                                <button class="w-10 h-10 rounded-lg flex items-center justify-center bg-gray-100 text-gray-500 hover:bg-gray-200 transition">❯</button>
+                                <button class="w-10 h-10 rounded-lg flex items-center justify-center bg-gray-100 text-gray-500 hover:bg-gray-200 transition"><i class="fa-solid fa-chevron-right"></i></button>
                             </div>
                         </div>
                     </div>

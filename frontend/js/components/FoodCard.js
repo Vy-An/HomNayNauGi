@@ -1,4 +1,4 @@
-export default function FoodCard({ id, name, image, time, likes, author }) {
+export default function FoodCard({ id, name, image, time, likes, author, description }) {
     const imageUrl = image || 'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=60';
     const link = `#/mon-an/${id || 1}`;
     
@@ -19,6 +19,7 @@ export default function FoodCard({ id, name, image, time, likes, author }) {
             </div>
             <div class="p-5 flex flex-col flex-grow">
                 <h3 class="font-extrabold text-lg text-text-main mb-2 line-clamp-2 group-hover:text-primary transition-colors leading-tight">${name}</h3>
+                ${description ? `<p class="text-sm text-text-muted mb-4 line-clamp-3">${description}</p>` : ''}
                 
                 <div class="mt-auto">
                     ${author ? `
