@@ -2,9 +2,9 @@ import { fetchAPI } from '../api.js';
 import FoodCard from '../components/FoodCard.js';
 
 const dummyFoods = [
-    { id: 1, name: 'Thịt Kho Trứng & Canh Chua', image: 'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=60', time: '45 phút', likes: '2.5k', author: { name: 'Mẹ Bông' } },
-    { id: 2, name: 'Gà Xào Sả Ớt & Rau Luộc', image: 'https://images.unsplash.com/photo-1604908176997-125f25cc6f3d?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=60', time: '30 phút', likes: '1.1k', author: { name: 'Lan Anh' } },
-    { id: 3, name: 'Bò Xào Lúc Lắc', image: 'https://images.unsplash.com/photo-1555939594-58d7cb561ad1?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=60', time: '20 phút', likes: '3.4k', author: { name: 'Chef Tùng' } }
+    { id: 1, name: 'Thịt Kho Trứng & Canh Chua', image: 'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=60', time: '45 phút', likes: '2.5k', author: { name: 'Mẹ Bông' }, description: 'Mâm cơm truyền thống đậm đà hương vị quê hương, ăn là ghiền.' },
+    { id: 2, name: 'Gà Xào Sả Ớt & Rau Luộc', image: 'https://images.unsplash.com/photo-1604908176997-125f25cc6f3d?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=60', time: '30 phút', likes: '1.1k', author: { name: 'Lan Anh' }, description: 'Món ăn đơn giản, nhanh gọn nhưng cực kỳ đưa cơm cho những ngày bận rộn.' },
+    { id: 3, name: 'Bò Xào Lúc Lắc', image: 'https://images.unsplash.com/photo-1555939594-58d7cb561ad1?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=60', time: '20 phút', likes: '3.4k', author: { name: 'Chef Tùng' }, description: 'Thịt bò mềm mọng, đậm đà gia vị kết hợp cùng rau củ giòn ngọt thanh mát.' }
 ];
 
 const ITEM_HEIGHT = 160;
@@ -15,7 +15,7 @@ const Home = {
         const otherFoods = dummyFoods.slice(1);
         
         const spotlightHTML = `
-            <a href="#/mon-an/${spotlightFood.id}" class="col-span-1 sm:col-span-2 lg:col-span-2 block bg-white rounded-2xl shadow-bento overflow-hidden group cursor-pointer hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 border border-primary-light/20 relative h-[300px] lg:h-full">
+            <a href="#/mon-an/${spotlightFood.id}" class="col-span-1 sm:col-span-2 lg:col-span-1 block bg-white rounded-2xl shadow-bento overflow-hidden group cursor-pointer hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 border border-primary-light/20 relative aspect-square">
                 <!-- Shine Effect -->
                 <div class="absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-white/50 to-transparent group-hover:animate-shine z-20 pointer-events-none"></div>
 
@@ -60,13 +60,12 @@ const Home = {
                 <div class="container mx-auto px-4 lg:px-8 relative z-10 flex flex-col lg:flex-row items-stretch gap-8">
                     
                     <!-- Cột Trái: Máy Gacha (60%) -->
-                    <div class="w-full lg:w-3/5 flex flex-col items-center justify-center bg-card/60 backdrop-blur-xl rounded-2xl p-8 shadow-bento border border-white">
-                        <div class="text-center w-full mb-6">
-                            <h1 class="text-4xl md:text-5xl font-extrabold text-text-main mb-3 drop-shadow-sm leading-tight tracking-tight">Hôm Nay <span class="text-transparent bg-clip-text bg-gradient-to-r from-primary to-accent">Ăn Gì?</span></h1>
-                            <p class="text-text-muted text-base font-medium">Khó chọn món? Quay cỗ máy ẩm thực chọn giúp bạn!</p>
-                        </div>
-                        <!-- Slot Machine Container -->
-                        <div id="slot-machine-container" class="w-full"></div>
+                    <div class="w-full lg:w-3/5 flex flex-col items-center justify-start bg-card/60 backdrop-blur-xl rounded-2xl p-4 lg:p-6 shadow-bento border border-white min-h-[550px] lg:min-h-[650px]">
+                        <!-- Slot Machine Container (Đẩy lên trên cùng) -->
+                        <div id="slot-machine-container" class="w-full flex flex-col justify-start items-center"></div>
+                        
+                        <!-- Results Container (Luôn chừa sẵn không gian cố định ở dưới) -->
+                        <div id="gacha-results-container" class="w-full mt-4 flex gap-4 overflow-x-auto pb-2 scrollbar-hide snap-x items-center justify-center min-h-[160px]"></div>
                     </div>
 
                     <!-- Cột Phải: Bộ Lọc (40%) -->
@@ -82,7 +81,7 @@ const Home = {
                                 <label class="flex items-center gap-2 text-text-main font-bold mb-3 text-sm">
                                     <span class="w-6 h-6 rounded-full bg-primary-subtle text-primary flex items-center justify-center text-xs border border-primary-light/30">1</span> Số lượng
                                 </label>
-                                <div class="grid grid-cols-3 gap-2">
+                                <div class="grid grid-cols-4 gap-2">
                                     <label class="cursor-pointer group">
                                         <input type="radio" name="quantity" value="1" class="peer sr-only" checked>
                                         <div class="text-center py-2.5 rounded-lg border border-gray-100 bg-white peer-checked:bg-primary peer-checked:text-white peer-checked:border-primary peer-checked:shadow-md peer-active:scale-95 peer-checked:scale-105 transition-all duration-300 ease-[cubic-bezier(0.34,1.56,0.64,1)] font-bold text-xs group-hover:border-primary-light">1 món</div>
@@ -93,8 +92,30 @@ const Home = {
                                     </label>
                                     <label class="cursor-pointer group">
                                         <input type="radio" name="quantity" value="3" class="peer sr-only">
-                                        <div class="text-center py-2.5 rounded-lg border border-gray-100 bg-white peer-checked:bg-primary peer-checked:text-white peer-checked:border-primary peer-checked:shadow-md peer-active:scale-95 peer-checked:scale-105 transition-all duration-300 ease-[cubic-bezier(0.34,1.56,0.64,1)] font-bold text-xs group-hover:border-primary-light">3-5 món</div>
+                                        <div class="text-center py-2.5 rounded-lg border border-gray-100 bg-white peer-checked:bg-primary peer-checked:text-white peer-checked:border-primary peer-checked:shadow-md peer-active:scale-95 peer-checked:scale-105 transition-all duration-300 ease-[cubic-bezier(0.34,1.56,0.64,1)] font-bold text-xs group-hover:border-primary-light">3 món</div>
                                     </label>
+                                    
+                                    <!-- Nút thêm số lượng tùy chọn -->
+                                    <div class="relative w-full h-full">
+                                        <label id="custom-qty-label" class="hidden cursor-pointer group w-full h-full">
+                                            <input type="radio" name="quantity" id="custom-qty-radio" value="" class="peer sr-only">
+                                            <div class="text-center flex items-center justify-center py-2.5 rounded-lg border border-gray-100 bg-white peer-checked:bg-primary peer-checked:text-white peer-checked:border-primary peer-checked:shadow-md peer-active:scale-95 peer-checked:scale-105 transition-all duration-300 ease-[cubic-bezier(0.34,1.56,0.64,1)] font-bold text-xs w-full h-full">
+                                                <span id="custom-qty-display"></span>
+                                            </div>
+                                        </label>
+
+                                        <button type="button" id="btn-show-custom-qty" class="w-full h-full text-center py-2.5 rounded-lg border border-gray-100 bg-white hover:bg-gray-50 text-gray-400 hover:text-primary hover:border-primary-light transition-all font-bold text-xs flex items-center justify-center group">
+                                            <i class="fa-solid fa-plus text-base group-hover:scale-110 transition-transform"></i>
+                                        </button>
+                                        
+                                        <!-- Ô nhập (ban đầu ẩn) -->
+                                        <div id="custom-qty-input-wrapper" class="hidden absolute top-0 left-0 w-full h-full bg-white border border-primary rounded-lg items-center overflow-hidden z-20 shadow-sm">
+                                            <input type="number" id="custom-qty-input" min="1" max="50" placeholder="Số" class="w-full h-full text-center text-sm font-bold text-primary focus:outline-none px-1 [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none" style="-moz-appearance: textfield;">
+                                            <button type="button" id="btn-confirm-custom-qty" class="h-full px-2.5 bg-primary text-white hover:bg-primary-hover flex items-center justify-center transition-colors">
+                                                <i class="fa-solid fa-check text-xs"></i>
+                                            </button>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
 
@@ -103,18 +124,38 @@ const Home = {
                                 <label class="flex items-center gap-2 text-text-main font-bold mb-3 text-sm">
                                     <span class="w-6 h-6 rounded-full bg-primary-subtle text-primary flex items-center justify-center text-xs border border-primary-light/30">2</span> Nguyên liệu
                                 </label>
-                                <div class="flex gap-2 overflow-x-auto pb-1 scrollbar-hide snap-x">
+                                <div class="flex gap-2 overflow-x-auto pb-2 scrollbar-hide snap-x">
                                     <label class="cursor-pointer group flex-shrink-0 w-24 snap-start">
-                                        <input type="checkbox" name="ingredients" value="thit" class="peer sr-only" checked>
+                                        <input type="checkbox" name="ingredients" value="thit-heo" class="peer sr-only" checked>
                                         <div class="text-center py-2.5 px-1 rounded-lg border border-gray-100 bg-white peer-checked:bg-red-50 peer-checked:text-red-500 peer-checked:border-red-200 peer-checked:shadow-sm peer-active:scale-95 peer-checked:scale-105 transition-all duration-300 ease-[cubic-bezier(0.34,1.56,0.64,1)] text-xs flex flex-col items-center justify-center gap-1 font-bold group-hover:border-red-200"><i class="fa-solid fa-drumstick-bite text-xl"></i> Thịt heo</div>
+                                    </label>
+                                    <label class="cursor-pointer group flex-shrink-0 w-24 snap-start">
+                                        <input type="checkbox" name="ingredients" value="thit-ga" class="peer sr-only">
+                                        <div class="text-center py-2.5 px-1 rounded-lg border border-gray-100 bg-white peer-checked:bg-orange-50 peer-checked:text-orange-500 peer-checked:border-orange-200 peer-checked:shadow-sm peer-active:scale-95 peer-checked:scale-105 transition-all duration-300 ease-[cubic-bezier(0.34,1.56,0.64,1)] text-xs flex flex-col items-center justify-center gap-1 font-bold group-hover:border-orange-200"><i class="fa-solid fa-kiwi-bird text-xl"></i> Thịt gà</div>
+                                    </label>
+                                    <label class="cursor-pointer group flex-shrink-0 w-24 snap-start">
+                                        <input type="checkbox" name="ingredients" value="thit-bo" class="peer sr-only">
+                                        <div class="text-center py-2.5 px-1 rounded-lg border border-gray-100 bg-white peer-checked:bg-rose-50 peer-checked:text-rose-600 peer-checked:border-rose-200 peer-checked:shadow-sm peer-active:scale-95 peer-checked:scale-105 transition-all duration-300 ease-[cubic-bezier(0.34,1.56,0.64,1)] text-xs flex flex-col items-center justify-center gap-1 font-bold group-hover:border-rose-200"><i class="fa-solid fa-cow text-xl"></i> Thịt bò</div>
+                                    </label>
+                                    <label class="cursor-pointer group flex-shrink-0 w-24 snap-start">
+                                        <input type="checkbox" name="ingredients" value="ca" class="peer sr-only">
+                                        <div class="text-center py-2.5 px-1 rounded-lg border border-gray-100 bg-white peer-checked:bg-blue-50 peer-checked:text-blue-500 peer-checked:border-blue-200 peer-checked:shadow-sm peer-active:scale-95 peer-checked:scale-105 transition-all duration-300 ease-[cubic-bezier(0.34,1.56,0.64,1)] text-xs flex flex-col items-center justify-center gap-1 font-bold group-hover:border-blue-200"><i class="fa-solid fa-fish text-xl"></i> Cá</div>
+                                    </label>
+                                    <label class="cursor-pointer group flex-shrink-0 w-24 snap-start">
+                                        <input type="checkbox" name="ingredients" value="tom" class="peer sr-only">
+                                        <div class="text-center py-2.5 px-1 rounded-lg border border-gray-100 bg-white peer-checked:bg-pink-50 peer-checked:text-pink-500 peer-checked:border-pink-200 peer-checked:shadow-sm peer-active:scale-95 peer-checked:scale-105 transition-all duration-300 ease-[cubic-bezier(0.34,1.56,0.64,1)] text-xs flex flex-col items-center justify-center gap-1 font-bold group-hover:border-pink-200"><i class="fa-solid fa-shrimp text-xl"></i> Tôm/Cua</div>
                                     </label>
                                     <label class="cursor-pointer group flex-shrink-0 w-24 snap-start">
                                         <input type="checkbox" name="ingredients" value="trung" class="peer sr-only">
                                         <div class="text-center py-2.5 px-1 rounded-lg border border-gray-100 bg-white peer-checked:bg-accent-subtle peer-checked:text-accent-hover peer-checked:border-accent-light peer-checked:shadow-sm peer-active:scale-95 peer-checked:scale-105 transition-all duration-300 ease-[cubic-bezier(0.34,1.56,0.64,1)] text-xs flex flex-col items-center justify-center gap-1 font-bold group-hover:border-accent-light"><i class="fa-solid fa-egg text-xl"></i> Trứng</div>
                                     </label>
                                     <label class="cursor-pointer group flex-shrink-0 w-24 snap-start">
+                                        <input type="checkbox" name="ingredients" value="dau-hu" class="peer sr-only">
+                                        <div class="text-center py-2.5 px-1 rounded-lg border border-gray-100 bg-white peer-checked:bg-yellow-50 peer-checked:text-yellow-600 peer-checked:border-yellow-200 peer-checked:shadow-sm peer-active:scale-95 peer-checked:scale-105 transition-all duration-300 ease-[cubic-bezier(0.34,1.56,0.64,1)] text-xs flex flex-col items-center justify-center gap-1 font-bold group-hover:border-yellow-200"><i class="fa-solid fa-cube text-xl"></i> Đậu hũ</div>
+                                    </label>
+                                    <label class="cursor-pointer group flex-shrink-0 w-24 snap-start">
                                         <input type="checkbox" name="ingredients" value="rau" class="peer sr-only">
-                                        <div class="text-center py-2.5 px-1 rounded-lg border border-gray-100 bg-white peer-checked:bg-primary-subtle peer-checked:text-primary-hover peer-checked:border-primary-light peer-checked:shadow-sm peer-active:scale-95 peer-checked:scale-105 transition-all duration-300 ease-[cubic-bezier(0.34,1.56,0.64,1)] text-xs flex flex-col items-center justify-center gap-1 font-bold group-hover:border-primary-light"><i class="fa-solid fa-leaf text-xl"></i> Rau</div>
+                                        <div class="text-center py-2.5 px-1 rounded-lg border border-gray-100 bg-white peer-checked:bg-primary-subtle peer-checked:text-primary-hover peer-checked:border-primary-light peer-checked:shadow-sm peer-active:scale-95 peer-checked:scale-105 transition-all duration-300 ease-[cubic-bezier(0.34,1.56,0.64,1)] text-xs flex flex-col items-center justify-center gap-1 font-bold group-hover:border-primary-light"><i class="fa-solid fa-leaf text-xl"></i> Rau củ</div>
                                     </label>
                                 </div>
                                 <div class="mt-3 relative">
@@ -130,18 +171,38 @@ const Home = {
                                 <label class="flex items-center gap-2 text-text-main font-bold mb-3 text-sm">
                                     <span class="w-6 h-6 rounded-full bg-primary-subtle text-primary flex items-center justify-center text-xs border border-primary-light/30">3</span> Loại món
                                 </label>
-                                <div class="flex gap-2 overflow-x-auto pb-1 scrollbar-hide snap-x">
+                                <div class="flex gap-2 overflow-x-auto pb-2 scrollbar-hide snap-x">
                                     <label class="cursor-pointer group flex-shrink-0 w-24 snap-start">
                                         <input type="checkbox" name="categories" value="man" class="peer sr-only">
-                                        <div class="text-center py-2 px-1 rounded-lg border border-gray-100 bg-white peer-checked:bg-orange-50 peer-checked:text-orange-600 peer-checked:border-orange-200 peer-checked:shadow-sm transition-all text-xs flex items-center justify-center gap-1 font-bold group-hover:border-orange-200"><i class="fa-solid fa-bowl-food text-base"></i> Mặn</div>
+                                        <div class="text-center py-2 px-1 rounded-lg border border-gray-100 bg-white peer-checked:bg-orange-50 peer-checked:text-orange-600 peer-checked:border-orange-200 peer-checked:shadow-sm transition-all text-xs flex items-center justify-center gap-1 font-bold group-hover:border-orange-200"><i class="fa-solid fa-bowl-food text-base"></i> Món mặn</div>
                                     </label>
                                     <label class="cursor-pointer group flex-shrink-0 w-24 snap-start">
                                         <input type="checkbox" name="categories" value="canh" class="peer sr-only">
-                                        <div class="text-center py-2 px-1 rounded-lg border border-gray-100 bg-white peer-checked:bg-blue-50 peer-checked:text-blue-600 peer-checked:border-blue-200 peer-checked:shadow-sm transition-all text-xs flex items-center justify-center gap-1 font-bold group-hover:border-blue-200"><i class="fa-solid fa-bowl-food text-base"></i> Canh</div>
+                                        <div class="text-center py-2 px-1 rounded-lg border border-gray-100 bg-white peer-checked:bg-blue-50 peer-checked:text-blue-600 peer-checked:border-blue-200 peer-checked:shadow-sm transition-all text-xs flex items-center justify-center gap-1 font-bold group-hover:border-blue-200"><i class="fa-solid fa-spoon text-base"></i> Món canh</div>
+                                    </label>
+                                    <label class="cursor-pointer group flex-shrink-0 w-24 snap-start">
+                                        <input type="checkbox" name="categories" value="xao" class="peer sr-only">
+                                        <div class="text-center py-2 px-1 rounded-lg border border-gray-100 bg-white peer-checked:bg-yellow-50 peer-checked:text-yellow-600 peer-checked:border-yellow-200 peer-checked:shadow-sm transition-all text-xs flex items-center justify-center gap-1 font-bold group-hover:border-yellow-200"><i class="fa-solid fa-fire-burner text-base"></i> Món xào</div>
+                                    </label>
+                                    <label class="cursor-pointer group flex-shrink-0 w-24 snap-start">
+                                        <input type="checkbox" name="categories" value="kho" class="peer sr-only">
+                                        <div class="text-center py-2 px-1 rounded-lg border border-gray-100 bg-white peer-checked:bg-amber-50 peer-checked:text-amber-700 peer-checked:border-amber-200 peer-checked:shadow-sm transition-all text-xs flex items-center justify-center gap-1 font-bold group-hover:border-amber-200"><i class="fa-solid fa-fire text-base"></i> Món kho</div>
+                                    </label>
+                                    <label class="cursor-pointer group flex-shrink-0 w-24 snap-start">
+                                        <input type="checkbox" name="categories" value="nuong" class="peer sr-only">
+                                        <div class="text-center py-2 px-1 rounded-lg border border-gray-100 bg-white peer-checked:bg-red-50 peer-checked:text-red-600 peer-checked:border-red-200 peer-checked:shadow-sm transition-all text-xs flex items-center justify-center gap-1 font-bold group-hover:border-red-200"><i class="fa-solid fa-fire-flame-curved text-base"></i> Đồ nướng</div>
+                                    </label>
+                                    <label class="cursor-pointer group flex-shrink-0 w-24 snap-start">
+                                        <input type="checkbox" name="categories" value="chien" class="peer sr-only">
+                                        <div class="text-center py-2 px-1 rounded-lg border border-gray-100 bg-white peer-checked:bg-amber-50 peer-checked:text-amber-600 peer-checked:border-amber-200 peer-checked:shadow-sm transition-all text-xs flex items-center justify-center gap-1 font-bold group-hover:border-amber-200"><i class="fa-solid fa-bacon text-base"></i> Đồ chiên</div>
+                                    </label>
+                                    <label class="cursor-pointer group flex-shrink-0 w-24 snap-start">
+                                        <input type="checkbox" name="categories" value="lau" class="peer sr-only">
+                                        <div class="text-center py-2 px-1 rounded-lg border border-gray-100 bg-white peer-checked:bg-rose-50 peer-checked:text-rose-600 peer-checked:border-rose-200 peer-checked:shadow-sm transition-all text-xs flex items-center justify-center gap-1 font-bold group-hover:border-rose-200"><i class="fa-solid fa-mug-hot text-base"></i> Món lẩu</div>
                                     </label>
                                     <label class="cursor-pointer group flex-shrink-0 w-24 snap-start">
                                         <input type="checkbox" name="categories" value="rau" class="peer sr-only">
-                                        <div class="text-center py-2 px-1 rounded-lg border border-gray-100 bg-white peer-checked:bg-primary-subtle peer-checked:text-primary-hover peer-checked:border-primary-light peer-checked:shadow-sm transition-all text-xs flex items-center justify-center gap-1 font-bold group-hover:border-primary-light"><i class="fa-solid fa-leaf text-base"></i> Rau</div>
+                                        <div class="text-center py-2 px-1 rounded-lg border border-gray-100 bg-white peer-checked:bg-primary-subtle peer-checked:text-primary-hover peer-checked:border-primary-light peer-checked:shadow-sm transition-all text-xs flex items-center justify-center gap-1 font-bold group-hover:border-primary-light"><i class="fa-solid fa-leaf text-base"></i> Món rau</div>
                                     </label>
                                 </div>
                                 <div class="mt-3 relative">
@@ -193,7 +254,7 @@ const Home = {
                 </div>
                 
                 <!-- Lưới Bento Grid -->
-                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 auto-rows-[1fr]">
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
                     ${spotlightHTML}
                     ${otherCardsHTML}
                 </div>
@@ -209,16 +270,16 @@ const Home = {
 
     afterRender: async () => {
         let isSpinning = false;
-        let reel1Items = [dummyFoods[0], dummyFoods[1]];
-        let reel2Items = [dummyFoods[0], dummyFoods[1]];
-        let reel3Items = [dummyFoods[0], dummyFoods[1]];
+        let reel1Items = [dummyFoods[0], dummyFoods[1], dummyFoods[2]];
+        let reel2Items = [dummyFoods[0], dummyFoods[1], dummyFoods[2]];
+        let reel3Items = [dummyFoods[0], dummyFoods[1], dummyFoods[2]];
 
         const slotMachineContainer = document.getElementById('slot-machine-container');
         const modal = document.getElementById('gacha-result-modal');
         const modalContent = document.getElementById('gacha-modal-content');
 
         const generateReelHTML = (reelNum) => `
-            <div class="relative flex-1 h-full overflow-hidden bg-white rounded-md sm:rounded-xl">
+            <div class="relative flex-1 h-full overflow-hidden bg-white rounded-md sm:rounded-xl" style="container-type: size;">
               <div class="absolute inset-x-0 top-0 h-6 bg-gradient-to-b from-white/95 to-transparent z-20 pointer-events-none"></div>
               <div class="absolute inset-x-0 bottom-0 h-6 bg-gradient-to-t from-white/95 to-transparent z-20 pointer-events-none"></div>
               <div id="reel-${reelNum}" class="w-full flex flex-col will-change-transform"></div>
@@ -227,28 +288,35 @@ const Home = {
 
         const renderSlotMachine = () => {
             slotMachineContainer.innerHTML = `
-            <div class="relative w-full flex justify-center min-h-[400px]">
-                <div class="relative z-50 w-full max-w-lg lg:max-w-xl mx-auto aspect-square bg-[url('/assets/images/gacha-machine-square.jpg')] bg-cover bg-center rounded-3xl overflow-hidden shadow-2xl">
+            <div class="relative w-full flex justify-center pt-0 pb-4">
+                <!-- Đổi sang dùng thẻ img để giữ đúng tỉ lệ, relative div sẽ ôm sát hình. Tránh bị vỡ layout khi thay đổi kích thước -->
+                <div class="relative z-50 w-[95%] sm:w-[85%] max-w-[550px] mx-auto mt-2">
+                    <img src="./assets/images/gacha-machine-square-new.png" alt="Máy Gacha" class="w-full h-auto block drop-shadow-2xl" />
                     
-                    <!-- Title Overlay -->
-                    <div class="absolute top-[8%] w-full text-center flex flex-col items-center justify-center select-none pointer-events-none z-10">
-                        <h2 class="text-3xl sm:text-4xl md:text-5xl font-black text-transparent bg-clip-text bg-gradient-to-b from-yellow-200 via-yellow-400 to-yellow-600 filter drop-shadow-[0_4px_4px_rgba(0,0,0,0.6)]" style="-webkit-text-stroke: 1px #854d0e;">HÔM NAY ĂN GÌ?</h2>
-                        <p class="text-[9px] sm:text-xs md:text-sm font-bold text-yellow-500 tracking-[0.2em] mt-1 filter drop-shadow-[0_2px_2px_rgba(0,0,0,0.8)]">MENU PRINTER - EDITION</p>
+                    <!-- Dynamic Header Logo -->
+                    <div class="absolute top-[10%] left-1/2 -translate-x-1/2 w-full text-center z-20 pointer-events-none flex items-center justify-center">
+                        <h2 class="text-sm sm:text-base md:text-lg lg:text-xl font-black text-white uppercase tracking-[0.1em] sm:tracking-[0.15em]" 
+                            style="-webkit-text-stroke: 1.5px #1e3a8a; text-shadow: 0px 3px 0px #1e3a8a, 0px 5px 10px rgba(0,0,0,0.5);">
+                            Hôm Nay Ăn Gì
+                        </h2>
                     </div>
 
                     <!-- The 3 Reels positioned over the image's screen -->
-                    <div class="absolute top-[29.5%] left-[12%] w-[76%] h-[41%] flex gap-[3.5%] items-center justify-between z-10">
+                    <div class="absolute top-[25.5%] left-[16.5%] w-[67%] h-[44.5%] flex gap-[2%] items-center justify-between z-10 p-1.5 sm:p-2 rounded-xl sm:rounded-2xl bg-black/80 shadow-[inset_0_0_20px_rgba(0,0,0,1)] border-4 border-yellow-500/50">
                         ${generateReelHTML(1)}
                         ${generateReelHTML(2)}
                         ${generateReelHTML(3)}
                     </div>
                     
-                    <!-- Invisible Spin Button Over the image's physical button -->
-                    <button id="spin-btn" class="absolute bottom-[4%] left-[40.5%] w-[19%] h-[19%] rounded-full pointer-events-auto hover:bg-white/20 active:bg-black/20 transition-colors z-20 flex items-center justify-center cursor-pointer" title="Quay Ngay" ${isSpinning ? 'disabled' : ''}>
-                        ${isSpinning ? '<i class="fa-solid fa-spinner fa-spin text-white text-3xl"></i>' : ''}
-                    </button>
-                    
-                    ${isSpinning ? '<div class="absolute inset-0 bg-black/10 pointer-events-auto z-30"></div>' : ''}
+                    <!-- Dynamic 3D Spin Button (Covers the blank slot) -->
+                    <!-- Căn chỉnh left 50% để vào chính giữa lỗ khoét, width 27% để bao trọn. Hạ bottom xuống 11% để khít lỗ khoét -->
+                    <div class="absolute bottom-[11.3%] left-[50%] -translate-x-1/2 w-[28%] h-[7.2%] z-30">
+                        <button id="spin-btn" class="group relative w-full h-full flex items-center justify-center font-black text-white text-[11px] sm:text-sm md:text-base rounded-md sm:rounded-lg bg-gradient-to-b from-blue-500 to-blue-700 hover:from-blue-400 hover:to-blue-600 active:translate-y-0.5 transition-all shadow-[0_4px_0_#1e3a8a] active:shadow-[0_0px_0_#1e3a8a] border border-blue-300 disabled:opacity-70 disabled:active:translate-y-0 disabled:active:shadow-[0_4px_0_#1e3a8a] cursor-pointer">
+                            <span id="spin-btn-text" class="tracking-wider uppercase drop-shadow-md flex items-center justify-center gap-1">
+                                <i class="fa-solid fa-play"></i> QUAY
+                            </span>
+                        </button>
+                    </div>
                 </div>
             </div>
             `;
@@ -275,13 +343,12 @@ const Home = {
             const reel = document.getElementById(reelId);
             if (!reel) return;
             reel.innerHTML = items.map(dish => {
-                if (!dish) return '<div style="height:160px"></div>';
+                if (!dish) return '<div style="height:33.333333cqh"></div>';
                 return `
-                <div style="height: 160px" class="w-full flex-shrink-0 flex flex-col items-center justify-center p-2.5 select-none relative group">
-                    <div class="relative w-20 h-20 md:w-24 md:h-24 rounded-full overflow-hidden border-4 border-orange-400 shadow-md shadow-green-900/20 mb-2 bg-white">
+                <div data-tooltip="${dish.name}" style="height: 33.333333cqh" class="w-full flex-shrink-0 flex flex-col items-center justify-center p-1 sm:p-2 select-none relative group border-b-[3px] border-gray-300">
+                    <div class="relative h-[80%] max-h-[80px] aspect-square rounded-full overflow-hidden border-2 sm:border-4 border-orange-400 shadow-md shadow-green-900/20 bg-white flex-shrink-0">
                         <img src="${dish.image}" alt="${dish.name}" class="w-full h-full object-cover" onerror="this.src='https://images.unsplash.com/photo-1546069901-ba9599a7e63c?auto=format&fit=crop&w=800&q=80'" />
                     </div>
-                    <p class="text-xs md:text-sm font-black text-green-900 text-center line-clamp-1 px-1 max-w-[140px]">${dish.name}</p>
                 </div>
                 `;
             }).join('');
@@ -309,7 +376,7 @@ const Home = {
                     <div class="absolute inset-0 bg-gradient-to-t from-white via-transparent to-transparent pointer-events-none"></div>
                 </div>
                 
-                <div class="p-5 sm:p-8 pt-0 relative z-10 -mt-6">
+                <div class="p-5 sm:p-8 pt-0 relative z-10 -mt-6 flex-1 overflow-y-auto">
                     <!-- Badges -->
                     <div class="flex flex-wrap gap-2 mb-3">
                         <span class="px-3 py-1 bg-orange-500 text-white text-xs font-bold rounded-full shadow-sm">Món Việt</span>
@@ -405,9 +472,9 @@ const Home = {
                             <i class="fa-solid fa-times"></i>
                         </button>
                     </div>
-                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div class="flex gap-4 overflow-x-auto pb-4 scrollbar-hide snap-x">
                         ${dishes.map((dish, idx) => `
-                            <div class="result-card cursor-pointer border border-green-100 rounded-2xl overflow-hidden shadow-sm hover:shadow-md transition-all duration-300 group bg-green-50/30 hover:bg-white hover:-translate-y-1" data-idx="${idx}">
+                            <div class="result-card cursor-pointer border border-green-100 rounded-2xl overflow-hidden shadow-sm hover:shadow-md transition-all duration-300 group bg-green-50/30 hover:bg-white hover:-translate-y-1 w-[80%] sm:w-72 flex-shrink-0 snap-start" data-idx="${idx}">
                                 <div class="h-32 w-full overflow-hidden relative">
                                     <img src="${dish.image}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
                                     <div class="absolute inset-0 bg-black/10 group-hover:bg-transparent transition-colors"></div>
@@ -476,88 +543,101 @@ const Home = {
             }, 300);
         };
 
-        const handleSpin = () => {
+        const handleSpin = async () => {
             if (isSpinning) return;
             isSpinning = true;
-            renderSlotMachine(); 
             
-            // Re-bind content because renderSlotMachine replaced DOM
-            populateReelContent('reel-1', reel1Items);
-            populateReelContent('reel-2', reel2Items);
-            populateReelContent('reel-3', reel3Items);
-
-            reel1Items = Array.from({length: 30}, () => dummyFoods[Math.floor(Math.random() * dummyFoods.length)]);
-            reel2Items = Array.from({length: 40}, () => dummyFoods[Math.floor(Math.random() * dummyFoods.length)]);
-            reel3Items = Array.from({length: 50}, () => dummyFoods[Math.floor(Math.random() * dummyFoods.length)]);
-
+            const resultsContainer = document.getElementById('gacha-results-container');
+            if (resultsContainer) {
+                resultsContainer.innerHTML = '';
+            }
+            
             const quantityVal = document.querySelector('input[name="quantity"]:checked')?.value || "1";
             let numDishes = parseInt(quantityVal);
-            if (numDishes === 3) numDishes = Math.floor(Math.random() * 3) + 3; // 3 to 5
             
-            const resultDishes = [];
-            for(let i=0; i<numDishes; i++) {
-                resultDishes.push(dummyFoods[Math.floor(Math.random() * dummyFoods.length)]);
+            const spinBtn = document.getElementById('spin-btn');
+            const spinBtnText = document.getElementById('spin-btn-text');
+            if (spinBtn) spinBtn.disabled = true;
+
+            for (let i = 0; i < numDishes; i++) {
+                if (spinBtnText) {
+                    spinBtnText.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> LẦN ${i + 1}/${numDishes}`;
+                }
+                await performSingleSpin();
+                if (i < numDishes - 1) {
+                    await new Promise(r => setTimeout(r, 800));
+                }
             }
 
-            const targetIdx1 = reel1Items.length - 2;
-            const targetIdx2 = reel2Items.length - 2;
-            const targetIdx3 = reel3Items.length - 2;
+            isSpinning = false;
+            if (spinBtn) spinBtn.disabled = false;
+            if (spinBtnText) spinBtnText.innerHTML = '<i class="fa-solid fa-play"></i> QUAY';
+        };
 
-            reel1Items[targetIdx1] = resultDishes[0];
-            reel2Items[targetIdx2] = resultDishes[1] || resultDishes[0];
-            reel3Items[targetIdx3] = resultDishes[2] || resultDishes[0];
+        const performSingleSpin = () => {
+            return new Promise((resolve) => {
+                reel1Items = Array.from({length: 30}, () => dummyFoods[Math.floor(Math.random() * dummyFoods.length)]);
+                reel2Items = Array.from({length: 40}, () => dummyFoods[Math.floor(Math.random() * dummyFoods.length)]);
+                reel3Items = Array.from({length: 50}, () => dummyFoods[Math.floor(Math.random() * dummyFoods.length)]);
 
-            populateReelContent('reel-1', reel1Items);
-            populateReelContent('reel-2', reel2Items);
-            populateReelContent('reel-3', reel3Items);
+                const resultDish = dummyFoods[Math.floor(Math.random() * dummyFoods.length)];
 
-            const r1 = document.getElementById('reel-1');
-            const r2 = document.getElementById('reel-2');
-            const r3 = document.getElementById('reel-3');
+                const targetIdx1 = reel1Items.length - 3;
+                const targetIdx2 = reel2Items.length - 3;
+                const targetIdx3 = reel3Items.length - 3;
 
-            r1.style.transition = 'none'; r1.style.transform = 'translateY(0px)';
-            r2.style.transition = 'none'; r2.style.transform = 'translateY(0px)';
-            r3.style.transition = 'none'; r3.style.transform = 'translateY(0px)';
+                // Place result in the middle of all 3 reels (jackpot)
+                reel1Items[targetIdx1 + 1] = resultDish;
+                reel2Items[targetIdx2 + 1] = resultDish;
+                reel3Items[targetIdx3 + 1] = resultDish;
 
-            setTimeout(() => {
-                r1.style.transition = 'transform 1.5s cubic-bezier(0.12, 0.82, 0.28, 1.0)';
-                r1.style.filter = 'blur(1px)';
-                r1.style.transform = `translateY(-${targetIdx1 * ITEM_HEIGHT}px)`;
-
-                r2.style.transition = 'transform 2.0s cubic-bezier(0.12, 0.82, 0.28, 1.0)';
-                r2.style.filter = 'blur(1px)';
-                r2.style.transform = `translateY(-${targetIdx2 * ITEM_HEIGHT}px)`;
-
-                r3.style.transition = 'transform 2.5s cubic-bezier(0.12, 0.82, 0.28, 1.0)';
-                r3.style.filter = 'blur(1px)';
-                r3.style.transform = `translateY(-${targetIdx3 * ITEM_HEIGHT}px)`;
-            }, 50);
-
-            setTimeout(() => {
-                r1.style.filter = 'none';
-                r2.style.filter = 'none';
-                r3.style.filter = 'none';
-                
-                isSpinning = false;
-                renderSlotMachine();
                 populateReelContent('reel-1', reel1Items);
                 populateReelContent('reel-2', reel2Items);
                 populateReelContent('reel-3', reel3Items);
-                
-                // Keep the final positions
-                const nr1 = document.getElementById('reel-1');
-                const nr2 = document.getElementById('reel-2');
-                const nr3 = document.getElementById('reel-3');
-                nr1.style.transition = 'none'; nr1.style.transform = `translateY(-${targetIdx1 * ITEM_HEIGHT}px)`;
-                nr2.style.transition = 'none'; nr2.style.transform = `translateY(-${targetIdx2 * ITEM_HEIGHT}px)`;
-                nr3.style.transition = 'none'; nr3.style.transform = `translateY(-${targetIdx3 * ITEM_HEIGHT}px)`;
 
-                if (numDishes === 1) {
-                    showResultModal(resultDishes[0]);
-                } else {
-                    showMultipleResultsModal(resultDishes);
-                }
-            }, 2550);
+                const r1 = document.getElementById('reel-1');
+                const r2 = document.getElementById('reel-2');
+                const r3 = document.getElementById('reel-3');
+
+                r1.style.transition = 'none'; r1.style.transform = 'translateY(0px)';
+                r2.style.transition = 'none'; r2.style.transform = 'translateY(0px)';
+                r3.style.transition = 'none'; r3.style.transform = 'translateY(0px)';
+
+                // Force reflow
+                void r1.offsetWidth;
+
+                setTimeout(() => {
+                    r1.style.transition = 'transform 1.5s cubic-bezier(0.12, 0.82, 0.28, 1.0)';
+                    r1.style.transform = `translateY(-${(targetIdx1 / reel1Items.length) * 100}%)`;
+
+                    r2.style.transition = 'transform 2.0s cubic-bezier(0.12, 0.82, 0.28, 1.0)';
+                    r2.style.transform = `translateY(-${(targetIdx2 / reel2Items.length) * 100}%)`;
+
+                    r3.style.transition = 'transform 2.5s cubic-bezier(0.12, 0.82, 0.28, 1.0)';
+                    r3.style.transform = `translateY(-${(targetIdx3 / reel3Items.length) * 100}%)`;
+                }, 50);
+
+                setTimeout(() => {
+                    const resultsContainer = document.getElementById('gacha-results-container');
+                    if (resultsContainer) {
+                        // Thẻ kết quả hình vuông nhỏ gọn
+                        const cardHTML = `
+                            <a href="#/mon-an/${resultDish.id || 1}" class="result-card block cursor-pointer border-4 border-yellow-400 rounded-2xl overflow-hidden shadow-lg hover:shadow-xl transition-all duration-300 group bg-white hover:-translate-y-2 w-28 sm:w-32 aspect-square flex-shrink-0 snap-start animate-[fadeIn_0.5s_ease-out] relative">
+                                <img src="${resultDish.image}" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
+                                <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent"></div>
+                                <div class="absolute bottom-0 left-0 w-full p-2 flex flex-col justify-end h-full">
+                                    <h3 class="font-bold text-xs sm:text-sm text-center text-white line-clamp-2 drop-shadow-md leading-snug">${resultDish.name}</h3>
+                                </div>
+                            </a>
+                        `;
+                        resultsContainer.insertAdjacentHTML('beforeend', cardHTML);
+                        
+                        // Cuộn đến thẻ mới
+                        resultsContainer.scrollTo({ left: resultsContainer.scrollWidth, behavior: 'smooth' });
+                    }
+                    resolve();
+                }, 2550);
+            });
         };
 
         // Init
@@ -577,6 +657,151 @@ const Home = {
         modal.addEventListener('click', (e) => {
             if (e.target === modal) hideModal();
         });
+
+        // Tương tác cho số lượng tùy chỉnh
+        const btnShowCustom = document.getElementById('btn-show-custom-qty');
+        const customInputWrapper = document.getElementById('custom-qty-input-wrapper');
+        const customInput = document.getElementById('custom-qty-input');
+        const btnConfirmCustom = document.getElementById('btn-confirm-custom-qty');
+        const customLabel = document.getElementById('custom-qty-label');
+        const customDisplay = document.getElementById('custom-qty-display');
+        const customRadio = document.getElementById('custom-qty-radio');
+        const standardRadios = document.querySelectorAll('input[name="quantity"]:not(#custom-qty-radio)');
+
+        if (btnShowCustom && customInputWrapper) {
+            btnShowCustom.addEventListener('click', () => {
+                btnShowCustom.classList.add('hidden');
+                customInputWrapper.classList.remove('hidden');
+                customInputWrapper.classList.add('flex');
+                customInput.focus();
+            });
+
+            const confirmCustom = () => {
+                const val = parseInt(customInput.value);
+                if (val && val > 0) {
+                    customInputWrapper.classList.add('hidden');
+                    customInputWrapper.classList.remove('flex');
+                    customLabel.classList.remove('hidden');
+                    customLabel.classList.add('block');
+                    customDisplay.textContent = val + ' món';
+                    customRadio.value = val;
+                    customRadio.checked = true;
+                } else {
+                    // Nếu nhập sai thì quay lại nút '+'
+                    customInputWrapper.classList.add('hidden');
+                    customInputWrapper.classList.remove('flex');
+                    btnShowCustom.classList.remove('hidden');
+                }
+            };
+
+            btnConfirmCustom.addEventListener('click', confirmCustom);
+            customInput.addEventListener('keypress', (e) => {
+                if (e.key === 'Enter') {
+                    e.preventDefault();
+                    confirmCustom();
+                }
+            });
+
+            // Nếu người dùng click vào 1, 2, 3 thì reset nút tùy chọn
+            standardRadios.forEach(radio => {
+                radio.addEventListener('change', () => {
+                    if (radio.checked) {
+                        customLabel.classList.add('hidden');
+                        customLabel.classList.remove('block');
+                        btnShowCustom.classList.remove('hidden');
+                        customInput.value = '';
+                    }
+                });
+            });
+        }
+
+        // Tính năng: Custom Tooltip cho Máy Gacha
+        let customTooltip = document.getElementById('gacha-custom-tooltip');
+        if (!customTooltip) {
+            customTooltip = document.createElement('div');
+            customTooltip.id = 'gacha-custom-tooltip';
+            customTooltip.className = 'fixed z-[9999] opacity-0 pointer-events-none transition-opacity duration-150 bg-[#654e38] text-white border border-white text-xs sm:text-sm px-3 py-1.5 font-semibold whitespace-nowrap drop-shadow-md';
+            document.body.appendChild(customTooltip);
+        }
+
+        if (slotMachineContainer) {
+            slotMachineContainer.addEventListener('mouseover', (e) => {
+                const item = e.target.closest('[data-tooltip]');
+                if (item) {
+                    customTooltip.textContent = item.getAttribute('data-tooltip');
+                    customTooltip.style.opacity = '1';
+                }
+            });
+            slotMachineContainer.addEventListener('mousemove', (e) => {
+                if (customTooltip.style.opacity === '1') {
+                    // Căn chỉnh vị trí tooltip so với con trỏ chuột
+                    customTooltip.style.left = (e.clientX + 15) + 'px';
+                    customTooltip.style.top = (e.clientY + 15) + 'px';
+                }
+            });
+            slotMachineContainer.addEventListener('mouseout', (e) => {
+                const item = e.target.closest('[data-tooltip]');
+                if (item) {
+                    customTooltip.style.opacity = '0';
+                }
+            });
+        }
+
+        // Tính năng: Nắm kéo để cuộn ngang (Drag to scroll)
+        const scrollContainers = document.querySelectorAll('.overflow-x-auto');
+        let isDown = false;
+        let isDragging = false;
+        let startX;
+        let scrollLeft;
+
+        scrollContainers.forEach(slider => {
+            // Thêm class cursor để người dùng biết có thể kéo
+            slider.style.cursor = 'grab';
+
+            slider.addEventListener('mousedown', (e) => {
+                isDown = true;
+                isDragging = false;
+                slider.style.cursor = 'grabbing';
+                // Tắt snap khi đang kéo để mượt hơn
+                slider.classList.remove('snap-x'); 
+                startX = e.pageX - slider.offsetLeft;
+                scrollLeft = slider.scrollLeft;
+            });
+
+            slider.addEventListener('mouseleave', () => {
+                isDown = false;
+                slider.style.cursor = 'grab';
+                slider.classList.add('snap-x');
+            });
+
+            slider.addEventListener('mouseup', () => {
+                isDown = false;
+                slider.style.cursor = 'grab';
+                slider.classList.add('snap-x');
+            });
+
+            slider.addEventListener('mousemove', (e) => {
+                if (!isDown) return;
+                e.preventDefault(); // Tránh bôi đen text
+                const x = e.pageX - slider.offsetLeft;
+                const walk = (x - startX) * 2; // Tốc độ cuộn (x2)
+                
+                if (Math.abs(walk) > 5) {
+                    isDragging = true;
+                }
+                
+                slider.scrollLeft = scrollLeft - walk;
+            });
+
+            // Chặn sự kiện click vào checkbox/radio nếu người dùng đang thực hiện hành động kéo
+            slider.addEventListener('click', (e) => {
+                if (isDragging) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                }
+            }, true); // Dùng useCapture=true để chặn ngay từ đầu
+        });
+
     }
 };
 
