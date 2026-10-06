@@ -1,4 +1,14 @@
 export default function Navbar() {
+    const currentHash = window.location.hash.slice(1).toLowerCase() || '/';
+    const isHome = currentHash === '/' || currentHash === '';
+    const isList = currentHash.startsWith('/danh-sach');
+    const isCommunity = currentHash.startsWith('/cong-dong');
+    const isAdmin = currentHash.startsWith('/admin');
+
+    const getLinkClass = (isActive) => isActive 
+        ? "text-accent font-bold relative after:content-[''] after:absolute after:w-full after:h-0.5 after:bg-accent after:left-0 after:-bottom-1 transition-all" 
+        : "relative hover:text-accent transition duration-300 after:content-[''] after:absolute after:w-0 after:h-0.5 after:bg-accent after:left-0 after:-bottom-1 hover:after:w-full after:transition-all after:duration-300";
+
     return `
         <!-- Lớp phủ tối (Overlay) cho Modal Yêu thích -->
         <div id="nav-fav-overlay" onclick="document.getElementById('nav-fav-modal').classList.add('translate-x-full'); this.classList.add('hidden');" class="fixed inset-0 bg-black/40 z-[55] hidden transition-opacity"></div>
@@ -13,10 +23,10 @@ export default function Navbar() {
                 
                 <!-- Center Navigation -->
                 <nav class="hidden md:flex gap-8 font-semibold">
-                    <a href="#/" class="relative hover:text-accent transition duration-300 after:content-[''] after:absolute after:w-0 after:h-0.5 after:bg-accent after:left-0 after:-bottom-1 hover:after:w-full after:transition-all after:duration-300">Trang chủ</a>
-                    <a href="#/danh-sach" class="relative hover:text-accent transition duration-300 after:content-[''] after:absolute after:w-0 after:h-0.5 after:bg-accent after:left-0 after:-bottom-1 hover:after:w-full after:transition-all after:duration-300">Danh sách món ăn</a>
-                    <a href="#/cong-dong" class="relative hover:text-accent transition duration-300 after:content-[''] after:absolute after:w-0 after:h-0.5 after:bg-accent after:left-0 after:-bottom-1 hover:after:w-full after:transition-all after:duration-300">Cộng đồng</a>
-                    <a href="#/admin" class="relative hover:text-accent transition duration-300 after:content-[''] after:absolute after:w-0 after:h-0.5 after:bg-accent after:left-0 after:-bottom-1 hover:after:w-full after:transition-all after:duration-300">Admin</a>
+                    <a href="#/" class="${getLinkClass(isHome)}">Trang chủ</a>
+                    <a href="#/danh-sach" class="${getLinkClass(isList)}">Danh sách món ăn</a>
+                    <a href="#/cong-dong" class="${getLinkClass(isCommunity)}">Cộng đồng</a>
+                    <a href="#/admin" class="${getLinkClass(isAdmin)}">Admin</a>
                 </nav>
 
                 <!-- Right Actions -->

@@ -1,10 +1,13 @@
 export default function Footer() {
     return `
-        <footer class="bg-primary hover text-white py-10 mt-auto">
+        <footer class="bg-[#183D2D] text-white py-12 mt-auto border-t border-white/10">
             <div class="container mx-auto px-4 lg:px-8 grid grid-cols-1 md:grid-cols-3 gap-8">
                 <div>
-                    <h3 class="text-xl font-bold mb-4">Hôm Nay Ăn Gì?</h3>
-                    <p class="text-white/80">Ứng dụng gợi ý mâm cơm gia đình, giúp bạn tiết kiệm thời gian suy nghĩ món ăn mỗi ngày.</p>
+                    <h3 class="text-xl font-extrabold mb-3 flex items-center gap-2">
+                        <i class="fa-solid fa-kitchen-set text-accent text-2xl"></i>
+                        <span>Hôm Nay Ăn Gì?</span>
+                    </h3>
+                    <p class="text-white/80 text-sm leading-relaxed">Ứng dụng gợi ý mâm cơm gia đình thông minh, giúp bạn tiết kiệm thời gian suy nghĩ món ăn ngon mỗi ngày.</p>
                 </div>
                 <div>
                     <h3 class="text-xl font-bold mb-4">Liên kết nhanh</h3>

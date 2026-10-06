@@ -35,7 +35,19 @@ const router = async () => {
             page = routes[path] || Home;
         }
 
-        document.getElementById('navbar-container').innerHTML = Navbar();
+        const navbarContainer = document.getElementById('navbar-container');
+        const footerContainer = document.getElementById('footer-container');
+
+        if (path === '/login') {
+            if (navbarContainer) navbarContainer.innerHTML = '';
+            if (footerContainer) footerContainer.style.display = 'none';
+        } else {
+            if (navbarContainer) navbarContainer.innerHTML = Navbar();
+            if (footerContainer) {
+                footerContainer.style.display = 'block';
+                footerContainer.innerHTML = Footer();
+            }
+        }
 
         document.getElementById('app-content').innerHTML = '<p class="text-center py-10">Đang tải...</p>';
         
@@ -46,10 +58,6 @@ const router = async () => {
             document.getElementById('app-content').innerHTML = await page.render(params);
             if (page.afterRender) await page.afterRender(params);
         }
-
-        const footerContainer = document.getElementById('footer-container');
-        footerContainer.style.display = 'block';
-        footerContainer.innerHTML = Footer();
     } catch (err) {
         console.error('Lỗi khi render trang:', err);
         const appContent = document.getElementById('app-content');
