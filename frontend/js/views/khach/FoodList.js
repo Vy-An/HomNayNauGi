@@ -267,6 +267,26 @@ const FoodList = {
                         <h1 class="text-3xl font-bold text-text-main">Khám phá Từ Điển Ẩm Thực</h1>
                     </div>
 
+                    <!-- Thanh kết quả & sắp xếp (trải full width) -->
+                    <div class="flex justify-between items-center mb-4 gap-3">
+                        <span class="text-text-muted text-sm">
+                            Hiển thị <span id="result-count-top" class="font-bold text-text-main">120</span> kết quả
+                        </span>
+                        <div class="sort-dropdown" id="sort-dropdown-top">
+                            <button id="sort-trigger" type="button" aria-haspopup="listbox" aria-expanded="false">
+                                <span class="trigger-icon-box">
+                                    <i id="sort-trigger-icon" class="fa-solid fa-clock"></i>
+                                </span>
+                                <span id="sort-trigger-label" class="trigger-label">Mới nhất</span>
+                                <i class="fa-solid fa-chevron-down trigger-chevron text-xs text-emerald-700/70"></i>
+                            </button>
+                            <ul class="sort-dropdown-menu" id="sort-menu" role="listbox">
+                                ${sortOptionsHTML}
+                            </ul>
+                            <input type="hidden" id="filter-sort" value="newest">
+                        </div>
+                    </div>
+
                     <div class="flex flex-col lg:flex-row gap-8">
 
                         <!-- ===== Cột Trái: Bộ Lọc ===== -->
@@ -358,25 +378,6 @@ const FoodList = {
 
                         <!-- ===== Cột Phải: Danh sách ===== -->
                         <div class="w-full lg:w-3/4">
-                            <div class="flex justify-between items-center mb-6 flex-wrap gap-3">
-                                <span class="text-text-muted text-sm">
-                                    Hiển thị <span class="font-bold text-text-main">120</span> kết quả
-                                </span>
-                                <div class="sort-dropdown" id="sort-dropdown">
-                                    <button id="sort-trigger" type="button" aria-haspopup="listbox" aria-expanded="false">
-                                        <span class="trigger-icon-box">
-                                            <i id="sort-trigger-icon" class="fa-solid fa-clock"></i>
-                                        </span>
-                                        <span id="sort-trigger-label" class="trigger-label">Mới nhất</span>
-                                        <i class="fa-solid fa-chevron-down trigger-chevron text-xs text-emerald-700/70"></i>
-                                    </button>
-                                    <ul class="sort-dropdown-menu" id="sort-menu" role="listbox">
-                                        ${sortOptionsHTML}
-                                    </ul>
-                                    <input type="hidden" id="filter-sort" value="newest">
-                                </div>
-                            </div>
-
                             <!-- Grid món ăn -->
                             <div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-6">
                                 ${foodCardsHTML}
@@ -513,7 +514,7 @@ const FoodList = {
 
         // Close on outside click
         document.addEventListener('click', e => {
-            const dropdown = document.getElementById('sort-dropdown');
+            const dropdown = document.getElementById('sort-dropdown-top');
             if (dropdown && !dropdown.contains(e.target)) {
                 closeMenu();
             }

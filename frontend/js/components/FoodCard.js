@@ -16,29 +16,27 @@ export default function FoodCard({ id, name, image, time, likes, author, descrip
                 <div class="absolute bottom-3 left-3 bg-black/50 backdrop-blur-md text-white text-xs font-bold px-3 py-1.5 rounded-full flex items-center gap-1.5 z-20 shadow-xs">
                     <i class="fa-regular fa-clock text-amber-300"></i> ${time || '30 phút'}
                 </div>
+
+                <!-- Nút Thích -->
+                <button class="absolute top-3 right-3 bg-white/90 backdrop-blur-md rounded-full w-9 h-9 flex items-center justify-center text-red-500 transition-all hover:scale-110 z-30 shadow-sm" onclick="event.preventDefault(); event.stopPropagation(); const isLiked = this.classList.contains('bg-red-500'); if(!isLiked) { this.className = 'absolute top-3 right-3 bg-red-500 backdrop-blur-md rounded-full w-9 h-9 flex items-center justify-center text-white transition-all hover:scale-110 z-30 shadow-sm'; this.querySelector('i').className = 'fa-solid fa-heart text-[15px]'; } else { this.className = 'absolute top-3 right-3 bg-white/90 backdrop-blur-md rounded-full w-9 h-9 flex items-center justify-center text-red-500 transition-all hover:scale-110 z-30 shadow-sm'; this.querySelector('i').className = 'fa-regular fa-heart text-[15px]'; }">
+                    <i class="fa-regular fa-heart text-[15px]"></i>
+                </button>
             </div>
 
             <!-- Body Section -->
             <div class="p-5 flex flex-col flex-grow">
-                <h3 class="font-extrabold text-lg text-text-main mb-2 line-clamp-2 group-hover:text-primary transition-colors leading-tight">${name}</h3>
-                ${description ? `<p class="text-sm text-text-muted mb-3 line-clamp-2">${description}</p>` : ''}
-                
-                <div class="mt-auto space-y-3 pt-3 border-t border-gray-100">
-                    <!-- Heart / Likes row & Nút Thích -->
-                    <div class="flex items-center justify-between text-sm">
-                        <!-- Số lượt thích -->
-                        <div class="flex items-center gap-1.5 font-bold text-red-500">
-                            <i class="fa-solid fa-heart text-red-500"></i>
-                            <span>${likes || '2.5k'}</span>
-                        </div>
-
-                        <!-- Nút Thích (Nút bấm tương tác) -->
-                        <button class="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-red-50 hover:bg-red-100 text-red-500 text-xs font-bold transition-all active:scale-95 border border-red-100/80 shadow-2xs" onclick="event.preventDefault(); event.stopPropagation(); const isLiked = this.classList.contains('bg-red-500'); if(!isLiked) { this.className = 'flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-red-500 text-white text-xs font-bold transition-all active:scale-95 shadow-2xs'; this.querySelector('i').className = 'fa-solid fa-heart text-xs'; } else { this.className = 'flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-red-50 hover:bg-red-100 text-red-500 text-xs font-bold transition-all active:scale-95 border border-red-100/80 shadow-2xs'; this.querySelector('i').className = 'fa-regular fa-heart text-xs'; }">
-                            <i class="fa-regular fa-heart text-xs"></i>
-                            <span>Thích</span>
-                        </button>
+                <div class="flex items-start justify-between gap-3 mb-2">
+                    <h3 class="font-extrabold text-lg text-text-main line-clamp-2 group-hover:text-primary transition-colors leading-tight">${name}</h3>
+                    <!-- Số lượt thích -->
+                    <div class="flex items-center gap-1.5 font-bold text-red-500 shrink-0 mt-0.5">
+                        <i class="fa-solid fa-heart"></i>
+                        <span>${likes || '2.5k'}</span>
                     </div>
-
+                </div>
+                
+                <p class="text-sm text-text-muted mb-4 line-clamp-2 flex-grow">${description || 'Món ăn thơm ngon, hấp dẫn và cung cấp đầy đủ dinh dưỡng, dễ dàng thực hiện tại nhà.'}</p>
+                
+                <div class="mt-auto pt-3 border-t border-gray-100">
                     <!-- Nút Xem công thức -->
                     <div class="w-full py-2.5 bg-primary/10 group-hover:bg-primary text-primary group-hover:text-white font-bold rounded-xl text-sm transition-all duration-200 flex items-center justify-center gap-2 shadow-2xs">
                         <span>Xem công thức</span>
