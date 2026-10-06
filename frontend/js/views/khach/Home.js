@@ -1,5 +1,5 @@
-import { fetchAPI } from '../api.js';
-import FoodCard from '../components/FoodCard.js';
+import { fetchAPI } from '../../api.js';
+import FoodCard from '../../components/FoodCard.js';
 
 const dummyFoods = [
     { id: 1, name: 'Thịt Kho Trứng & Canh Chua', image: 'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=60', time: '45 phút', likes: '2.5k', author: { name: 'Mẹ Bông' }, description: 'Mâm cơm truyền thống đậm đà hương vị quê hương, ăn là ghiền.' },
@@ -124,7 +124,7 @@ const Home = {
                                 <label class="flex items-center gap-2 text-text-main font-bold mb-3 text-sm">
                                     <span class="w-6 h-6 rounded-full bg-primary-subtle text-primary flex items-center justify-center text-xs border border-primary-light/30">2</span> Nguyên liệu
                                 </label>
-                                <div class="flex gap-2 overflow-x-auto pb-2 scrollbar-hide snap-x">
+                                <div id="ingredient-options" class="flex gap-2 overflow-x-auto pb-2 scrollbar-hide snap-x">
                                     <label class="cursor-pointer group flex-shrink-0 w-24 snap-start">
                                         <input type="checkbox" name="ingredients" value="thit-heo" class="peer sr-only" checked>
                                         <div class="text-center py-2.5 px-1 rounded-lg border border-gray-100 bg-white peer-checked:bg-red-50 peer-checked:text-red-500 peer-checked:border-red-200 peer-checked:shadow-sm peer-active:scale-95 peer-checked:scale-105 transition-all duration-300 ease-[cubic-bezier(0.34,1.56,0.64,1)] text-xs flex flex-col items-center justify-center gap-1 font-bold group-hover:border-red-200"><i class="fa-solid fa-drumstick-bite text-xl"></i> Thịt heo</div>
@@ -162,7 +162,7 @@ const Home = {
                                     <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                                         <i class="fa-solid fa-magnifying-glass text-gray-400"></i>
                                     </div>
-                                    <input type="text" placeholder="Tìm thêm nguyên liệu khác..." class="w-full pl-10 pr-4 py-2.5 bg-gray-50 border border-gray-100 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-primary focus:bg-white transition-all">
+                                    <input id="ingredient-search" type="text" placeholder="Tìm thêm nguyên liệu khác..." class="w-full pl-10 pr-4 py-2.5 bg-gray-50 border border-gray-100 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-primary focus:bg-white transition-all">
                                 </div>
                             </div>
 
@@ -171,7 +171,7 @@ const Home = {
                                 <label class="flex items-center gap-2 text-text-main font-bold mb-3 text-sm">
                                     <span class="w-6 h-6 rounded-full bg-primary-subtle text-primary flex items-center justify-center text-xs border border-primary-light/30">3</span> Loại món
                                 </label>
-                                <div class="flex gap-2 overflow-x-auto pb-2 scrollbar-hide snap-x">
+                                <div id="category-options" class="flex gap-2 overflow-x-auto pb-2 scrollbar-hide snap-x">
                                     <label class="cursor-pointer group flex-shrink-0 w-24 snap-start">
                                         <input type="checkbox" name="categories" value="man" class="peer sr-only">
                                         <div class="text-center py-2 px-1 rounded-lg border border-gray-100 bg-white peer-checked:bg-orange-50 peer-checked:text-orange-600 peer-checked:border-orange-200 peer-checked:shadow-sm transition-all text-xs flex items-center justify-center gap-1 font-bold group-hover:border-orange-200"><i class="fa-solid fa-bowl-food text-base"></i> Món mặn</div>
@@ -209,7 +209,7 @@ const Home = {
                                     <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                                         <i class="fa-solid fa-magnifying-glass text-gray-400"></i>
                                     </div>
-                                    <input type="text" placeholder="Tìm thêm loại món khác..." class="w-full pl-10 pr-4 py-2.5 bg-gray-50 border border-gray-100 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-primary focus:bg-white transition-all">
+                                    <input id="category-search" type="text" placeholder="Tìm thêm loại món khác..." class="w-full pl-10 pr-4 py-2.5 bg-gray-50 border border-gray-100 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-primary focus:bg-white transition-all">
                                 </div>
                             </div>
                         </form>
@@ -277,6 +277,184 @@ const Home = {
         const slotMachineContainer = document.getElementById('slot-machine-container');
         const modal = document.getElementById('gacha-result-modal');
         const modalContent = document.getElementById('gacha-modal-content');
+        const fallbackImage = 'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?auto=format&fit=crop&w=800&q=80';
+        let randomFoodsPool = [...dummyFoods];
+
+        const normalizeFood = (food) => ({
+            ...food,
+            id: food.id || food.id_food || 1,
+            image: food.image || fallbackImage,
+            time: food.time || (food.cookingTime ? `${food.cookingTime} phut` : '30 phut'),
+            likes: food.likes || '0',
+            author: food.author || { name: 'Hom Nay Nau Gi' },
+            ingredients: Array.isArray(food.ingredients) ? food.ingredients : [],
+            steps: Array.isArray(food.steps) ? food.steps : []
+        });
+
+        const getCheckedValues = (name) => {
+            return Array.from(document.querySelectorAll(`input[name="${name}"]:checked`))
+                .map(input => input.value)
+                .filter(Boolean);
+        };
+
+        const getSelectedQuantity = () => {
+            const customInput = document.getElementById('custom-qty-input');
+            const customInputWrapper = document.getElementById('custom-qty-input-wrapper');
+            const customRadio = document.getElementById('custom-qty-radio');
+            const isCustomEditing = customInputWrapper && !customInputWrapper.classList.contains('hidden');
+            const customValue = Number.parseInt(customInput?.value || customRadio?.value, 10);
+
+            if ((isCustomEditing || customRadio?.checked) && customValue > 0) {
+                return Math.min(customValue, 50);
+            }
+
+            const quantityVal = document.querySelector('input[name="quantity"]:checked')?.value || "1";
+            const quantity = Number.parseInt(quantityVal, 10);
+
+            if (!quantity || quantity < 1) return 1;
+            return Math.min(quantity, 50);
+        };
+
+        const buildRandomEndpoint = (quantity) => {
+            const params = new URLSearchParams();
+            params.set('quantity', quantity);
+
+            const ingredients = getCheckedValues('ingredients');
+            const categories = getCheckedValues('categories');
+
+            if (ingredients.length) params.set('ingredients', ingredients.join(','));
+            if (categories.length) params.set('categories', categories.join(','));
+
+            return `/random?${params.toString()}`;
+        };
+
+        const fetchRandomFoods = async (quantity) => {
+            const response = await fetchAPI(buildRandomEndpoint(quantity));
+
+            if (!response.success || !Array.isArray(response.data) || response.data.length === 0) {
+                throw new Error(response.message || 'Khong the lay mon an ngau nhien.');
+            }
+
+            const foods = response.data.map(normalizeFood);
+            randomFoodsPool = [...foods, ...randomFoodsPool].slice(0, 30);
+
+            return foods;
+        };
+
+        const getRandomPoolFood = () => {
+            const pool = randomFoodsPool.length ? randomFoodsPool : dummyFoods;
+            return pool[Math.floor(Math.random() * pool.length)];
+        };
+
+        const showResultsMessage = (message) => {
+            const resultsContainer = document.getElementById('gacha-results-container');
+            if (!resultsContainer) return;
+
+            resultsContainer.innerHTML = `
+                <div class="w-full text-center text-sm font-bold text-red-500 bg-red-50 border border-red-100 rounded-xl px-4 py-3">
+                    ${message}
+                </div>
+            `;
+        };
+
+        const escapeHTML = (value) => String(value || '')
+            .replace(/&/g, '&amp;')
+            .replace(/</g, '&lt;')
+            .replace(/>/g, '&gt;')
+            .replace(/"/g, '&quot;')
+            .replace(/'/g, '&#039;');
+
+        const normalizeText = (value) => String(value || '')
+            .normalize('NFD')
+            .replace(/[\u0300-\u036f]/g, '')
+            .toLowerCase();
+
+        const getIngredientIcon = (name) => {
+            const normalized = normalizeText(name);
+            if (normalized.includes('trung')) return 'fa-egg';
+            if (normalized.includes('ca')) return 'fa-fish';
+            if (normalized.includes('ga')) return 'fa-drumstick-bite';
+            if (normalized.includes('bo')) return 'fa-cow';
+            if (normalized.includes('thit') || normalized.includes('suon')) return 'fa-drumstick-bite';
+            if (normalized.includes('rau') || normalized.includes('cai') || normalized.includes('bong') || normalized.includes('gia') || normalized.includes('bi') || normalized.includes('ca rot')) return 'fa-leaf';
+            if (normalized.includes('dau')) return 'fa-cube';
+            if (normalized.includes('hanh') || normalized.includes('toi')) return 'fa-seedling';
+            return 'fa-bowl-food';
+        };
+
+        const getCategoryIcon = (slug, name) => {
+            const normalized = `${normalizeText(slug)} ${normalizeText(name)}`;
+            if (normalized.includes('canh')) return 'fa-spoon';
+            if (normalized.includes('xao')) return 'fa-fire-burner';
+            if (normalized.includes('kho')) return 'fa-fire';
+            if (normalized.includes('chien')) return 'fa-bacon';
+            if (normalized.includes('luoc')) return 'fa-bowl-food';
+            if (normalized.includes('rau')) return 'fa-leaf';
+            return 'fa-bowl-food';
+        };
+
+        const renderFilterChip = ({ name, value, icon, type }) => {
+            const safeName = escapeHTML(name);
+            const safeValue = escapeHTML(value);
+            const safeIcon = escapeHTML(icon);
+            const chipLayout = type === 'ingredients'
+                ? 'py-2.5 px-1 flex-col gap-1 text-xs'
+                : 'py-2 px-1 flex-row gap-1 text-xs';
+
+            return `
+                <label class="filter-chip cursor-pointer group flex-shrink-0 w-24 snap-start" data-label="${escapeHTML(normalizeText(name))}">
+                    <input type="checkbox" name="${type}" value="${safeValue}" class="peer sr-only">
+                    <div class="text-center rounded-lg border border-gray-100 bg-white peer-checked:bg-primary-subtle peer-checked:text-primary-hover peer-checked:border-primary-light peer-checked:shadow-sm peer-active:scale-95 peer-checked:scale-105 transition-all duration-300 ease-[cubic-bezier(0.34,1.56,0.64,1)] flex items-center justify-center font-bold group-hover:border-primary-light ${chipLayout}">
+                        <i class="fa-solid ${safeIcon} ${type === 'ingredients' ? 'text-xl' : 'text-base'}"></i>
+                        <span class="line-clamp-2">${safeName}</span>
+                    </div>
+                </label>
+            `;
+        };
+
+        const bindFilterSearch = (inputId, containerId) => {
+            const input = document.getElementById(inputId);
+            const container = document.getElementById(containerId);
+            if (!input || !container) return;
+
+            input.addEventListener('input', () => {
+                const keyword = normalizeText(input.value);
+
+                container.querySelectorAll('.filter-chip').forEach((chip) => {
+                    const label = chip.getAttribute('data-label') || '';
+                    chip.classList.toggle('hidden', keyword && !label.includes(keyword));
+                });
+            });
+        };
+
+        const loadRandomOptions = async () => {
+            const response = await fetchAPI('/random/options');
+            if (!response.success || !response.data) return;
+
+            const ingredientContainer = document.getElementById('ingredient-options');
+            const categoryContainer = document.getElementById('category-options');
+
+            if (ingredientContainer && Array.isArray(response.data.ingredients) && response.data.ingredients.length) {
+                ingredientContainer.innerHTML = response.data.ingredients.map((ingredient) => renderFilterChip({
+                    type: 'ingredients',
+                    name: ingredient.name,
+                    value: ingredient.name,
+                    icon: getIngredientIcon(ingredient.name)
+                })).join('');
+            }
+
+            if (categoryContainer && Array.isArray(response.data.categories) && response.data.categories.length) {
+                categoryContainer.innerHTML = response.data.categories.map((category) => renderFilterChip({
+                    type: 'categories',
+                    name: category.name,
+                    value: category.slug,
+                    icon: getCategoryIcon(category.slug, category.name)
+                })).join('');
+            }
+
+            bindFilterSearch('ingredient-search', 'ingredient-options');
+            bindFilterSearch('category-search', 'category-options');
+        };
 
         const generateReelHTML = (reelNum) => `
             <div class="relative flex-1 h-full overflow-hidden bg-white rounded-md sm:rounded-xl" style="container-type: size;">
@@ -367,7 +545,7 @@ const Home = {
             
             modalContent.innerHTML = `
                 <div class="relative w-full h-48 sm:h-64 flex-shrink-0">
-                    <img src="${dish.image}" class="w-full h-full object-cover" />
+                    <img src="${dish.image}" class="w-full h-full object-cover" onerror="this.onerror=null; this.src='${fallbackImage}'" />
                     <!-- Close button on image -->
                     <button id="close-modal-x" class="absolute top-4 right-4 w-8 h-8 flex items-center justify-center bg-black/50 hover:bg-black/80 text-white rounded-full backdrop-blur-sm transition z-10">
                         <i class="fa-solid fa-times"></i>
@@ -476,7 +654,7 @@ const Home = {
                         ${dishes.map((dish, idx) => `
                             <div class="result-card cursor-pointer border border-green-100 rounded-2xl overflow-hidden shadow-sm hover:shadow-md transition-all duration-300 group bg-green-50/30 hover:bg-white hover:-translate-y-1 w-[80%] sm:w-72 flex-shrink-0 snap-start" data-idx="${idx}">
                                 <div class="h-32 w-full overflow-hidden relative">
-                                    <img src="${dish.image}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+                                    <img src="${dish.image}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" onerror="this.onerror=null; this.src='${fallbackImage}'">
                                     <div class="absolute inset-0 bg-black/10 group-hover:bg-transparent transition-colors"></div>
                                 </div>
                                 <div class="p-4 relative">
@@ -552,18 +730,30 @@ const Home = {
                 resultsContainer.innerHTML = '';
             }
             
-            const quantityVal = document.querySelector('input[name="quantity"]:checked')?.value || "1";
-            let numDishes = parseInt(quantityVal);
+            let numDishes = getSelectedQuantity();
             
             const spinBtn = document.getElementById('spin-btn');
             const spinBtnText = document.getElementById('spin-btn-text');
             if (spinBtn) spinBtn.disabled = true;
 
+            let resultDishes = [];
+            try {
+                resultDishes = await fetchRandomFoods(numDishes);
+            } catch (error) {
+                showResultsMessage(error.message || 'Khong the ket noi API random.');
+                isSpinning = false;
+                if (spinBtn) spinBtn.disabled = false;
+                if (spinBtnText) spinBtnText.innerHTML = '<i class="fa-solid fa-play"></i> QUAY';
+                return;
+            }
+
+            numDishes = resultDishes.length;
+
             for (let i = 0; i < numDishes; i++) {
                 if (spinBtnText) {
                     spinBtnText.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> LẦN ${i + 1}/${numDishes}`;
                 }
-                await performSingleSpin();
+                await performSingleSpin(resultDishes[i]);
                 if (i < numDishes - 1) {
                     await new Promise(r => setTimeout(r, 800));
                 }
@@ -574,22 +764,22 @@ const Home = {
             if (spinBtnText) spinBtnText.innerHTML = '<i class="fa-solid fa-play"></i> QUAY';
         };
 
-        const performSingleSpin = () => {
+        const performSingleSpin = (resultDish) => {
             return new Promise((resolve) => {
-                reel1Items = Array.from({length: 30}, () => dummyFoods[Math.floor(Math.random() * dummyFoods.length)]);
-                reel2Items = Array.from({length: 40}, () => dummyFoods[Math.floor(Math.random() * dummyFoods.length)]);
-                reel3Items = Array.from({length: 50}, () => dummyFoods[Math.floor(Math.random() * dummyFoods.length)]);
+                const finalDish = resultDish || getRandomPoolFood();
 
-                const resultDish = dummyFoods[Math.floor(Math.random() * dummyFoods.length)];
+                reel1Items = Array.from({length: 30}, () => getRandomPoolFood());
+                reel2Items = Array.from({length: 40}, () => getRandomPoolFood());
+                reel3Items = Array.from({length: 50}, () => getRandomPoolFood());
 
                 const targetIdx1 = reel1Items.length - 3;
                 const targetIdx2 = reel2Items.length - 3;
                 const targetIdx3 = reel3Items.length - 3;
 
                 // Place result in the middle of all 3 reels (jackpot)
-                reel1Items[targetIdx1 + 1] = resultDish;
-                reel2Items[targetIdx2 + 1] = resultDish;
-                reel3Items[targetIdx3 + 1] = resultDish;
+                reel1Items[targetIdx1 + 1] = finalDish;
+                reel2Items[targetIdx2 + 1] = finalDish;
+                reel3Items[targetIdx3 + 1] = finalDish;
 
                 populateReelContent('reel-1', reel1Items);
                 populateReelContent('reel-2', reel2Items);
@@ -622,11 +812,11 @@ const Home = {
                     if (resultsContainer) {
                         // Thẻ kết quả hình vuông nhỏ gọn
                         const cardHTML = `
-                            <a href="#/mon-an/${resultDish.id || 1}" class="result-card block cursor-pointer border-4 border-yellow-400 rounded-2xl overflow-hidden shadow-lg hover:shadow-xl transition-all duration-300 group bg-white hover:-translate-y-2 w-28 sm:w-32 aspect-square flex-shrink-0 snap-start animate-[fadeIn_0.5s_ease-out] relative">
-                                <img src="${resultDish.image}" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
+                            <a href="#/mon-an/${finalDish.id || 1}" class="result-card block cursor-pointer border-4 border-yellow-400 rounded-2xl overflow-hidden shadow-lg hover:shadow-xl transition-all duration-300 group bg-white hover:-translate-y-2 w-28 sm:w-32 aspect-square flex-shrink-0 snap-start animate-[fadeIn_0.5s_ease-out] relative">
+                                <img src="${finalDish.image}" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" onerror="this.onerror=null; this.src='${fallbackImage}'">
                                 <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent"></div>
                                 <div class="absolute bottom-0 left-0 w-full p-2 flex flex-col justify-end h-full">
-                                    <h3 class="font-bold text-xs sm:text-sm text-center text-white line-clamp-2 drop-shadow-md leading-snug">${resultDish.name}</h3>
+                                    <h3 class="font-bold text-xs sm:text-sm text-center text-white line-clamp-2 drop-shadow-md leading-snug">${finalDish.name}</h3>
                                 </div>
                             </a>
                         `;
@@ -642,6 +832,20 @@ const Home = {
 
         // Init
         renderSlotMachine();
+        try {
+            await loadRandomOptions();
+        } catch (error) {
+            bindFilterSearch('ingredient-search', 'ingredient-options');
+            bindFilterSearch('category-search', 'category-options');
+        }
+        try {
+            randomFoodsPool = await fetchRandomFoods(6);
+        } catch (error) {
+            randomFoodsPool = [...dummyFoods];
+        }
+        reel1Items = [getRandomPoolFood(), getRandomPoolFood(), getRandomPoolFood()];
+        reel2Items = [getRandomPoolFood(), getRandomPoolFood(), getRandomPoolFood()];
+        reel3Items = [getRandomPoolFood(), getRandomPoolFood(), getRandomPoolFood()];
         populateReelContent('reel-1', reel1Items);
         populateReelContent('reel-2', reel2Items);
         populateReelContent('reel-3', reel3Items);
@@ -673,28 +877,37 @@ const Home = {
                 btnShowCustom.classList.add('hidden');
                 customInputWrapper.classList.remove('hidden');
                 customInputWrapper.classList.add('flex');
+                customRadio.checked = true;
                 customInput.focus();
             });
 
             const confirmCustom = () => {
-                const val = parseInt(customInput.value);
+                const val = Number.parseInt(customInput.value, 10);
                 if (val && val > 0) {
+                    const safeValue = Math.min(val, 50);
+                    customInput.value = safeValue;
                     customInputWrapper.classList.add('hidden');
                     customInputWrapper.classList.remove('flex');
                     customLabel.classList.remove('hidden');
                     customLabel.classList.add('block');
-                    customDisplay.textContent = val + ' món';
-                    customRadio.value = val;
+                    customDisplay.textContent = safeValue + ' món';
+                    customRadio.value = safeValue;
                     customRadio.checked = true;
                 } else {
                     // Nếu nhập sai thì quay lại nút '+'
                     customInputWrapper.classList.add('hidden');
                     customInputWrapper.classList.remove('flex');
                     btnShowCustom.classList.remove('hidden');
+                    standardRadios[0].checked = true;
                 }
             };
 
             btnConfirmCustom.addEventListener('click', confirmCustom);
+            customInput.addEventListener('input', () => {
+                const val = Number.parseInt(customInput.value, 10);
+                customRadio.value = val && val > 0 ? Math.min(val, 50) : '';
+                customRadio.checked = true;
+            });
             customInput.addEventListener('keypress', (e) => {
                 if (e.key === 'Enter') {
                     e.preventDefault();

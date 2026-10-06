@@ -1,4 +1,4 @@
-import FoodCard from '../components/FoodCard.js';
+import FoodCard from '../../components/FoodCard.js';
 
 const FoodList = {
     render: async () => {

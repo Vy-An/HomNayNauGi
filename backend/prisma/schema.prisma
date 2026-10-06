@@ -7,201 +7,238 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model User {
-  id_user       Int             @id @default(autoincrement())
-  name          String
-  email         String          @unique
-  password      String
-  avatar        String?
-  role          Role            @default(USER)
-  status        UserStatus      @default(ACTIVE)
-  created_at    DateTime        @default(now())
-  updated_at    DateTime        @updatedAt
-  shoppingLists ShoppingList[]
-  favorites     Favorite[]
-  posts         Post[]
-  comments      Comment[]
-  postLikes     PostLike[]
-  reports       Report[]
-  notifications Notification[]
+model categories {
+  id_category Int      @id @default(autoincrement()) @db.UnsignedInt
+  name        String   @unique(map: "uq_categories_name") @db.VarChar(100)
+  slug        String   @unique(map: "uq_categories_slug") @db.VarChar(150)
+  created_at  DateTime @default(now()) @db.Timestamp(0)
+  updated_at  DateTime @default(now()) @db.Timestamp(0)
+  foods       foods[]
 }
 
-enum Role {
-  USER
-  ADMIN
+model comments {
+  id_comment Int             @id @default(autoincrement()) @db.UnsignedInt
+  id_post    Int             @db.UnsignedInt
+  id_user    Int             @db.UnsignedInt
+  content    String          @db.Text
+  status     comments_status @default(active)
+  created_at DateTime        @default(now()) @db.Timestamp(0)
+  updated_at DateTime        @default(now()) @db.Timestamp(0)
+  posts      posts           @relation(fields: [id_post], references: [id_post], onDelete: Cascade, map: "fk_comments_post")
+  users      users           @relation(fields: [id_user], references: [id_user], onDelete: Cascade, map: "fk_comments_user")
+
+  @@index([id_post], map: "fk_comments_post")
+  @@index([id_user], map: "fk_comments_user")
 }
 
-enum UserStatus {
-  ACTIVE
-  BANNED
+model favorites {
+  id_favorite Int      @id @default(autoincrement()) @db.UnsignedInt
+  id_user     Int      @db.UnsignedInt
+  id_food     Int      @db.UnsignedInt
+  created_at  DateTime @default(now()) @db.Timestamp(0)
+  foods       foods    @relation(fields: [id_food], references: [id_food], onDelete: Cascade, map: "fk_favorites_food")
+  users       users    @relation(fields: [id_user], references: [id_user], onDelete: Cascade, map: "fk_favorites_user")
+
+  @@unique([id_user, id_food], map: "uq_user_favorite_food")
+  @@index([id_food], map: "fk_favorites_food")
 }
 
-model Food {
-  id_food         Int               @id @default(autoincrement())
-  id_category     Int
-  name            String
-  slug            String            @unique
-  description     String?           @db.Text
-  image           String?
-  cooking_time    Int?              // in minutes
-  servings        Int?
-  status          FoodStatus        @default(ACTIVE)
-  created_at      DateTime          @default(now())
-  updated_at      DateTime          @updatedAt
-  category        Category          @relation(fields: [id_category], references: [id_Category])
-  foodIngredients FoodIngredient[]
-  recipeSteps     RecipeStep[]
-  favorites       Favorite[]
-  shoppingLists   ShoppingList[]
-  posts           Post[]
+/// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
+model food_ingredients {
+  id_food_ingredient Int         @id @default(autoincrement()) @db.UnsignedInt
+  id_food            Int         @db.UnsignedInt
+  id_ingredient      Int         @db.UnsignedInt
+  quantity           Decimal     @db.Decimal(10, 2)
+  note               String?     @db.VarChar(255)
+  foods              foods       @relation(fields: [id_food], references: [id_food], onDelete: Cascade, map: "fk_food_ingredients_food")
+  ingredients        ingredients @relation(fields: [id_ingredient], references: [id_ingredient], map: "fk_food_ingredients_ingredient")
+
+  @@unique([id_food, id_ingredient], map: "uq_food_ingredient")
+  @@index([id_ingredient], map: "fk_food_ingredients_ingredient")
 }
 
-enum FoodStatus {
-  ACTIVE
-  HIDDEN
+/// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
+model foods {
+  id_food          Int                @id @default(autoincrement()) @db.UnsignedInt
+  id_category      Int                @db.UnsignedInt
+  name             String             @db.VarChar(255)
+  slug             String             @unique(map: "uq_foods_slug") @db.VarChar(255)
+  description      String?            @db.Text
+  image            String?            @db.VarChar(500)
+  cooking_time     Int?               @db.UnsignedSmallInt
+  servings         Int?               @db.UnsignedTinyInt
+  status           foods_status       @default(active)
+  created_at       DateTime           @default(now()) @db.Timestamp(0)
+  updated_at       DateTime           @default(now()) @db.Timestamp(0)
+  favorites        favorites[]
+  food_ingredients food_ingredients[]
+  categories       categories         @relation(fields: [id_category], references: [id_category], map: "fk_foods_category")
+  posts            posts[]
+  recipe_steps     recipe_steps[]
+  shopping_lists   shopping_lists[]
+
+  @@index([id_category], map: "fk_foods_category")
 }
 
-model Category {
-  id_Category Int      @id @default(autoincrement())
-  name        String
-  slug        String   @unique
-  created_at  DateTime @default(now())
-  updated_at  DateTime @updatedAt
-  foods       Food[]
+model ingredients {
+  id_ingredient       Int                   @id @default(autoincrement()) @db.UnsignedInt
+  name                String                @unique(map: "uq_ingredients_name") @db.VarChar(150)
+  unit                String                @db.VarChar(50)
+  created_at          DateTime              @default(now()) @db.Timestamp(0)
+  updated_at          DateTime              @default(now()) @db.Timestamp(0)
+  food_ingredients    food_ingredients[]
+  shopping_list_items shopping_list_items[]
 }
 
-model Ingredient {
-  id_ingredient      Int                  @id @default(autoincrement())
-  name               String
-  unit               String
-  created_at         DateTime             @default(now())
-  updated_at         DateTime             @updatedAt
-  foodIngredients    FoodIngredient[]
-  shoppingListItems  ShoppingListItem[]
-}
-
-model FoodIngredient {
-  id_Food_Ingredient Int        @id @default(autoincrement())
-  id_food            Int
-  id_ingredient      Int
-  quantity           Float
-  note               String?
-  food               Food       @relation(fields: [id_food], references: [id_food])
-  ingredient         Ingredient @relation(fields: [id_ingredient], references: [id_ingredient])
-}
-
-model RecipeStep {
-  id_Recipe_steps Int    @id @default(autoincrement())
-  id_food         Int
-  step_number     Int
-  instruction     String @db.Text
-  food            Food   @relation(fields: [id_food], references: [id_food])
-}
-
-model Favorite {
-  id_favorites Int      @id @default(autoincrement())
-  id_user      Int
-  id_food      Int
-  created_at   DateTime @default(now())
-  user         User     @relation(fields: [id_user], references: [id_user])
-  food         Food     @relation(fields: [id_food], references: [id_food])
-}
-
-model ShoppingList {
-  id_shopping_list Int                @id @default(autoincrement())
-  id_user          Int
-  id_food          Int?
-  created_at       DateTime           @default(now())
-  user             User               @relation(fields: [id_user], references: [id_user])
-  food             Food?              @relation(fields: [id_food], references: [id_food])
-  items            ShoppingListItem[]
-}
-
-model ShoppingListItem {
-  id_shopping_list_item Int          @id @default(autoincrement())
-  id_shopping_list      Int
-  id_ingredient         Int
-  quantity              Float
-  unit                  String
-  is_checked            Boolean      @default(false)
-  shoppingList          ShoppingList @relation(fields: [id_shopping_list], references: [id_shopping_list])
-  ingredient            Ingredient   @relation(fields: [id_ingredient], references: [id_ingredient])
-}
-
-model Post {
-  id_post    Int        @id @default(autoincrement())
-  id_user    Int
-  id_food    Int?
-  title      String
-  content    String     @db.Text
-  image      String?
-  status     PostStatus @default(PUBLISHED)
-  created_at DateTime   @default(now())
-  updated_at DateTime   @updatedAt
-  user       User       @relation(fields: [id_user], references: [id_user])
-  food       Food?      @relation(fields: [id_food], references: [id_food])
-  comments   Comment[]
-  likes      PostLike[]
-}
-
-enum PostStatus {
-  PUBLISHED
-  HIDDEN
-  DELETED
-}
-
-model Comment {
-  id_comment Int           @id @default(autoincrement())
-  id_post    Int
-  id_user    Int
-  content    String        @db.Text
-  status     CommentStatus @default(ACTIVE)
-  created_at DateTime      @default(now())
-  updated_at DateTime      @updatedAt
-  post       Post          @relation(fields: [id_post], references: [id_post])
-  user       User          @relation(fields: [id_user], references: [id_user])
-}
-
-enum CommentStatus {
-  ACTIVE
-  HIDDEN
-}
-
-model PostLike {
-  id_post_like Int      @id @default(autoincrement())
-  id_post      Int
-  id_user      Int
-  created_at   DateTime @default(now())
-  post         Post     @relation(fields: [id_post], references: [id_post])
-  user         User     @relation(fields: [id_user], references: [id_user])
-}
-
-model Report {
-  id_report   Int          @id @default(autoincrement())
-  id_user     Int
-  target_type String       // "POST", "COMMENT", "USER"
-  target_id   Int
-  reason      String
-  description String?      @db.Text
-  status      ReportStatus @default(PENDING)
-  created_at  DateTime     @default(now())
-  updated_at  DateTime     @updatedAt
-  user        User         @relation(fields: [id_user], references: [id_user])
-}
-
-enum ReportStatus {
-  PENDING
-  RESOLVED
-  DISMISSED
-}
-
-model Notification {
-  id_notification Int      @id @default(autoincrement())
-  id_user         Int
-  type            String   // "LIKE", "COMMENT", "SYSTEM"
-  title           String
-  message         String
+model notifications {
+  id_notification Int      @id @default(autoincrement()) @db.UnsignedInt
+  id_user         Int      @db.UnsignedInt
+  type            String   @db.VarChar(50)
+  title           String   @db.VarChar(255)
+  message         String   @db.Text
   is_read         Boolean  @default(false)
-  created_at      DateTime @default(now())
-  user            User     @relation(fields: [id_user], references: [id_user])
+  created_at      DateTime @default(now()) @db.Timestamp(0)
+  users           users    @relation(fields: [id_user], references: [id_user], onDelete: Cascade, map: "fk_notifications_user")
+
+  @@index([id_user], map: "fk_notifications_user")
+}
+
+model post_likes {
+  id_post_like Int      @id @default(autoincrement()) @db.UnsignedInt
+  id_post      Int      @db.UnsignedInt
+  id_user      Int      @db.UnsignedInt
+  created_at   DateTime @default(now()) @db.Timestamp(0)
+  posts        posts    @relation(fields: [id_post], references: [id_post], onDelete: Cascade, map: "fk_post_likes_post")
+  users        users    @relation(fields: [id_user], references: [id_user], onDelete: Cascade, map: "fk_post_likes_user")
+
+  @@unique([id_post, id_user], map: "uq_user_post_like")
+  @@index([id_user], map: "fk_post_likes_user")
+}
+
+model posts {
+  id_post    Int          @id @default(autoincrement()) @db.UnsignedInt
+  id_user    Int          @db.UnsignedInt
+  id_food    Int?         @db.UnsignedInt
+  title      String       @db.VarChar(255)
+  content    String       @db.Text
+  image      String?      @db.VarChar(500)
+  status     posts_status @default(active)
+  created_at DateTime     @default(now()) @db.Timestamp(0)
+  updated_at DateTime     @default(now()) @db.Timestamp(0)
+  comments   comments[]
+  post_likes post_likes[]
+  foods      foods?       @relation(fields: [id_food], references: [id_food], map: "fk_posts_food")
+  users      users        @relation(fields: [id_user], references: [id_user], onDelete: Cascade, map: "fk_posts_user")
+
+  @@index([id_food], map: "fk_posts_food")
+  @@index([id_user], map: "fk_posts_user")
+}
+
+/// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
+model recipe_steps {
+  id_recipe_step Int    @id @default(autoincrement()) @db.UnsignedInt
+  id_food        Int    @db.UnsignedInt
+  step_number    Int    @db.UnsignedSmallInt
+  instruction    String @db.Text
+  foods          foods  @relation(fields: [id_food], references: [id_food], onDelete: Cascade, map: "fk_recipe_steps_food")
+
+  @@unique([id_food, step_number], map: "uq_food_step")
+}
+
+model reports {
+  id_report   Int                 @id @default(autoincrement()) @db.UnsignedInt
+  id_user     Int?                @db.UnsignedInt
+  target_type reports_target_type
+  target_id   Int                 @db.UnsignedInt
+  reason      String              @db.VarChar(255)
+  description String?             @db.Text
+  status      reports_status      @default(pending)
+  created_at  DateTime            @default(now()) @db.Timestamp(0)
+  updated_at  DateTime            @default(now()) @db.Timestamp(0)
+  users       users?              @relation(fields: [id_user], references: [id_user], map: "fk_reports_user")
+
+  @@index([id_user], map: "fk_reports_user")
+}
+
+/// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
+model shopping_list_items {
+  id_shopping_list_item Int            @id @default(autoincrement()) @db.UnsignedInt
+  id_shopping_list      Int            @db.UnsignedInt
+  id_ingredient         Int            @db.UnsignedInt
+  quantity              Decimal        @db.Decimal(10, 2)
+  unit                  String         @db.VarChar(50)
+  is_checked            Boolean        @default(false)
+  ingredients           ingredients    @relation(fields: [id_ingredient], references: [id_ingredient], map: "fk_shopping_items_ingredient")
+  shopping_lists        shopping_lists @relation(fields: [id_shopping_list], references: [id_shopping_list], onDelete: Cascade, map: "fk_shopping_items_list")
+
+  @@unique([id_shopping_list, id_ingredient], map: "uq_shopping_ingredient")
+  @@index([id_ingredient], map: "fk_shopping_items_ingredient")
+}
+
+model shopping_lists {
+  id_shopping_list    Int                   @id @default(autoincrement()) @db.UnsignedInt
+  id_user             Int                   @db.UnsignedInt
+  id_food             Int?                  @db.UnsignedInt
+  created_at          DateTime              @default(now()) @db.Timestamp(0)
+  shopping_list_items shopping_list_items[]
+  foods               foods?                @relation(fields: [id_food], references: [id_food], map: "fk_shopping_lists_food")
+  users               users                 @relation(fields: [id_user], references: [id_user], onDelete: Cascade, map: "fk_shopping_lists_user")
+
+  @@index([id_food], map: "fk_shopping_lists_food")
+  @@index([id_user], map: "fk_shopping_lists_user")
+}
+
+model users {
+  id_user        Int              @id @default(autoincrement()) @db.UnsignedInt
+  name           String           @db.VarChar(100)
+  email          String           @unique(map: "uq_users_email") @db.VarChar(255)
+  password       String           @db.VarChar(255)
+  avatar         String?          @db.VarChar(500)
+  role           users_role       @default(user)
+  status         users_status     @default(active)
+  created_at     DateTime         @default(now()) @db.Timestamp(0)
+  updated_at     DateTime         @default(now()) @db.Timestamp(0)
+  comments       comments[]
+  favorites      favorites[]
+  notifications  notifications[]
+  post_likes     post_likes[]
+  posts          posts[]
+  reports        reports[]
+  shopping_lists shopping_lists[]
+}
+
+enum reports_target_type {
+  post
+  comment
+}
+
+enum comments_status {
+  active
+  hidden
+}
+
+enum users_role {
+  user
+  admin
+}
+
+enum reports_status {
+  pending
+  resolved
+  rejected
+}
+
+enum posts_status {
+  active
+  hidden
+}
+
+enum users_status {
+  active
+  blocked
+}
+
+enum foods_status {
+  active
+  inactive
 }
