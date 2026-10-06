@@ -1,29 +1,69 @@
-import FoodCard from '../../components/FoodCard.js';
-
-const sortOptions = [
-    { value: 'newest',    icon: 'fa-clock',            label: 'Mới nhất' },
-    { value: 'popular',   icon: 'fa-heart',            label: 'Yêu thích nhiều nhất' },
-    { value: 'easy',      icon: 'fa-star',             label: 'Dễ làm nhất' },
-    { value: 'name_asc',  icon: 'fa-arrow-down-a-z',   label: 'Tên A → Z' },
-    { value: 'name_desc', icon: 'fa-arrow-up-z-a',     label: 'Tên Z → A' },
-    { value: 'time_asc',  icon: 'fa-hourglass-start',  label: 'Thời gian tăng dần' },
-    { value: 'time_desc', icon: 'fa-hourglass-end',    label: 'Thời gian giảm dần' },
-];
+import FoodCard from "../components/FoodCard.js";
 
 const FoodList = {
-    render: async () => {
-        const dummyFoods = [
-            { id: 1, name: 'Thịt Kho Trứng',    image: 'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=500', time: '45 phút', likes: '2.5k', author: { name: 'Mẹ Bông' } },
-            { id: 2, name: 'Gà Xào Sả Ụt',     image: 'https://images.unsplash.com/photo-1604908176997-125f25cc6f3d?w=500', time: '30 phút', likes: '1.1k', author: { name: 'Lan Anh' } },
-            { id: 3, name: 'Rau Muống Xào',   image: 'https://images.unsplash.com/photo-1555939594-58d7cb561ad1?w=500', time: '10 phút', likes: '3.4k', author: { name: 'Chef Tùng' } },
-            { id: 4, name: 'Sườn Chua Ngọot',  image: 'https://images.unsplash.com/photo-1544025162-8314e3fc4585?w=500', time: '40 phút', likes: '4.2k', author: { name: 'Bếp Của Hoa' } },
-            { id: 5, name: 'Canh Chua Cá Lóc', image: 'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=500', time: '25 phút', likes: '1.5k', author: { name: 'Gia Đình' } },
-            { id: 6, name: 'Đậu Hũ Dồn Thịt',  image: 'https://images.unsplash.com/photo-1604908176997-125f25cc6f3d?w=500', time: '35 phút', likes: '890',  author: { name: 'Lan Anh' } },
-        ];
+  render: async () => {
+    const dummyFoods = [
+      {
+        id: 1,
+        name: "Thịt Kho Trứng",
+        image:
+          "https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=500",
+        time: "45 phút",
+        likes: "2.5k",
+        author: { name: "Mẹ Bông" },
+      },
+      {
+        id: 2,
+        name: "Gà Xào Sả Ụt",
+        image:
+          "https://images.unsplash.com/photo-1604908176997-125f25cc6f3d?w=500",
+        time: "30 phút",
+        likes: "1.1k",
+        author: { name: "Lan Anh" },
+      },
+      {
+        id: 3,
+        name: "Rau Muống Xào",
+        image:
+          "https://images.unsplash.com/photo-1555939594-58d7cb561ad1?w=500",
+        time: "10 phút",
+        likes: "3.4k",
+        author: { name: "Chef Tùng" },
+      },
+      {
+        id: 4,
+        name: "Sườn Chua Ngọot",
+        image:
+          "https://images.unsplash.com/photo-1544025162-8314e3fc4585?w=500",
+        time: "40 phút",
+        likes: "4.2k",
+        author: { name: "Bếp Của Hoa" },
+      },
+      {
+        id: 5,
+        name: "Canh Chua Cá Lóc",
+        image:
+          "https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=500",
+        time: "25 phút",
+        likes: "1.5k",
+        author: { name: "Gia Đình" },
+      },
+      {
+        id: 6,
+        name: "Đậu Hũ Dồn Thịt",
+        image:
+          "https://images.unsplash.com/photo-1604908176997-125f25cc6f3d?w=500",
+        time: "35 phút",
+        likes: "890",
+        author: { name: "Lan Anh" },
+      },
+    ];
 
-        const foodCardsHTML = dummyFoods.map(food => FoodCard(food)).join('');
+    const foodCardsHTML = dummyFoods.map((food) => FoodCard(food)).join("");
 
-        const sortOptionsHTML = sortOptions.map(o => `
+    const sortOptionsHTML = sortOptions
+      .map(
+        (o) => `
             <li data-value="${o.value}"
                 class="sort-option flex items-center gap-3 px-4 py-2.5 cursor-pointer rounded-lg hover:bg-primary/8 hover:text-primary transition-all duration-150 text-sm text-text-muted">
                 <span class="w-7 h-7 rounded-lg bg-gray-100 flex items-center justify-center flex-shrink-0">
@@ -31,9 +71,11 @@ const FoodList = {
                 </span>
                 ${o.label}
             </li>
-        `).join('');
+        `,
+      )
+      .join("");
 
-        return `
+    return `
             <style>
                 /* ===== Custom Dropdown (Equal width trigger & menu) ===== */
                 .sort-dropdown {
@@ -399,141 +441,151 @@ const FoodList = {
                 </div>
             </div>
         `;
-    },
+  },
 
-    afterRender: () => {
-        // ---- 1. Category tag toggle ----
-        const tags = document.querySelectorAll('.category-tag');
-        tags.forEach(tag => {
-            tag.addEventListener('click', () => {
-                tags.forEach(t => t.classList.remove('active-tag'));
-                tag.classList.add('active-tag');
-            });
-        });
+  afterRender: () => {
+    // ---- 1. Category tag toggle ----
+    const tags = document.querySelectorAll(".category-tag");
+    tags.forEach((tag) => {
+      tag.addEventListener("click", () => {
+        tags.forEach((t) => t.classList.remove("active-tag"));
+        tag.classList.add("active-tag");
+      });
+    });
 
-        // Fade hint: ẩn khi đã scroll tới cuối
-        const catContainer = document.getElementById('category-tags');
-        const catWrap = catContainer?.parentElement;
-        function checkCatScroll() {
-            if (!catContainer || !catWrap) return;
-            const atBottom = catContainer.scrollTop + catContainer.clientHeight >= catContainer.scrollHeight - 4;
-            catWrap.classList.toggle('no-fade', atBottom);
-        }
-        catContainer?.addEventListener('scroll', checkCatScroll);
-        checkCatScroll();
-
-        // ---- 2. Custom Sort Dropdown ----
-        const trigger      = document.getElementById('sort-trigger');
-        const menu         = document.getElementById('sort-menu');
-        const triggerIcon  = document.getElementById('sort-trigger-icon');
-        const triggerLabel = document.getElementById('sort-trigger-label');
-        const sortInput    = document.getElementById('filter-sort');
-        const sortLabel    = document.getElementById('current-sort-label');
-        const activeSortIcon = document.getElementById('active-sort-icon');
-
-        const sortMap = {
-            newest:    { icon: 'fa-clock',           label: 'Mới nhất' },
-            popular:   { icon: 'fa-heart',           label: 'Yêu thích nhiều nhất' },
-            easy:      { icon: 'fa-star',            label: 'Dễ làm nhất' },
-            name_asc:  { icon: 'fa-arrow-down-a-z',  label: 'Tên A → Z' },
-            name_desc: { icon: 'fa-arrow-up-z-a',    label: 'Tên Z → A' },
-            time_asc:  { icon: 'fa-hourglass-start', label: 'Thời gian tăng dần' },
-            time_desc: { icon: 'fa-hourglass-end',   label: 'Thời gian giảm dần' },
-        };
-
-        function setSort(value) {
-            const opt = sortMap[value];
-            if (!opt) return;
-            // Update trigger button pill
-            if (triggerIcon) triggerIcon.className = `fa-solid ${opt.icon}`;
-            if (triggerLabel) triggerLabel.textContent = opt.label;
-            if (sortInput) sortInput.value = value;
-            // Highlight active item in list
-            document.querySelectorAll('.sort-option').forEach(li => {
-                const isActive = li.dataset.value === value;
-                li.classList.toggle('active-sort', isActive);
-                const iconBox = li.querySelector('span');
-                const ico = li.querySelector('i');
-                if (iconBox) iconBox.className = isActive
-                    ? 'sort-icon-box w-7 h-7 rounded-lg flex items-center justify-center flex-shrink-0 bg-primary/15'
-                    : 'sort-icon-box w-7 h-7 rounded-lg flex items-center justify-center flex-shrink-0 bg-gray-100';
-                if (ico) ico.style.color = isActive ? 'var(--color-primary,#3a6b35)' : '';
-            });
-        }
-
-        // Calculate menu orientation & max height based on viewport space
-        function positionMenu() {
-            const rect = trigger.getBoundingClientRect();
-            const spaceBelow = window.innerHeight - rect.bottom;
-            const spaceAbove = rect.top;
-            const defaultMenuHeight = 230;
-
-            if (spaceBelow < defaultMenuHeight && spaceAbove > spaceBelow) {
-                menu.classList.add('drop-up');
-                const maxH = Math.max(120, Math.min(spaceAbove - 16, defaultMenuHeight));
-                menu.style.maxHeight = maxH + 'px';
-            } else {
-                menu.classList.remove('drop-up');
-                const maxH = Math.max(120, Math.min(spaceBelow - 16, defaultMenuHeight));
-                menu.style.maxHeight = maxH + 'px';
-            }
-        }
-
-        function closeMenu() {
-            menu.classList.remove('open');
-            trigger.classList.remove('open');
-            trigger.setAttribute('aria-expanded', 'false');
-            window.removeEventListener('scroll', positionMenu);
-            window.removeEventListener('resize', positionMenu);
-        }
-
-        // Open/close
-        trigger.addEventListener('click', () => {
-            const willOpen = !menu.classList.contains('open');
-            if (willOpen) {
-                positionMenu();
-                window.addEventListener('scroll', positionMenu, { passive: true });
-                window.addEventListener('resize', positionMenu, { passive: true });
-            } else {
-                window.removeEventListener('scroll', positionMenu);
-                window.removeEventListener('resize', positionMenu);
-            }
-            const open = menu.classList.toggle('open');
-            trigger.classList.toggle('open', open);
-            trigger.setAttribute('aria-expanded', open);
-        });
-
-        // Select item
-        document.querySelectorAll('.sort-option').forEach(li => {
-            li.addEventListener('click', () => {
-                setSort(li.dataset.value);
-                closeMenu();
-            });
-        });
-
-        // Close on outside click
-        document.addEventListener('click', e => {
-            const dropdown = document.getElementById('sort-dropdown');
-            if (dropdown && !dropdown.contains(e.target)) {
-                closeMenu();
-            }
-        });
-
-        // Highlight default
-        setSort('newest');
-
-        // ---- 3. Apply filter ----
-        const applyBtn = document.getElementById('apply-filter-btn');
-        if (applyBtn) {
-            applyBtn.addEventListener('click', () => {
-                const name = document.getElementById('filter-name')?.value || '';
-                const activeTag = document.querySelector('.category-tag.active-tag');
-                const category = activeTag?.dataset.category || 'Tất cả';
-                const sort = sortInput?.value || 'newest';
-                console.log('Filter applied:', { name, category, sort });
-            });
-        }
+    // Fade hint: ẩn khi đã scroll tới cuối
+    const catContainer = document.getElementById("category-tags");
+    const catWrap = catContainer?.parentElement;
+    function checkCatScroll() {
+      if (!catContainer || !catWrap) return;
+      const atBottom =
+        catContainer.scrollTop + catContainer.clientHeight >=
+        catContainer.scrollHeight - 4;
+      catWrap.classList.toggle("no-fade", atBottom);
     }
+    catContainer?.addEventListener("scroll", checkCatScroll);
+    checkCatScroll();
+
+    // ---- 2. Custom Sort Dropdown ----
+    const trigger = document.getElementById("sort-trigger");
+    const menu = document.getElementById("sort-menu");
+    const triggerIcon = document.getElementById("sort-trigger-icon");
+    const triggerLabel = document.getElementById("sort-trigger-label");
+    const sortInput = document.getElementById("filter-sort");
+    const sortLabel = document.getElementById("current-sort-label");
+    const activeSortIcon = document.getElementById("active-sort-icon");
+
+    const sortMap = {
+      newest: { icon: "fa-clock", label: "Mới nhất" },
+      popular: { icon: "fa-heart", label: "Yêu thích nhiều nhất" },
+      easy: { icon: "fa-star", label: "Dễ làm nhất" },
+      name_asc: { icon: "fa-arrow-down-a-z", label: "Tên A → Z" },
+      name_desc: { icon: "fa-arrow-up-z-a", label: "Tên Z → A" },
+      time_asc: { icon: "fa-hourglass-start", label: "Thời gian tăng dần" },
+      time_desc: { icon: "fa-hourglass-end", label: "Thời gian giảm dần" },
+    };
+
+    function setSort(value) {
+      const opt = sortMap[value];
+      if (!opt) return;
+      // Update trigger button pill
+      if (triggerIcon) triggerIcon.className = `fa-solid ${opt.icon}`;
+      if (triggerLabel) triggerLabel.textContent = opt.label;
+      if (sortInput) sortInput.value = value;
+      // Highlight active item in list
+      document.querySelectorAll(".sort-option").forEach((li) => {
+        const isActive = li.dataset.value === value;
+        li.classList.toggle("active-sort", isActive);
+        const iconBox = li.querySelector("span");
+        const ico = li.querySelector("i");
+        if (iconBox)
+          iconBox.className = isActive
+            ? "sort-icon-box w-7 h-7 rounded-lg flex items-center justify-center flex-shrink-0 bg-primary/15"
+            : "sort-icon-box w-7 h-7 rounded-lg flex items-center justify-center flex-shrink-0 bg-gray-100";
+        if (ico)
+          ico.style.color = isActive ? "var(--color-primary,#3a6b35)" : "";
+      });
+    }
+
+    // Calculate menu orientation & max height based on viewport space
+    function positionMenu() {
+      const rect = trigger.getBoundingClientRect();
+      const spaceBelow = window.innerHeight - rect.bottom;
+      const spaceAbove = rect.top;
+      const defaultMenuHeight = 230;
+
+      if (spaceBelow < defaultMenuHeight && spaceAbove > spaceBelow) {
+        menu.classList.add("drop-up");
+        const maxH = Math.max(
+          120,
+          Math.min(spaceAbove - 16, defaultMenuHeight),
+        );
+        menu.style.maxHeight = maxH + "px";
+      } else {
+        menu.classList.remove("drop-up");
+        const maxH = Math.max(
+          120,
+          Math.min(spaceBelow - 16, defaultMenuHeight),
+        );
+        menu.style.maxHeight = maxH + "px";
+      }
+    }
+
+    function closeMenu() {
+      menu.classList.remove("open");
+      trigger.classList.remove("open");
+      trigger.setAttribute("aria-expanded", "false");
+      window.removeEventListener("scroll", positionMenu);
+      window.removeEventListener("resize", positionMenu);
+    }
+
+    // Open/close
+    trigger.addEventListener("click", () => {
+      const willOpen = !menu.classList.contains("open");
+      if (willOpen) {
+        positionMenu();
+        window.addEventListener("scroll", positionMenu, { passive: true });
+        window.addEventListener("resize", positionMenu, { passive: true });
+      } else {
+        window.removeEventListener("scroll", positionMenu);
+        window.removeEventListener("resize", positionMenu);
+      }
+      const open = menu.classList.toggle("open");
+      trigger.classList.toggle("open", open);
+      trigger.setAttribute("aria-expanded", open);
+    });
+
+    // Select item
+    document.querySelectorAll(".sort-option").forEach((li) => {
+      li.addEventListener("click", () => {
+        setSort(li.dataset.value);
+        closeMenu();
+      });
+    });
+
+    // Close on outside click
+    document.addEventListener("click", (e) => {
+      const dropdown = document.getElementById("sort-dropdown");
+      if (dropdown && !dropdown.contains(e.target)) {
+        closeMenu();
+      }
+    });
+
+    // Highlight default
+    setSort("newest");
+
+    // ---- 3. Apply filter ----
+    const applyBtn = document.getElementById("apply-filter-btn");
+    if (applyBtn) {
+      applyBtn.addEventListener("click", () => {
+        const name = document.getElementById("filter-name")?.value || "";
+        const activeTag = document.querySelector(".category-tag.active-tag");
+        const category = activeTag?.dataset.category || "Tất cả";
+        const sort = sortInput?.value || "newest";
+        console.log("Filter applied:", { name, category, sort });
+      });
+    }
+  },
 };
 
 export default FoodList;
