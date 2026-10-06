@@ -5,8 +5,9 @@
   "main": "index.js",
   "scripts": {
     "build:css": "npx @tailwindcss/cli -i ./css/input.css -o ./css/style.css --watch",
-    "start": "npx serve",
-    "dev": "concurrently \"npm run build:css\" \"npm run start\""
+    "server": "npx serve .",
+    "start": "npx serve .",
+    "dev": "concurrently -n \"CSS,SERVER\" -c \"cyan,green\" \"npm run build:css\" \"npm run start\""
   },
   "keywords": [],
   "author": "",
@@ -14,6 +15,7 @@
   "type": "commonjs",
   "devDependencies": {
     "concurrently": "^10.0.5",
+    "serve": "^14.2.6",
     "tailwindcss": "^4.3.3"
   },
   "dependencies": {

@@ -69,7 +69,7 @@ const Home = {
                     </div>
 
                     <!-- Cột Phải: Bộ Lọc (40%) -->
-                    <div class="w-full lg:w-2/5 bg-glass-gradient backdrop-blur-xl rounded-2xl p-8 shadow-bento border border-white flex flex-col relative overflow-hidden">
+                    <div id="gacha-filter-card" class="w-full lg:w-2/5 bg-glass-gradient backdrop-blur-xl rounded-2xl p-8 shadow-bento border border-white flex flex-col relative overflow-clip" style="overflow: clip;">
                         
                         <h2 class="text-2xl font-bold text-text-main mb-6 flex items-center gap-3">
                             <span class="p-2 bg-primary-subtle rounded-xl text-2xl shadow-sm border border-white text-primary"><i class="fa-solid fa-bowl-food"></i></span> Tùy chỉnh
@@ -125,35 +125,35 @@ const Home = {
                                     <span class="w-6 h-6 rounded-full bg-primary-subtle text-primary flex items-center justify-center text-xs border border-primary-light/30">2</span> Nguyên liệu
                                 </label>
                                 <div id="ingredient-options" class="flex gap-2 overflow-x-auto pb-2 scrollbar-hide snap-x">
-                                    <label class="cursor-pointer group flex-shrink-0 w-24 snap-start">
+                                    <label class="cursor-pointer group flex-shrink-0 w-24 snap-start relative">
                                         <input type="checkbox" name="ingredients" value="thit-heo" class="peer sr-only" checked>
                                         <div class="text-center py-2.5 px-1 rounded-lg border border-gray-100 bg-white peer-checked:bg-red-50 peer-checked:text-red-500 peer-checked:border-red-200 peer-checked:shadow-sm peer-active:scale-95 peer-checked:scale-105 transition-all duration-300 ease-[cubic-bezier(0.34,1.56,0.64,1)] text-xs flex flex-col items-center justify-center gap-1 font-bold group-hover:border-red-200"><i class="fa-solid fa-drumstick-bite text-xl"></i> Thịt heo</div>
                                     </label>
-                                    <label class="cursor-pointer group flex-shrink-0 w-24 snap-start">
+                                    <label class="cursor-pointer group flex-shrink-0 w-24 snap-start relative">
                                         <input type="checkbox" name="ingredients" value="thit-ga" class="peer sr-only">
                                         <div class="text-center py-2.5 px-1 rounded-lg border border-gray-100 bg-white peer-checked:bg-orange-50 peer-checked:text-orange-500 peer-checked:border-orange-200 peer-checked:shadow-sm peer-active:scale-95 peer-checked:scale-105 transition-all duration-300 ease-[cubic-bezier(0.34,1.56,0.64,1)] text-xs flex flex-col items-center justify-center gap-1 font-bold group-hover:border-orange-200"><i class="fa-solid fa-kiwi-bird text-xl"></i> Thịt gà</div>
                                     </label>
-                                    <label class="cursor-pointer group flex-shrink-0 w-24 snap-start">
+                                    <label class="cursor-pointer group flex-shrink-0 w-24 snap-start relative">
                                         <input type="checkbox" name="ingredients" value="thit-bo" class="peer sr-only">
                                         <div class="text-center py-2.5 px-1 rounded-lg border border-gray-100 bg-white peer-checked:bg-rose-50 peer-checked:text-rose-600 peer-checked:border-rose-200 peer-checked:shadow-sm peer-active:scale-95 peer-checked:scale-105 transition-all duration-300 ease-[cubic-bezier(0.34,1.56,0.64,1)] text-xs flex flex-col items-center justify-center gap-1 font-bold group-hover:border-rose-200"><i class="fa-solid fa-cow text-xl"></i> Thịt bò</div>
                                     </label>
-                                    <label class="cursor-pointer group flex-shrink-0 w-24 snap-start">
+                                    <label class="cursor-pointer group flex-shrink-0 w-24 snap-start relative">
                                         <input type="checkbox" name="ingredients" value="ca" class="peer sr-only">
                                         <div class="text-center py-2.5 px-1 rounded-lg border border-gray-100 bg-white peer-checked:bg-blue-50 peer-checked:text-blue-500 peer-checked:border-blue-200 peer-checked:shadow-sm peer-active:scale-95 peer-checked:scale-105 transition-all duration-300 ease-[cubic-bezier(0.34,1.56,0.64,1)] text-xs flex flex-col items-center justify-center gap-1 font-bold group-hover:border-blue-200"><i class="fa-solid fa-fish text-xl"></i> Cá</div>
                                     </label>
-                                    <label class="cursor-pointer group flex-shrink-0 w-24 snap-start">
+                                    <label class="cursor-pointer group flex-shrink-0 w-24 snap-start relative">
                                         <input type="checkbox" name="ingredients" value="tom" class="peer sr-only">
                                         <div class="text-center py-2.5 px-1 rounded-lg border border-gray-100 bg-white peer-checked:bg-pink-50 peer-checked:text-pink-500 peer-checked:border-pink-200 peer-checked:shadow-sm peer-active:scale-95 peer-checked:scale-105 transition-all duration-300 ease-[cubic-bezier(0.34,1.56,0.64,1)] text-xs flex flex-col items-center justify-center gap-1 font-bold group-hover:border-pink-200"><i class="fa-solid fa-shrimp text-xl"></i> Tôm/Cua</div>
                                     </label>
-                                    <label class="cursor-pointer group flex-shrink-0 w-24 snap-start">
+                                    <label class="cursor-pointer group flex-shrink-0 w-24 snap-start relative">
                                         <input type="checkbox" name="ingredients" value="trung" class="peer sr-only">
                                         <div class="text-center py-2.5 px-1 rounded-lg border border-gray-100 bg-white peer-checked:bg-accent-subtle peer-checked:text-accent-hover peer-checked:border-accent-light peer-checked:shadow-sm peer-active:scale-95 peer-checked:scale-105 transition-all duration-300 ease-[cubic-bezier(0.34,1.56,0.64,1)] text-xs flex flex-col items-center justify-center gap-1 font-bold group-hover:border-accent-light"><i class="fa-solid fa-egg text-xl"></i> Trứng</div>
                                     </label>
-                                    <label class="cursor-pointer group flex-shrink-0 w-24 snap-start">
+                                    <label class="cursor-pointer group flex-shrink-0 w-24 snap-start relative">
                                         <input type="checkbox" name="ingredients" value="dau-hu" class="peer sr-only">
                                         <div class="text-center py-2.5 px-1 rounded-lg border border-gray-100 bg-white peer-checked:bg-yellow-50 peer-checked:text-yellow-600 peer-checked:border-yellow-200 peer-checked:shadow-sm peer-active:scale-95 peer-checked:scale-105 transition-all duration-300 ease-[cubic-bezier(0.34,1.56,0.64,1)] text-xs flex flex-col items-center justify-center gap-1 font-bold group-hover:border-yellow-200"><i class="fa-solid fa-cube text-xl"></i> Đậu hũ</div>
                                     </label>
-                                    <label class="cursor-pointer group flex-shrink-0 w-24 snap-start">
+                                    <label class="cursor-pointer group flex-shrink-0 w-24 snap-start relative">
                                         <input type="checkbox" name="ingredients" value="rau" class="peer sr-only">
                                         <div class="text-center py-2.5 px-1 rounded-lg border border-gray-100 bg-white peer-checked:bg-primary-subtle peer-checked:text-primary-hover peer-checked:border-primary-light peer-checked:shadow-sm peer-active:scale-95 peer-checked:scale-105 transition-all duration-300 ease-[cubic-bezier(0.34,1.56,0.64,1)] text-xs flex flex-col items-center justify-center gap-1 font-bold group-hover:border-primary-light"><i class="fa-solid fa-leaf text-xl"></i> Rau củ</div>
                                     </label>
@@ -172,35 +172,35 @@ const Home = {
                                     <span class="w-6 h-6 rounded-full bg-primary-subtle text-primary flex items-center justify-center text-xs border border-primary-light/30">3</span> Loại món
                                 </label>
                                 <div id="category-options" class="flex gap-2 overflow-x-auto pb-2 scrollbar-hide snap-x">
-                                    <label class="cursor-pointer group flex-shrink-0 w-24 snap-start">
+                                    <label class="cursor-pointer group flex-shrink-0 w-24 snap-start relative">
                                         <input type="checkbox" name="categories" value="man" class="peer sr-only">
                                         <div class="text-center py-2 px-1 rounded-lg border border-gray-100 bg-white peer-checked:bg-orange-50 peer-checked:text-orange-600 peer-checked:border-orange-200 peer-checked:shadow-sm transition-all text-xs flex items-center justify-center gap-1 font-bold group-hover:border-orange-200"><i class="fa-solid fa-bowl-food text-base"></i> Món mặn</div>
                                     </label>
-                                    <label class="cursor-pointer group flex-shrink-0 w-24 snap-start">
+                                    <label class="cursor-pointer group flex-shrink-0 w-24 snap-start relative">
                                         <input type="checkbox" name="categories" value="canh" class="peer sr-only">
                                         <div class="text-center py-2 px-1 rounded-lg border border-gray-100 bg-white peer-checked:bg-blue-50 peer-checked:text-blue-600 peer-checked:border-blue-200 peer-checked:shadow-sm transition-all text-xs flex items-center justify-center gap-1 font-bold group-hover:border-blue-200"><i class="fa-solid fa-spoon text-base"></i> Món canh</div>
                                     </label>
-                                    <label class="cursor-pointer group flex-shrink-0 w-24 snap-start">
+                                    <label class="cursor-pointer group flex-shrink-0 w-24 snap-start relative">
                                         <input type="checkbox" name="categories" value="xao" class="peer sr-only">
                                         <div class="text-center py-2 px-1 rounded-lg border border-gray-100 bg-white peer-checked:bg-yellow-50 peer-checked:text-yellow-600 peer-checked:border-yellow-200 peer-checked:shadow-sm transition-all text-xs flex items-center justify-center gap-1 font-bold group-hover:border-yellow-200"><i class="fa-solid fa-fire-burner text-base"></i> Món xào</div>
                                     </label>
-                                    <label class="cursor-pointer group flex-shrink-0 w-24 snap-start">
+                                    <label class="cursor-pointer group flex-shrink-0 w-24 snap-start relative">
                                         <input type="checkbox" name="categories" value="kho" class="peer sr-only">
                                         <div class="text-center py-2 px-1 rounded-lg border border-gray-100 bg-white peer-checked:bg-amber-50 peer-checked:text-amber-700 peer-checked:border-amber-200 peer-checked:shadow-sm transition-all text-xs flex items-center justify-center gap-1 font-bold group-hover:border-amber-200"><i class="fa-solid fa-fire text-base"></i> Món kho</div>
                                     </label>
-                                    <label class="cursor-pointer group flex-shrink-0 w-24 snap-start">
+                                    <label class="cursor-pointer group flex-shrink-0 w-24 snap-start relative">
                                         <input type="checkbox" name="categories" value="nuong" class="peer sr-only">
                                         <div class="text-center py-2 px-1 rounded-lg border border-gray-100 bg-white peer-checked:bg-red-50 peer-checked:text-red-600 peer-checked:border-red-200 peer-checked:shadow-sm transition-all text-xs flex items-center justify-center gap-1 font-bold group-hover:border-red-200"><i class="fa-solid fa-fire-flame-curved text-base"></i> Đồ nướng</div>
                                     </label>
-                                    <label class="cursor-pointer group flex-shrink-0 w-24 snap-start">
+                                    <label class="cursor-pointer group flex-shrink-0 w-24 snap-start relative">
                                         <input type="checkbox" name="categories" value="chien" class="peer sr-only">
                                         <div class="text-center py-2 px-1 rounded-lg border border-gray-100 bg-white peer-checked:bg-amber-50 peer-checked:text-amber-600 peer-checked:border-amber-200 peer-checked:shadow-sm transition-all text-xs flex items-center justify-center gap-1 font-bold group-hover:border-amber-200"><i class="fa-solid fa-bacon text-base"></i> Đồ chiên</div>
                                     </label>
-                                    <label class="cursor-pointer group flex-shrink-0 w-24 snap-start">
+                                    <label class="cursor-pointer group flex-shrink-0 w-24 snap-start relative">
                                         <input type="checkbox" name="categories" value="lau" class="peer sr-only">
                                         <div class="text-center py-2 px-1 rounded-lg border border-gray-100 bg-white peer-checked:bg-rose-50 peer-checked:text-rose-600 peer-checked:border-rose-200 peer-checked:shadow-sm transition-all text-xs flex items-center justify-center gap-1 font-bold group-hover:border-rose-200"><i class="fa-solid fa-mug-hot text-base"></i> Món lẩu</div>
                                     </label>
-                                    <label class="cursor-pointer group flex-shrink-0 w-24 snap-start">
+                                    <label class="cursor-pointer group flex-shrink-0 w-24 snap-start relative">
                                         <input type="checkbox" name="categories" value="rau" class="peer sr-only">
                                         <div class="text-center py-2 px-1 rounded-lg border border-gray-100 bg-white peer-checked:bg-primary-subtle peer-checked:text-primary-hover peer-checked:border-primary-light peer-checked:shadow-sm transition-all text-xs flex items-center justify-center gap-1 font-bold group-hover:border-primary-light"><i class="fa-solid fa-leaf text-base"></i> Món rau</div>
                                     </label>
@@ -402,7 +402,7 @@ const Home = {
                 : 'py-2 px-1 flex-row gap-1 text-xs';
 
             return `
-                <label class="filter-chip cursor-pointer group flex-shrink-0 w-24 snap-start" data-label="${escapeHTML(normalizeText(name))}">
+                <label class="filter-chip cursor-pointer group flex-shrink-0 w-24 snap-start relative" data-label="${escapeHTML(normalizeText(name))}">
                     <input type="checkbox" name="${type}" value="${safeValue}" class="peer sr-only">
                     <div class="text-center rounded-lg border border-gray-100 bg-white peer-checked:bg-primary-subtle peer-checked:text-primary-hover peer-checked:border-primary-light peer-checked:shadow-sm peer-active:scale-95 peer-checked:scale-105 transition-all duration-300 ease-[cubic-bezier(0.34,1.56,0.64,1)] flex items-center justify-center font-bold group-hover:border-primary-light ${chipLayout}">
                         <i class="fa-solid ${safeIcon} ${type === 'ingredients' ? 'text-xl' : 'text-base'}"></i>
@@ -861,6 +861,13 @@ const Home = {
         modal.addEventListener('click', (e) => {
             if (e.target === modal) hideModal();
         });
+
+        const filterCard = document.getElementById('gacha-filter-card');
+        if (filterCard) {
+            filterCard.addEventListener('scroll', () => {
+                if (filterCard.scrollLeft !== 0) filterCard.scrollLeft = 0;
+            });
+        }
 
         // Tương tác cho số lượng tùy chỉnh
         const btnShowCustom = document.getElementById('btn-show-custom-qty');
