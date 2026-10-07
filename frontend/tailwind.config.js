@@ -46,8 +46,9 @@ module.exports = {
       },
       fontFamily: {
         sans: ['Nunito', 'sans-serif'],
-        handwriting: ['Patrick Hand', 'cursive'],
-        caveat: ['Caveat', 'cursive'],
+        handwriting: ['Itim', 'Caveat', 'cursive'],
+        caveat: ['Dancing Script', 'Caveat', 'cursive'],
+        script: ['Dancing Script', 'cursive'],
         quicksand: ['Quicksand', 'sans-serif'],
       },
       boxShadow: {

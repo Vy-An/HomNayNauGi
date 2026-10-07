@@ -59,15 +59,15 @@ const FoodDetail = {
         const relatedCardsHTML = relatedFoods.map(f => FoodCard(f)).join('');
 
         return `
-            <div class="bg-white min-h-screen">
+            <div class="cozy-kitchen-bg min-h-screen text-text-main font-sans pb-16">
                 <!-- Breadcrumb Header -->
-                <div class="bg-gray-50/80 border-b border-gray-100 py-3">
+                <div class="bg-white/70 backdrop-blur-xs border-b border-beige-border/80 py-3">
                     <div class="container mx-auto px-4 lg:px-8 text-xs text-text-muted flex items-center gap-2">
-                        <a href="#/" class="hover:text-primary transition">Trang chủ</a> 
-                        <span>/</span> 
-                        <a href="#/danh-sach" class="hover:text-primary transition">Danh sách món ăn</a>
-                        <span>/</span> 
-                        <span class="text-text-main font-semibold">${food.name}</span>
+                        <a href="#/" class="hover:text-primary transition font-medium">Trang chủ</a> 
+                        <span class="text-gray-300">/</span> 
+                        <a href="#/danh-sach" class="hover:text-primary transition font-medium">Danh sách món ăn</a>
+                        <span class="text-gray-300">/</span> 
+                        <span class="text-primary font-bold">${food.name}</span>
                     </div>
                 </div>
 
@@ -76,7 +76,7 @@ const FoodDetail = {
                         
                         <!-- COLUMN 1 (LEFT): Ảnh món ăn HÌNH VUÔNG TO [hình2] -->
                         <div class="w-full lg:w-5/12 lg:sticky lg:top-20">
-                            <div class="relative aspect-square w-full rounded-3xl overflow-hidden shadow-lg border border-gray-100">
+                            <div class="relative aspect-square w-full rounded-3xl overflow-hidden shadow-md border-4 border-white">
                                 <img src="${food.image}" alt="${food.name}" class="w-full h-full object-cover">
                                 <div class="absolute inset-0 bg-gradient-to-t from-black/85 via-black/30 to-transparent"></div>
                                 
@@ -93,7 +93,7 @@ const FoodDetail = {
                                     <div class="flex flex-wrap items-center gap-1.5 mb-2">
                                         <span class="px-2.5 py-0.5 rounded-full bg-primary text-white text-[11px] font-bold shadow-2xs">${food.category}</span>
                                         <span class="px-2.5 py-0.5 rounded-full bg-white/20 backdrop-blur-md text-white text-[11px] font-semibold">${food.mealType}</span>
-                                        <span class="px-2.5 py-0.5 rounded-full bg-emerald-500/90 text-white text-[11px] font-semibold flex items-center gap-1">
+                                        <span class="px-2.5 py-0.5 rounded-full bg-accent text-white text-[11px] font-bold flex items-center gap-1 shadow-2xs">
                                             <i class="fa-solid fa-fire text-[9px]"></i> ${food.calories}
                                         </span>
                                     </div>
@@ -109,18 +109,18 @@ const FoodDetail = {
                             <div class="space-y-4">
                                 <!-- Metadata 3-Card Row -->
                                 <div class="grid grid-cols-3 gap-3">
-                                    <div class="bg-gray-50 border border-gray-100 rounded-2xl p-4 text-center">
+                                    <div class="bg-white rounded-2xl p-3.5 sm:p-4 text-center border border-beige-border/80 shadow-sm">
                                         <span class="text-primary text-lg mb-0.5 block"><i class="fa-regular fa-clock"></i></span>
                                         <span class="text-[11px] text-text-muted font-medium block">Thời gian</span>
                                         <span class="font-extrabold text-text-main text-sm md:text-base">${food.time}</span>
                                     </div>
-                                    <div class="bg-gray-50 border border-gray-100 rounded-2xl p-4 text-center">
-                                        <span class="text-amber-500 text-lg mb-0.5 block"><i class="fa-solid fa-thumbs-up"></i></span>
-                                        <span class="text-[11px] text-text-muted font-medium block">Lượt thích</span>
+                                    <div class="bg-white rounded-2xl p-3.5 sm:p-4 text-center border border-beige-border/80 shadow-sm">
+                                        <span class="text-rose-500 text-lg mb-0.5 block"><i class="fa-solid fa-heart"></i></span>
+                                        <span class="text-[11px] text-text-muted font-medium block">Yêu thích</span>
                                         <span class="font-extrabold text-text-main text-sm md:text-base">${food.likes || '2.5k'}</span>
                                     </div>
-                                    <div class="bg-gray-50 border border-gray-100 rounded-2xl p-4 text-center">
-                                        <span class="text-emerald-600 text-lg mb-0.5 block"><i class="fa-solid fa-users"></i></span>
+                                    <div class="bg-white rounded-2xl p-3.5 sm:p-4 text-center border border-beige-border/80 shadow-sm">
+                                        <span class="text-emerald-700 text-lg mb-0.5 block"><i class="fa-solid fa-users"></i></span>
                                         <span class="text-[11px] text-text-muted font-medium block">Khẩu phần</span>
                                         <span class="font-extrabold text-text-main text-sm md:text-base">${food.portions}</span>
                                     </div>
@@ -128,28 +128,28 @@ const FoodDetail = {
 
                                 <!-- Action Buttons Row -->
                                 <div class="flex items-center gap-3">
-                                    <button id="fav-btn" class="flex-1 py-3 px-4 rounded-2xl border border-gray-200 text-text-main font-semibold hover:bg-gray-50 transition flex items-center justify-center gap-2 text-xs md:text-sm">
-                                        <i class="fa-regular fa-heart text-red-500"></i>
+                                    <button id="fav-btn" class="flex-1 py-3 px-4 rounded-2xl bg-white border border-beige-border/80 text-text-main font-semibold hover:bg-cream-soft transition flex items-center justify-center gap-2 text-xs md:text-sm shadow-sm cursor-pointer">
+                                        <i class="fa-regular fa-heart text-rose-500"></i>
                                         <span>Lưu món</span>
                                     </button>
-                                    <button id="add-to-cart-btn" class="flex-[2] py-3 px-5 bg-primary hover:bg-primary-hover text-white font-bold rounded-2xl transition shadow-md flex items-center justify-center gap-2 text-xs md:text-sm active:scale-95">
-                                        <i class="fa-solid fa-cart-shopping"></i>
+                                    <button id="add-to-cart-btn" class="flex-[2] py-3 px-5 bg-primary hover:bg-[#1B4633] active:bg-[#143627] text-white font-bold rounded-2xl transition shadow-md shadow-primary/20 flex items-center justify-center gap-2 text-xs md:text-sm cursor-pointer">
+                                        <i class="fa-solid fa-cart-shopping text-accent-light"></i>
                                         <span>Thêm vào đi chợ</span>
                                     </button>
                                 </div>
                             </div>
 
                             <!-- BẢNG NGUYÊN LIỆU & CÔNG THỨC (CÓ TAB SWITCHING) -->
-                            <div class="bg-white border border-gray-100 rounded-2xl p-5 shadow-2xs space-y-4">
+                            <div class="bg-white border border-beige-border/80 rounded-[22px] p-5 shadow-sm space-y-4">
                                 
                                 <!-- TAB HEADER BUTTONS (2 cột dài bằng khung bên ngoài) -->
-                                <div class="grid grid-cols-2 gap-2 bg-gray-100/80 p-1.5 rounded-2xl border border-gray-100 mb-2">
-                                    <button id="tab-ingredients" class="tab-btn active w-full py-2.5 px-3 rounded-xl text-xs font-bold transition-all bg-white text-primary shadow-xs border border-gray-200/60 flex items-center justify-center gap-2 cursor-pointer">
-                                        <i class="fa-solid fa-wand-magic-sparkles text-amber-500"></i>
+                                <div class="grid grid-cols-2 gap-2 bg-cream-soft/60 p-1.5 rounded-2xl border border-beige-border mb-2">
+                                    <button id="tab-ingredients" class="tab-btn active w-full py-2.5 px-3 rounded-xl text-xs font-bold transition-all bg-white text-primary shadow-xs border border-beige-border flex items-center justify-center gap-2 cursor-pointer">
+                                        <i class="fa-solid fa-wand-magic-sparkles text-accent"></i>
                                         <span>Nguyên liệu chuẩn bị</span>
                                     </button>
                                     <button id="tab-recipe" class="tab-btn w-full py-2.5 px-3 rounded-xl text-xs font-semibold text-text-muted hover:text-text-main transition-all flex items-center justify-center gap-2 cursor-pointer">
-                                        <i class="fa-solid fa-fire-burner text-orange-500"></i>
+                                        <i class="fa-solid fa-fire-burner text-primary"></i>
                                         <span>Công thức nấu (${food.steps.length} bước)</span>
                                     </button>
                                 </div>
@@ -172,16 +172,16 @@ const FoodDetail = {
                     </div>
 
                     <!-- SECTION MÓN ĂN LIÊN QUAN (THEO DANH MỤC) -->
-                    <div class="pt-10 border-t border-gray-100 space-y-5">
+                    <div class="pt-8 border-t border-beige-border/80 space-y-5">
                         <div class="flex items-center justify-between flex-wrap gap-2">
                             <div>
                                 <h2 class="text-xl font-extrabold text-text-main flex items-center gap-2">
                                     <i class="fa-solid fa-utensils text-primary"></i>
                                     Món ăn liên quan (${food.category})
                                 </h2>
-                                <p class="text-xs text-text-muted mt-0.5">Gợi ý các món ngon cùng danh mục cho bữa ăn gia đình</p>
+                                <p class="text-xs text-text-muted mt-0.5 font-medium">Gợi ý các món ngon cùng danh mục cho bữa ăn gia đình</p>
                             </div>
-                            <a href="#/danh-sach" class="text-xs font-bold text-primary hover:underline flex items-center gap-1">
+                            <a href="#/danh-sach" class="text-xs font-bold text-primary hover:text-primary-deep flex items-center gap-1">
                                 <span>Xem tất cả</span>
                                 <i class="fa-solid fa-chevron-right text-[10px]"></i>
                             </a>

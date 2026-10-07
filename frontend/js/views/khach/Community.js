@@ -1,5 +1,5 @@
 // Community View - Food Social Community & Food Magazine Concept
-// Features: 3-Column Desktop Layout, Food Journal Composer with id_food attachment, Client-side Pagination (8 posts/page), Filter Navigation, Like & Share.
+// Features: 3-Column Desktop Layout, Food Journal Composer with id_food attachment, Lazy Loading / Infinite Scroll (6 initial + 4 more on scroll), Filter Navigation, Like & Share.
 
 // Sample existing foods in frontend database
 const availableFoods = [
@@ -16,6 +16,7 @@ const availableFoods = [
 ];
 
 // Rich Initial Community Posts Dataset (Conforms to Post entity: id_post, id_user, id_food, title, content, image, status, created_at)
+// 20 realistic culinary posts for seamless infinite scroll demonstration
 const initialPosts = [
     {
         id_post: 1,
@@ -124,7 +125,7 @@ const initialPosts = [
         created_at: new Date(Date.now() - 48 * 3600 * 1000).toISOString(),
         title: 'Đậu hũ sốt cà truyền thống',
         content: 'Món đậu hũ nhồi thịt sốt cà chua thân thương mộc mạc, làm nhanh chỉ 15 phút mà rất bùi béo ngọt thanh, chan cơm thì ngon tuyệt vời. 🍅',
-        image: 'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=1000&auto=format&fit=crop&q=80',
+        image: 'https://images.unsplash.com/photo-1546069901-d1d0cf377fde?w=1000&auto=format&fit=crop&q=80',
         foodName: 'Đậu Hũ Nhồi Thịt Sốt Cà',
         likes: 145,
         liked: false
@@ -156,10 +157,152 @@ const initialPosts = [
         foodName: 'Canh Sườn Nấu Sấu Hà Nội',
         likes: 290,
         liked: false
+    },
+    {
+        id_post: 11,
+        id_user: 111,
+        id_food: 1,
+        author: { name: 'Lê Thùy Dung', avatar: 'https://images.unsplash.com/photo-1524504388940-b1c1722653e1?w=150&auto=format&fit=crop&q=80' },
+        time: '3 ngày trước',
+        created_at: new Date(Date.now() - 80 * 3600 * 1000).toISOString(),
+        title: 'Thịt kho dừa thơm béo',
+        content: 'Thịt ba chỉ kho cùi dừa giòn sần sật, nước kho sền sệt béo ngậy vị dừa xiêm. Món này ăn vào ngày trở gió thì ngon hết sẩy! 🥥🥘',
+        image: 'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=1000&auto=format&fit=crop&q=80',
+        foodName: 'Thịt Kho Trứng & Nước Dừa',
+        likes: 210,
+        liked: false
+    },
+    {
+        id_post: 12,
+        id_user: 112,
+        id_food: 2,
+        author: { name: 'Phan Anh Tuấn', avatar: 'https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?w=150&auto=format&fit=crop&q=80' },
+        time: '4 ngày trước',
+        created_at: new Date(Date.now() - 96 * 3600 * 1000).toISOString(),
+        title: 'Nem rán giòn rụm đãi bạn bè',
+        content: 'Nem rán nhân tôm thịt mộc nhĩ nấm hương, vỏ nem giòn rụm chấm nước mắm tỏi ớt chua ngọt. Bí quyết là thêm chút bia vào vỏ bánh đa nem khi cuốn! 🥢',
+        image: 'https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?w=1000&auto=format&fit=crop&q=80',
+        foodName: 'Bún Chả & Nem Rán Hà Nội',
+        likes: 345,
+        liked: false
+    },
+    {
+        id_post: 13,
+        id_user: 113,
+        id_food: 3,
+        author: { name: 'Trịnh Ngọc Mai', avatar: 'https://images.unsplash.com/photo-1531746020798-e6953c6e8e04?w=150&auto=format&fit=crop&q=80' },
+        time: '4 ngày trước',
+        created_at: new Date(Date.now() - 100 * 3600 * 1000).toISOString(),
+        title: 'Cá hồi nướng tiêu chanh',
+        content: 'Đổi gió với món cá hồi sốt bơ chanh tiêu thơm phức, ăn kèm bông cải xanh luộc. Vừa healthy vừa tiết kiệm thời gian chuẩn bị! 🥑✨',
+        image: 'https://images.unsplash.com/photo-1467003909585-2f8a72700288?w=1000&auto=format&fit=crop&q=80',
+        foodName: 'Cá Hồi Áp Chảo Bơ Tỏi',
+        likes: 180,
+        liked: false
+    },
+    {
+        id_post: 14,
+        id_user: 114,
+        id_food: 6,
+        author: { name: 'Đỗ Hữu Minh', avatar: 'https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=150&auto=format&fit=crop&q=80' },
+        time: '5 ngày trước',
+        created_at: new Date(Date.now() - 120 * 3600 * 1000).toISOString(),
+        title: 'Gà rang lá chanh chuẩn vị mẹ nấu',
+        content: 'Thịt gà ta thả vườn rang khô với chút gừng, sả và lá chanh bánh tẻ thái chỉ. Mùi thơm nức mũi lan khắp xóm! 🍗🌿',
+        image: 'https://images.unsplash.com/photo-1604908176997-125f25cc6f3d?w=1000&auto=format&fit=crop&q=80',
+        foodName: 'Gà Xào Sả Ớt Cay Nồng',
+        likes: 275,
+        liked: false
+    },
+    {
+        id_post: 15,
+        id_user: 115,
+        id_food: 7,
+        author: { name: 'Vũ Thảo Vy', avatar: 'https://images.unsplash.com/photo-1548142813-c348350df52b?w=150&auto=format&fit=crop&q=80' },
+        time: '5 ngày trước',
+        created_at: new Date(Date.now() - 125 * 3600 * 1000).toISOString(),
+        title: 'Bò bít tết sốt tiêu bơ tỏi',
+        content: 'Tự làm bò lúc lắc và bít tết bơ tỏi tại gia chuẩn vị nhà hàng, thịt mềm mọng nước thơm lừng sốt kem béo ngậy. 🥩🍷',
+        image: 'https://images.unsplash.com/photo-1555939594-58d7cb561ad1?w=1000&auto=format&fit=crop&q=80',
+        foodName: 'Bò Xào Lúc Lắc Khoai Tây',
+        likes: 360,
+        liked: false
+    },
+    {
+        id_post: 16,
+        id_user: 116,
+        id_food: 5,
+        author: { name: 'Dương Gia Bảo', avatar: 'https://images.unsplash.com/photo-1501196354995-cbb51c65aaea?w=150&auto=format&fit=crop&q=80' },
+        time: '6 ngày trước',
+        created_at: new Date(Date.now() - 144 * 3600 * 1000).toISOString(),
+        title: 'Canh riêu cua đồng thanh mát',
+        content: 'Ngày hè nóng bức chỉ cần bát canh chua thanh đạm cùng đĩa cà pháo muối giòn là bao nhiêu mệt mỏi tan biến hết! 🥣🦀',
+        image: 'https://images.unsplash.com/photo-1547592180-85f173990554?w=1000&auto=format&fit=crop&q=80',
+        foodName: 'Canh Chua Cá Lóc Nam Bộ',
+        likes: 230,
+        liked: false
+    },
+    {
+        id_post: 17,
+        id_user: 117,
+        id_food: 4,
+        author: { name: 'Tạ Quỳnh Nga', avatar: 'https://images.unsplash.com/photo-1534751516642-a171edd2521d?w=150&auto=format&fit=crop&q=80' },
+        time: '6 ngày trước',
+        created_at: new Date(Date.now() - 150 * 3600 * 1000).toISOString(),
+        title: 'Sườn nướng mật ong óng ả',
+        content: 'Sườn ướp nước mắm, tỏi băm và mật ong rừng nướng nồi chiên không dầu thơm nức nở, màu vàng ươm đẹp mắt. 🍯🍖',
+        image: 'https://images.unsplash.com/photo-1544025162-8314e3fc4585?w=1000&auto=format&fit=crop&q=80',
+        foodName: 'Sườn Xào Chua Ngọt',
+        likes: 310,
+        liked: false
+    },
+    {
+        id_post: 18,
+        id_user: 118,
+        id_food: 8,
+        author: { name: 'Lâm Hoàng Phúc', avatar: 'https://images.unsplash.com/photo-1528892952291-009c663ce843?w=150&auto=format&fit=crop&q=80' },
+        time: '1 tuần trước',
+        created_at: new Date(Date.now() - 168 * 3600 * 1000).toISOString(),
+        title: 'Đậu hũ chiên sả ớt giòn cay',
+        content: 'Món ăn chay thanh đạm nhưng cực kỳ đưa cơm. Đậu hũ bên ngoài giòn rụm bên trong béo mềm thơm mùi sả ớt chiên vàng! 🌶️🌱',
+        image: 'https://images.unsplash.com/photo-1546069901-d1d0cf377fde?w=1000&auto=format&fit=crop&q=80',
+        foodName: 'Đậu Hũ Nhồi Thịt Sốt Cà',
+        likes: 195,
+        liked: false
+    },
+    {
+        id_post: 19,
+        id_user: 119,
+        id_food: 9,
+        author: { name: 'Hồ Mỹ Duyên', avatar: 'https://images.unsplash.com/photo-1544717305-2782549b5136?w=150&auto=format&fit=crop&q=80' },
+        time: '1 tuần trước',
+        created_at: new Date(Date.now() - 172 * 3600 * 1000).toISOString(),
+        title: 'Nộm rau muống tai heo giòn sần sật',
+        content: 'Rau muống chẻ ngâm nước đá giòn tan trộn cùng tai heo luộc thái mỏng, lạc rang bùi béo và nước mắm chua cay ngọt đậm vị! 🥗🥢',
+        image: 'https://images.unsplash.com/photo-1540420773420-3366772f4999?w=1000&auto=format&fit=crop&q=80',
+        foodName: 'Rau Muống Xào Tỏi Xanh Mướt',
+        likes: 240,
+        liked: false
+    },
+    {
+        id_post: 20,
+        id_user: 120,
+        id_food: 10,
+        author: { name: 'Trần Gia Hân', avatar: 'https://images.unsplash.com/photo-1517365830460-955ce3ccd263?w=150&auto=format&fit=crop&q=80' },
+        time: '1 tuần trước',
+        created_at: new Date(Date.now() - 180 * 3600 * 1000).toISOString(),
+        title: 'Vịt om sấu mùa hè',
+        content: 'Thịt vịt mềm ngọt hòa cùng nước om sấu béo ngậy, khoai sọ bở tơi thơm lừng. Cả nhà chan bún ăn hết veo cả nồi! 🦆🍲',
+        image: 'https://images.unsplash.com/photo-1512621776951-a57141f2eefd?w=1000&auto=format&fit=crop&q=80',
+        foodName: 'Canh Sườn Nấu Sấu Hà Nội',
+        likes: 388,
+        liked: false
     }
 ];
 
-const POSTS_PER_PAGE = 4; // 4 posts per page for clean, compact & balanced feed
+// Lazy Loading Batches Configuration
+const INITIAL_BATCH = 6;     // Load 6 posts initially
+const LOAD_MORE_BATCH = 4;    // Load 4 more posts each time user scrolls near bottom
 
 const Community = {
     render: async () => {
@@ -396,7 +539,7 @@ const Community = {
                                                 <div class="space-y-1 mt-1">
                                                     ${availableFoods.map(f => `
                                                         <button type="button" class="btn-select-food w-full text-left p-1.5 rounded-xl hover:bg-primary-subtle flex items-center gap-2 text-xs font-bold text-text-main transition-colors cursor-pointer" data-id="${f.id}" data-name="${f.name}">
-                                                            <img src="${f.image}" class="w-7 h-7 rounded-lg object-cover">
+                                                            <img src="${f.image}" class="w-7 h-7 rounded-lg object-cover" loading="lazy">
                                                             <span class="truncate">${f.name}</span>
                                                         </button>
                                                     `).join('')}
@@ -424,13 +567,13 @@ const Community = {
                             <span id="feed-post-count-badge" class="bg-white border border-beige-border px-2 py-0.5 rounded-full text-[11px]">Đang tải...</span>
                         </div>
 
-                        <!-- FEED POSTS CONTAINER -->
+                        <!-- FEED POSTS CONTAINER (Lazy loaded posts appended here) -->
                         <div id="community-feed" class="space-y-5">
                             <!-- Injected by JavaScript -->
                         </div>
 
-                        <!-- PAGINATION CONTAINER -->
-                        <div id="community-pagination" class="pt-2 pb-4 flex items-center justify-center">
+                        <!-- LAZY LOADING SENTINEL & SKELETON / END-OF-FEED CONTAINER -->
+                        <div id="community-load-more" class="py-4 flex flex-col items-center justify-center">
                             <!-- Injected by JavaScript -->
                         </div>
 
@@ -509,7 +652,10 @@ const Community = {
         // Master State (Frontend only)
         let allPosts = [...initialPosts];
         let currentFilteredPosts = [...allPosts];
-        let currentPage = 1;
+        let displayedCount = INITIAL_BATCH;
+        let isLoading = false;
+        let infiniteScrollObserver = null;
+
         let selectedFoodId = null;
         let selectedFoodName = null;
         let uploadedImageSrc = null;
@@ -529,7 +675,7 @@ const Community = {
         const attachedFoodNameEl = document.getElementById('attached-food-name');
         const btnRemoveAttachedFood = document.getElementById('btn-remove-attached-food');
         const feedContainer = document.getElementById('community-feed');
-        const paginationContainer = document.getElementById('community-pagination');
+        const loadMoreSentinel = document.getElementById('community-load-more');
         const feedFilterTitle = document.getElementById('feed-filter-title');
         const feedPostCountBadge = document.getElementById('feed-post-count-badge');
         const btnScrollToComposer = document.getElementById('btn-scroll-to-composer');
@@ -575,26 +721,18 @@ const Community = {
             }, 3000);
         };
 
-        // Smooth Scroll to Top of Feed (Composer or Feed Header)
-        const scrollToFeed = () => {
-            const target = document.getElementById('community-feed-header') || document.getElementById('post-composer');
-            if (target) {
-                target.scrollIntoView({ behavior: 'smooth', block: 'start' });
-            }
-        };
-
         // Render Single Post Card HTML
         const createPostCardHTML = (post, isFeatured = false) => {
             const hasImage = !!post.image;
             const hasFood = !!post.foodName;
 
             return `
-                <article class="bg-white rounded-[20px] border border-beige-border/80 shadow-sm hover:shadow-md transition-all duration-300 p-4.5 sm:p-5 mb-4 group ${isFeatured ? 'ring-1 ring-primary/20' : ''}" id="post-card-${post.id_post}">
+                <article class="bg-white rounded-[20px] border border-beige-border/80 shadow-sm hover:shadow-md transition-all duration-300 p-4.5 sm:p-5 group ${isFeatured ? 'ring-1 ring-primary/20' : ''}" id="post-card-${post.id_post}">
                     <!-- Author Header -->
                     <div class="flex items-center justify-between mb-3">
                         <div class="flex items-center gap-3">
                             <div class="relative">
-                                <img src="${post.author.avatar}" alt="${post.author.name}" class="w-10 h-10 rounded-full object-cover ring-2 ring-primary/15 shadow-sm">
+                                <img src="${post.author.avatar}" alt="${post.author.name}" class="w-10 h-10 rounded-full object-cover ring-2 ring-primary/15 shadow-sm" loading="lazy" decoding="async">
                                 <span class="absolute -bottom-0.5 -right-0.5 w-3 h-3 bg-green-500 border-2 border-white rounded-full"></span>
                             </div>
                             <div>
@@ -609,7 +747,7 @@ const Community = {
                             </div>
                         </div>
 
-                        <button class="btn-more-options text-text-muted hover:text-text-main p-1.5 rounded-full hover:bg-gray-100 transition-colors" title="Tùy chọn">
+                        <button class="btn-more-options text-text-muted hover:text-text-main p-1.5 rounded-full hover:bg-gray-100 transition-colors cursor-pointer" title="Tùy chọn">
                             <i class="fa-solid fa-ellipsis"></i>
                         </button>
                     </div>
@@ -619,7 +757,7 @@ const Community = {
                         ${post.content}
                     </p>
 
-                    <!-- Large Food Image with Attached Food Pill (16:10 Aspect Ratio) -->
+                    <!-- Food Image with Attached Food Pill (Fixed 16:10 Aspect Ratio) -->
                     ${hasImage ? `
                     <div class="rounded-xl overflow-hidden mb-3.5 bg-cream-soft border border-[#EFE9DC] relative group/img aspect-[16/10]">
                         <img 
@@ -627,6 +765,7 @@ const Community = {
                             alt="${post.foodName || 'Món ăn gia đình'}" 
                             class="w-full h-full object-cover object-center group-hover/img:scale-[1.02] transition-transform duration-500 ease-out" 
                             loading="lazy"
+                            decoding="async"
                         />
                         ${hasFood ? `
                         <div class="absolute bottom-2.5 left-2.5 bg-black/65 backdrop-blur-md text-white px-3 py-1 rounded-full text-[11px] font-bold flex items-center gap-1.5 shadow-sm">
@@ -664,14 +803,45 @@ const Community = {
             `;
         };
 
-        // Render Posts for Current Page (Pagination Slice)
-        const renderPosts = () => {
+        // Render Shimmer Skeleton Card HTML
+        const createSkeletonCardHTML = () => {
+            return `
+                <div class="bg-white rounded-[20px] border border-beige-border/80 p-4.5 sm:p-5 shadow-sm animate-pulse space-y-3.5 mb-5">
+                    <div class="flex items-center gap-3">
+                        <div class="w-10 h-10 rounded-full bg-[#ECE5D8]"></div>
+                        <div class="space-y-1.5 flex-1">
+                            <div class="w-32 h-3.5 bg-[#ECE5D8] rounded-md"></div>
+                            <div class="w-20 h-2.5 bg-[#ECE5D8] rounded-md"></div>
+                        </div>
+                    </div>
+                    <div class="space-y-2">
+                        <div class="w-full h-3 bg-[#ECE5D8] rounded-md"></div>
+                        <div class="w-4/5 h-3 bg-[#ECE5D8] rounded-md"></div>
+                    </div>
+                    <div class="w-full aspect-[16/10] bg-[#ECE5D8] rounded-xl"></div>
+                    <div class="flex justify-between items-center pt-2 border-t border-[#F0EBE0]">
+                        <div class="w-20 h-6 bg-[#ECE5D8] rounded-full"></div>
+                        <div class="w-16 h-6 bg-[#ECE5D8] rounded-full"></div>
+                    </div>
+                </div>
+            `;
+        };
+
+        // Update Post Count Badge
+        const updateFeedBadge = () => {
+            if (feedPostCountBadge) {
+                const total = currentFilteredPosts.length;
+                const visible = Math.min(displayedCount, total);
+                feedPostCountBadge.textContent = `Hiển thị ${visible}/${total} bài viết`;
+            }
+        };
+
+        // Render Initial Posts Batch
+        const renderInitialPosts = () => {
             if (!feedContainer) return;
 
             const totalPosts = currentFilteredPosts.length;
-            if (feedPostCountBadge) {
-                feedPostCountBadge.textContent = `${totalPosts} bài viết`;
-            }
+            updateFeedBadge();
 
             // Empty State
             if (totalPosts === 0) {
@@ -682,7 +852,7 @@ const Community = {
                         </div>
                         <h3 class="text-base font-extrabold text-text-main mb-1">Chưa có bài viết nào</h3>
                         <p class="text-xs text-text-muted mb-4">Hãy là người đầu tiên chia sẻ mâm cơm ấm cúng hôm nay!</p>
-                        <button id="btn-empty-composer" class="inline-flex items-center gap-1.5 bg-primary hover:bg-primary-hover text-white font-bold text-xs px-4 py-2 rounded-full transition-all">
+                        <button id="btn-empty-composer" class="inline-flex items-center gap-1.5 bg-primary hover:bg-primary-hover text-white font-bold text-xs px-4 py-2 rounded-full transition-all cursor-pointer">
                             <i class="fa-solid fa-plus text-xs"></i>
                             <span>Đăng bài ngay</span>
                         </button>
@@ -696,105 +866,116 @@ const Community = {
                     });
                 }
 
-                if (paginationContainer) paginationContainer.innerHTML = '';
+                if (loadMoreSentinel) loadMoreSentinel.innerHTML = '';
                 return;
             }
 
-            // Calculate Pagination Slice
-            const startIndex = (currentPage - 1) * POSTS_PER_PAGE;
-            const endIndex = startIndex + POSTS_PER_PAGE;
-            const pagePosts = currentFilteredPosts.slice(startIndex, endIndex);
-
-            feedContainer.innerHTML = pagePosts.map((post, index) => {
-                const isFeatured = (currentPage === 1 && index === 0);
+            // Render first batch
+            const initialSlice = currentFilteredPosts.slice(0, displayedCount);
+            feedContainer.innerHTML = initialSlice.map((post, index) => {
+                const isFeatured = (index === 0 && currentFilter === 'all');
                 return createPostCardHTML(post, isFeatured);
             }).join('');
 
-            renderPagination();
+            updateSentinelStatus();
         };
 
-        // Render Pagination Controls
-        const renderPagination = () => {
-            if (!paginationContainer) return;
+        // Update Sentinel View (Loading Shimmer / End of Feed indicator)
+        const updateSentinelStatus = () => {
+            if (!loadMoreSentinel) return;
 
-            const totalPosts = currentFilteredPosts.length;
-            const totalPages = Math.ceil(totalPosts / POSTS_PER_PAGE);
-
-            // Hide pagination if <= POSTS_PER_PAGE
-            if (totalPages <= 1) {
-                paginationContainer.innerHTML = '';
+            const total = currentFilteredPosts.length;
+            if (total === 0) {
+                loadMoreSentinel.innerHTML = '';
                 return;
             }
 
-            const isFirstPage = currentPage === 1;
-            const isLastPage = currentPage === totalPages;
+            if (displayedCount >= total) {
+                // All posts loaded
+                loadMoreSentinel.innerHTML = `
+                    <div class="text-center py-5 text-text-muted text-xs font-medium w-full">
+                        <div class="inline-flex items-center gap-2 bg-white/80 backdrop-blur-sm border border-beige-border px-4 py-2 rounded-full shadow-sm text-text-muted">
+                            <span class="text-accent">✨</span>
+                            <span>Bạn đã xem hết bài viết trong cộng đồng.</span>
+                        </div>
+                    </div>
+                `;
+            } else {
+                // Ready to load more on scroll
+                loadMoreSentinel.innerHTML = `
+                    <div class="text-center py-3 text-text-muted text-xs font-medium">
+                        <span class="inline-flex items-center gap-2 text-text-muted opacity-70">
+                            <i class="fa-solid fa-angles-down animate-bounce text-xs text-primary"></i>
+                            <span>Cuộn xuống để xem thêm món ngon</span>
+                        </span>
+                    </div>
+                `;
+            }
+        };
 
-            let pageNumbersHTML = '';
-            for (let i = 1; i <= totalPages; i++) {
-                const isActive = i === currentPage;
-                pageNumbersHTML += `
-                    <button 
-                        type="button" 
-                        class="page-num-btn w-8.5 h-8.5 rounded-xl text-xs font-bold transition-all duration-150 flex items-center justify-center cursor-pointer ${
-                            isActive 
-                                ? 'bg-primary text-white shadow-sm font-extrabold scale-105' 
-                                : 'bg-white text-text-main hover:bg-primary-subtle hover:text-primary border border-beige-border'
-                        }" 
-                        data-page="${i}"
-                    >
-                        ${i}
-                    </button>
+        // Load More Posts on Infinite Scroll Trigger
+        const loadMorePosts = () => {
+            if (isLoading) return;
+            const total = currentFilteredPosts.length;
+            if (displayedCount >= total) return;
+
+            isLoading = true;
+
+            // Display Shimmer Skeleton while loading next batch
+            if (loadMoreSentinel) {
+                loadMoreSentinel.innerHTML = `
+                    <div class="w-full space-y-4">
+                        ${createSkeletonCardHTML()}
+                        <div class="flex items-center justify-center gap-2 text-xs font-bold text-primary py-2">
+                            <i class="fa-solid fa-spinner animate-spin text-sm text-accent"></i>
+                            <span>Đang khám phá thêm món ngon...</span>
+                        </div>
+                    </div>
                 `;
             }
 
-            paginationContainer.innerHTML = `
-                <div class="inline-flex items-center gap-2 bg-white/80 backdrop-blur-sm border border-beige-border px-3 py-1.5 rounded-2xl shadow-sm">
-                    <!-- Prev Button -->
-                    <button 
-                        type="button" 
-                        id="btn-prev-page" 
-                        class="px-3 py-1.5 rounded-xl text-xs font-bold transition-all flex items-center gap-1 cursor-pointer ${
-                            isFirstPage 
-                                ? 'opacity-40 cursor-not-allowed text-gray-400 bg-gray-50 border border-gray-100' 
-                                : 'bg-white text-text-main hover:bg-primary-subtle hover:text-primary border border-beige-border'
-                        }"
-                        ${isFirstPage ? 'disabled' : ''}
-                    >
-                        <span>←</span>
-                        <span>Trước</span>
-                    </button>
+            // Simulate realistic smooth lazy load delay (400-600ms)
+            setTimeout(() => {
+                const nextBatch = currentFilteredPosts.slice(displayedCount, displayedCount + LOAD_MORE_BATCH);
+                
+                if (feedContainer && nextBatch.length > 0) {
+                    const tempDiv = document.createElement('div');
+                    tempDiv.innerHTML = nextBatch.map(post => createPostCardHTML(post)).join('');
+                    
+                    while (tempDiv.firstChild) {
+                        feedContainer.appendChild(tempDiv.firstChild);
+                    }
+                }
 
-                    <!-- Page Numbers -->
-                    <div class="flex items-center gap-1.5 px-1">
-                        ${pageNumbersHTML}
-                    </div>
-
-                    <!-- Next Button -->
-                    <button 
-                        type="button" 
-                        id="btn-next-page" 
-                        class="px-3 py-1.5 rounded-xl text-xs font-bold transition-all flex items-center gap-1 cursor-pointer ${
-                            isLastPage 
-                                ? 'opacity-40 cursor-not-allowed text-gray-400 bg-gray-50 border border-gray-100' 
-                                : 'bg-white text-text-main hover:bg-primary-subtle hover:text-primary border border-beige-border'
-                        }"
-                        ${isLastPage ? 'disabled' : ''}
-                    >
-                        <span>Sau</span>
-                        <span>→</span>
-                    </button>
-                </div>
-            `;
+                displayedCount += nextBatch.length;
+                isLoading = false;
+                updateFeedBadge();
+                updateSentinelStatus();
+            }, 500);
         };
 
-        // Go to Page function
-        const goToPage = (pageNumber) => {
-            const totalPages = Math.ceil(currentFilteredPosts.length / POSTS_PER_PAGE);
-            if (pageNumber < 1 || pageNumber > totalPages) return;
+        // Setup Intersection Observer for Infinite Scroll
+        const setupInfiniteScroll = () => {
+            if (infiniteScrollObserver) {
+                infiniteScrollObserver.disconnect();
+            }
 
-            currentPage = pageNumber;
-            renderPosts();
-            scrollToFeed();
+            if (!loadMoreSentinel) return;
+
+            infiniteScrollObserver = new IntersectionObserver((entries) => {
+                const entry = entries[0];
+                if (entry && entry.isIntersecting) {
+                    if (!isLoading && displayedCount < currentFilteredPosts.length) {
+                        loadMorePosts();
+                    }
+                }
+            }, {
+                root: null,
+                rootMargin: '350px 0px', // Pre-fetch before user hits the exact bottom
+                threshold: 0.1
+            });
+
+            infiniteScrollObserver.observe(loadMoreSentinel);
         };
 
         // Render Right Sidebar Popular & Recent Cards
@@ -808,7 +989,7 @@ const Community = {
 
                 popularDishesList.innerHTML = popularSorted.map(p => `
                     <div class="flex items-center gap-2.5 group cursor-pointer" onclick="window.location.hash='#/danh-sach'">
-                        <img src="${p.image || 'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=100'}" alt="${p.foodName}" class="w-11 h-11 rounded-xl object-cover ring-1 ring-black/5 flex-shrink-0 group-hover:scale-105 transition-transform">
+                        <img src="${p.image || 'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=100'}" alt="${p.foodName}" class="w-11 h-11 rounded-xl object-cover ring-1 ring-black/5 flex-shrink-0 group-hover:scale-105 transition-transform" loading="lazy">
                         <div class="flex-1 min-w-0">
                             <h4 class="font-bold text-xs text-text-main truncate group-hover:text-primary transition-colors">${p.foodName}</h4>
                             <p class="text-[11px] text-rose-600 font-bold mt-0.5 flex items-center gap-1">
@@ -828,7 +1009,7 @@ const Community = {
 
                 recentPostsList.innerHTML = recentSorted.map(p => `
                     <div class="flex items-center gap-2.5 group cursor-pointer">
-                        <img src="${p.image || p.author.avatar}" alt="${p.author.name}" class="w-11 h-11 rounded-xl object-cover ring-1 ring-black/5 flex-shrink-0 group-hover:scale-105 transition-transform">
+                        <img src="${p.image || p.author.avatar}" alt="${p.author.name}" class="w-11 h-11 rounded-xl object-cover ring-1 ring-black/5 flex-shrink-0 group-hover:scale-105 transition-transform" loading="lazy">
                         <div class="flex-1 min-w-0">
                             <h4 class="font-bold text-xs text-text-main truncate group-hover:text-primary transition-colors">${p.title || p.author.name}</h4>
                             <p class="text-[10px] text-text-muted font-medium mt-0.5 flex items-center gap-1">
@@ -957,13 +1138,19 @@ const Community = {
 
                 // Add to master array at beginning
                 allPosts.unshift(newPost);
-                currentFilteredPosts = [...allPosts];
+                currentFilteredPosts.unshift(newPost);
+                displayedCount++;
 
-                // Reset page to 1
-                currentPage = 1;
-                renderPosts();
+                // Prepend directly into feedContainer
+                if (feedContainer) {
+                    const tempDiv = document.createElement('div');
+                    tempDiv.innerHTML = createPostCardHTML(newPost, true);
+                    const newCard = tempDiv.firstElementChild;
+                    feedContainer.insertBefore(newCard, feedContainer.firstChild);
+                }
+
+                updateFeedBadge();
                 renderSidebars();
-                scrollToFeed();
 
                 // Reset composer
                 formCreatePost.reset();
@@ -978,7 +1165,7 @@ const Community = {
             });
         }
 
-        // Event Delegation for Like & Share on feedContainer
+        // Event Delegation for Like & Share on feedContainer (seamless for lazy loaded items)
         if (feedContainer) {
             feedContainer.addEventListener('click', (e) => {
                 // Like Handler
@@ -1039,32 +1226,6 @@ const Community = {
             });
         }
 
-        // Pagination Container Event Delegation
-        if (paginationContainer) {
-            paginationContainer.addEventListener('click', (e) => {
-                const prevBtn = e.target.closest('#btn-prev-page');
-                if (prevBtn && !prevBtn.disabled) {
-                    goToPage(currentPage - 1);
-                    return;
-                }
-
-                const nextBtn = e.target.closest('#btn-next-page');
-                if (nextBtn && !nextBtn.disabled) {
-                    goToPage(currentPage + 1);
-                    return;
-                }
-
-                const pageBtn = e.target.closest('.page-num-btn');
-                if (pageBtn) {
-                    const page = parseInt(pageBtn.getAttribute('data-page'), 10);
-                    if (page && page !== currentPage) {
-                        goToPage(page);
-                    }
-                    return;
-                }
-            });
-        }
-
         // Left Sidebar Filter Navigation Handlers
         const filterButtons = document.querySelectorAll('.filter-nav-btn');
         filterButtons.forEach(btn => {
@@ -1101,16 +1262,23 @@ const Community = {
                     if (feedFilterTitle) feedFilterTitle.textContent = '🎲 Khám phá ngẫu nhiên';
                 }
 
-                // Reset page to 1 on filter switch
-                currentPage = 1;
-                renderPosts();
-                scrollToFeed();
+                // Reset lazy loading batch to initial size
+                displayedCount = INITIAL_BATCH;
+                renderInitialPosts();
+                setupInfiniteScroll();
+
+                const target = document.getElementById('community-feed-header') || document.getElementById('post-composer');
+                if (target) {
+                    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }
+
                 showToast(`Đã lọc: ${btn.querySelector('span span:last-child')?.textContent || 'Danh sách'}`, 'info');
             });
         });
 
-        // Initial Renders
-        renderPosts();
+        // Initial Renders & Setup
+        renderInitialPosts();
+        setupInfiniteScroll();
         renderSidebars();
     }
 };

@@ -3,10 +3,13 @@
 
 @layer utilities {
   .font-handwriting {
-    font-family: 'Patrick Hand', cursive;
+    font-family: 'Itim', 'Caveat', cursive;
   }
   .font-caveat {
-    font-family: 'Caveat', cursive;
+    font-family: 'Dancing Script', 'Caveat', cursive;
+  }
+  .font-script {
+    font-family: 'Dancing Script', cursive;
   }
   .font-quicksand {
     font-family: 'Quicksand', sans-serif;
@@ -86,3 +89,23 @@
 .shadow-cozy-pill {
   box-shadow: 0 4px 14px 0 rgba(36, 91, 67, 0.25);
 }
+
+/* Custom Sleek Scrollbar */
+.custom-scrollbar::-webkit-scrollbar {
+  width: 5px;
+}
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: transparent;
+}
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background-color: #DFD5BE;
+  border-radius: 9999px;
+}
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background-color: #245B43;
+}
+.custom-scrollbar {
+  scrollbar-width: thin;
+  scrollbar-color: #DFD5BE transparent;
+}
+
