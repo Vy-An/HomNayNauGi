@@ -1,6 +1,7 @@
 const prisma = require('../lib/prisma');
+const { resolveAssetUrl } = require('../utils/assetUrl');
 
-const FALLBACK_IMAGE = 'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?auto=format&fit=crop&w=800&q=80';
+const FALLBACK_IMAGE = '/images/foods/thit-kho-trung.jpg';
 
 const INGREDIENT_ALIASES = {
     thit: ['Thit', 'Thịt', 'heo', 'gà', 'ga', 'bò', 'bo', 'cá', 'ca', 'sườn', 'suon'],
@@ -25,6 +26,12 @@ const CATEGORY_ALIASES = {
     rau: ['mon-rau']
 };
 
+const COOK_TIME_FILTERS = {
+    quick: { lte: 15 },
+    medium: { gt: 15, lte: 30 },
+    long: { gt: 30 }
+};
+
 function clampQuantity(quantity) {
     const parsed = Number.parseInt(quantity, 10);
     if (Number.isNaN(parsed)) return 1;
@@ -45,10 +52,22 @@ function expandAliases(values, aliases) {
     return values.flatMap((value) => aliases[value] || [value]);
 }
 
-function buildWhere({ ingredients = [], categories = [] }) {
+function normalizeCookTime(value) {
+    if (!value) return '';
+    const normalized = Array.isArray(value) ? value[0] : value;
+    const key = String(normalized).trim().toLowerCase();
+
+    return COOK_TIME_FILTERS[key] ? key : '';
+}
+
+function buildWhere({ ingredients = [], categories = [], cookTime = '' }) {
     const where = {
         status: 'active'
     };
+
+    if (cookTime) {
+        where.cooking_time = COOK_TIME_FILTERS[cookTime];
+    }
 
     const categorySlugs = expandAliases(categories, CATEGORY_ALIASES);
     if (categorySlugs.length) {
@@ -88,6 +107,26 @@ function shuffle(items) {
     return cloned;
 }
 
+function getCookingTime(food) {
+    return food.cooking_time ?? Number.MAX_SAFE_INTEGER;
+}
+
+function pickShortestRandom(foods, count) {
+    const groupedByTime = foods.reduce((groups, food) => {
+        const cookingTime = getCookingTime(food);
+        const group = groups.get(cookingTime) || [];
+        group.push(food);
+        groups.set(cookingTime, group);
+
+        return groups;
+    }, new Map());
+
+    return Array.from(groupedByTime.keys())
+        .sort((a, b) => a - b)
+        .flatMap((cookingTime) => shuffle(groupedByTime.get(cookingTime)))
+        .slice(0, count);
+}
+
 function formatQuantity(value) {
     if (value === null || value === undefined) return '';
 
@@ -102,7 +141,7 @@ function formatFood(food) {
         name: food.name,
         slug: food.slug,
         description: food.description,
-        image: food.image || FALLBACK_IMAGE,
+        image: resolveAssetUrl(food.image || FALLBACK_IMAGE),
         time: food.cooking_time ? `${food.cooking_time} phut` : '30 phut',
         cookingTime: food.cooking_time,
         servings: food.servings,
@@ -152,12 +191,40 @@ async function getRandomMeals(options = {}) {
     const quantity = clampQuantity(options.quantity);
     const ingredients = normalizeList(options.ingredients);
     const categories = normalizeList(options.categories);
-    const filteredWhere = buildWhere({ ingredients, categories });
+    const cookTime = normalizeCookTime(options.cookTime || options.cook_time);
+    const filteredWhere = buildWhere({ ingredients, categories, cookTime });
 
-    const hasFilters = ingredients.length || categories.length;
+    const hasFilters = ingredients.length || categories.length || Boolean(cookTime);
     const matchedFoods = await findFoods(filteredWhere);
     const selectedFoods = shuffle(matchedFoods).slice(0, quantity);
     let fallbackCount = 0;
+    let timeRelaxedCount = 0;
+
+    const appendFallbackFoods = (foods, count, pickShortest = false) => {
+        const fillFoods = pickShortest
+            ? pickShortestRandom(foods, count)
+            : shuffle(foods).slice(0, count);
+
+        fallbackCount += fillFoods.length;
+        selectedFoods.push(...fillFoods);
+
+        return fillFoods.length;
+    };
+
+    if (cookTime && selectedFoods.length < quantity) {
+        const selectedIds = new Set(selectedFoods.map((food) => food.id_food));
+        const relaxedTimeWhere = buildWhere({ ingredients, categories });
+        relaxedTimeWhere.id_food = {
+            notIn: Array.from(selectedIds)
+        };
+
+        const relaxedTimeFoods = await findFoods(relaxedTimeWhere);
+        timeRelaxedCount += appendFallbackFoods(
+            relaxedTimeFoods,
+            quantity - selectedFoods.length,
+            true
+        );
+    }
 
     if (selectedFoods.length < quantity) {
         const selectedIds = new Set(selectedFoods.map((food) => food.id_food));
@@ -168,9 +235,11 @@ async function getRandomMeals(options = {}) {
             }
         });
 
-        const fillFoods = shuffle(fallbackFoods).slice(0, quantity - selectedFoods.length);
-        fallbackCount = fillFoods.length;
-        selectedFoods.push(...fillFoods);
+        appendFallbackFoods(
+            fallbackFoods,
+            quantity - selectedFoods.length,
+            Boolean(cookTime)
+        );
     }
 
     return {
@@ -178,12 +247,14 @@ async function getRandomMeals(options = {}) {
         matchedFilters: !hasFilters || matchedFoods.length > 0,
         totalCandidates: matchedFoods.length,
         fallbackCount,
+        timeRelaxedCount,
+        cookTime,
         foods: selectedFoods.map(formatFood)
     };
 }
 
 async function getRandomOptions() {
-    const [categories, ingredients] = await Promise.all([
+    const [categories, ingredients, categoryCounts] = await Promise.all([
         prisma.categories.findMany({
             orderBy: {
                 name: 'asc'
@@ -193,14 +264,28 @@ async function getRandomOptions() {
             orderBy: {
                 name: 'asc'
             }
+        }),
+        prisma.foods.groupBy({
+            by: ['id_category'],
+            where: {
+                status: 'active'
+            },
+            _count: {
+                id_food: true
+            }
         })
     ]);
+
+    const categoryCountById = new Map(
+        categoryCounts.map((item) => [item.id_category, item._count.id_food])
+    );
 
     return {
         categories: categories.map((category) => ({
             id: category.id_category,
             name: category.name,
-            slug: category.slug
+            slug: category.slug,
+            foodCount: categoryCountById.get(category.id_category) || 0
         })),
         ingredients: ingredients.map((ingredient) => ({
             id: ingredient.id_ingredient,
