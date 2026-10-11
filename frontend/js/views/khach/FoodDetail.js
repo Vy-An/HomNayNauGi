@@ -1,36 +1,32 @@
 import FoodCard from '../../components/FoodCard.js';
+import { fetchAPI } from '../../api.js';
+
+let currentFoodDetail = null;
 
 const FoodDetail = {
     render: async (id) => {
-        const food = {
-            id: id || 1,
-            name: 'Cơm Tấm Sườn Bì Chả',
-            description: 'Món ăn đặc sản Nam Bộ thơm ngon chuẩn vị với sườn nướng mật ong mềm mọng, bì giòn sần sật và chả trứng hấp béo ngậy.',
-            image: 'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=1000',
-            time: '45 phút',
-            portions: '2 người',
-            difficulty: 'Trung bình',
-            likes: '2.5k',
-            calories: '650 kcal',
-            category: 'Món Mặn',
-            mealType: 'Bữa trưa',
-            ingredients: [
-                { name: 'Gạo tấm', amount: '300g' },
-                { name: 'Sườn cốt lết', amount: '2 miếng' },
-                { name: 'Bì heo trộn thính', amount: '100g' },
-                { name: 'Chả trứng hấp', amount: '1 phần' },
-                { name: 'Mỡ hành, đồ chua', amount: 'Vừa đủ' },
-                { name: 'Nước mắm chua ngọt', amount: 'Vừa đủ' }
-            ],
-            steps: [
-                'Ướp sườn với sả băm, tỏi băm, mật ong, dầu hào, nước mắm trong 30 phút.',
-                'Nướng sườn trên nồi chiên không dầu hoặc bếp than ở 180°C đến khi vàng nâu.',
-                'Nấu cơm tấm bằng nồi cơm điện với lượng nước vừa phải.',
-                'Xới cơm ra đĩa, đặt sườn nướng, bì, chả trứng, rưới mỡ hành và chan nước mắm.'
-            ]
-        };
+        let food = null;
+        try {
+            const res = await fetchAPI(`/foods/${id || 1}`);
+            if (res && res.success && res.data) {
+                food = res.data;
+            }
+        } catch (e) {
+            console.warn('Lỗi khi gọi API chi tiết món ăn:', e);
+        }
 
-        const ingredientsCardsHTML = food.ingredients.map(ing => `
+        if (!food) {
+            return `
+                <div class="cozy-kitchen-bg min-h-screen text-center py-20">
+                    <p class="text-xl font-bold text-red-500 mb-2">Không tìm thấy món ăn này trong Database!</p>
+                    <a href="#/danh-sach" class="text-primary font-semibold underline">Quay lại danh sách</a>
+                </div>
+            `;
+        }
+
+        currentFoodDetail = food;
+
+        const ingredientsCardsHTML = (food.ingredients || []).map(ing => `
             <div class="bg-gray-50/80 border border-gray-100 rounded-xl px-3.5 py-2.5 flex items-center justify-between text-xs hover:border-primary/30 transition">
                 <div class="flex items-center gap-2 font-semibold text-text-main">
                     <span class="w-1.5 h-1.5 rounded-full bg-primary"></span>
@@ -40,7 +36,7 @@ const FoodDetail = {
             </div>
         `).join('');
 
-        const stepsCardsHTML = food.steps.map((step, index) => `
+        const stepsCardsHTML = (food.steps || []).map((step, index) => `
             <div class="bg-gray-50/80 border border-gray-100 rounded-xl p-3.5 flex items-start gap-3 hover:border-primary/30 transition">
                 <div class="shrink-0 w-7 h-7 rounded-full bg-primary text-white font-extrabold text-xs flex items-center justify-center shadow-xs">
                     ${index + 1}
@@ -49,12 +45,10 @@ const FoodDetail = {
             </div>
         `).join('');
 
-        // Mockup danh sách món ăn liên quan theo danh mục
-        const relatedFoods = [
-            { id: 2, name: 'Thịt Kho Trứng Cút', image: 'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=500', time: '45 phút', likes: '3.1k', description: 'Thịt kho trứng cút đậm đà béo ngậy ăn với cơm nóng.' },
-            { id: 3, name: 'Gà Xào Sả Ớt', image: 'https://images.unsplash.com/photo-1604908176997-125f25cc6f3d?w=500', time: '30 phút', likes: '1.8k', description: 'Gà xào sả ớt thơm nức cay nồng hấp dẫn.' },
-            { id: 4, name: 'Sườn Xào Chua Ngọt', image: 'https://images.unsplash.com/photo-1544025162-8314e3fc4585?w=500', time: '40 phút', likes: '4.5k', description: 'Sườn sụn xào chua ngọt chuẩn vị đưa cơm.' }
-        ];
+        // Món ăn liên quan từ database
+        const relatedFoods = (food.relatedFoods && food.relatedFoods.length > 0)
+            ? food.relatedFoods
+            : [];
 
         const relatedCardsHTML = relatedFoods.map(f => FoodCard(f)).join('');
 
