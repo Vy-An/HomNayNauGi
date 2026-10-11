@@ -112,8 +112,7 @@ export default function Navbar() {
             </div>
         </header>
 
-        <!-- Sidebar Favorites Drawer -->
-        <div id="nav-fav-modal" class="fixed inset-y-0 right-0 w-[85vw] sm:w-96 bg-white shadow-2xl z-[70] transform translate-x-full transition-transform duration-300 ease-in-out flex flex-col border-l border-gray-200">
+        <div id="nav-fav-modal" class="fixed inset-y-0 right-0 w-[85vw] sm:w-96 bg-white shadow-2xl z-[70] transform translate-x-full invisible pointer-events-none transition-transform duration-300 ease-in-out flex flex-col border-l border-gray-200">
             <div class="p-4 border-b border-gray-100 flex items-center justify-between bg-[#0F4937] text-white">
                 <h3 class="text-base font-bold flex items-center gap-2"><i class="fa-solid fa-heart text-[#F4A62A]"></i> Món yêu thích</h3>
                 <button onclick="window.closeNavDrawers && window.closeNavDrawers()" class="hover:bg-white/10 text-white transition text-2xl w-8 h-8 flex items-center justify-center rounded-full cursor-pointer">&times;</button>
@@ -133,14 +132,20 @@ export default function Navbar() {
     `;
 }
 
-// Global helper for Drawer & Won Dishes
 if (typeof window !== 'undefined') {
     window.closeNavDrawers = () => {
         const overlay = document.getElementById('nav-drawer-overlay');
         const favModal = document.getElementById('nav-fav-modal');
         const wonPopover = document.getElementById('nav-won-popover');
         if (overlay) overlay.classList.add('hidden');
-        if (favModal) favModal.classList.add('translate-x-full');
+        if (favModal) {
+            favModal.classList.add('translate-x-full');
+            setTimeout(() => {
+                if (favModal.classList.contains('translate-x-full')) {
+                    favModal.classList.add('invisible', 'pointer-events-none');
+                }
+            }, 300);
+        }
         if (wonPopover) wonPopover.classList.add('hidden');
     };
 
@@ -148,7 +153,9 @@ if (typeof window !== 'undefined') {
         const overlay = document.getElementById('nav-drawer-overlay');
         const favModal = document.getElementById('nav-fav-modal');
         if (overlay) overlay.classList.remove('hidden');
-        if (favModal) favModal.classList.remove('translate-x-full');
+        if (favModal) {
+            favModal.classList.remove('invisible', 'pointer-events-none', 'translate-x-full');
+        }
     };
 
     window.toggleWonDishesPopover = () => {

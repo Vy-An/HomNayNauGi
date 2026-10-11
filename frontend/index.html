@@ -11,13 +11,16 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="css/style.css">
     <style>
-        /* Ẩn thanh cuộn dọc và ngang nhưng vẫn cho phép lướt */
+        html, body {
+            overflow-x: clip;
+            max-width: 100vw;
+        }
         ::-webkit-scrollbar {
             display: none;
         }
         * {
-            -ms-overflow-style: none;  /* IE and Edge */
-            scrollbar-width: none;  /* Firefox */
+            -ms-overflow-style: none;
+            scrollbar-width: none;
         }
     </style>
 </head>

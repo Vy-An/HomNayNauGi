@@ -91,10 +91,6 @@ const FoodList = {
                         <!-- Quick Category Pills -->
                         <div class="pt-1 flex flex-wrap items-center gap-2" id="quick-category-pills">
                             <span class="text-xs font-bold text-text-muted mr-1 hidden sm:inline">Danh mục:</span>
-                            <button type="button" class="quick-cat-btn active-pill px-3.5 py-1.5 rounded-full text-xs font-bold transition-all flex items-center gap-1.5 cursor-pointer border shadow-2xs" data-cat="all">
-                                <span>✨</span>
-                                <span>Tất cả</span>
-                            </button>
                             <button type="button" class="quick-cat-btn px-3.5 py-1.5 rounded-full text-xs font-bold transition-all flex items-center gap-1.5 cursor-pointer border border-[#E5DEC9] bg-white/80 text-text-muted hover:text-primary hover:bg-primary-subtle shadow-2xs" data-cat="viet">
                                 <span>🍲</span>
                                 <span>Món Việt</span>
@@ -184,24 +180,26 @@ const FoodList = {
                                 Loại món
                             </h3>
                             <div class="grid grid-cols-2 gap-1" id="filter-category-group">
-                                <button type="button" class="btn-filter-cat active-cat px-2 py-1 rounded-lg text-[11px] font-bold text-left transition-all border cursor-pointer flex items-center justify-between" data-cat="all">
-                                    <span>Tất cả</span>
-                                    <i class="fa-solid fa-check text-[8px]"></i>
-                                </button>
                                 <button type="button" class="btn-filter-cat px-2 py-1 rounded-lg text-[11px] font-semibold text-text-muted text-left transition-all border border-gray-100 hover:bg-cream-soft hover:text-primary cursor-pointer flex items-center justify-between" data-cat="Món mặn">
                                     <span>Món mặn</span>
                                 </button>
                                 <button type="button" class="btn-filter-cat px-2 py-1 rounded-lg text-[11px] font-semibold text-text-muted text-left transition-all border border-gray-100 hover:bg-cream-soft hover:text-primary cursor-pointer flex items-center justify-between" data-cat="Món canh">
                                     <span>Món canh</span>
                                 </button>
+                                <button type="button" class="btn-filter-cat px-2 py-1 rounded-lg text-[11px] font-semibold text-text-muted text-left transition-all border border-gray-100 hover:bg-cream-soft hover:text-primary cursor-pointer flex items-center justify-between" data-cat="Món kho">
+                                    <span>Món kho</span>
+                                </button>
                                 <button type="button" class="btn-filter-cat px-2 py-1 rounded-lg text-[11px] font-semibold text-text-muted text-left transition-all border border-gray-100 hover:bg-cream-soft hover:text-primary cursor-pointer flex items-center justify-between" data-cat="Món xào">
                                     <span>Món xào</span>
                                 </button>
-                                <button type="button" class="btn-filter-cat px-2 py-1 rounded-lg text-[11px] font-semibold text-text-muted text-left transition-all border border-gray-100 hover:bg-cream-soft hover:text-primary cursor-pointer flex items-center justify-between" data-cat="Món nướng">
-                                    <span>Món nướng</span>
-                                </button>
                                 <button type="button" class="btn-filter-cat px-2 py-1 rounded-lg text-[11px] font-semibold text-text-muted text-left transition-all border border-gray-100 hover:bg-cream-soft hover:text-primary cursor-pointer flex items-center justify-between" data-cat="Món chiên">
                                     <span>Món chiên</span>
+                                </button>
+                                <button type="button" class="btn-filter-cat px-2 py-1 rounded-lg text-[11px] font-semibold text-text-muted text-left transition-all border border-gray-100 hover:bg-cream-soft hover:text-primary cursor-pointer flex items-center justify-between" data-cat="Món rau">
+                                    <span>Món rau</span>
+                                </button>
+                                <button type="button" class="btn-filter-cat px-2 py-1 rounded-lg text-[11px] font-semibold text-text-muted text-left transition-all border border-gray-100 hover:bg-cream-soft hover:text-primary cursor-pointer flex items-center justify-between" data-cat="Món luộc">
+                                    <span>Món luộc</span>
                                 </button>
                             </div>
                         </div>
@@ -467,7 +465,7 @@ const FoodList = {
         `;
     },
 
-    afterRender: async () => {
+    afterRender: async (params) => {
         // ====================================================================
         // STATE MANAGEMENT (Frontend only)
         // ====================================================================
@@ -478,8 +476,8 @@ const FoodList = {
         let hasMore = true;
         let viewMode = 'grid'; // 'grid' or 'list'
         let currentSort = 'newest';
-        let currentCategory = 'all';
-        let currentQuickCategory = 'all';
+        let currentCategory = '';
+        let currentQuickCategory = '';
         let currentCookTime = 'all';
         let currentSelectedIngredients = [];
         let currentSearchQuery = '';
@@ -495,12 +493,13 @@ const FoodList = {
                     name: item.name || item.ten_mon || 'Món ngon',
                     image: item.image || item.hinh_anh || 'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=700',
                     time: item.time || (item.thoi_gian ? `${item.thoi_gian} phút` : '25 phút'),
-                    cooking_time_minutes: parseInt(item.thoi_gian || 25, 10),
+                    cooking_time_minutes: parseInt(item.cooking_time_minutes || item.thoi_gian || 25, 10),
                     rating: item.rating || 4.8,
                     rating_count: item.rating_count || '1.5k',
                     likes: item.likes || 120,
                     is_favorite: false,
                     category: item.category || item.loai_mon || 'Món mặn',
+                    category_slug: item.category_slug || '',
                     sub_category: item.sub_category || 'viet',
                     difficulty: item.difficulty || 'Dễ làm',
                     description: item.description || item.mo_ta || 'Món ăn thơm ngon đậm đà cho bữa cơm gia đình.',
@@ -750,9 +749,9 @@ const FoodList = {
                 mobileResultCountEl.textContent = `${total} món ăn`;
             }
 
-            const hasActiveFilters = currentCategory !== 'all' || 
-                                     currentQuickCategory !== 'all' || 
-                                     currentCookTime !== 'all' || 
+            const hasActiveFilters = Boolean(currentCategory) || 
+                                     Boolean(currentQuickCategory) || 
+                                     (currentCookTime && currentCookTime !== 'all') || 
                                      currentSelectedIngredients.length > 0 || 
                                      currentSearchQuery.trim() !== '';
 
@@ -761,9 +760,9 @@ const FoodList = {
             }
 
             let filterCount = 0;
-            if (currentCategory !== 'all') filterCount++;
-            if (currentQuickCategory !== 'all') filterCount++;
-            if (currentCookTime !== 'all') filterCount++;
+            if (currentCategory) filterCount++;
+            if (currentQuickCategory) filterCount++;
+            if (currentCookTime && currentCookTime !== 'all') filterCount++;
             filterCount += currentSelectedIngredients.length;
             if (currentSearchQuery.trim() !== '') filterCount++;
 
@@ -954,10 +953,9 @@ const FoodList = {
         // ====================================================================
         // FILTER & SORT LOGIC
         // ====================================================================
-        const executeFilterAndSort = () => {
+        const runClientFilter = () => {
             let result = [...masterDishes];
 
-            // 1. Search Query Filter
             if (currentSearchQuery.trim() !== '') {
                 const q = currentSearchQuery.toLowerCase().trim();
                 result = result.filter(d => 
@@ -968,17 +966,18 @@ const FoodList = {
                 );
             }
 
-            // 2. Quick Category Filter (viet, chay, nhanh, ngot, au)
-            if (currentQuickCategory !== 'all') {
+            if (currentQuickCategory && currentQuickCategory !== 'all') {
                 result = result.filter(d => d.sub_category === currentQuickCategory);
             }
 
-            // 3. Category Group Filter
-            if (currentCategory !== 'all') {
-                result = result.filter(d => d.category.toLowerCase() === currentCategory.toLowerCase());
+            if (currentCategory && currentCategory !== 'all') {
+                const targetCat = currentCategory.toLowerCase();
+                result = result.filter(d => 
+                    d.category.toLowerCase() === targetCat || 
+                    (d.category_slug && d.category_slug.toLowerCase() === targetCat)
+                );
             }
 
-            // 4. Cooking Time Filter
             if (currentCookTime === 'under_15') {
                 result = result.filter(d => d.cooking_time_minutes <= 15);
             } else if (currentCookTime === '15_to_30') {
@@ -987,7 +986,6 @@ const FoodList = {
                 result = result.filter(d => d.cooking_time_minutes > 30);
             }
 
-            // 5. Ingredients Checkboxes Filter
             if (currentSelectedIngredients.length > 0) {
                 result = result.filter(d => 
                     currentSelectedIngredients.some(selectedIng => 
@@ -996,7 +994,6 @@ const FoodList = {
                 );
             }
 
-            // 6. Sorting
             if (currentSort === 'newest') {
                 result.sort((a, b) => b.id - a.id);
             } else if (currentSort === 'popular') {
@@ -1013,14 +1010,75 @@ const FoodList = {
                 result.sort((a, b) => a.name.localeCompare(b.name, 'vi'));
             }
 
+            return result;
+        };
+
+        const executeFilterAndSort = async () => {
+            let result = [];
+            try {
+                const queryParams = new URLSearchParams();
+                queryParams.set('limit', '50');
+
+                if (currentSearchQuery && currentSearchQuery.trim()) {
+                    queryParams.set('search', currentSearchQuery.trim());
+                }
+
+                if (currentCategory && currentCategory !== 'all') {
+                    queryParams.set('category', currentCategory);
+                }
+
+                if (currentQuickCategory && currentQuickCategory !== 'all') {
+                    queryParams.set('sub_category', currentQuickCategory);
+                }
+
+                if (currentCookTime && currentCookTime !== 'all') {
+                    queryParams.set('cook_time', currentCookTime);
+                }
+
+                if (currentSelectedIngredients && currentSelectedIngredients.length > 0) {
+                    queryParams.set('ingredients', currentSelectedIngredients.join(','));
+                }
+
+                if (currentSort && currentSort !== 'newest') {
+                    queryParams.set('sort', currentSort);
+                }
+
+                const endpoint = `/foods?${queryParams.toString()}`;
+                const apiRes = await fetchAPI(endpoint);
+                if (apiRes && apiRes.success && Array.isArray(apiRes.data)) {
+                    result = apiRes.data.map(item => ({
+                        id: item.id || item.id_food || item.id_monan,
+                        name: item.name || item.ten_mon || 'Món ngon',
+                        image: item.image || item.hinh_anh || 'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=700',
+                        time: item.time || (item.thoi_gian ? `${item.thoi_gian} phút` : '25 phút'),
+                        cooking_time_minutes: parseInt(item.cooking_time_minutes || item.thoi_gian || 25, 10),
+                        rating: item.rating || 4.8,
+                        rating_count: item.rating_count || '1.5k',
+                        likes: item.likes || 120,
+                        is_favorite: false,
+                        category: item.category || item.loai_mon || 'Món mặn',
+                        category_slug: item.category_slug || '',
+                        sub_category: item.sub_category || 'viet',
+                        difficulty: item.difficulty || 'Dễ làm',
+                        description: item.description || item.mo_ta || 'Món ăn thơm ngon đậm đà cho bữa cơm gia đình.',
+                        ingredients: item.ingredients || ['Rau củ', 'Gia vị'],
+                        tags: item.tags || ['Món ngon', 'Món Việt'],
+                        author: item.author || { name: 'Bếp Nhà', avatar: 'https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=100' }
+                    }));
+                } else {
+                    result = runClientFilter();
+                }
+            } catch (e) {
+                result = runClientFilter();
+            }
+
             currentFilteredDishes = result;
             renderFirstBatch();
         };
 
-        // Reset All Filters
         const resetAllFilters = () => {
-            currentCategory = 'all';
-            currentQuickCategory = 'all';
+            currentCategory = '';
+            currentQuickCategory = '';
             currentCookTime = 'all';
             currentSelectedIngredients = [];
             currentSearchQuery = '';
@@ -1030,22 +1088,13 @@ const FoodList = {
             if (btnClearSearch) btnClearSearch.classList.add('hidden');
 
             document.querySelectorAll('.quick-cat-btn').forEach(btn => {
-                const isAll = btn.getAttribute('data-cat') === 'all';
-                btn.className = isAll
-                    ? "quick-cat-btn active-pill px-3.5 py-1.5 rounded-full text-xs font-bold transition-all flex items-center gap-1.5 cursor-pointer border shadow-2xs"
-                    : "quick-cat-btn px-3.5 py-1.5 rounded-full text-xs font-bold transition-all flex items-center gap-1.5 cursor-pointer border border-[#E5DEC9] bg-white/80 text-text-muted hover:text-primary hover:bg-primary-subtle shadow-2xs";
+                btn.className = "quick-cat-btn px-3.5 py-1.5 rounded-full text-xs font-bold transition-all flex items-center gap-1.5 cursor-pointer border border-[#E5DEC9] bg-white/80 text-text-muted hover:text-primary hover:bg-primary-subtle shadow-2xs";
             });
 
             document.querySelectorAll('.btn-filter-cat').forEach(btn => {
-                const isAll = btn.getAttribute('data-cat') === 'all';
-                btn.className = isAll
-                    ? "btn-filter-cat active-cat px-2.5 py-1.5 rounded-xl text-xs font-bold text-left transition-all border cursor-pointer flex items-center justify-between"
-                    : "btn-filter-cat px-2.5 py-1.5 rounded-xl text-xs font-semibold text-text-muted text-left transition-all border border-gray-100 hover:bg-cream-soft hover:text-primary cursor-pointer flex items-center justify-between";
+                btn.className = "btn-filter-cat px-2 py-1 rounded-lg text-[11px] font-semibold text-text-muted text-left transition-all border border-gray-100 hover:bg-cream-soft hover:text-primary cursor-pointer flex items-center justify-between";
                 const checkIcon = btn.querySelector('.fa-check');
                 if (checkIcon) checkIcon.remove();
-                if (isAll) {
-                    btn.innerHTML = `<span>Tất cả</span><i class="fa-solid fa-check text-[9px]"></i>`;
-                }
             });
 
             const allRadio = document.querySelector('input[name="cook_time"][value="all"]');
@@ -1100,46 +1149,57 @@ const FoodList = {
             });
         }
 
-        // 2. Quick Category Pills Click
         const quickCatBtns = document.querySelectorAll('.quick-cat-btn');
         quickCatBtns.forEach(btn => {
             btn.addEventListener('click', () => {
                 const cat = btn.getAttribute('data-cat');
-                currentQuickCategory = cat;
-
-                quickCatBtns.forEach(b => {
-                    b.className = "quick-cat-btn px-3.5 py-1.5 rounded-full text-xs font-bold transition-all flex items-center gap-1.5 cursor-pointer border border-[#E5DEC9] bg-white/80 text-text-muted hover:text-primary hover:bg-primary-subtle shadow-2xs";
-                });
-                btn.className = "quick-cat-btn active-pill px-3.5 py-1.5 rounded-full text-xs font-bold transition-all flex items-center gap-1.5 cursor-pointer border shadow-2xs";
+                if (currentQuickCategory === cat) {
+                    currentQuickCategory = '';
+                    btn.className = "quick-cat-btn px-3.5 py-1.5 rounded-full text-xs font-bold transition-all flex items-center gap-1.5 cursor-pointer border border-[#E5DEC9] bg-white/80 text-text-muted hover:text-primary hover:bg-primary-subtle shadow-2xs";
+                } else {
+                    currentQuickCategory = cat;
+                    quickCatBtns.forEach(b => {
+                        b.className = "quick-cat-btn px-3.5 py-1.5 rounded-full text-xs font-bold transition-all flex items-center gap-1.5 cursor-pointer border border-[#E5DEC9] bg-white/80 text-text-muted hover:text-primary hover:bg-primary-subtle shadow-2xs";
+                    });
+                    btn.className = "quick-cat-btn active-pill px-3.5 py-1.5 rounded-full text-xs font-bold transition-all flex items-center gap-1.5 cursor-pointer border shadow-2xs";
+                }
 
                 executeFilterAndSort();
             });
         });
 
-        // 3. Category Buttons Group Click
         const catButtons = document.querySelectorAll('.btn-filter-cat');
         catButtons.forEach(btn => {
             btn.addEventListener('click', () => {
                 const cat = btn.getAttribute('data-cat');
-                currentCategory = cat;
+                if (currentCategory === cat) {
+                    currentCategory = '';
+                    catButtons.forEach(b => {
+                        b.className = "btn-filter-cat px-2 py-1 rounded-lg text-[11px] font-semibold text-text-muted text-left transition-all border border-gray-100 hover:bg-cream-soft hover:text-primary cursor-pointer flex items-center justify-between";
+                        const ic = b.querySelector('.fa-check');
+                        if (ic) ic.remove();
+                    });
+                } else {
+                    currentCategory = cat;
+                    catButtons.forEach(b => {
+                        b.className = "btn-filter-cat px-2 py-1 rounded-lg text-[11px] font-semibold text-text-muted text-left transition-all border border-gray-100 hover:bg-cream-soft hover:text-primary cursor-pointer flex items-center justify-between";
+                        const ic = b.querySelector('.fa-check');
+                        if (ic) ic.remove();
+                    });
+                    btn.className = "btn-filter-cat active-cat px-2 py-1 rounded-lg text-[11px] font-bold text-left transition-all border cursor-pointer flex items-center justify-between";
+                    const spanText = btn.querySelector('span')?.textContent || '';
+                    btn.innerHTML = `<span>${spanText}</span><i class="fa-solid fa-check text-[8px]"></i>`;
+                }
 
-                catButtons.forEach(b => {
-                    b.className = "btn-filter-cat px-2.5 py-1.5 rounded-xl text-xs font-semibold text-text-muted text-left transition-all border border-gray-100 hover:bg-cream-soft hover:text-primary cursor-pointer flex items-center justify-between";
-                    const ic = b.querySelector('.fa-check');
-                    if (ic) ic.remove();
-                });
-
-                btn.className = "btn-filter-cat active-cat px-2.5 py-1.5 rounded-xl text-xs font-bold text-left transition-all border cursor-pointer flex items-center justify-between";
-                const spanText = btn.querySelector('span')?.textContent || '';
-                btn.innerHTML = `<span>${spanText}</span><i class="fa-solid fa-check text-[9px]"></i>`;
+                executeFilterAndSort();
             });
         });
 
-        // 4. Time Radio Change
         const timeRadios = document.querySelectorAll('input[name="cook_time"]');
         timeRadios.forEach(r => {
             r.addEventListener('change', () => {
                 currentCookTime = r.value;
+                executeFilterAndSort();
             });
         });
 
@@ -1272,6 +1332,67 @@ const FoodList = {
         // ====================================================================
         // INITIAL RENDER
         // ====================================================================
+        const urlParams = params instanceof URLSearchParams 
+            ? params 
+            : new URLSearchParams(window.location.hash.includes('?') ? window.location.hash.split('?')[1] : '');
+
+        const urlSort = urlParams.get('sort');
+        const urlCat = urlParams.get('category');
+        const urlTime = urlParams.get('cook_time') || urlParams.get('time');
+        const urlSubCat = urlParams.get('sub_category');
+        const urlSearch = urlParams.get('search');
+
+        if (urlSort) {
+            currentSort = urlSort;
+            const sortMatch = sortOptions.find(o => o.value === urlSort);
+            if (sortMatch && currentSortLabel) {
+                currentSortLabel.textContent = sortMatch.label;
+            }
+        }
+
+        if (urlCat) {
+            currentCategory = urlCat;
+            catButtons.forEach(b => {
+                const bCat = b.getAttribute('data-cat');
+                const bCatSlug = bCat ? bCat.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/\s+/g, '-') : '';
+                const isMatch = bCat && (bCat.toLowerCase() === urlCat.toLowerCase() || bCatSlug === urlCat.toLowerCase());
+                b.className = isMatch
+                    ? "btn-filter-cat active-cat px-2 py-1 rounded-lg text-[11px] font-bold text-left transition-all border cursor-pointer flex items-center justify-between"
+                    : "btn-filter-cat px-2 py-1 rounded-lg text-[11px] font-semibold text-text-muted text-left transition-all border border-gray-100 hover:bg-cream-soft hover:text-primary cursor-pointer flex items-center justify-between";
+                const ic = b.querySelector('.fa-check');
+                if (ic) ic.remove();
+                if (isMatch) {
+                    currentCategory = bCat;
+                    const spanText = b.querySelector('span')?.textContent || '';
+                    b.innerHTML = `<span>${spanText}</span><i class="fa-solid fa-check text-[8px]"></i>`;
+                }
+            });
+        }
+
+        if (urlTime) {
+            currentCookTime = urlTime;
+            const targetRadio = document.querySelector(`input[name="cook_time"][value="${urlTime}"]`);
+            if (targetRadio) {
+                targetRadio.checked = true;
+            }
+        }
+
+        if (urlSubCat) {
+            currentQuickCategory = urlSubCat;
+            quickCatBtns.forEach(b => {
+                const isMatch = b.getAttribute('data-cat') === urlSubCat;
+                b.className = isMatch
+                    ? "quick-cat-btn active-pill px-3.5 py-1.5 rounded-full text-xs font-bold transition-all flex items-center gap-1.5 cursor-pointer border shadow-2xs"
+                    : "quick-cat-btn px-3.5 py-1.5 rounded-full text-xs font-bold transition-all flex items-center gap-1.5 cursor-pointer border border-[#E5DEC9] bg-white/80 text-text-muted hover:text-primary hover:bg-primary-subtle shadow-2xs";
+            });
+        }
+
+        if (urlSearch) {
+            currentSearchQuery = urlSearch;
+            if (heroSearchInput) heroSearchInput.value = urlSearch;
+            if (btnClearSearch) btnClearSearch.classList.remove('hidden');
+        }
+
         executeFilterAndSort();
     }
 };
