@@ -497,11 +497,11 @@ CREATE TABLE `users` (
 --
 
 INSERT INTO `users` (`id_user`, `name`, `email`, `password`, `avatar`, `role`, `status`, `created_at`, `updated_at`) VALUES
-(1, 'Admin', 'admin@gmail.com', '123456', NULL, 'admin', 'active', '2026-10-05 14:52:02', '2026-10-05 14:52:02'),
-(2, 'Nguyễn Văn An', 'an@gmail.com', '123456', NULL, 'user', 'active', '2026-10-05 14:52:02', '2026-10-05 14:52:02'),
-(3, 'Trần Minh', 'minh@gmail.com', '123456', NULL, 'user', 'active', '2026-10-05 14:52:02', '2026-10-05 14:52:02'),
-(4, 'Lê Thu Hương', 'huong@gmail.com', '123456', NULL, 'user', 'active', '2026-10-05 14:52:02', '2026-10-05 14:52:02'),
-(5, 'Phạm Hoàng Nam', 'nam@gmail.com', '123456', NULL, 'user', 'active', '2026-10-05 14:52:02', '2026-10-05 14:52:02');
+(1, 'Admin', 'admin@gmail.com', '123456', '/images/users/admin.jpg', 'admin', 'active', '2026-10-05 14:52:02', '2026-10-05 14:52:02'),
+(2, 'Nguyễn Văn An', 'an@gmail.com', '123456', '/images/users/nguyen-van-an.jpg', 'user', 'active', '2026-10-05 14:52:02', '2026-10-05 14:52:02'),
+(3, 'Trần Minh', 'minh@gmail.com', '123456', '/images/users/tran-minh.jpg', 'user', 'active', '2026-10-05 14:52:02', '2026-10-05 14:52:02'),
+(4, 'Lê Thu Hương', 'huong@gmail.com', '123456', '/images/users/le-thu-huong.jpg', 'user', 'active', '2026-10-05 14:52:02', '2026-10-05 14:52:02'),
+(5, 'Phạm Hoàng Nam', 'nam@gmail.com', '123456', '/images/users/pham-hoang-nam.jpg', 'user', 'active', '2026-10-05 14:52:02', '2026-10-05 14:52:02');
 
 --
 -- Indexes for dumped tables

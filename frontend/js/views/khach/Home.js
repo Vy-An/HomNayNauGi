@@ -9,12 +9,12 @@ const dummyFoods = [
 ];
 
 const categoryExplore = [
-    { title: 'Món Việt', slug: 'mon-viet', icon: 'fa-bowl-rice', count: '120+ món', image: 'https://images.unsplash.com/photo-1583032015879-c5c2d38ecf15?auto=format&fit=crop&w=400&q=80' },
-    { title: 'Món Hàn', slug: 'mon-han', icon: 'fa-fire-burner', count: '45+ món', image: 'https://images.unsplash.com/photo-1553163147-622ab57be1c7?auto=format&fit=crop&w=400&q=80' },
-    { title: 'Món Âu', slug: 'mon-au', icon: 'fa-utensils', count: '60+ món', image: 'https://images.unsplash.com/photo-1551183053-bf91a1d81141?auto=format&fit=crop&w=400&q=80' },
-    { title: 'Món chay', slug: 'mon-chay', icon: 'fa-leaf', count: '85+ món', image: 'https://images.unsplash.com/photo-1540420773420-3366772f4999?auto=format&fit=crop&w=400&q=80' },
-    { title: 'Món nướng', slug: 'mon-nuong', icon: 'fa-fire', count: '50+ món', image: 'https://images.unsplash.com/photo-1544025162-d76694265947?auto=format&fit=crop&w=400&q=80' },
-    { title: 'Tráng miệng', slug: 'trang-mieng', icon: 'fa-cake-candles', count: '40+ món', image: 'https://images.unsplash.com/photo-1551024601-bec78aea704b?auto=format&fit=crop&w=400&q=80' },
+    { title: 'Món mặn', slug: 'mon-man', icon: 'fa-bowl-rice', count: '1 món', image: 'http://localhost:5000/images/foods/thit-ba-chi-luoc.jpg' },
+    { title: 'Món canh', slug: 'mon-canh', icon: 'fa-spoon', count: '4 món', image: 'http://localhost:5000/images/foods/canh-chua-ca-loc.jpg' },
+    { title: 'Món kho', slug: 'mon-kho', icon: 'fa-fire-flame-simple', count: '3 món', image: 'http://localhost:5000/images/foods/thit-kho-trung.jpg' },
+    { title: 'Món xào', slug: 'mon-xao', icon: 'fa-fire-burner', count: '2 món', image: 'http://localhost:5000/images/foods/suon-xao-chua-ngot.jpg' },
+    { title: 'Món chiên', slug: 'mon-chien', icon: 'fa-fire', count: '3 món', image: 'http://localhost:5000/images/foods/ga-chien-nuoc-mam.jpg' },
+    { title: 'Món rau', slug: 'mon-rau', icon: 'fa-leaf', count: '3 món', image: 'http://localhost:5000/images/foods/rau-muong-xao-toi.jpg' }
 ];
 
 const Home = {
@@ -27,14 +27,14 @@ const Home = {
                 <!-- MAIN RANDOM HERO SECTION (IN NATURAL DOCUMENT FLOW) -->
                 <section class="max-w-[1360px] w-full mx-auto px-4 sm:px-6 lg:px-8 py-5 sm:py-7">
                     
-                    <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+                    <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-stretch">
                         
-                        <!-- LEFT COLUMN: RANDOM MACHINE SECTION (55% / 7 cols) -->
-                        <div class="random-machine-section lg:col-span-7 bg-[#FAF6EE] rounded-[24px] p-4 sm:p-6 shadow-xs border border-[#E5E1D6] flex flex-col justify-between">
+                        <!-- LEFT COLUMN: RANDOM MACHINE SECTION (50% / 6 cols) -->
+                        <div class="random-machine-section lg:col-span-6 bg-[#FAF6EE] rounded-[24px] p-4 sm:p-6 shadow-xs border border-[#E5E1D6] flex flex-col justify-center">
                             
                             <!-- Machine Component Wrapper -->
-                            <div class="w-full flex items-center justify-center py-2">
-                                <div class="random-machine relative w-full max-w-[580px] mx-auto select-none">
+                            <div class="w-full flex items-center justify-center py-1">
+                                <div class="random-machine relative w-full max-w-[560px] mx-auto select-none">
                                     
                                     <!-- Machine Stage (Preserves exact 1024:903 aspect ratio, no stretching, no distortion) -->
                                     <div class="machine-stage relative w-full aspect-[1024/903]">
@@ -95,27 +95,10 @@ const Home = {
                                 </div>
                             </div>
 
-                            <!-- Món vừa quay được (Mini cards row beneath machine) -->
-                            <div class="pt-4 border-t border-[#E5E1D6] mt-3">
-                                <div class="flex items-center justify-between mb-2.5">
-                                    <span class="text-xs sm:text-sm font-bold text-[#18382D] flex items-center gap-1.5">
-                                        <i class="fa-solid fa-rotate-right text-[#F4A62A]"></i>
-                                        <span>Món vừa quay được</span>
-                                    </span>
-                                    <button type="button" onclick="window.toggleWonDishesPopover && window.toggleWonDishesPopover()" class="text-xs font-bold text-[#145A43] hover:underline flex items-center gap-1 cursor-pointer">
-                                        <span>Xem tất cả</span>
-                                        <i class="fa-solid fa-arrow-right text-[10px]"></i>
-                                    </button>
-                                </div>
-                                <div id="gacha-results-container" class="flex gap-2.5 overflow-x-auto pb-1.5 scrollbar-hide snap-x items-center min-h-[82px]">
-                                    <!-- Rendered dynamically by JS -->
-                                </div>
-                            </div>
-
                         </div>
 
-                        <!-- RIGHT COLUMN: FILTER SECTION (45% / 5 cols) -->
-                        <div class="lg:col-span-5 bg-white rounded-[24px] p-5 sm:p-6 shadow-xs border border-[#E5E1D6] flex flex-col justify-between">
+                        <!-- RIGHT COLUMN: FILTER SECTION (50% / 6 cols) -->
+                        <div class="lg:col-span-6 bg-white rounded-[24px] p-5 sm:p-6 shadow-xs border border-[#E5E1D6] flex flex-col justify-between">
                             
                             <!-- Header Form -->
                             <div class="flex items-center justify-between pb-3.5 border-b border-[#E5E1D6] mb-4">
@@ -186,40 +169,40 @@ const Home = {
                                         </span>
                                         <span class="text-xs text-[#718078] font-normal">Chọn 1 hoặc nhiều</span>
                                     </label>
-                                    <div id="ingredient-options" class="flex gap-2 overflow-x-auto pb-1 scrollbar-hide snap-x">
-                                        <label class="cursor-pointer group flex-shrink-0 snap-start">
+                                    <div id="ingredient-options" class="flex flex-nowrap gap-2 overflow-x-auto overflow-y-hidden pb-1 max-w-full scrollbar-none snap-x cursor-grab select-none">
+                                        <label class="cursor-pointer group shrink-0 snap-start">
                                             <input type="checkbox" name="ingredients" value="Thịt heo" class="peer sr-only">
-                                            <div class="py-1.5 px-3 rounded-xl border border-[#E5E1D6] bg-white peer-checked:bg-[#145A43] peer-checked:text-white peer-checked:border-[#145A43] text-xs font-bold flex items-center gap-1.5 transition">
+                                            <div class="py-1.5 px-3 rounded-xl border border-[#E5E1D6] bg-white peer-checked:bg-[#145A43] peer-checked:text-white peer-checked:border-[#145A43] text-xs font-bold flex items-center gap-1.5 transition whitespace-nowrap">
                                                 <i class="fa-solid fa-drumstick-bite text-amber-500 peer-checked:text-white"></i> Thịt heo
                                             </div>
                                         </label>
-                                        <label class="cursor-pointer group flex-shrink-0 snap-start">
+                                        <label class="cursor-pointer group shrink-0 snap-start">
                                             <input type="checkbox" name="ingredients" value="Thịt gà" class="peer sr-only">
-                                            <div class="py-1.5 px-3 rounded-xl border border-[#E5E1D6] bg-white peer-checked:bg-[#145A43] peer-checked:text-white peer-checked:border-[#145A43] text-xs font-bold flex items-center gap-1.5 transition">
+                                            <div class="py-1.5 px-3 rounded-xl border border-[#E5E1D6] bg-white peer-checked:bg-[#145A43] peer-checked:text-white peer-checked:border-[#145A43] text-xs font-bold flex items-center gap-1.5 transition whitespace-nowrap">
                                                 <i class="fa-solid fa-kiwi-bird text-orange-500 peer-checked:text-white"></i> Thịt gà
                                             </div>
                                         </label>
-                                        <label class="cursor-pointer group flex-shrink-0 snap-start">
+                                        <label class="cursor-pointer group shrink-0 snap-start">
                                             <input type="checkbox" name="ingredients" value="Hải sản" class="peer sr-only">
-                                            <div class="py-1.5 px-3 rounded-xl border border-[#E5E1D6] bg-white peer-checked:bg-[#145A43] peer-checked:text-white peer-checked:border-[#145A43] text-xs font-bold flex items-center gap-1.5 transition">
+                                            <div class="py-1.5 px-3 rounded-xl border border-[#E5E1D6] bg-white peer-checked:bg-[#145A43] peer-checked:text-white peer-checked:border-[#145A43] text-xs font-bold flex items-center gap-1.5 transition whitespace-nowrap">
                                                 <i class="fa-solid fa-shrimp text-rose-500 peer-checked:text-white"></i> Hải sản
                                             </div>
                                         </label>
-                                        <label class="cursor-pointer group flex-shrink-0 snap-start">
+                                        <label class="cursor-pointer group shrink-0 snap-start">
                                             <input type="checkbox" name="ingredients" value="Rau củ" class="peer sr-only">
-                                            <div class="py-1.5 px-3 rounded-xl border border-[#E5E1D6] bg-white peer-checked:bg-[#145A43] peer-checked:text-white peer-checked:border-[#145A43] text-xs font-bold flex items-center gap-1.5 transition">
+                                            <div class="py-1.5 px-3 rounded-xl border border-[#E5E1D6] bg-white peer-checked:bg-[#145A43] peer-checked:text-white peer-checked:border-[#145A43] text-xs font-bold flex items-center gap-1.5 transition whitespace-nowrap">
                                                 <i class="fa-solid fa-leaf text-emerald-500 peer-checked:text-white"></i> Rau củ
                                             </div>
                                         </label>
-                                        <label class="cursor-pointer group flex-shrink-0 snap-start">
+                                        <label class="cursor-pointer group shrink-0 snap-start">
                                             <input type="checkbox" name="ingredients" value="Trứng" class="peer sr-only">
-                                            <div class="py-1.5 px-3 rounded-xl border border-[#E5E1D6] bg-white peer-checked:bg-[#145A43] peer-checked:text-white peer-checked:border-[#145A43] text-xs font-bold flex items-center gap-1.5 transition">
+                                            <div class="py-1.5 px-3 rounded-xl border border-[#E5E1D6] bg-white peer-checked:bg-[#145A43] peer-checked:text-white peer-checked:border-[#145A43] text-xs font-bold flex items-center gap-1.5 transition whitespace-nowrap">
                                                 <i class="fa-solid fa-egg text-amber-500 peer-checked:text-white"></i> Trứng
                                             </div>
                                         </label>
-                                        <label class="cursor-pointer group flex-shrink-0 snap-start">
+                                        <label class="cursor-pointer group shrink-0 snap-start">
                                             <input type="checkbox" name="ingredients" value="Đậu hũ" class="peer sr-only">
-                                            <div class="py-1.5 px-3 rounded-xl border border-[#E5E1D6] bg-white peer-checked:bg-[#145A43] peer-checked:text-white peer-checked:border-[#145A43] text-xs font-bold flex items-center gap-1.5 transition">
+                                            <div class="py-1.5 px-3 rounded-xl border border-[#E5E1D6] bg-white peer-checked:bg-[#145A43] peer-checked:text-white peer-checked:border-[#145A43] text-xs font-bold flex items-center gap-1.5 transition whitespace-nowrap">
                                                 <i class="fa-solid fa-cube text-yellow-600 peer-checked:text-white"></i> Đậu hũ
                                             </div>
                                         </label>
@@ -239,34 +222,34 @@ const Home = {
                                         </span>
                                         <span class="text-xs text-[#718078] font-normal">Kiểu chế biến</span>
                                     </label>
-                                    <div id="category-options" class="flex gap-2 overflow-x-auto pb-1 scrollbar-hide snap-x">
-                                        <label class="cursor-pointer group flex-shrink-0 snap-start">
+                                    <div id="category-options" class="flex flex-nowrap gap-2 overflow-x-auto overflow-y-hidden pb-1 max-w-full scrollbar-none snap-x cursor-grab select-none">
+                                        <label class="cursor-pointer group shrink-0 snap-start">
                                             <input type="checkbox" name="categories" value="Món mặn" class="peer sr-only">
-                                            <div class="py-1.5 px-3 rounded-xl border border-[#E5E1D6] bg-white peer-checked:bg-[#145A43] peer-checked:text-white peer-checked:border-[#145A43] text-xs font-bold flex items-center gap-1.5 transition">
+                                            <div class="py-1.5 px-3 rounded-xl border border-[#E5E1D6] bg-white peer-checked:bg-[#145A43] peer-checked:text-white peer-checked:border-[#145A43] text-xs font-bold flex items-center gap-1.5 transition whitespace-nowrap">
                                                 <i class="fa-solid fa-bowl-food text-orange-500 peer-checked:text-white"></i> Món mặn
                                             </div>
                                         </label>
-                                        <label class="cursor-pointer group flex-shrink-0 snap-start">
+                                        <label class="cursor-pointer group shrink-0 snap-start">
                                             <input type="checkbox" name="categories" value="Món canh" class="peer sr-only">
-                                            <div class="py-1.5 px-3 rounded-xl border border-[#E5E1D6] bg-white peer-checked:bg-[#145A43] peer-checked:text-white peer-checked:border-[#145A43] text-xs font-bold flex items-center gap-1.5 transition">
+                                            <div class="py-1.5 px-3 rounded-xl border border-[#E5E1D6] bg-white peer-checked:bg-[#145A43] peer-checked:text-white peer-checked:border-[#145A43] text-xs font-bold flex items-center gap-1.5 transition whitespace-nowrap">
                                                 <i class="fa-solid fa-spoon text-blue-500 peer-checked:text-white"></i> Món canh
                                             </div>
                                         </label>
-                                        <label class="cursor-pointer group flex-shrink-0 snap-start">
+                                        <label class="cursor-pointer group shrink-0 snap-start">
                                             <input type="checkbox" name="categories" value="Món xào" class="peer sr-only">
-                                            <div class="py-1.5 px-3 rounded-xl border border-[#E5E1D6] bg-white peer-checked:bg-[#145A43] peer-checked:text-white peer-checked:border-[#145A43] text-xs font-bold flex items-center gap-1.5 transition">
+                                            <div class="py-1.5 px-3 rounded-xl border border-[#E5E1D6] bg-white peer-checked:bg-[#145A43] peer-checked:text-white peer-checked:border-[#145A43] text-xs font-bold flex items-center gap-1.5 transition whitespace-nowrap">
                                                 <i class="fa-solid fa-fire-burner text-amber-500 peer-checked:text-white"></i> Món xào
                                             </div>
                                         </label>
-                                        <label class="cursor-pointer group flex-shrink-0 snap-start">
+                                        <label class="cursor-pointer group shrink-0 snap-start">
                                             <input type="checkbox" name="categories" value="Món nướng" class="peer sr-only">
-                                            <div class="py-1.5 px-3 rounded-xl border border-[#E5E1D6] bg-white peer-checked:bg-[#145A43] peer-checked:text-white peer-checked:border-[#145A43] text-xs font-bold flex items-center gap-1.5 transition">
+                                            <div class="py-1.5 px-3 rounded-xl border border-[#E5E1D6] bg-white peer-checked:bg-[#145A43] peer-checked:text-white peer-checked:border-[#145A43] text-xs font-bold flex items-center gap-1.5 transition whitespace-nowrap">
                                                 <i class="fa-solid fa-fire text-red-500 peer-checked:text-white"></i> Món nướng
                                             </div>
                                         </label>
-                                        <label class="cursor-pointer group flex-shrink-0 snap-start">
+                                        <label class="cursor-pointer group shrink-0 snap-start">
                                             <input type="checkbox" name="categories" value="Món kho" class="peer sr-only">
-                                            <div class="py-1.5 px-3 rounded-xl border border-[#E5E1D6] bg-white peer-checked:bg-[#145A43] peer-checked:text-white peer-checked:border-[#145A43] text-xs font-bold flex items-center gap-1.5 transition">
+                                            <div class="py-1.5 px-3 rounded-xl border border-[#E5E1D6] bg-white peer-checked:bg-[#145A43] peer-checked:text-white peer-checked:border-[#145A43] text-xs font-bold flex items-center gap-1.5 transition whitespace-nowrap">
                                                 <i class="fa-solid fa-fire-flame-simple text-amber-600 peer-checked:text-white"></i> Món kho
                                             </div>
                                         </label>
@@ -311,41 +294,38 @@ const Home = {
                         </div>
 
                     </div>
+
+                    <!-- Món vừa quay được (Full-width card beneath Section 1) -->
+                    <div class="bg-white rounded-[24px] p-4 sm:p-5 border border-[#E5E1D6] shadow-xs mt-6">
+                        <div class="flex items-center justify-between mb-3">
+                            <span class="text-xs sm:text-sm font-bold text-[#18382D] flex items-center gap-1.5">
+                                <i class="fa-solid fa-rotate-right text-[#F4A62A]"></i>
+                                <span>Món vừa quay được</span>
+                            </span>
+                            <button type="button" onclick="window.toggleWonDishesPopover && window.toggleWonDishesPopover()" class="text-xs font-bold text-[#145A43] hover:underline flex items-center gap-1 cursor-pointer">
+                                <span>Xem tất cả</span>
+                                <i class="fa-solid fa-arrow-right text-[10px]"></i>
+                            </button>
+                        </div>
+                        <div id="gacha-results-container" class="flex gap-2.5 overflow-x-auto pb-1.5 scrollbar-hide snap-x items-center min-h-[82px]">
+                            <!-- Rendered dynamically by JS -->
+                        </div>
+                    </div>
                 </section>
 
 
-                <!-- SECTION 2: GỢI Ý NHANH (COMPACT QUICK CHIPS) -->
-                <section class="max-w-[1360px] w-full mx-auto px-4 sm:px-6 lg:px-8 py-4">
+                <section class="max-w-[1360px] w-full mx-auto px-4 sm:px-6 lg:px-8 py-4" id="section-quick-suggestions">
                     <div class="flex items-center gap-2 mb-2.5">
                         <span class="text-xs font-black uppercase tracking-wider text-[#145A43] flex items-center gap-1.5">
                             <i class="fa-solid fa-bolt text-[#F4A62A]"></i> Gợi ý nhanh:
                         </span>
                     </div>
-                    <div class="flex gap-2.5 overflow-x-auto pb-2 scrollbar-hide snap-x">
-                        <a href="#/danh-sach?sort=popular" class="snap-start shrink-0 px-4 py-2 bg-white hover:bg-[#145A43] text-[#18382D] hover:text-white rounded-full text-xs font-bold border border-[#E5E1D6] shadow-2xs hover:shadow-xs transition-all flex items-center gap-1.5 group">
-                            <span>🔥 Đang thịnh hành</span>
-                            <i class="fa-solid fa-angle-right text-[10px] text-gray-400 group-hover:text-white"></i>
-                        </a>
-                        <a href="#/danh-sach?category=eat-clean" class="snap-start shrink-0 px-4 py-2 bg-white hover:bg-[#145A43] text-[#18382D] hover:text-white rounded-full text-xs font-bold border border-[#E5E1D6] shadow-2xs hover:shadow-xs transition-all flex items-center gap-1.5 group">
-                            <span>🥗 Eat Clean</span>
-                            <i class="fa-solid fa-angle-right text-[10px] text-gray-400 group-hover:text-white"></i>
-                        </a>
-                        <a href="#/danh-sach?price=under50" class="snap-start shrink-0 px-4 py-2 bg-white hover:bg-[#145A43] text-[#18382D] hover:text-white rounded-full text-xs font-bold border border-[#E5E1D6] shadow-2xs hover:shadow-xs transition-all flex items-center gap-1.5 group">
-                            <span>💰 Dưới 50k</span>
-                            <i class="fa-solid fa-angle-right text-[10px] text-gray-400 group-hover:text-white"></i>
-                        </a>
-                        <a href="#/danh-sach?time=30" class="snap-start shrink-0 px-4 py-2 bg-white hover:bg-[#145A43] text-[#18382D] hover:text-white rounded-full text-xs font-bold border border-[#E5E1D6] shadow-2xs hover:shadow-xs transition-all flex items-center gap-1.5 group">
-                            <span>⏱️ Nấu dưới 30 phút</span>
-                            <i class="fa-solid fa-angle-right text-[10px] text-gray-400 group-hover:text-white"></i>
-                        </a>
-                        <a href="#/danh-sach?taste=spicy" class="snap-start shrink-0 px-4 py-2 bg-white hover:bg-[#145A43] text-[#18382D] hover:text-white rounded-full text-xs font-bold border border-[#E5E1D6] shadow-2xs hover:shadow-xs transition-all flex items-center gap-1.5 group">
-                            <span>🌶️ Món cay đưa cơm</span>
-                            <i class="fa-solid fa-angle-right text-[10px] text-gray-400 group-hover:text-white"></i>
-                        </a>
-                        <a href="#/danh-sach?mood=rain" class="snap-start shrink-0 px-4 py-2 bg-white hover:bg-[#145A43] text-[#18382D] hover:text-white rounded-full text-xs font-bold border border-[#E5E1D6] shadow-2xs hover:shadow-xs transition-all flex items-center gap-1.5 group">
-                            <span>🌧️ Ngày mưa ấm nóng</span>
-                            <i class="fa-solid fa-angle-right text-[10px] text-gray-400 group-hover:text-white"></i>
-                        </a>
+                    <div id="quick-suggestions-container" class="flex gap-2.5 overflow-x-auto pb-2 scrollbar-hide snap-x">
+                        <div class="h-8 w-32 bg-[#E5E1D6]/60 rounded-full animate-pulse shrink-0"></div>
+                        <div class="h-8 w-36 bg-[#E5E1D6]/60 rounded-full animate-pulse shrink-0"></div>
+                        <div class="h-8 w-28 bg-[#E5E1D6]/60 rounded-full animate-pulse shrink-0"></div>
+                        <div class="h-8 w-36 bg-[#E5E1D6]/60 rounded-full animate-pulse shrink-0"></div>
+                        <div class="h-8 w-32 bg-[#E5E1D6]/60 rounded-full animate-pulse shrink-0"></div>
                     </div>
                 </section>
 
@@ -368,7 +348,7 @@ const Home = {
                         </a>
                     </div>
 
-                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
+                    <div id="home-community-cards" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
                         ${communityCardsHTML}
                     </div>
                 </section>
@@ -386,7 +366,7 @@ const Home = {
                         <p class="text-xs sm:text-sm text-[#718078] mt-1">Tìm kiếm công thức theo phong cách và sở thích ẩm thực</p>
                     </div>
 
-                    <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4">
+                    <div id="home-explore-categories" class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4">
                         ${categoryExplore.map(cat => `
                             <a href="#/danh-sach?category=${cat.slug}" class="group relative rounded-2xl overflow-hidden bg-white border border-[#E5E1D6] shadow-2xs hover:shadow-xs transition-all duration-300 transform hover:-translate-y-1 block aspect-[4/5] flex flex-col justify-end p-3.5">
                                 <img src="${cat.image}" alt="${cat.title}" class="absolute inset-0 w-full h-full object-cover group-hover:scale-110 transition-transform duration-500 ease-out">
@@ -477,9 +457,13 @@ const Home = {
 
             const ingredients = getCheckedValues('ingredients');
             const categories = getCheckedValues('categories');
+            const cookTimeInput = document.querySelector('input[name="cook_time"]:checked');
 
             if (ingredients.length) params.set('ingredients', ingredients.join(','));
             if (categories.length) params.set('categories', categories.join(','));
+            if (cookTimeInput && cookTimeInput.value) {
+                params.set('cook_time', cookTimeInput.value);
+            }
 
             return `/random?${params.toString()}`;
         };
@@ -911,6 +895,12 @@ const Home = {
                 const mediumRadio = document.querySelector('#gacha-form input[name="cook_time"][value="medium"]');
                 if (mediumRadio) mediumRadio.checked = true;
                 
+                const ingSearch = document.getElementById('ingredient-search');
+                if (ingSearch) ingSearch.value = '';
+                const catSearch = document.getElementById('category-search');
+                if (catSearch) catSearch.value = '';
+                document.querySelectorAll('#ingredient-options label, #category-options label').forEach(lbl => lbl.classList.remove('hidden'));
+
                 const customLabel = document.getElementById('custom-qty-label');
                 const btnShowCustom = document.getElementById('btn-show-custom-qty');
                 if (customLabel) customLabel.classList.add('hidden');
@@ -999,6 +989,180 @@ const Home = {
 
         bindFilterSearch('ingredient-search', 'ingredient-options');
         bindFilterSearch('category-search', 'category-options');
+
+        const ingredientIconMap = {
+            'thit ba chi': 'fa-drumstick-bite text-amber-500',
+            'trung ga': 'fa-egg text-amber-500',
+            'ca basa': 'fa-fish text-blue-500',
+            'thit ga': 'fa-kiwi-bird text-orange-500',
+            'suon non': 'fa-bone text-red-500',
+            'ot chuong': 'fa-pepper-hot text-red-500',
+            'thom': 'fa-apple-whole text-amber-500',
+            'hanh tay': 'fa-seedling text-emerald-500',
+            'thit bo': 'fa-drumstick-bite text-red-600',
+            'ca loc': 'fa-fish text-blue-600',
+            'ca chua': 'fa-apple-whole text-rose-500',
+            'gia do': 'fa-seedling text-emerald-500',
+            'bi do': 'fa-bowl-food text-amber-600',
+            'thit heo bam': 'fa-drumstick-bite text-amber-500',
+            'cai xanh': 'fa-leaf text-emerald-500',
+            'rau muong': 'fa-leaf text-emerald-500',
+            'cai thia': 'fa-leaf text-emerald-500',
+            'dau que': 'fa-seedling text-emerald-500',
+            'ca rot': 'fa-carrot text-orange-500',
+            'bong cai xanh': 'fa-tree text-emerald-500',
+            'dau hu': 'fa-cube text-yellow-600'
+        };
+
+        const categoryIconMap = {
+            'mon-man': 'fa-bowl-food text-orange-500',
+            'mon-canh': 'fa-spoon text-blue-500',
+            'mon-xao': 'fa-fire-burner text-amber-500',
+            'mon-kho': 'fa-fire-flame-simple text-amber-600',
+            'mon-chien': 'fa-fire text-red-500',
+            'mon-rau': 'fa-leaf text-emerald-500',
+            'mon-luoc': 'fa-water text-cyan-500'
+        };
+
+        const categoryExploreImages = {
+            'mon-man': 'http://localhost:5000/images/foods/thit-ba-chi-luoc.jpg',
+            'mon-canh': 'http://localhost:5000/images/foods/canh-chua-ca-loc.jpg',
+            'mon-kho': 'http://localhost:5000/images/foods/thit-kho-trung.jpg',
+            'mon-xao': 'http://localhost:5000/images/foods/suon-xao-chua-ngot.jpg',
+            'mon-chien': 'http://localhost:5000/images/foods/ga-chien-nuoc-mam.jpg',
+            'mon-rau': 'http://localhost:5000/images/foods/rau-muong-xao-toi.jpg',
+            'mon-luoc': 'http://localhost:5000/images/foods/rau-cu-luoc.jpg'
+        };
+
+        try {
+            const optionsRes = await fetchAPI('/random/options');
+            if (optionsRes && optionsRes.success && optionsRes.data) {
+                const { categories, ingredients } = optionsRes.data;
+
+                if (Array.isArray(ingredients) && ingredients.length > 0) {
+                    const ingContainer = document.getElementById('ingredient-options');
+                    if (ingContainer) {
+                        ingContainer.innerHTML = ingredients.map(ing => {
+                            const normalized = normalizeText(ing.name);
+                            const iconClass = ingredientIconMap[normalized] || 'fa-leaf text-emerald-500';
+                            return `
+                                <label class="cursor-pointer group shrink-0 snap-start">
+                                    <input type="checkbox" name="ingredients" value="${ing.name}" class="peer sr-only">
+                                    <div class="py-1.5 px-3 rounded-xl border border-[#E5E1D6] bg-white peer-checked:bg-[#145A43] peer-checked:text-white peer-checked:border-[#145A43] text-xs font-bold flex items-center gap-1.5 transition whitespace-nowrap">
+                                        <i class="fa-solid ${iconClass} peer-checked:text-white"></i> ${ing.name}
+                                    </div>
+                                </label>
+                            `;
+                        }).join('');
+                    }
+                }
+
+                if (Array.isArray(categories) && categories.length > 0) {
+                    const catContainer = document.getElementById('category-options');
+                    if (catContainer) {
+                        catContainer.innerHTML = categories.map(cat => {
+                            const iconClass = categoryIconMap[cat.slug] || 'fa-bowl-food text-orange-500';
+                            return `
+                                <label class="cursor-pointer group shrink-0 snap-start">
+                                    <input type="checkbox" name="categories" value="${cat.name}" class="peer sr-only">
+                                    <div class="py-1.5 px-3 rounded-xl border border-[#E5E1D6] bg-white peer-checked:bg-[#145A43] peer-checked:text-white peer-checked:border-[#145A43] text-xs font-bold flex items-center gap-1.5 transition whitespace-nowrap">
+                                        <i class="fa-solid ${iconClass} peer-checked:text-white"></i> ${cat.name}
+                                    </div>
+                                </label>
+                            `;
+                        }).join('');
+                    }
+
+                    const exploreContainer = document.getElementById('home-explore-categories');
+                    if (exploreContainer) {
+                        exploreContainer.innerHTML = categories.slice(0, 6).map(cat => {
+                            const iconClass = categoryIconMap[cat.slug]?.split(' ')[0] || 'fa-bowl-food';
+                            const image = categoryExploreImages[cat.slug] || categoryExploreImages['mon-man'];
+                            const countText = `${cat.foodCount || 0} món`;
+                            return `
+                                <a href="#/danh-sach?category=${cat.slug}" class="group relative rounded-2xl overflow-hidden bg-white border border-[#E5E1D6] shadow-2xs hover:shadow-xs transition-all duration-300 transform hover:-translate-y-1 block aspect-[4/5] flex flex-col justify-end p-3.5">
+                                    <img src="${image}" alt="${cat.name}" class="absolute inset-0 w-full h-full object-cover group-hover:scale-110 transition-transform duration-500 ease-out">
+                                    <div class="absolute inset-0 bg-gradient-to-t from-black/85 via-black/25 to-transparent"></div>
+                                    <div class="relative z-10 text-white">
+                                        <div class="w-8 h-8 rounded-full bg-white/20 backdrop-blur-md flex items-center justify-center text-sm mb-2 group-hover:bg-[#F4A62A] group-hover:text-[#0F4937] transition-colors">
+                                            <i class="fa-solid ${iconClass}"></i>
+                                        </div>
+                                        <h3 class="font-bold text-sm sm:text-base leading-tight">${cat.name}</h3>
+                                        <span class="text-xs text-white/80 font-medium">${countText}</span>
+                                    </div>
+                                </a>
+                            `;
+                        }).join('');
+                    }
+                }
+            }
+        } catch (e) {
+            console.warn('Loi khi tai danh sach options:', e);
+        }
+
+        try {
+            const postsRes = await fetchAPI('/posts/featured?limit=4');
+            if (postsRes && postsRes.success && Array.isArray(postsRes.data) && postsRes.data.length > 0) {
+                const communityContainer = document.getElementById('home-community-cards');
+                if (communityContainer) {
+                    communityContainer.innerHTML = postsRes.data.map(post => FoodCard({
+                        id: post.id || post.foodId || post.postId,
+                        name: post.name || post.title,
+                        image: post.image,
+                        time: post.time,
+                        likes: post.likes,
+                        author: post.author,
+                        description: post.description
+                    })).join('');
+                }
+            }
+        } catch (e) {
+            console.warn('Loi khi tai bai viet cong dong:', e);
+        }
+
+        try {
+            const suggestionsRes = await fetchAPI('/foods/quick-suggestions');
+            const quickContainer = document.getElementById('quick-suggestions-container');
+            const quickSection = document.getElementById('section-quick-suggestions');
+            if (suggestionsRes && suggestionsRes.success && Array.isArray(suggestionsRes.data) && suggestionsRes.data.length > 0) {
+                if (quickContainer) {
+                    quickContainer.innerHTML = suggestionsRes.data.map((item) => {
+                        const iconHtml = item.icon ? `<i class="fa-solid ${item.icon}"></i>` : (item.emoji ? `<span>${item.emoji}</span>` : '');
+                        const countBadge = item.count ? `<span class="text-[10px] px-1.5 py-0.5 bg-[#F8F5EC] text-[#145A43] rounded-full border border-[#E5E1D6] font-semibold">${item.count}</span>` : '';
+                        return `
+                            <a href="${item.url}" class="snap-start shrink-0 px-4 py-2 bg-white hover:bg-[#145A43] text-[#18382D] hover:text-white rounded-full text-xs font-bold border border-[#E5E1D6] shadow-2xs hover:shadow-xs transition-all flex items-center gap-1.5 group cursor-pointer">
+                                ${iconHtml}
+                                <span>${item.label}</span>
+                                ${countBadge}
+                                <i class="fa-solid fa-angle-right text-[10px] text-gray-400 group-hover:text-white group-hover:translate-x-0.5 transition-transform"></i>
+                            </a>
+                        `;
+                    }).join('');
+                }
+            } else if (quickSection) {
+                quickSection.classList.add('hidden');
+            }
+        } catch (e) {
+            const quickSection = document.getElementById('section-quick-suggestions');
+            if (quickSection) {
+                quickSection.classList.add('hidden');
+            }
+        }
+
+        try {
+            const foodsRes = await fetchAPI('/foods?limit=50');
+            if (foodsRes && foodsRes.success && Array.isArray(foodsRes.data) && foodsRes.data.length > 0) {
+                randomFoodsPool = foodsRes.data.map(normalizeFood);
+                reel1Items = [getRandomPoolFood(), getRandomPoolFood(), getRandomPoolFood()];
+                reel2Items = [getRandomPoolFood(), getRandomPoolFood(), getRandomPoolFood()];
+                reel3Items = [getRandomPoolFood(), getRandomPoolFood(), getRandomPoolFood()];
+                populateReelContent('reel-1', reel1Items);
+                populateReelContent('reel-2', reel2Items);
+                populateReelContent('reel-3', reel3Items);
+            }
+        } catch (e) {
+            console.warn('Loi khi tai danh sach mon an ban dau:', e);
+        }
     }
 };
 

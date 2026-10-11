@@ -5,7 +5,8 @@ async function randomMeals(req, res) {
         const result = await mealRandomService.getRandomMeals({
             quantity: req.query.quantity,
             ingredients: req.query.ingredients,
-            categories: req.query.categories
+            categories: req.query.categories,
+            cook_time: req.query.cook_time
         });
 
         if (!result.foods.length) {
@@ -25,7 +26,9 @@ async function randomMeals(req, res) {
                 requested: result.requested,
                 matchedFilters: result.matchedFilters,
                 totalCandidates: result.totalCandidates,
-                fallbackCount: result.fallbackCount
+                fallbackCount: result.fallbackCount,
+                timeRelaxedCount: result.timeRelaxedCount,
+                cookTime: result.cookTime
             },
             data: result.foods
         });

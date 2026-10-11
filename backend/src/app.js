@@ -1,14 +1,20 @@
 const express = require('express');
 const cors = require('cors');
+const path = require('path');
 require('dotenv').config();
 const randomRoutes = require('./routes/random.routes');
+const postRoutes = require('./routes/post.routes');
+const foodRoutes = require('./routes/food.routes');
 
 const app = express();
 
 // Middlewares
 app.use(cors());
 app.use(express.json());
+app.use('/images', express.static(path.join(__dirname, '..', 'public', 'images')));
 app.use('/api/random', randomRoutes);
+app.use('/api/posts', postRoutes);
+app.use('/api/foods', foodRoutes);
 
 // Route mặc định kiểm tra server
 app.get('/', (req, res) => {

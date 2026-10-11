@@ -6,440 +6,8 @@ import { fetchAPI } from '../../api.js';
 // rating_count, likes, is_favorite, category, sub_category, difficulty, 
 // description, ingredients, tags, author
 // ============================================================================
-const initialDishes = [
-    {
-        id: 1,
-        name: 'Thịt Kho Trứng Nước Dừa',
-        image: 'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=700&auto=format&fit=crop&q=80',
-        time: '45 phút',
-        cooking_time_minutes: 45,
-        rating: 4.9,
-        rating_count: '2.8k',
-        likes: 1250,
-        is_favorite: false,
-        category: 'Món mặn',
-        sub_category: 'viet',
-        difficulty: 'Dễ làm',
-        description: 'Món thịt kho hột vịt nước dừa xiêm béo ngậy, thịt ba chỉ mềm tan đậm đà, trứng cút ngấm vị truyền thống.',
-        ingredients: ['Thịt heo', 'Trứng', 'Nước dừa', 'Hành tím', 'Nước mắm'],
-        tags: ['Món mặn', 'Dễ làm', 'Món Việt'],
-        author: { name: 'Mẹ Bông', avatar: 'https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=100' }
-    },
-    {
-        id: 2,
-        name: 'Bún Chả Hà Nội Truyền Thống',
-        image: 'https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?w=700&auto=format&fit=crop&q=80',
-        time: '40 phút',
-        cooking_time_minutes: 40,
-        rating: 4.8,
-        rating_count: '3.1k',
-        likes: 1980,
-        is_favorite: false,
-        category: 'Món nướng',
-        sub_category: 'viet',
-        difficulty: 'Trung bình',
-        description: 'Chả thịt nướng than hoa thơm lừng ăn kèm bún tươi, rau sống và nước mắm chua ngọt đu đủ cà rốt giòn rụm.',
-        ingredients: ['Thịt heo', 'Rau củ', 'Bún tươi', 'Nước mắm', 'Sả'],
-        tags: ['Món nướng', 'Đặc sản', 'Món Việt'],
-        author: { name: 'Bếp Của Lan', avatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=100' }
-    },
-    {
-        id: 3,
-        name: 'Gà Xào Sả Ớt Cay Nồng',
-        image: 'https://images.unsplash.com/photo-1604908176997-125f25cc6f3d?w=700&auto=format&fit=crop&q=80',
-        time: '25 phút',
-        cooking_time_minutes: 25,
-        rating: 4.7,
-        rating_count: '1.5k',
-        likes: 890,
-        is_favorite: false,
-        category: 'Món xào',
-        sub_category: 'nhanh',
-        difficulty: 'Dễ làm',
-        description: 'Thịt gà ta săn chắc xào sả ớt đẫm vị cay thơm nức mũi, màu vàng ươm kích thích vị giác cực kỳ đưa cơm.',
-        ingredients: ['Thịt gà', 'Sả', 'Ớt', 'Tỏi', 'Gừng'],
-        tags: ['Món xào', 'Món nhanh', 'Đậm đà'],
-        author: { name: 'Chef Tùng', avatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100' }
-    },
-    {
-        id: 4,
-        name: 'Canh Chua Cá Lóc Nam Bộ',
-        image: 'https://images.unsplash.com/photo-1547592180-85f173990554?w=700&auto=format&fit=crop&q=80',
-        time: '30 phút',
-        cooking_time_minutes: 30,
-        rating: 4.9,
-        rating_count: '2.4k',
-        likes: 1420,
-        is_favorite: false,
-        category: 'Món canh',
-        sub_category: 'viet',
-        difficulty: 'Dễ làm',
-        description: 'Tô canh chua cá lóc nấu cùng thơm, cà chua, dọc mùng, bạc hà và giá đỗ tươi mát giải nhiệt ngày nắng.',
-        ingredients: ['Hải sản', 'Rau củ', 'Me', 'Bạc hà', 'Dọc mùng'],
-        tags: ['Món canh', 'Thanh mát', 'Món Việt'],
-        author: { name: 'Gia Đình Bếp', avatar: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=100' }
-    },
-    {
-        id: 5,
-        name: 'Bò Xào Lúc Lắc Khoai Tây',
-        image: 'https://images.unsplash.com/photo-1555939594-58d7cb561ad1?w=700&auto=format&fit=crop&q=80',
-        time: '20 phút',
-        cooking_time_minutes: 20,
-        rating: 4.8,
-        rating_count: '1.9k',
-        likes: 1670,
-        is_favorite: false,
-        category: 'Món xào',
-        sub_category: 'nhanh',
-        difficulty: 'Dễ làm',
-        description: 'Thịt thăn bò mềm mọng ướp sốt tiêu đen xào lửa lớn với ớt chuông ba màu và khoai tây chiên giòn.',
-        ingredients: ['Thịt bò', 'Rau củ', 'Ớt chuông', 'Hành tây', 'Bơ tỏi'],
-        tags: ['Món xào', 'Món nhanh', 'Món ngon'],
-        author: { name: 'Hoàng Nam', avatar: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=100' }
-    },
-    {
-        id: 6,
-        name: 'Sườn Xào Chua Ngọt',
-        image: 'https://images.unsplash.com/photo-1544025162-8314e3fc4585?w=700&auto=format&fit=crop&q=80',
-        time: '35 phút',
-        cooking_time_minutes: 35,
-        rating: 4.9,
-        rating_count: '3.5k',
-        likes: 2100,
-        is_favorite: false,
-        category: 'Món xào',
-        sub_category: 'viet',
-        difficulty: 'Trung bình',
-        description: 'Sườn heo non chặt vừa ăn đảo đều sốt cà chua, giấm táo và đường thốt nốt sánh óng ánh chua ngọt hài hòa.',
-        ingredients: ['Thịt heo', 'Rau củ', 'Cà chua', 'Hành tây', 'Ớt chuông'],
-        tags: ['Món xào', 'Đưa cơm', 'Món Việt'],
-        author: { name: 'Cô Ba Sài Gòn', avatar: 'https://images.unsplash.com/photo-1517841905240-472988babdf9?w=100' }
-    },
-    {
-        id: 7,
-        name: 'Đậu Hũ Nhồi Thịt Sốt Cà',
-        image: 'https://images.unsplash.com/photo-1546069901-d1d0cf377fde?w=700&auto=format&fit=crop&q=80',
-        time: '20 phút',
-        cooking_time_minutes: 20,
-        rating: 4.6,
-        rating_count: '1.2k',
-        likes: 780,
-        is_favorite: false,
-        category: 'Món mặn',
-        sub_category: 'nhanh',
-        difficulty: 'Dễ làm',
-        description: 'Đậu hũ chiên vàng nhồi thịt heo mộc nhĩ nấm hương, sốt cà chua tươi sánh mịn thơm ngậy ấm lòng bữa tối.',
-        ingredients: ['Đậu hũ', 'Thịt heo', 'Rau củ', 'Cà chua', 'Hành lá'],
-        tags: ['Món mặn', 'Món nhanh', 'Bình dân'],
-        author: { name: 'Thanh Mai', avatar: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=100' }
-    },
-    {
-        id: 8,
-        name: 'Rau Muống Xào Tỏi Xanh Giòn',
-        image: 'https://images.unsplash.com/photo-1540420773420-3366772f4999?w=700&auto=format&fit=crop&q=80',
-        time: '10 phút',
-        cooking_time_minutes: 10,
-        rating: 4.7,
-        rating_count: '2.1k',
-        likes: 1150,
-        is_favorite: false,
-        category: 'Món xào',
-        sub_category: 'nhanh',
-        difficulty: 'Dễ làm',
-        description: 'Rau muống non xanh mướt chần nhanh xào lửa lớn cùng tỏi phi thơm nức mũi, giữ trọn độ giòn ngọt tự nhiên.',
-        ingredients: ['Rau củ', 'Tỏi', 'Dầu hào', 'Nước mắm'],
-        tags: ['Món xào', 'Dưới 15p', 'Rau xanh'],
-        author: { name: 'Bếp Nhà Tôi', avatar: 'https://images.unsplash.com/photo-1522075469751-3a6694fb2f61?w=100' }
-    },
-    {
-        id: 9,
-        name: 'Cá Hồi Áp Chảo Bơ Chanh',
-        image: 'https://images.unsplash.com/photo-1467003909585-2f8a72700288?w=700&auto=format&fit=crop&q=80',
-        time: '15 phút',
-        cooking_time_minutes: 15,
-        rating: 4.9,
-        rating_count: '1.8k',
-        likes: 1890,
-        is_favorite: false,
-        category: 'Món chiên',
-        sub_category: 'au',
-        difficulty: 'Dễ làm',
-        description: 'Phi lê cá hồi tươi da giòn thịt mềm mọng nước, sốt bơ chanh vàng óng ăn kèm măng tây xào bơ tỏi.',
-        ingredients: ['Hải sản', 'Rau củ', 'Bơ', 'Chanh vàng', 'Măng tây'],
-        tags: ['Món Âu', 'Eat Clean', 'Cao cấp'],
-        author: { name: 'Chef Julian', avatar: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=100' }
-    },
-    {
-        id: 10,
-        name: 'Canh Sườn Nấu Sấu Hà Nội',
-        image: 'https://images.unsplash.com/photo-1512621776951-a57141f2eefd?w=700&auto=format&fit=crop&q=80',
-        time: '35 phút',
-        cooking_time_minutes: 35,
-        rating: 4.8,
-        rating_count: '1.6k',
-        likes: 920,
-        is_favorite: false,
-        category: 'Món canh',
-        sub_category: 'viet',
-        difficulty: 'Dễ làm',
-        description: 'Vị chua thanh mát lành đặc trưng của quả sấu hòa quyện cùng sườn non ninh mềm béo ngậy chuẩn vị hè Bắc Bộ.',
-        ingredients: ['Thịt heo', 'Rau củ', 'Quả sấu', 'Hành lá', 'Mùi tàu'],
-        tags: ['Món canh', 'Món Việt', 'Chua thanh'],
-        author: { name: 'Hà Nội Xưa', avatar: 'https://images.unsplash.com/photo-1567532939604-b6b5b0db2604?w=100' }
-    },
-    {
-        id: 11,
-        name: 'Nem Rán Hà Nội Giòn Rụm',
-        image: 'https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?w=700&auto=format&fit=crop&q=80',
-        time: '45 phút',
-        cooking_time_minutes: 45,
-        rating: 4.9,
-        rating_count: '4.2k',
-        likes: 2450,
-        is_favorite: false,
-        category: 'Món chiên',
-        sub_category: 'viet',
-        difficulty: 'Trung bình',
-        description: 'Cuốn nem đầy đặn tôm thịt mộc nhĩ miến dong, chiên vàng ươm giòn tan chấm nước mắm tỏi ớt chua ngọt.',
-        ingredients: ['Thịt heo', 'Hải sản', 'Trứng', 'Rau củ', 'Miến dong'],
-        tags: ['Món chiên', 'Đặc sản', 'Món Tết'],
-        author: { name: 'Bà Nội Nấu', avatar: 'https://images.unsplash.com/photo-1524504388940-b1c1722653e1?w=100' }
-    },
-    {
-        id: 12,
-        name: 'Đậu Hũ Chiên Sả Ớt Giòn Cay',
-        image: 'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=700&auto=format&fit=crop&q=80',
-        time: '15 phút',
-        cooking_time_minutes: 15,
-        rating: 4.7,
-        rating_count: '980',
-        likes: 650,
-        is_favorite: false,
-        category: 'Món chiên',
-        sub_category: 'chay',
-        difficulty: 'Dễ làm',
-        description: 'Món ăn chay thanh đạm nhưng cực kỳ đưa cơm. Đậu hũ bên ngoài giòn rụm bên trong béo mềm phủ sả ớt phi vàng.',
-        ingredients: ['Đậu hũ', 'Sả', 'Ớt', 'Hạt nêm chay'],
-        tags: ['Món Chay', 'Món chiên', 'Dễ làm'],
-        author: { name: 'Tâm An', avatar: 'https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?w=100' }
-    },
-    {
-        id: 13,
-        name: 'Chè Hạt Sen Long Nhãn',
-        image: 'https://images.unsplash.com/photo-1509440159596-0249088772ff?w=700&auto=format&fit=crop&q=80',
-        time: '25 phút',
-        cooking_time_minutes: 25,
-        rating: 4.9,
-        rating_count: '1.4k',
-        likes: 1120,
-        is_favorite: false,
-        category: 'Món chiên',
-        sub_category: 'ngot',
-        difficulty: 'Dễ làm',
-        description: 'Hạt sen bùi béo lồng bên trong cùi nhãn Hưng Yên mọng nước, nấu cùng đường phèn thanh mát bổ dưỡng.',
-        ingredients: ['Hạt sen', 'Long nhãn', 'Đường phèn', 'Lá dứa'],
-        tags: ['Món Ngọt', 'Tráng miệng', 'Thanh mát'],
-        author: { name: 'Bếp Bánh & Chè', avatar: 'https://images.unsplash.com/photo-1531746020798-e6953c6e8e04?w=100' }
-    },
-    {
-        id: 14,
-        name: 'Mì Ý Sốt Bò Bằm Bolognese',
-        image: 'https://images.unsplash.com/photo-1551183053-bf91a1d81141?w=700&auto=format&fit=crop&q=80',
-        time: '30 phút',
-        cooking_time_minutes: 30,
-        rating: 4.8,
-        rating_count: '2.9k',
-        likes: 1750,
-        is_favorite: false,
-        category: 'Món xào',
-        sub_category: 'au',
-        difficulty: 'Trung bình',
-        description: 'Sợi mì Spaghetti dai ngon ngập tràn sốt cà chua thịt bò bằm đậm đà thơm thảo mộc Ý và phô mai Parmesan bào.',
-        ingredients: ['Thịt bò', 'Rau củ', 'Cà chua', 'Mì Spaghetti', 'Phô mai'],
-        tags: ['Món Âu', 'Món xào', 'Yêu thích'],
-        author: { name: 'Chef Mario', avatar: 'https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=100' }
-    },
-    {
-        id: 15,
-        name: 'Nấm Đùi Gà Kho Tiêu Chay',
-        image: 'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=700&auto=format&fit=crop&q=80',
-        time: '20 phút',
-        cooking_time_minutes: 20,
-        rating: 4.7,
-        rating_count: '860',
-        likes: 540,
-        is_favorite: false,
-        category: 'Món mặn',
-        sub_category: 'chay',
-        difficulty: 'Dễ làm',
-        description: 'Nấm đùi gà giòn ngọt tự nhiên kho kẹo cùng nước tương thơm béo và tiêu sọ Phú Quốc cay nồng đậm vị.',
-        ingredients: ['Nấm đùi gà', 'Rau củ', 'Tiêu xanh', 'Nước tương'],
-        tags: ['Món Chay', 'Món mặn', 'Healthy'],
-        author: { name: 'Bếp Chay Mộc', avatar: 'https://images.unsplash.com/photo-1548142813-c348350df52b?w=100' }
-    },
-    {
-        id: 16,
-        name: 'Mực Hấp Gừng Hành',
-        image: 'https://images.unsplash.com/photo-1544025162-8314e3fc4585?w=700&auto=format&fit=crop&q=80',
-        time: '15 phút',
-        cooking_time_minutes: 15,
-        rating: 4.9,
-        rating_count: '2.1k',
-        likes: 1390,
-        is_favorite: false,
-        category: 'Món mặn',
-        sub_category: 'nhanh',
-        difficulty: 'Dễ làm',
-        description: 'Mực ống tươi rói hấp nhanh cùng gừng thái chỉ và hành hoa, giòn ngọt sần sật chấm muối ớt chanh chuẩn vị.',
-        ingredients: ['Hải sản', 'Rau củ', 'Gừng tươi', 'Hành lá', 'Ớt sừng'],
-        tags: ['Hải sản', 'Món nhanh', 'Thanh ngọt'],
-        author: { name: 'Hải Sản Phố', avatar: 'https://images.unsplash.com/photo-1501196354995-cbb51c65aaea?w=100' }
-    },
-    {
-        id: 17,
-        name: 'Sườn Nướng Mật Ong BBQ',
-        image: 'https://images.unsplash.com/photo-1544025162-8314e3fc4585?w=700&auto=format&fit=crop&q=80',
-        time: '50 phút',
-        cooking_time_minutes: 50,
-        rating: 4.9,
-        rating_count: '3.7k',
-        likes: 2890,
-        is_favorite: false,
-        category: 'Món nướng',
-        sub_category: 'viet',
-        difficulty: 'Trung bình',
-        description: 'Sườn heo ướp mật ong rừng, dầu hào và tỏi nướng bằng nồi chiên không dầu thơm nức nở, màu cánh gián quyến rũ.',
-        ingredients: ['Thịt heo', 'Mật ong', 'Tỏi', 'Dầu hào', 'Tiêu'],
-        tags: ['Món nướng', 'Đậm vị', 'Món tiệc'],
-        author: { name: 'Vũ Bếp', avatar: 'https://images.unsplash.com/photo-1534751516642-a171edd2521d?w=100' }
-    },
-    {
-        id: 18,
-        name: 'Trứng Chiên Cuộn Phô Mai',
-        image: 'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=700&auto=format&fit=crop&q=80',
-        time: '12 phút',
-        cooking_time_minutes: 12,
-        rating: 4.8,
-        rating_count: '1.7k',
-        likes: 980,
-        is_favorite: false,
-        category: 'Món chiên',
-        sub_category: 'nhanh',
-        difficulty: 'Dễ làm',
-        description: 'Trứng gà đánh xốp mịn cuộn cùng phô mai Mozzarella tan chảy béo ngậy, món ăn sáng hoặc ăn vặt các bé mê tít.',
-        ingredients: ['Trứng', 'Phô mai', 'Rau củ', 'Bơ lạt'],
-        tags: ['Dưới 15p', 'Món nhanh', 'Món chiên'],
-        author: { name: 'Mẹ Min', avatar: 'https://images.unsplash.com/photo-1528892952291-009c663ce843?w=100' }
-    },
-    {
-        id: 19,
-        name: 'Canh Rong Biển Thịt Bò',
-        image: 'https://images.unsplash.com/photo-1547592180-85f173990554?w=700&auto=format&fit=crop&q=80',
-        time: '20 phút',
-        cooking_time_minutes: 20,
-        rating: 4.7,
-        rating_count: '1.3k',
-        likes: 810,
-        is_favorite: false,
-        category: 'Món canh',
-        sub_category: 'nhanh',
-        difficulty: 'Dễ làm',
-        description: 'Rong biển thanh mát nấu cùng thịt bò bằm xào dầu mè thơm lừng, món canh dinh dưỡng hồi phục sức khỏe nhanh chóng.',
-        ingredients: ['Thịt bò', 'Rau củ', 'Rong biển', 'Dầu mè', 'Tỏi'],
-        tags: ['Món canh', 'Healthy', 'Món nhanh'],
-        author: { name: 'K-Kitchen', avatar: 'https://images.unsplash.com/photo-1544717305-2782549b5136?w=100' }
-    },
-    {
-        id: 20,
-        name: 'Bánh Flan Trứng Sữa Caramen',
-        image: 'https://images.unsplash.com/photo-1509440159596-0249088772ff?w=700&auto=format&fit=crop&q=80',
-        time: '35 phút',
-        cooking_time_minutes: 35,
-        rating: 4.9,
-        rating_count: '4.8k',
-        likes: 3100,
-        is_favorite: false,
-        category: 'Món chiên',
-        sub_category: 'ngot',
-        difficulty: 'Dễ làm',
-        description: 'Bánh flan mềm mịn không rỗ, vị béo thơm của sữa tươi và trứng quyện cùng lớp caramen đắng nhẹ thơm cà phê.',
-        ingredients: ['Trứng', 'Sữa tươi', 'Đường', 'Cà phê', 'Vani'],
-        tags: ['Món Ngọt', 'Tráng miệng', 'Béo ngậy'],
-        author: { name: 'Gia Hân', avatar: 'https://images.unsplash.com/photo-1517365830460-955ce3ccd263?w=100' }
-    },
-    {
-        id: 21,
-        name: 'Tôm Sốt Bơ Tỏi Cay',
-        image: 'https://images.unsplash.com/photo-1555939594-58d7cb561ad1?w=700&auto=format&fit=crop&q=80',
-        time: '18 phút',
-        cooking_time_minutes: 18,
-        rating: 4.8,
-        rating_count: '1.9k',
-        likes: 1420,
-        is_favorite: false,
-        category: 'Món xào',
-        sub_category: 'nhanh',
-        difficulty: 'Dễ làm',
-        description: 'Tôm sú tươi giòn ngọt sốt bơ tỏi sánh ngậy thơm lừng, chấm bánh mì giòn rụm thì ngon hết nấc.',
-        ingredients: ['Hải sản', 'Bơ lạt', 'Tỏi băm', 'Ớt bột', 'Ngò tây'],
-        tags: ['Hải sản', 'Món xào', 'Đậm vị'],
-        author: { name: 'Chef Hải', avatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100' }
-    },
-    {
-        id: 22,
-        name: 'Canh Kim Chi Đậu Phụ Thịt Heo',
-        image: 'https://images.unsplash.com/photo-1547592180-85f173990554?w=700&auto=format&fit=crop&q=80',
-        time: '25 phút',
-        cooking_time_minutes: 25,
-        rating: 4.8,
-        rating_count: '2.2k',
-        likes: 1530,
-        is_favorite: false,
-        category: 'Món canh',
-        sub_category: 'nhanh',
-        difficulty: 'Dễ làm',
-        description: 'Nước canh cay nồng đậm đà từ kim chi lên men, thịt ba chỉ ngọt mềm và đậu hũ non bùi béo ăn ấm lòng ngày đông.',
-        ingredients: ['Thịt heo', 'Đậu hũ', 'Rau củ', 'Kim chi', 'Hành baro'],
-        tags: ['Món canh', 'Cay nồng', 'Món nhanh'],
-        author: { name: 'Kimchi House', avatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=100' }
-    },
-    {
-        id: 23,
-        name: 'Gà Nướng Muối Ớt Da Giòn',
-        image: 'https://images.unsplash.com/photo-1604908176997-125f25cc6f3d?w=700&auto=format&fit=crop&q=80',
-        time: '45 phút',
-        cooking_time_minutes: 45,
-        rating: 4.9,
-        rating_count: '3.3k',
-        likes: 2150,
-        is_favorite: false,
-        category: 'Món nướng',
-        sub_category: 'viet',
-        difficulty: 'Trung bình',
-        description: 'Gà nguyên con ướp muối hạt ớt hiểm giã nhuyễn nướng than hồng, lớp da giòn rụm bên trong mọng nước ngọt thịt.',
-        ingredients: ['Thịt gà', 'Ớt hiểm', 'Muối hạt', 'Lá chanh', 'Mật ong'],
-        tags: ['Món nướng', 'Món Việt', 'Đậm đà'],
-        author: { name: 'Anh Ba Nướng', avatar: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=100' }
-    },
-    {
-        id: 24,
-        name: 'Salad Rau Mầm Cá Ngừ Sốt Mè Rang',
-        image: 'https://images.unsplash.com/photo-1540420773420-3366772f4999?w=700&auto=format&fit=crop&q=80',
-        time: '10 phút',
-        cooking_time_minutes: 10,
-        rating: 4.7,
-        rating_count: '1.1k',
-        likes: 720,
-        is_favorite: false,
-        category: 'Món xào',
-        sub_category: 'chay',
-        difficulty: 'Dễ làm',
-        description: 'Bữa ăn Eat Clean cực kỳ tiện lợi với rau mầm tươi xanh, cà chua bi giòn ngọt và sốt mè rang bùi béo.',
-        ingredients: ['Rau củ', 'Hải sản', 'Cà chua bi', 'Sốt mè rang'],
-        tags: ['Dưới 15p', 'Eat Clean', 'Món nhanh'],
-        author: { name: 'Healthy Life', avatar: 'https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=100' }
-    }
-];
+// Toàn bộ danh sách món ăn được nạp động từ Database Backend
+const initialDishes = [];
 
 // Lazy Loading Batch Configuration
 const BATCH_SIZE = 12;
@@ -523,10 +91,6 @@ const FoodList = {
                         <!-- Quick Category Pills -->
                         <div class="pt-1 flex flex-wrap items-center gap-2" id="quick-category-pills">
                             <span class="text-xs font-bold text-text-muted mr-1 hidden sm:inline">Danh mục:</span>
-                            <button type="button" class="quick-cat-btn active-pill px-3.5 py-1.5 rounded-full text-xs font-bold transition-all flex items-center gap-1.5 cursor-pointer border shadow-2xs" data-cat="all">
-                                <span>✨</span>
-                                <span>Tất cả</span>
-                            </button>
                             <button type="button" class="quick-cat-btn px-3.5 py-1.5 rounded-full text-xs font-bold transition-all flex items-center gap-1.5 cursor-pointer border border-[#E5DEC9] bg-white/80 text-text-muted hover:text-primary hover:bg-primary-subtle shadow-2xs" data-cat="viet">
                                 <span>🍲</span>
                                 <span>Món Việt</span>
@@ -616,24 +180,26 @@ const FoodList = {
                                 Loại món
                             </h3>
                             <div class="grid grid-cols-2 gap-1" id="filter-category-group">
-                                <button type="button" class="btn-filter-cat active-cat px-2 py-1 rounded-lg text-[11px] font-bold text-left transition-all border cursor-pointer flex items-center justify-between" data-cat="all">
-                                    <span>Tất cả</span>
-                                    <i class="fa-solid fa-check text-[8px]"></i>
-                                </button>
                                 <button type="button" class="btn-filter-cat px-2 py-1 rounded-lg text-[11px] font-semibold text-text-muted text-left transition-all border border-gray-100 hover:bg-cream-soft hover:text-primary cursor-pointer flex items-center justify-between" data-cat="Món mặn">
                                     <span>Món mặn</span>
                                 </button>
                                 <button type="button" class="btn-filter-cat px-2 py-1 rounded-lg text-[11px] font-semibold text-text-muted text-left transition-all border border-gray-100 hover:bg-cream-soft hover:text-primary cursor-pointer flex items-center justify-between" data-cat="Món canh">
                                     <span>Món canh</span>
                                 </button>
+                                <button type="button" class="btn-filter-cat px-2 py-1 rounded-lg text-[11px] font-semibold text-text-muted text-left transition-all border border-gray-100 hover:bg-cream-soft hover:text-primary cursor-pointer flex items-center justify-between" data-cat="Món kho">
+                                    <span>Món kho</span>
+                                </button>
                                 <button type="button" class="btn-filter-cat px-2 py-1 rounded-lg text-[11px] font-semibold text-text-muted text-left transition-all border border-gray-100 hover:bg-cream-soft hover:text-primary cursor-pointer flex items-center justify-between" data-cat="Món xào">
                                     <span>Món xào</span>
                                 </button>
-                                <button type="button" class="btn-filter-cat px-2 py-1 rounded-lg text-[11px] font-semibold text-text-muted text-left transition-all border border-gray-100 hover:bg-cream-soft hover:text-primary cursor-pointer flex items-center justify-between" data-cat="Món nướng">
-                                    <span>Món nướng</span>
-                                </button>
                                 <button type="button" class="btn-filter-cat px-2 py-1 rounded-lg text-[11px] font-semibold text-text-muted text-left transition-all border border-gray-100 hover:bg-cream-soft hover:text-primary cursor-pointer flex items-center justify-between" data-cat="Món chiên">
                                     <span>Món chiên</span>
+                                </button>
+                                <button type="button" class="btn-filter-cat px-2 py-1 rounded-lg text-[11px] font-semibold text-text-muted text-left transition-all border border-gray-100 hover:bg-cream-soft hover:text-primary cursor-pointer flex items-center justify-between" data-cat="Món rau">
+                                    <span>Món rau</span>
+                                </button>
+                                <button type="button" class="btn-filter-cat px-2 py-1 rounded-lg text-[11px] font-semibold text-text-muted text-left transition-all border border-gray-100 hover:bg-cream-soft hover:text-primary cursor-pointer flex items-center justify-between" data-cat="Món luộc">
+                                    <span>Món luộc</span>
                                 </button>
                             </div>
                         </div>
@@ -899,7 +465,7 @@ const FoodList = {
         `;
     },
 
-    afterRender: async () => {
+    afterRender: async (params) => {
         // ====================================================================
         // STATE MANAGEMENT (Frontend only)
         // ====================================================================
@@ -910,8 +476,8 @@ const FoodList = {
         let hasMore = true;
         let viewMode = 'grid'; // 'grid' or 'list'
         let currentSort = 'newest';
-        let currentCategory = 'all';
-        let currentQuickCategory = 'all';
+        let currentCategory = '';
+        let currentQuickCategory = '';
         let currentCookTime = 'all';
         let currentSelectedIngredients = [];
         let currentSearchQuery = '';
@@ -927,12 +493,13 @@ const FoodList = {
                     name: item.name || item.ten_mon || 'Món ngon',
                     image: item.image || item.hinh_anh || 'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=700',
                     time: item.time || (item.thoi_gian ? `${item.thoi_gian} phút` : '25 phút'),
-                    cooking_time_minutes: parseInt(item.thoi_gian || 25, 10),
+                    cooking_time_minutes: parseInt(item.cooking_time_minutes || item.thoi_gian || 25, 10),
                     rating: item.rating || 4.8,
                     rating_count: item.rating_count || '1.5k',
                     likes: item.likes || 120,
                     is_favorite: false,
                     category: item.category || item.loai_mon || 'Món mặn',
+                    category_slug: item.category_slug || '',
                     sub_category: item.sub_category || 'viet',
                     difficulty: item.difficulty || 'Dễ làm',
                     description: item.description || item.mo_ta || 'Món ăn thơm ngon đậm đà cho bữa cơm gia đình.',
@@ -1182,9 +749,9 @@ const FoodList = {
                 mobileResultCountEl.textContent = `${total} món ăn`;
             }
 
-            const hasActiveFilters = currentCategory !== 'all' || 
-                                     currentQuickCategory !== 'all' || 
-                                     currentCookTime !== 'all' || 
+            const hasActiveFilters = Boolean(currentCategory) || 
+                                     Boolean(currentQuickCategory) || 
+                                     (currentCookTime && currentCookTime !== 'all') || 
                                      currentSelectedIngredients.length > 0 || 
                                      currentSearchQuery.trim() !== '';
 
@@ -1193,9 +760,9 @@ const FoodList = {
             }
 
             let filterCount = 0;
-            if (currentCategory !== 'all') filterCount++;
-            if (currentQuickCategory !== 'all') filterCount++;
-            if (currentCookTime !== 'all') filterCount++;
+            if (currentCategory) filterCount++;
+            if (currentQuickCategory) filterCount++;
+            if (currentCookTime && currentCookTime !== 'all') filterCount++;
             filterCount += currentSelectedIngredients.length;
             if (currentSearchQuery.trim() !== '') filterCount++;
 
@@ -1386,10 +953,9 @@ const FoodList = {
         // ====================================================================
         // FILTER & SORT LOGIC
         // ====================================================================
-        const executeFilterAndSort = () => {
+        const runClientFilter = () => {
             let result = [...masterDishes];
 
-            // 1. Search Query Filter
             if (currentSearchQuery.trim() !== '') {
                 const q = currentSearchQuery.toLowerCase().trim();
                 result = result.filter(d => 
@@ -1400,17 +966,18 @@ const FoodList = {
                 );
             }
 
-            // 2. Quick Category Filter (viet, chay, nhanh, ngot, au)
-            if (currentQuickCategory !== 'all') {
+            if (currentQuickCategory && currentQuickCategory !== 'all') {
                 result = result.filter(d => d.sub_category === currentQuickCategory);
             }
 
-            // 3. Category Group Filter
-            if (currentCategory !== 'all') {
-                result = result.filter(d => d.category.toLowerCase() === currentCategory.toLowerCase());
+            if (currentCategory && currentCategory !== 'all') {
+                const targetCat = currentCategory.toLowerCase();
+                result = result.filter(d => 
+                    d.category.toLowerCase() === targetCat || 
+                    (d.category_slug && d.category_slug.toLowerCase() === targetCat)
+                );
             }
 
-            // 4. Cooking Time Filter
             if (currentCookTime === 'under_15') {
                 result = result.filter(d => d.cooking_time_minutes <= 15);
             } else if (currentCookTime === '15_to_30') {
@@ -1419,7 +986,6 @@ const FoodList = {
                 result = result.filter(d => d.cooking_time_minutes > 30);
             }
 
-            // 5. Ingredients Checkboxes Filter
             if (currentSelectedIngredients.length > 0) {
                 result = result.filter(d => 
                     currentSelectedIngredients.some(selectedIng => 
@@ -1428,7 +994,6 @@ const FoodList = {
                 );
             }
 
-            // 6. Sorting
             if (currentSort === 'newest') {
                 result.sort((a, b) => b.id - a.id);
             } else if (currentSort === 'popular') {
@@ -1445,14 +1010,75 @@ const FoodList = {
                 result.sort((a, b) => a.name.localeCompare(b.name, 'vi'));
             }
 
+            return result;
+        };
+
+        const executeFilterAndSort = async () => {
+            let result = [];
+            try {
+                const queryParams = new URLSearchParams();
+                queryParams.set('limit', '50');
+
+                if (currentSearchQuery && currentSearchQuery.trim()) {
+                    queryParams.set('search', currentSearchQuery.trim());
+                }
+
+                if (currentCategory && currentCategory !== 'all') {
+                    queryParams.set('category', currentCategory);
+                }
+
+                if (currentQuickCategory && currentQuickCategory !== 'all') {
+                    queryParams.set('sub_category', currentQuickCategory);
+                }
+
+                if (currentCookTime && currentCookTime !== 'all') {
+                    queryParams.set('cook_time', currentCookTime);
+                }
+
+                if (currentSelectedIngredients && currentSelectedIngredients.length > 0) {
+                    queryParams.set('ingredients', currentSelectedIngredients.join(','));
+                }
+
+                if (currentSort && currentSort !== 'newest') {
+                    queryParams.set('sort', currentSort);
+                }
+
+                const endpoint = `/foods?${queryParams.toString()}`;
+                const apiRes = await fetchAPI(endpoint);
+                if (apiRes && apiRes.success && Array.isArray(apiRes.data)) {
+                    result = apiRes.data.map(item => ({
+                        id: item.id || item.id_food || item.id_monan,
+                        name: item.name || item.ten_mon || 'Món ngon',
+                        image: item.image || item.hinh_anh || 'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=700',
+                        time: item.time || (item.thoi_gian ? `${item.thoi_gian} phút` : '25 phút'),
+                        cooking_time_minutes: parseInt(item.cooking_time_minutes || item.thoi_gian || 25, 10),
+                        rating: item.rating || 4.8,
+                        rating_count: item.rating_count || '1.5k',
+                        likes: item.likes || 120,
+                        is_favorite: false,
+                        category: item.category || item.loai_mon || 'Món mặn',
+                        category_slug: item.category_slug || '',
+                        sub_category: item.sub_category || 'viet',
+                        difficulty: item.difficulty || 'Dễ làm',
+                        description: item.description || item.mo_ta || 'Món ăn thơm ngon đậm đà cho bữa cơm gia đình.',
+                        ingredients: item.ingredients || ['Rau củ', 'Gia vị'],
+                        tags: item.tags || ['Món ngon', 'Món Việt'],
+                        author: item.author || { name: 'Bếp Nhà', avatar: 'https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=100' }
+                    }));
+                } else {
+                    result = runClientFilter();
+                }
+            } catch (e) {
+                result = runClientFilter();
+            }
+
             currentFilteredDishes = result;
             renderFirstBatch();
         };
 
-        // Reset All Filters
         const resetAllFilters = () => {
-            currentCategory = 'all';
-            currentQuickCategory = 'all';
+            currentCategory = '';
+            currentQuickCategory = '';
             currentCookTime = 'all';
             currentSelectedIngredients = [];
             currentSearchQuery = '';
@@ -1462,22 +1088,13 @@ const FoodList = {
             if (btnClearSearch) btnClearSearch.classList.add('hidden');
 
             document.querySelectorAll('.quick-cat-btn').forEach(btn => {
-                const isAll = btn.getAttribute('data-cat') === 'all';
-                btn.className = isAll
-                    ? "quick-cat-btn active-pill px-3.5 py-1.5 rounded-full text-xs font-bold transition-all flex items-center gap-1.5 cursor-pointer border shadow-2xs"
-                    : "quick-cat-btn px-3.5 py-1.5 rounded-full text-xs font-bold transition-all flex items-center gap-1.5 cursor-pointer border border-[#E5DEC9] bg-white/80 text-text-muted hover:text-primary hover:bg-primary-subtle shadow-2xs";
+                btn.className = "quick-cat-btn px-3.5 py-1.5 rounded-full text-xs font-bold transition-all flex items-center gap-1.5 cursor-pointer border border-[#E5DEC9] bg-white/80 text-text-muted hover:text-primary hover:bg-primary-subtle shadow-2xs";
             });
 
             document.querySelectorAll('.btn-filter-cat').forEach(btn => {
-                const isAll = btn.getAttribute('data-cat') === 'all';
-                btn.className = isAll
-                    ? "btn-filter-cat active-cat px-2.5 py-1.5 rounded-xl text-xs font-bold text-left transition-all border cursor-pointer flex items-center justify-between"
-                    : "btn-filter-cat px-2.5 py-1.5 rounded-xl text-xs font-semibold text-text-muted text-left transition-all border border-gray-100 hover:bg-cream-soft hover:text-primary cursor-pointer flex items-center justify-between";
+                btn.className = "btn-filter-cat px-2 py-1 rounded-lg text-[11px] font-semibold text-text-muted text-left transition-all border border-gray-100 hover:bg-cream-soft hover:text-primary cursor-pointer flex items-center justify-between";
                 const checkIcon = btn.querySelector('.fa-check');
                 if (checkIcon) checkIcon.remove();
-                if (isAll) {
-                    btn.innerHTML = `<span>Tất cả</span><i class="fa-solid fa-check text-[9px]"></i>`;
-                }
             });
 
             const allRadio = document.querySelector('input[name="cook_time"][value="all"]');
@@ -1532,46 +1149,57 @@ const FoodList = {
             });
         }
 
-        // 2. Quick Category Pills Click
         const quickCatBtns = document.querySelectorAll('.quick-cat-btn');
         quickCatBtns.forEach(btn => {
             btn.addEventListener('click', () => {
                 const cat = btn.getAttribute('data-cat');
-                currentQuickCategory = cat;
-
-                quickCatBtns.forEach(b => {
-                    b.className = "quick-cat-btn px-3.5 py-1.5 rounded-full text-xs font-bold transition-all flex items-center gap-1.5 cursor-pointer border border-[#E5DEC9] bg-white/80 text-text-muted hover:text-primary hover:bg-primary-subtle shadow-2xs";
-                });
-                btn.className = "quick-cat-btn active-pill px-3.5 py-1.5 rounded-full text-xs font-bold transition-all flex items-center gap-1.5 cursor-pointer border shadow-2xs";
+                if (currentQuickCategory === cat) {
+                    currentQuickCategory = '';
+                    btn.className = "quick-cat-btn px-3.5 py-1.5 rounded-full text-xs font-bold transition-all flex items-center gap-1.5 cursor-pointer border border-[#E5DEC9] bg-white/80 text-text-muted hover:text-primary hover:bg-primary-subtle shadow-2xs";
+                } else {
+                    currentQuickCategory = cat;
+                    quickCatBtns.forEach(b => {
+                        b.className = "quick-cat-btn px-3.5 py-1.5 rounded-full text-xs font-bold transition-all flex items-center gap-1.5 cursor-pointer border border-[#E5DEC9] bg-white/80 text-text-muted hover:text-primary hover:bg-primary-subtle shadow-2xs";
+                    });
+                    btn.className = "quick-cat-btn active-pill px-3.5 py-1.5 rounded-full text-xs font-bold transition-all flex items-center gap-1.5 cursor-pointer border shadow-2xs";
+                }
 
                 executeFilterAndSort();
             });
         });
 
-        // 3. Category Buttons Group Click
         const catButtons = document.querySelectorAll('.btn-filter-cat');
         catButtons.forEach(btn => {
             btn.addEventListener('click', () => {
                 const cat = btn.getAttribute('data-cat');
-                currentCategory = cat;
+                if (currentCategory === cat) {
+                    currentCategory = '';
+                    catButtons.forEach(b => {
+                        b.className = "btn-filter-cat px-2 py-1 rounded-lg text-[11px] font-semibold text-text-muted text-left transition-all border border-gray-100 hover:bg-cream-soft hover:text-primary cursor-pointer flex items-center justify-between";
+                        const ic = b.querySelector('.fa-check');
+                        if (ic) ic.remove();
+                    });
+                } else {
+                    currentCategory = cat;
+                    catButtons.forEach(b => {
+                        b.className = "btn-filter-cat px-2 py-1 rounded-lg text-[11px] font-semibold text-text-muted text-left transition-all border border-gray-100 hover:bg-cream-soft hover:text-primary cursor-pointer flex items-center justify-between";
+                        const ic = b.querySelector('.fa-check');
+                        if (ic) ic.remove();
+                    });
+                    btn.className = "btn-filter-cat active-cat px-2 py-1 rounded-lg text-[11px] font-bold text-left transition-all border cursor-pointer flex items-center justify-between";
+                    const spanText = btn.querySelector('span')?.textContent || '';
+                    btn.innerHTML = `<span>${spanText}</span><i class="fa-solid fa-check text-[8px]"></i>`;
+                }
 
-                catButtons.forEach(b => {
-                    b.className = "btn-filter-cat px-2.5 py-1.5 rounded-xl text-xs font-semibold text-text-muted text-left transition-all border border-gray-100 hover:bg-cream-soft hover:text-primary cursor-pointer flex items-center justify-between";
-                    const ic = b.querySelector('.fa-check');
-                    if (ic) ic.remove();
-                });
-
-                btn.className = "btn-filter-cat active-cat px-2.5 py-1.5 rounded-xl text-xs font-bold text-left transition-all border cursor-pointer flex items-center justify-between";
-                const spanText = btn.querySelector('span')?.textContent || '';
-                btn.innerHTML = `<span>${spanText}</span><i class="fa-solid fa-check text-[9px]"></i>`;
+                executeFilterAndSort();
             });
         });
 
-        // 4. Time Radio Change
         const timeRadios = document.querySelectorAll('input[name="cook_time"]');
         timeRadios.forEach(r => {
             r.addEventListener('change', () => {
                 currentCookTime = r.value;
+                executeFilterAndSort();
             });
         });
 
@@ -1704,6 +1332,67 @@ const FoodList = {
         // ====================================================================
         // INITIAL RENDER
         // ====================================================================
+        const urlParams = params instanceof URLSearchParams 
+            ? params 
+            : new URLSearchParams(window.location.hash.includes('?') ? window.location.hash.split('?')[1] : '');
+
+        const urlSort = urlParams.get('sort');
+        const urlCat = urlParams.get('category');
+        const urlTime = urlParams.get('cook_time') || urlParams.get('time');
+        const urlSubCat = urlParams.get('sub_category');
+        const urlSearch = urlParams.get('search');
+
+        if (urlSort) {
+            currentSort = urlSort;
+            const sortMatch = sortOptions.find(o => o.value === urlSort);
+            if (sortMatch && currentSortLabel) {
+                currentSortLabel.textContent = sortMatch.label;
+            }
+        }
+
+        if (urlCat) {
+            currentCategory = urlCat;
+            catButtons.forEach(b => {
+                const bCat = b.getAttribute('data-cat');
+                const bCatSlug = bCat ? bCat.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/\s+/g, '-') : '';
+                const isMatch = bCat && (bCat.toLowerCase() === urlCat.toLowerCase() || bCatSlug === urlCat.toLowerCase());
+                b.className = isMatch
+                    ? "btn-filter-cat active-cat px-2 py-1 rounded-lg text-[11px] font-bold text-left transition-all border cursor-pointer flex items-center justify-between"
+                    : "btn-filter-cat px-2 py-1 rounded-lg text-[11px] font-semibold text-text-muted text-left transition-all border border-gray-100 hover:bg-cream-soft hover:text-primary cursor-pointer flex items-center justify-between";
+                const ic = b.querySelector('.fa-check');
+                if (ic) ic.remove();
+                if (isMatch) {
+                    currentCategory = bCat;
+                    const spanText = b.querySelector('span')?.textContent || '';
+                    b.innerHTML = `<span>${spanText}</span><i class="fa-solid fa-check text-[8px]"></i>`;
+                }
+            });
+        }
+
+        if (urlTime) {
+            currentCookTime = urlTime;
+            const targetRadio = document.querySelector(`input[name="cook_time"][value="${urlTime}"]`);
+            if (targetRadio) {
+                targetRadio.checked = true;
+            }
+        }
+
+        if (urlSubCat) {
+            currentQuickCategory = urlSubCat;
+            quickCatBtns.forEach(b => {
+                const isMatch = b.getAttribute('data-cat') === urlSubCat;
+                b.className = isMatch
+                    ? "quick-cat-btn active-pill px-3.5 py-1.5 rounded-full text-xs font-bold transition-all flex items-center gap-1.5 cursor-pointer border shadow-2xs"
+                    : "quick-cat-btn px-3.5 py-1.5 rounded-full text-xs font-bold transition-all flex items-center gap-1.5 cursor-pointer border border-[#E5DEC9] bg-white/80 text-text-muted hover:text-primary hover:bg-primary-subtle shadow-2xs";
+            });
+        }
+
+        if (urlSearch) {
+            currentSearchQuery = urlSearch;
+            if (heroSearchInput) heroSearchInput.value = urlSearch;
+            if (btnClearSearch) btnClearSearch.classList.remove('hidden');
+        }
+
         executeFilterAndSort();
     }
 };

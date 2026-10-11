@@ -18,21 +18,22 @@ const routes = {
 
 const router = async () => {
     try {
-        // Lấy nội dung sau dấu #
-        let path = window.location.hash.slice(1).toLowerCase() || '/';
+        let fullHash = window.location.hash.slice(1) || '/';
+        let [hashPath, queryString] = fullHash.split('?');
+        let path = (hashPath || '/').toLowerCase();
         
         let page = null;
         let params = null;
 
-        // Xử lý route động cho chi tiết món ăn (VD: /mon-an/1)
         if (path.startsWith('/mon-an/')) {
             page = FoodDetail;
-            params = path.split('/')[2]; // Lấy ID
+            params = path.split('/')[2];
         } else if (path.startsWith('/admin')) {
             page = Admin;
-            params = path.split('/')[2] || 'dashboard'; // /admin/users -> users, mặc định là dashboard
+            params = path.split('/')[2] || 'dashboard';
         } else {
             page = routes[path] || Home;
+            params = queryString ? new URLSearchParams(queryString) : null;
         }
 
         const navbarContainer = document.getElementById('navbar-container');
