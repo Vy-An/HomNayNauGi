@@ -1,165 +1,259 @@
+import FoodCard from '../../components/FoodCard.js';
+
 const FoodDetail = {
     render: async (id) => {
-        // Trong thực tế sẽ gọi fetchAPI('/foods/' + id)
-        // Đây là data mockup
         const food = {
             id: id || 1,
-            name: 'Thịt Kho Trứng Cút',
-            description: 'Món ăn truyền thống đậm đà, thịt mềm tan, trứng cút thấm vị, ăn với cơm trắng là hết sẩy.',
-            image: 'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=800',
+            name: 'Cơm Tấm Sườn Bì Chả',
+            description: 'Món ăn đặc sản Nam Bộ thơm ngon chuẩn vị với sườn nướng mật ong mềm mọng, bì giòn sần sật và chả trứng hấp béo ngậy.',
+            image: 'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=1000',
             time: '45 phút',
-            portions: '3-4 người',
+            portions: '2 người',
             difficulty: 'Trung bình',
+            likes: '2.5k',
+            calories: '650 kcal',
+            category: 'Món Mặn',
+            mealType: 'Bữa trưa',
             ingredients: [
-                { name: 'Thịt ba chỉ', amount: '500g' },
-                { name: 'Trứng cút', amount: '20 quả' },
-                { name: 'Nước dừa tươi', amount: '1 trái' },
-                { name: 'Hành tím, tỏi, ớt', amount: 'Vừa đủ' },
-                { name: 'Nước mắm, đường, tiêu', amount: 'Tùy khẩu vị' }
+                { name: 'Gạo tấm', amount: '300g' },
+                { name: 'Sườn cốt lết', amount: '2 miếng' },
+                { name: 'Bì heo trộn thính', amount: '100g' },
+                { name: 'Chả trứng hấp', amount: '1 phần' },
+                { name: 'Mỡ hành, đồ chua', amount: 'Vừa đủ' },
+                { name: 'Nước mắm chua ngọt', amount: 'Vừa đủ' }
             ],
             steps: [
-                'Sơ chế nguyên liệu: Rửa sạch thịt ba chỉ, thái miếng vuông vừa ăn. Trứng cút luộc chín, bóc vỏ. Hành, tỏi băm nhỏ.',
-                'Ướp thịt: Ướp thịt với hành tỏi băm, 2 muỗng nước mắm, 1 muỗng đường, 1/2 muỗng tiêu trong 30 phút.',
-                'Thắng nước màu: Cho 2 muỗng đường vào nồi, đun đến khi có màu cánh gián thì cho 1 muỗng nước vào.',
-                'Kho thịt: Cho thịt đã ướp vào nồi nước màu, đảo đều cho săn lại. Đổ nước dừa tươi vào ngập thịt, đun lửa riu riu.',
-                'Hoàn thành: Khi thịt bắt đầu mềm, cho trứng cút vào kho cùng. Nêm nếm lại cho vừa miệng. Đun đến khi nước kho sánh lại là được.'
+                'Ướp sườn với sả băm, tỏi băm, mật ong, dầu hào, nước mắm trong 30 phút.',
+                'Nướng sườn trên nồi chiên không dầu hoặc bếp than ở 180°C đến khi vàng nâu.',
+                'Nấu cơm tấm bằng nồi cơm điện với lượng nước vừa phải.',
+                'Xới cơm ra đĩa, đặt sườn nướng, bì, chả trứng, rưới mỡ hành và chan nước mắm.'
             ]
         };
 
-        const ingredientsHTML = food.ingredients.map(ing => `
-            <li class="flex justify-between items-center py-3 border-b border-gray-100 last:border-0">
-                <span class="text-text-main font-medium">${ing.name}</span>
-                <span class="text-text-muted text-sm bg-gray-100 px-3 py-1 rounded-full">${ing.amount}</span>
-            </li>
+        const ingredientsCardsHTML = food.ingredients.map(ing => `
+            <div class="bg-gray-50/80 border border-gray-100 rounded-xl px-3.5 py-2.5 flex items-center justify-between text-xs hover:border-primary/30 transition">
+                <div class="flex items-center gap-2 font-semibold text-text-main">
+                    <span class="w-1.5 h-1.5 rounded-full bg-primary"></span>
+                    <span>${ing.name}</span>
+                </div>
+                <span class="text-[11px] font-bold text-text-muted bg-white px-2 py-0.5 rounded-full border border-gray-100 shadow-2xs">${ing.amount}</span>
+            </div>
         `).join('');
 
-        const stepsHTML = food.steps.map((step, index) => `
-            <div class="flex gap-4 mb-6">
-                <div class="shrink-0 w-8 h-8 bg-green-100 text-primary font-bold rounded-full flex items-center justify-center">
+        const stepsCardsHTML = food.steps.map((step, index) => `
+            <div class="bg-gray-50/80 border border-gray-100 rounded-xl p-3.5 flex items-start gap-3 hover:border-primary/30 transition">
+                <div class="shrink-0 w-7 h-7 rounded-full bg-primary text-white font-extrabold text-xs flex items-center justify-center shadow-xs">
                     ${index + 1}
                 </div>
-                <div>
-                    <h4 class="font-bold text-text-main mb-1">Bước ${index + 1}</h4>
-                    <p class="text-text-muted leading-relaxed">${step}</p>
-                </div>
+                <p class="text-text-main text-xs md:text-sm leading-relaxed pt-0.5">${step}</p>
             </div>
         `).join('');
 
+        // Mockup danh sách món ăn liên quan theo danh mục
+        const relatedFoods = [
+            { id: 2, name: 'Thịt Kho Trứng Cút', image: 'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=500', time: '45 phút', likes: '3.1k', description: 'Thịt kho trứng cút đậm đà béo ngậy ăn với cơm nóng.' },
+            { id: 3, name: 'Gà Xào Sả Ớt', image: 'https://images.unsplash.com/photo-1604908176997-125f25cc6f3d?w=500', time: '30 phút', likes: '1.8k', description: 'Gà xào sả ớt thơm nức cay nồng hấp dẫn.' },
+            { id: 4, name: 'Sườn Xào Chua Ngọt', image: 'https://images.unsplash.com/photo-1544025162-8314e3fc4585?w=500', time: '40 phút', likes: '4.5k', description: 'Sườn sụn xào chua ngọt chuẩn vị đưa cơm.' }
+        ];
+
+        const relatedCardsHTML = relatedFoods.map(f => FoodCard(f)).join('');
+
         return `
-            <div class="bg-white">
-                <!-- Header / Breadcrumb -->
-                <div class="bg-gray-50 border-b border-gray-100 py-4">
-                    <div class="container mx-auto px-4 lg:px-8 text-sm text-text-muted">
-                        <a href="#/" class="hover:text-primary transition">Trang chủ</a> 
-                        <span class="mx-2">/</span> 
-                        <a href="#/danh-sach" class="hover:text-primary transition">Danh sách món ăn</a>
-                        <span class="mx-2">/</span> 
-                        <span class="text-text-main font-semibold">${food.name}</span>
+            <div class="cozy-kitchen-bg min-h-screen text-text-main font-sans pb-16">
+                <!-- Breadcrumb Header -->
+                <div class="bg-white/70 backdrop-blur-xs border-b border-beige-border/80 py-3">
+                    <div class="container mx-auto px-4 lg:px-8 text-xs text-text-muted flex items-center gap-2">
+                        <a href="#/" class="hover:text-primary transition font-medium">Trang chủ</a> 
+                        <span class="text-gray-300">/</span> 
+                        <a href="#/danh-sach" class="hover:text-primary transition font-medium">Danh sách món ăn</a>
+                        <span class="text-gray-300">/</span> 
+                        <span class="text-primary font-bold">${food.name}</span>
                     </div>
                 </div>
 
-                <div class="container mx-auto px-4 lg:px-8 py-8 md:py-12">
-                    <div class="flex flex-col lg:flex-row gap-10">
-                        <!-- Ảnh Món Ăn -->
-                        <div class="w-full lg:w-5/12">
-                            <div class="rounded-3xl overflow-hidden shadow-lg sticky top-24">
-                                <img src="${food.image}" alt="${food.name}" class="w-full h-[400px] object-cover">
-                                <div class="absolute top-4 right-4 flex gap-2">
-                                    <button class="w-10 h-10 bg-white/90 backdrop-blur rounded-full flex items-center justify-center text-gray-500 hover:text-red-500 hover:bg-white transition shadow-sm" title="Yêu thích">
-                                        <i class="fa-solid fa-heart"></i>
-                                    </button>
+                <div class="container mx-auto px-4 lg:px-8 py-6 md:py-8 max-w-6xl space-y-10">
+                    <div class="flex flex-col lg:flex-row gap-8 items-start">
+                        
+                        <!-- COLUMN 1 (LEFT): Ảnh món ăn HÌNH VUÔNG TO [hình2] -->
+                        <div class="w-full lg:w-5/12 lg:sticky lg:top-20">
+                            <div class="relative aspect-square w-full rounded-3xl overflow-hidden shadow-md border-4 border-white">
+                                <img src="${food.image}" alt="${food.name}" class="w-full h-full object-cover">
+                                <div class="absolute inset-0 bg-gradient-to-t from-black/85 via-black/30 to-transparent"></div>
+                                
+                                <!-- Top Back Button -->
+                                <div class="absolute top-4 left-4 z-10">
+                                    <a href="#/danh-sach" class="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-black/40 backdrop-blur-md text-white text-xs font-semibold hover:bg-black/60 transition shadow-xs">
+                                        <i class="fa-solid fa-arrow-left text-[10px]"></i>
+                                        <span>Quay lại</span>
+                                    </a>
+                                </div>
+
+                                <!-- Overlaid Title & Tags -->
+                                <div class="absolute bottom-5 left-5 right-5 text-white z-10">
+                                    <div class="flex flex-wrap items-center gap-1.5 mb-2">
+                                        <span class="px-2.5 py-0.5 rounded-full bg-primary text-white text-[11px] font-bold shadow-2xs">${food.category}</span>
+                                        <span class="px-2.5 py-0.5 rounded-full bg-white/20 backdrop-blur-md text-white text-[11px] font-semibold">${food.mealType}</span>
+                                        <span class="px-2.5 py-0.5 rounded-full bg-accent text-white text-[11px] font-bold flex items-center gap-1 shadow-2xs">
+                                            <i class="fa-solid fa-fire text-[9px]"></i> ${food.calories}
+                                        </span>
+                                    </div>
+                                    <h1 class="text-2xl md:text-3xl font-extrabold text-white tracking-tight leading-tight">${food.name}</h1>
                                 </div>
                             </div>
                         </div>
 
-                        <!-- Thông tin Chi Tiết -->
-                        <div class="w-full lg:w-7/12">
-                            <div class="mb-8">
-                                <h1 class="text-3xl md:text-4xl font-extrabold text-text-main mb-4">${food.name}</h1>
-                                <p class="text-lg text-text-muted leading-relaxed">${food.description}</p>
+                        <!-- COLUMN 2 (RIGHT): [hình1] (Metadata + Buttons) NẰM TRÊN BẢNG NGUYÊN LIỆU & CÔNG THỨC -->
+                        <div class="w-full lg:w-7/12 space-y-5">
+                            
+                            <!-- [hình1]: METADATA 3-CARD ROW & ACTION BUTTONS -->
+                            <div class="space-y-4">
+                                <!-- Metadata 3-Card Row -->
+                                <div class="grid grid-cols-3 gap-3">
+                                    <div class="bg-white rounded-2xl p-3.5 sm:p-4 text-center border border-beige-border/80 shadow-sm">
+                                        <span class="text-primary text-lg mb-0.5 block"><i class="fa-regular fa-clock"></i></span>
+                                        <span class="text-[11px] text-text-muted font-medium block">Thời gian</span>
+                                        <span class="font-extrabold text-text-main text-sm md:text-base">${food.time}</span>
+                                    </div>
+                                    <div class="bg-white rounded-2xl p-3.5 sm:p-4 text-center border border-beige-border/80 shadow-sm">
+                                        <span class="text-rose-500 text-lg mb-0.5 block"><i class="fa-solid fa-heart"></i></span>
+                                        <span class="text-[11px] text-text-muted font-medium block">Yêu thích</span>
+                                        <span class="font-extrabold text-text-main text-sm md:text-base">${food.likes || '2.5k'}</span>
+                                    </div>
+                                    <div class="bg-white rounded-2xl p-3.5 sm:p-4 text-center border border-beige-border/80 shadow-sm">
+                                        <span class="text-emerald-700 text-lg mb-0.5 block"><i class="fa-solid fa-users"></i></span>
+                                        <span class="text-[11px] text-text-muted font-medium block">Khẩu phần</span>
+                                        <span class="font-extrabold text-text-main text-sm md:text-base">${food.portions}</span>
+                                    </div>
+                                </div>
+
+                                <!-- Action Buttons Row -->
+                                <div class="flex items-center gap-3">
+                                    <button id="fav-btn" class="flex-1 py-3 px-4 rounded-2xl bg-white border border-beige-border/80 text-text-main font-semibold hover:bg-cream-soft transition flex items-center justify-center gap-2 text-xs md:text-sm shadow-sm cursor-pointer">
+                                        <i class="fa-regular fa-heart text-rose-500"></i>
+                                        <span>Lưu món</span>
+                                    </button>
+                                    <button id="add-to-cart-btn" class="flex-[2] py-3 px-5 bg-primary hover:bg-[#1B4633] active:bg-[#143627] text-white font-bold rounded-2xl transition shadow-md shadow-primary/20 flex items-center justify-center gap-2 text-xs md:text-sm cursor-pointer">
+                                        <i class="fa-solid fa-cart-shopping text-accent-light"></i>
+                                        <span>Thêm vào đi chợ</span>
+                                    </button>
+                                </div>
                             </div>
 
-                            <div class="flex flex-wrap gap-6 mb-10 pb-8 border-b border-gray-100">
-                                <div class="flex items-center gap-3">
-                                    <span class="w-12 h-12 rounded-full bg-green-50 flex items-center justify-center text-2xl"><i class="fa-solid fa-clock"></i></span>
-                                    <div>
-                                        <p class="text-sm text-text-muted">Thời gian</p>
-                                        <p class="font-bold text-text-main">${food.time}</p>
-                                    </div>
-                                </div>
-                                <div class="flex items-center gap-3">
-                                    <span class="w-12 h-12 rounded-full bg-green-50 flex items-center justify-center text-2xl"><i class="fa-solid fa-users"></i></span>
-                                    <div>
-                                        <p class="text-sm text-text-muted">Khẩu phần</p>
-                                        <p class="font-bold text-text-main">${food.portions}</p>
-                                    </div>
-                                </div>
-                                <div class="flex items-center gap-3">
-                                    <span class="w-12 h-12 rounded-full bg-green-50 flex items-center justify-center text-2xl"><i class="fa-solid fa-star"></i></span>
-                                    <div>
-                                        <p class="text-sm text-text-muted">Độ khó</p>
-                                        <p class="font-bold text-text-main">${food.difficulty}</p>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="grid grid-cols-1 md:grid-cols-2 gap-10">
-                                <!-- Nguyên liệu -->
-                                <div>
-                                    <div class="flex justify-between items-end mb-4">
-                                        <h3 class="text-2xl font-bold text-text-main flex items-center gap-2"><i class="fa-solid fa-leaf text-green-500"></i> Nguyên liệu</h3>
-                                    </div>
-                                    <div class="bg-gray-50 p-6 rounded-2xl border border-gray-100 mb-6">
-                                        <ul class="m-0 p-0">
-                                            ${ingredientsHTML}
-                                        </ul>
-                                    </div>
-                                    <!-- Nút Mua Sắm -->
-                                    <button id="add-to-cart-btn" class="w-full py-4 bg-primary hover:bg-primary-hover text-white font-bold rounded-xl flex items-center justify-center gap-2 transition shadow-md">
-                                        <i class="fa-solid fa-cart-shopping"></i> Thêm vào danh sách đi chợ
+                            <!-- BẢNG NGUYÊN LIỆU & CÔNG THỨC (CÓ TAB SWITCHING) -->
+                            <div class="bg-white border border-beige-border/80 rounded-[22px] p-5 shadow-sm space-y-4">
+                                
+                                <!-- TAB HEADER BUTTONS (2 cột dài bằng khung bên ngoài) -->
+                                <div class="grid grid-cols-2 gap-2 bg-cream-soft/60 p-1.5 rounded-2xl border border-beige-border mb-2">
+                                    <button id="tab-ingredients" class="tab-btn active w-full py-2.5 px-3 rounded-xl text-xs font-bold transition-all bg-white text-primary shadow-xs border border-beige-border flex items-center justify-center gap-2 cursor-pointer">
+                                        <i class="fa-solid fa-wand-magic-sparkles text-accent"></i>
+                                        <span>Nguyên liệu chuẩn bị</span>
+                                    </button>
+                                    <button id="tab-recipe" class="tab-btn w-full py-2.5 px-3 rounded-xl text-xs font-semibold text-text-muted hover:text-text-main transition-all flex items-center justify-center gap-2 cursor-pointer">
+                                        <i class="fa-solid fa-fire-burner text-primary"></i>
+                                        <span>Công thức nấu (${food.steps.length} bước)</span>
                                     </button>
                                 </div>
 
-                                <!-- Các bước thực hiện -->
-                                <div>
-                                    <h3 class="text-2xl font-bold text-text-main mb-6 flex items-center gap-2"><i class="fa-solid fa-fire-burner text-orange-500"></i> Cách làm</h3>
-                                    <div class="pr-4">
-                                        ${stepsHTML}
+                                <!-- TAB PANEL 1: NGUYÊN LIỆU CHUẨN BỊ -->
+                                <div id="panel-ingredients" class="tab-panel space-y-3">
+                                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+                                        ${ingredientsCardsHTML}
                                     </div>
                                 </div>
+
+                                <!-- TAB PANEL 2: CÔNG THỨC NẤU -->
+                                <div id="panel-recipe" class="tab-panel hidden space-y-2.5">
+                                    ${stepsCardsHTML}
+                                </div>
+
                             </div>
+                        </div>
+
+                    </div>
+
+                    <!-- SECTION MÓN ĂN LIÊN QUAN (THEO DANH MỤC) -->
+                    <div class="pt-8 border-t border-beige-border/80 space-y-5">
+                        <div class="flex items-center justify-between flex-wrap gap-2">
+                            <div>
+                                <h2 class="text-xl font-extrabold text-text-main flex items-center gap-2">
+                                    <i class="fa-solid fa-utensils text-primary"></i>
+                                    Món ăn liên quan (${food.category})
+                                </h2>
+                                <p class="text-xs text-text-muted mt-0.5 font-medium">Gợi ý các món ngon cùng danh mục cho bữa ăn gia đình</p>
+                            </div>
+                            <a href="#/danh-sach" class="text-xs font-bold text-primary hover:text-primary-deep flex items-center gap-1">
+                                <span>Xem tất cả</span>
+                                <i class="fa-solid fa-chevron-right text-[10px]"></i>
+                            </a>
+                        </div>
+
+                        <!-- Grid món ăn liên quan (3 cột) -->
+                        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
+                            ${relatedCardsHTML}
                         </div>
                     </div>
+
                 </div>
             </div>
-            
+
             <!-- Toast notification -->
-            <div id="toast-msg" class="fixed bottom-5 right-5 bg-gray-900 text-white px-6 py-3 rounded-lg shadow-xl translate-y-20 opacity-0 transition-all duration-300 flex items-center gap-3">
+            <div id="toast-msg" class="fixed bottom-5 right-5 bg-gray-900 text-white px-6 py-3 rounded-xl shadow-xl translate-y-20 opacity-0 transition-all duration-300 flex items-center gap-3 z-50">
                 <span class="text-green-400"><i class="fa-solid fa-check"></i></span>
-                <span>Đã thêm nguyên liệu vào Danh sách đi chợ!</span>
+                <span id="toast-text">Đã thêm nguyên liệu vào Danh sách đi chợ!</span>
             </div>
         `;
     },
-    
+
     afterRender: async (id) => {
-        // Xử lý nút Thêm vào danh sách đi chợ
         const btnAdd = document.getElementById('add-to-cart-btn');
+        const btnFav = document.getElementById('fav-btn');
         const toast = document.getElementById('toast-msg');
-        
+        const toastText = document.getElementById('toast-text');
+
+        // Tab logic
+        const tabIng = document.getElementById('tab-ingredients');
+        const tabRec = document.getElementById('tab-recipe');
+        const panelIng = document.getElementById('panel-ingredients');
+        const panelRec = document.getElementById('panel-recipe');
+
+        if (tabIng && tabRec && panelIng && panelRec) {
+            tabIng.addEventListener('click', () => {
+                tabIng.className = 'tab-btn active w-full py-2.5 px-3 rounded-xl text-xs font-bold transition-all bg-white text-primary shadow-xs border border-gray-200/60 flex items-center justify-center gap-2 cursor-pointer';
+                tabRec.className = 'tab-btn w-full py-2.5 px-3 rounded-xl text-xs font-semibold text-text-muted hover:text-text-main transition-all flex items-center justify-center gap-2 cursor-pointer';
+                panelIng.classList.remove('hidden');
+                panelRec.classList.add('hidden');
+            });
+
+            tabRec.addEventListener('click', () => {
+                tabRec.className = 'tab-btn active w-full py-2.5 px-3 rounded-xl text-xs font-bold transition-all bg-white text-primary shadow-xs border border-gray-200/60 flex items-center justify-center gap-2 cursor-pointer';
+                tabIng.className = 'tab-btn w-full py-2.5 px-3 rounded-xl text-xs font-semibold text-text-muted hover:text-text-main transition-all flex items-center justify-center gap-2 cursor-pointer';
+                panelRec.classList.remove('hidden');
+                panelIng.classList.add('hidden');
+            });
+        }
+
+        function showToast(text) {
+            if (!toast) return;
+            if (toastText) toastText.textContent = text;
+            toast.classList.remove('translate-y-20', 'opacity-0');
+            setTimeout(() => {
+                toast.classList.add('translate-y-20', 'opacity-0');
+            }, 3000);
+        }
+
         if (btnAdd) {
             btnAdd.addEventListener('click', () => {
-                // Logic lưu LocalStorage giả lập
                 let cart = JSON.parse(localStorage.getItem('shoppingCart') || '[]');
-                cart.push({ id, name: 'Thịt Kho Trứng Cút', addedAt: new Date().toISOString() });
+                cart.push({ id, name: 'Cơm Tấm Sườn Bì Chả', addedAt: new Date().toISOString() });
                 localStorage.setItem('shoppingCart', JSON.stringify(cart));
-                
-                // Hiển thị Toast
-                toast.classList.remove('translate-y-20', 'opacity-0');
-                
-                // Ẩn Toast sau 3 giây
-                setTimeout(() => {
-                    toast.classList.add('translate-y-20', 'opacity-0');
-                }, 3000);
+                showToast('Đã thêm nguyên liệu vào Danh sách đi chợ!');
+            });
+        }
+
+        if (btnFav) {
+            btnFav.addEventListener('click', () => {
+                btnFav.classList.toggle('text-red-500');
+                showToast('Đã lưu món ăn vào danh sách yêu thích!');
             });
         }
     }

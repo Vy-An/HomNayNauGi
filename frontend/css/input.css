@@ -1,2 +1,111 @@
 @import "tailwindcss";
 @config "../tailwind.config.js";
+
+@layer utilities {
+  .font-handwriting {
+    font-family: 'Itim', 'Caveat', cursive;
+  }
+  .font-caveat {
+    font-family: 'Dancing Script', 'Caveat', cursive;
+  }
+  .font-script {
+    font-family: 'Dancing Script', cursive;
+  }
+  .font-quicksand {
+    font-family: 'Quicksand', sans-serif;
+  }
+}
+
+/* Cozy kitchen background & texture */
+.cozy-kitchen-bg {
+  background-color: #F7F3EB;
+  background-image: 
+    radial-gradient(at 15% 15%, rgba(233, 216, 183, 0.45) 0px, transparent 50%),
+    radial-gradient(at 85% 20%, rgba(245, 235, 212, 0.6) 0px, transparent 55%),
+    radial-gradient(at 50% 85%, rgba(226, 215, 195, 0.35) 0px, transparent 60%),
+    radial-gradient(at 10% 90%, rgba(47, 107, 79, 0.08) 0px, transparent 40%);
+}
+
+.cozy-pattern {
+  background-image: radial-gradient(#245B43 0.75px, transparent 0.75px);
+  background-size: 24px 24px;
+}
+
+.wood-texture {
+  background: linear-gradient(180deg, #C99662 0%, #B9824B 50%, #9F6935 100%);
+}
+
+/* Gentle floating animations */
+@keyframes floatGentle {
+  0%, 100% {
+    transform: translateY(0px) rotate(0deg);
+  }
+  50% {
+    transform: translateY(-8px) rotate(1.5deg);
+  }
+}
+
+@keyframes floatGentleAlt {
+  0%, 100% {
+    transform: translateY(0px) rotate(0deg);
+  }
+  50% {
+    transform: translateY(-6px) rotate(-1.5deg);
+  }
+}
+
+@keyframes steamWave {
+  0% {
+    transform: translateY(0) scaleX(1);
+    opacity: 0.2;
+  }
+  50% {
+    transform: translateY(-12px) scaleX(1.15);
+    opacity: 0.7;
+  }
+  100% {
+    transform: translateY(-24px) scaleX(1.3);
+    opacity: 0;
+  }
+}
+
+.animate-float-gentle {
+  animation: floatGentle 5s ease-in-out infinite;
+}
+
+.animate-float-alt {
+  animation: floatGentleAlt 6s ease-in-out infinite;
+}
+
+.animate-steam {
+  animation: steamWave 3s ease-out infinite;
+}
+
+/* Custom shadow for warm cream card */
+.shadow-cozy-card {
+  box-shadow: 0 10px 40px -10px rgba(36, 91, 67, 0.12), 0 20px 30px -15px rgba(0, 0, 0, 0.06), 0 0 0 1px rgba(233, 216, 183, 0.5);
+}
+
+.shadow-cozy-pill {
+  box-shadow: 0 4px 14px 0 rgba(36, 91, 67, 0.25);
+}
+
+/* Custom Sleek Scrollbar */
+.custom-scrollbar::-webkit-scrollbar {
+  width: 5px;
+}
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: transparent;
+}
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background-color: #DFD5BE;
+  border-radius: 9999px;
+}
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background-color: #245B43;
+}
+.custom-scrollbar {
+  scrollbar-width: thin;
+  scrollbar-color: #DFD5BE transparent;
+}
+

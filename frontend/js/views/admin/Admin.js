@@ -245,32 +245,32 @@ const Admin = {
         }
 
         return `
-            <div class="bg-gray-50 min-h-screen flex">
+            <div class="cozy-kitchen-bg min-h-screen flex text-text-main font-sans">
                 <!-- Sidebar -->
-                <aside class="w-64 bg-white border-r border-gray-200 hidden md:flex flex-col min-h-[calc(100vh-70px)]">
-                    <div class="p-6 border-b border-gray-100">
+                <aside class="w-64 bg-white/90 backdrop-blur-md border-r border-beige-border hidden md:flex flex-col min-h-[calc(100vh-70px)]">
+                    <div class="p-6 border-b border-beige-border/80">
                         <h2 class="text-xl font-bold text-primary flex items-center gap-2">
-                            <i class="fa-solid fa-shield"></i> Admin Panel
+                            <i class="fa-solid fa-shield text-accent"></i> Admin Panel
                         </h2>
                     </div>
                     <nav class="flex-1 p-4 space-y-2">
-                        <a href="#/admin/dashboard" class="flex items-center gap-3 px-4 py-3 ${page === 'dashboard' ? 'bg-green-50 text-primary font-bold' : 'text-text-muted hover:bg-gray-50 hover:text-primary font-medium'} rounded-xl transition">
+                        <a href="#/admin/dashboard" class="flex items-center gap-3 px-4 py-3 ${page === 'dashboard' ? 'bg-primary text-white font-bold shadow-sm' : 'text-text-muted hover:bg-cream-soft hover:text-primary font-semibold'} rounded-xl transition cursor-pointer">
                             <i class="fa-solid fa-chart-simple w-5 text-center"></i> Dashboard
                         </a>
-                        <a href="#/admin/users" class="flex items-center gap-3 px-4 py-3 ${page === 'users' ? 'bg-green-50 text-primary font-bold' : 'text-text-muted hover:bg-gray-50 hover:text-primary font-medium'} rounded-xl transition">
+                        <a href="#/admin/users" class="flex items-center gap-3 px-4 py-3 ${page === 'users' ? 'bg-primary text-white font-bold shadow-sm' : 'text-text-muted hover:bg-cream-soft hover:text-primary font-semibold'} rounded-xl transition cursor-pointer">
                             <i class="fa-solid fa-users w-5 text-center"></i> Quản lý người dùng
                         </a>
-                        <a href="#/admin/foods" class="flex items-center gap-3 px-4 py-3 ${page === 'foods' ? 'bg-green-50 text-primary font-bold' : 'text-text-muted hover:bg-gray-50 hover:text-primary font-medium'} rounded-xl transition">
+                        <a href="#/admin/foods" class="flex items-center gap-3 px-4 py-3 ${page === 'foods' ? 'bg-primary text-white font-bold shadow-sm' : 'text-text-muted hover:bg-cream-soft hover:text-primary font-semibold'} rounded-xl transition cursor-pointer">
                             <i class="fa-solid fa-kitchen-set w-5 text-center"></i> Quản lý món ăn
                         </a>
-                        <a href="#/admin/community" class="flex items-center gap-3 px-4 py-3 ${page === 'community' ? 'bg-green-50 text-primary font-bold' : 'text-text-muted hover:bg-gray-50 hover:text-primary font-medium'} rounded-xl transition">
+                        <a href="#/admin/community" class="flex items-center gap-3 px-4 py-3 ${page === 'community' ? 'bg-primary text-white font-bold shadow-sm' : 'text-text-muted hover:bg-cream-soft hover:text-primary font-semibold'} rounded-xl transition cursor-pointer">
                             <i class="fa-solid fa-comments w-5 text-center"></i> Quản lý cộng đồng
                         </a>
                     </nav>
                 </aside>
 
                 <!-- Main Content -->
-                <main class="flex-1 p-8">
+                <main class="flex-1 p-6 sm:p-8">
                     ${contentHTML}
                 </main>
             </div>

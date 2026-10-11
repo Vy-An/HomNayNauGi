@@ -17,40 +17,66 @@ const routes = {
 };
 
 const router = async () => {
-    // Lấy nội dung sau dấu #
-    let path = window.location.hash.slice(1).toLowerCase() || '/';
-    
-    let page = null;
-    let params = null;
+    try {
+        // Lấy nội dung sau dấu #
+        let path = window.location.hash.slice(1).toLowerCase() || '/';
+        
+        let page = null;
+        let params = null;
 
-    // Xử lý route động cho chi tiết món ăn (VD: /mon-an/1)
-    if (path.startsWith('/mon-an/')) {
-        page = FoodDetail;
-        params = path.split('/')[2]; // Lấy ID
-    } else if (path.startsWith('/admin')) {
-        page = Admin;
-        params = path.split('/')[2] || 'dashboard'; // /admin/users -> users, mặc định là dashboard
-    } else {
-        page = routes[path] || Home;
+        // Xử lý route động cho chi tiết món ăn (VD: /mon-an/1)
+        if (path.startsWith('/mon-an/')) {
+            page = FoodDetail;
+            params = path.split('/')[2]; // Lấy ID
+        } else if (path.startsWith('/admin')) {
+            page = Admin;
+            params = path.split('/')[2] || 'dashboard'; // /admin/users -> users, mặc định là dashboard
+        } else {
+            page = routes[path] || Home;
+        }
+
+        const navbarContainer = document.getElementById('navbar-container');
+        const footerContainer = document.getElementById('footer-container');
+
+        if (path === '/login') {
+            if (navbarContainer) navbarContainer.innerHTML = '';
+            if (footerContainer) footerContainer.style.display = 'none';
+        } else {
+            if (navbarContainer) navbarContainer.innerHTML = Navbar();
+            if (footerContainer) {
+                footerContainer.style.display = 'block';
+                footerContainer.innerHTML = Footer();
+            }
+        }
+
+        document.getElementById('app-content').innerHTML = '<p class="text-center py-10">Đang tải...</p>';
+        
+        // Hỗ trợ cả page dạng function hoặc dạng object có render() và afterRender()
+        if (typeof page === 'function') {
+            document.getElementById('app-content').innerHTML = await page(params);
+        } else {
+            document.getElementById('app-content').innerHTML = await page.render(params);
+            if (page.afterRender) await page.afterRender(params);
+        }
+    } catch (err) {
+        console.error('Lỗi khi render trang:', err);
+        const appContent = document.getElementById('app-content');
+        if (appContent) {
+            appContent.innerHTML = `
+                <div class="container mx-auto p-8 text-center">
+                    <p class="text-red-500 font-bold mb-2">Đã xảy ra lỗi khi tải giao diện:</p>
+                    <p class="text-sm text-gray-600 bg-red-50 p-4 rounded-xl inline-block border border-red-200">${err.message}</p>
+                </div>
+            `;
+        }
     }
-
-    document.getElementById('navbar-container').innerHTML = Navbar();
-
-    document.getElementById('app-content').innerHTML = '<p class="text-center py-10">Đang tải...</p>';
-    
-    // Hỗ trợ cả page dạng function hoặc dạng object có render() và afterRender()
-    if (typeof page === 'function') {
-        document.getElementById('app-content').innerHTML = await page(params);
-    } else {
-        document.getElementById('app-content').innerHTML = await page.render(params);
-        if (page.afterRender) await page.afterRender(params);
-    }
-
-    const footerContainer = document.getElementById('footer-container');
-    footerContainer.style.display = 'block';
-    footerContainer.innerHTML = Footer();
 };
 
 // Chạy router khi vừa tải trang hoặc khi đổi URL (back/forward, click link)
 window.addEventListener('hashchange', router);
-window.addEventListener('load', router);
+
+if (document.readyState === 'loading') {
+    window.addEventListener('DOMContentLoaded', router);
+} else {
+    router();
+}
