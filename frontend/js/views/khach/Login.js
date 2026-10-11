@@ -1,4 +1,4 @@
-// Login & Register View (Static UI with Rich Cozy Kitchen Theme)
+import { fetchAPI } from '../../api.js';
 
 const Login = {
     render: async () => {
@@ -629,9 +629,8 @@ const Login = {
             }
         };
 
-        // Form Validation & Submit Handlers (Pure Client-side Demo)
         if (loginForm) {
-            loginForm.addEventListener('submit', (e) => {
+            loginForm.addEventListener('submit', async (e) => {
                 e.preventDefault();
                 let isValid = true;
 
@@ -658,27 +657,38 @@ const Login = {
 
                 if (!isValid) return;
 
-                // Simulate Button Loading state
                 const submitBtn = document.getElementById('btn-login-submit');
                 const originalText = submitBtn.innerHTML;
                 submitBtn.disabled = true;
                 submitBtn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i><span>Đang xác thực...</span>';
 
-                setTimeout(() => {
+                try {
+                    const res = await fetchAPI('/auth/login', {
+                        method: 'POST',
+                        body: JSON.stringify({ account: accountVal, password: passwordVal })
+                    });
+                    if (res && res.success && res.token) {
+                        localStorage.setItem('auth_token', res.token);
+                        localStorage.setItem('auth_user', JSON.stringify(res.user));
+                        showToast('Đăng nhập thành công!', 'success');
+                        setTimeout(() => {
+                            window.location.hash = '#/cong-dong';
+                        }, 800);
+                    } else {
+                        showError('error-login-password', res?.message || 'Đăng nhập không thành công.');
+                        showToast(res?.message || 'Đăng nhập thất bại.', 'warning');
+                    }
+                } catch (err) {
+                    showToast('Lỗi kết nối máy chủ.', 'warning');
+                } finally {
                     submitBtn.disabled = false;
                     submitBtn.innerHTML = originalText;
-                    showToast('Đăng nhập thành công (Demo)', 'success');
-                    
-                    // Optional demo redirect back to home after 1.2s
-                    setTimeout(() => {
-                        window.location.hash = '#/';
-                    }, 1200);
-                }, 700);
+                }
             });
         }
 
         if (registerForm) {
-            registerForm.addEventListener('submit', (e) => {
+            registerForm.addEventListener('submit', async (e) => {
                 e.preventDefault();
                 let isValid = true;
 
@@ -741,18 +751,28 @@ const Login = {
                 submitBtn.disabled = true;
                 submitBtn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i><span>Đang tạo tài khoản...</span>';
 
-                setTimeout(() => {
+                try {
+                    const res = await fetchAPI('/auth/register', {
+                        method: 'POST',
+                        body: JSON.stringify({ name: nameVal, email: emailVal, password: passwordVal })
+                    });
+                    if (res && res.success && res.token) {
+                        localStorage.setItem('auth_token', res.token);
+                        localStorage.setItem('auth_user', JSON.stringify(res.user));
+                        showToast('Đăng ký tài khoản thành công!', 'success');
+                        setTimeout(() => {
+                            window.location.hash = '#/cong-dong';
+                        }, 800);
+                    } else {
+                        showError('error-reg-email', res?.message || 'Đăng ký không thành công.');
+                        showToast(res?.message || 'Đăng ký thất bại.', 'warning');
+                    }
+                } catch (err) {
+                    showToast('Lỗi kết nối máy chủ.', 'warning');
+                } finally {
                     submitBtn.disabled = false;
                     submitBtn.innerHTML = originalText;
-                    showToast('Tạo tài khoản thành công (Demo)', 'success');
-                    
-                    // Switch back to login view after success
-                    setTimeout(() => {
-                        switchMode('login');
-                        const loginAccount = document.getElementById('login-account');
-                        if (loginAccount) loginAccount.value = emailVal;
-                    }, 1000);
-                }, 800);
+                }
             });
         }
 
