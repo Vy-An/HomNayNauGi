@@ -1,34 +1,13 @@
 const prisma = require('../lib/prisma');
+const { resolveAssetUrl } = require('../utils/assetUrl');
 
-const FALLBACK_IMAGE = 'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=800&auto=format&fit=crop&q=80';
-
-// Mapping ảnh HD chất lượng cao tương ứng với các món ăn trong cơ sở dữ liệu
-const DISH_IMAGES = {
-    'thit-kho-trung': 'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=800&auto=format&fit=crop&q=80',
-    'ca-kho-to': 'https://images.unsplash.com/photo-1519708227418-c8fd9a32b7a2?w=800&auto=format&fit=crop&q=80',
-    'ga-kho-gung': 'https://images.unsplash.com/photo-1604908176997-125f25cc6f3d?w=800&auto=format&fit=crop&q=80',
-    'suon-xao-chua-ngot': 'https://images.unsplash.com/photo-1544025162-8314e3fc4585?w=800&auto=format&fit=crop&q=80',
-    'bo-xao-hanh-tay': 'https://images.unsplash.com/photo-1555939594-58d7cb561ad1?w=800&auto=format&fit=crop&q=80',
-    'trung-chien-hanh': 'https://images.unsplash.com/photo-1525351484163-7529414344d8?w=800&auto=format&fit=crop&q=80',
-    'ca-chien-nuoc-mam': 'https://images.unsplash.com/photo-1534422298391-e4f8c172dddb?w=800&auto=format&fit=crop&q=80',
-    'canh-chua-ca-loc': 'https://images.unsplash.com/photo-1547592180-85f173990554?w=800&auto=format&fit=crop&q=80',
-    'canh-bi-do-thit-bam': 'https://images.unsplash.com/photo-1476718406336-bb5a9690ee2a?w=800&auto=format&fit=crop&q=80',
-    'canh-cai-thit-bam': 'https://images.unsplash.com/photo-1541832676-9b763b0239ab?w=800&auto=format&fit=crop&q=80',
-    'canh-ca-chua-trung': 'https://images.unsplash.com/photo-1572449043416-55f4685c9bb7?w=800&auto=format&fit=crop&q=80',
-    'rau-muong-xao-toi': 'https://images.unsplash.com/photo-1540420773420-3366772f4999?w=800&auto=format&fit=crop&q=80',
-    'cai-thia-xao-toi': 'https://images.unsplash.com/photo-1543339308-43e59d6b73a6?w=800&auto=format&fit=crop&q=80',
-    'dau-que-xao-toi': 'https://images.unsplash.com/photo-1540420773420-3366772f4999?w=800&auto=format&fit=crop&q=80',
-    'rau-cu-luoc': 'https://images.unsplash.com/photo-1546793665-c74683f339c1?w=800&auto=format&fit=crop&q=80',
-    'thit-ba-chi-luoc': 'https://images.unsplash.com/photo-1544025162-8314e3fc4585?w=800&auto=format&fit=crop&q=80',
-    'dau-hu-sot-ca-chua': 'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=800&auto=format&fit=crop&q=80',
-    'ga-chien-nuoc-mam': 'https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?w=800&auto=format&fit=crop&q=80'
-};
+const FALLBACK_IMAGE = '/images/foods/thit-kho-trung.jpg';
 
 function resolveImage(slug, image) {
-    if (image && (image.startsWith('http://') || image.startsWith('https://'))) {
-        return image;
+    if (image) {
+        return resolveAssetUrl(image);
     }
-    return DISH_IMAGES[slug] || FALLBACK_IMAGE;
+    return resolveAssetUrl(FALLBACK_IMAGE);
 }
 
 function formatQuantity(value) {
@@ -340,8 +319,103 @@ async function getFoodOptions() {
     };
 }
 
+async function getQuickSuggestions() {
+    const [under15Count, mediumCount, longCount, categories] = await Promise.all([
+        prisma.foods.count({ where: { status: 'active', cooking_time: { lte: 15 } } }),
+        prisma.foods.count({ where: { status: 'active', cooking_time: { gt: 15, lte: 30 } } }),
+        prisma.foods.count({ where: { status: 'active', cooking_time: { gt: 30 } } }),
+        prisma.categories.findMany({
+            where: {
+                foods: {
+                    some: { status: 'active' }
+                }
+            },
+            include: {
+                _count: {
+                    select: {
+                        foods: { where: { status: 'active' } }
+                    }
+                }
+            },
+            orderBy: { id_category: 'asc' }
+        })
+    ]);
+
+    const categoryIcons = {
+        'mon-canh': 'fa-spoon text-blue-500',
+        'mon-kho': 'fa-fire-flame-simple text-amber-600',
+        'mon-xao': 'fa-fire-burner text-amber-500',
+        'mon-chien': 'fa-fire text-red-500',
+        'mon-rau': 'fa-leaf text-emerald-500',
+        'mon-luoc': 'fa-water text-cyan-500',
+        'mon-man': 'fa-bowl-food text-orange-500'
+    };
+
+    const suggestions = [];
+
+    if (under15Count > 0) {
+        suggestions.push({
+            id: 'under_15',
+            label: 'Dưới 15 phút',
+            type: 'cook_time',
+            param: 'cook_time',
+            value: 'under_15',
+            count: under15Count,
+            icon: 'fa-bolt text-amber-500',
+            emoji: '⚡',
+            url: '#/danh-sach?cook_time=under_15'
+        });
+    }
+
+    if (mediumCount > 0) {
+        suggestions.push({
+            id: '15_to_30',
+            label: '15 – 30 phút',
+            type: 'cook_time',
+            param: 'cook_time',
+            value: '15_to_30',
+            count: mediumCount,
+            icon: 'fa-stopwatch text-emerald-600',
+            emoji: '⏱️',
+            url: '#/danh-sach?cook_time=15_to_30'
+        });
+    }
+
+    if (longCount > 0) {
+        suggestions.push({
+            id: 'above_30',
+            label: 'Trên 30 phút',
+            type: 'cook_time',
+            param: 'cook_time',
+            value: 'above_30',
+            count: longCount,
+            icon: 'fa-hourglass text-amber-600',
+            emoji: '🍲',
+            url: '#/danh-sach?cook_time=above_30'
+        });
+    }
+
+    categories.forEach((cat) => {
+        const icon = categoryIcons[cat.slug] || 'fa-bowl-food text-emerald-500';
+        suggestions.push({
+            id: cat.slug,
+            label: cat.name,
+            category_name: cat.name,
+            type: 'category',
+            param: 'category',
+            value: cat.slug,
+            count: cat._count.foods,
+            icon: icon,
+            url: `#/danh-sach?category=${cat.slug}`
+        });
+    });
+
+    return suggestions;
+}
+
 module.exports = {
     getFoods,
     getFoodById,
-    getFoodOptions
+    getFoodOptions,
+    getQuickSuggestions
 };

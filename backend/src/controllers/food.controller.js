@@ -84,9 +84,30 @@ async function getFoodOptions(req, res) {
     }
 }
 
+async function getQuickSuggestions(req, res) {
+    try {
+        const suggestions = await foodService.getQuickSuggestions();
+
+        return res.json({
+            success: true,
+            message: 'Lấy danh sách gợi ý nhanh thành công.',
+            data: suggestions
+        });
+    } catch (error) {
+        console.error('Lỗi khi lấy danh sách gợi ý nhanh:', error);
+
+        return res.status(500).json({
+            success: false,
+            message: 'Không thể lấy danh sách gợi ý nhanh lúc này.',
+            data: []
+        });
+    }
+}
+
 module.exports = {
     getFoods,
     listFoods: getFoods,
     getFoodById,
-    getFoodOptions
+    getFoodOptions,
+    getQuickSuggestions
 };

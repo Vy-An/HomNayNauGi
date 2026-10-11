@@ -10,6 +10,7 @@ router.get('/', foodController.getFoods);
 router.get('/options', foodController.getFoodOptions);
 
 // Xem chi tiết món ăn theo ID hoặc Slug
+router.get('/quick-suggestions', foodController.getQuickSuggestions);
 router.get('/:id', foodController.getFoodById);
 
 module.exports = router;
