@@ -1,4 +1,5 @@
 import { fetchAPI } from '../../api.js';
+import Popup from '../../components/Popup.js';
 
 const INITIAL_BATCH = 6;
 const LOAD_MORE_BATCH = 4;
@@ -1272,7 +1273,15 @@ const Community = {
                     const commentId = deleteCommentBtn.getAttribute('data-comment-id');
                     const postId = parseInt(deleteCommentBtn.getAttribute('data-post-id'), 10);
 
-                    if (!confirm('Bạn có chắc chắn muốn xóa bình luận này không?')) return;
+                    const confirmed = await Popup.confirm({
+                        title: 'Xóa bình luận',
+                        message: 'Bạn có chắc chắn muốn xóa bình luận này không? Thao tác này không thể hoàn tác.',
+                        type: 'danger',
+                        confirmText: 'Xóa bình luận',
+                        cancelText: 'Hủy bỏ',
+                        confirmButtonColor: 'danger'
+                    });
+                    if (!confirmed) return;
 
                     try {
                         const res = await fetchAPI(`/comments/${commentId}`, { method: 'DELETE' });

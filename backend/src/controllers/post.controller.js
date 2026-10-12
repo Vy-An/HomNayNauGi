@@ -48,6 +48,7 @@ function formatPost(post, currentUserId = null) {
         content: post.content,
         image: resolveAssetUrl(post.image),
         status: post.status,
+        hidden_reason: post.hidden_reason || null,
         created_at: post.created_at,
         time: formatRelativeTime(post.created_at),
         likesCount,
@@ -396,7 +397,7 @@ async function createPost(req, res) {
                 title: finalTitle,
                 content: trimmedContent,
                 image: savedImagePath,
-                status: 'active'
+                status: 'pending'
             },
             include: {
                 users: {
@@ -430,7 +431,7 @@ async function createPost(req, res) {
 
         return res.status(201).json({
             success: true,
-            message: 'Đăng bài viết thành công.',
+            message: 'Đăng bài viết thành công! Bài viết của bạn đang chờ kiểm duyệt trước khi hiển thị công khai.',
             data: formatPost(newPost, req.user.id_user)
         });
     } catch (error) {

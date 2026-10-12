@@ -122,8 +122,9 @@ model posts {
   title      String       @db.VarChar(255)
   content    String       @db.Text
   image      String?      @db.VarChar(500)
-  status     posts_status @default(active)
-  created_at DateTime     @default(now()) @db.Timestamp(0)
+  status        posts_status @default(pending)
+  hidden_reason String?      @db.VarChar(255)
+  created_at    DateTime     @default(now()) @db.Timestamp(0)
   updated_at DateTime     @default(now()) @db.Timestamp(0)
   comments   comments[]
   post_likes post_likes[]
@@ -231,6 +232,7 @@ enum reports_status {
 enum posts_status {
   active
   hidden
+  pending
 }
 
 enum users_status {

@@ -264,8 +264,7 @@ async function getMyPosts(req, res) {
 
         const posts = await prisma.posts.findMany({
             where: {
-                id_user: req.user.id_user,
-                status: 'active'
+                id_user: req.user.id_user
             },
             include: {
                 users: {
@@ -316,6 +315,7 @@ async function getMyPosts(req, res) {
                 content: post.content,
                 image: resolveAssetUrl(post.image),
                 status: post.status,
+                hidden_reason: post.hidden_reason || null,
                 created_at: post.created_at,
                 likesCount,
                 likes: likesCount,

@@ -529,11 +529,25 @@ const Profile = {
             userPopover?.classList.add('hidden');
         });
 
-        const handleLogout = () => {
+        const handleLogout = async () => {
+            if (window.Popup) {
+                const confirmed = await window.Popup.confirm({
+                    title: 'Đăng xuất tài khoản',
+                    message: 'Bạn có chắc chắn muốn đăng xuất không?',
+                    type: 'question',
+                    confirmText: 'Đăng xuất',
+                    cancelText: 'Hủy bỏ',
+                    confirmButtonColor: 'warning'
+                });
+                if (!confirmed) return;
+            }
             localStorage.removeItem('auth_token');
             localStorage.removeItem('auth_user');
             localStorage.removeItem('user');
             window.location.hash = '#/login';
+            if (window.Popup) {
+                window.Popup.toast('Đã đăng xuất tài khoản thành công.', 'info');
+            }
         };
 
         document.getElementById('btn-top-logout')?.addEventListener('click', handleLogout);
@@ -721,9 +735,50 @@ const Profile = {
                 const isLiked = Boolean(post.isLiked || post.liked);
                 const postImg = post.image || (post.food?.image || 'http://localhost:5000/images/foods/thit-kho-trung.jpg');
                 const foodName = post.foodName || post.food?.name || '';
+                const isPending = post.status === 'pending';
+                const isHidden = post.status === 'hidden';
+
+                let statusBadge = `
+                    <span class="text-[10px] bg-emerald-50 text-emerald-700 font-bold px-2 py-0.5 rounded-full border border-emerald-200 flex items-center gap-1">
+                        <i class="fa-solid fa-check text-emerald-600"></i> Đã duyệt
+                    </span>
+                `;
+                let cardStyle = "bg-white rounded-2xl border border-beige-border/90 p-3.5 shadow-sm hover:shadow-md transition-all flex flex-col justify-between";
+                let statusNotice = '';
+
+                if (isPending) {
+                    statusBadge = `
+                        <span class="text-[10px] bg-amber-100 text-[#C27E25] font-extrabold px-2.5 py-0.5 rounded-full border border-amber-300 shadow-2xs flex items-center gap-1">
+                            <i class="fa-solid fa-clock text-amber-600"></i> Chờ duyệt bài viết
+                        </span>
+                    `;
+                    cardStyle = "bg-amber-50/20 rounded-2xl border-2 border-amber-300/80 p-3.5 shadow-xs opacity-75 hover:opacity-95 transition-all flex flex-col justify-between ring-1 ring-amber-200/50";
+                    statusNotice = `
+                        <div class="px-3 py-2 rounded-xl bg-amber-100/70 border border-amber-300/70 text-[#8C5300] text-[11px] font-semibold flex items-center gap-2">
+                            <i class="fa-solid fa-hourglass-half text-amber-600 text-xs shrink-0"></i>
+                            <span>Bài viết đang chờ duyệt, chưa hiển thị công khai trên cộng đồng.</span>
+                        </div>
+                    `;
+                } else if (isHidden) {
+                    statusBadge = `
+                        <span class="text-[10px] bg-rose-100 text-rose-700 font-extrabold px-2.5 py-0.5 rounded-full border border-rose-300 shadow-2xs flex items-center gap-1">
+                            <i class="fa-solid fa-eye-slash text-rose-600"></i> Đã bị ẩn
+                        </span>
+                    `;
+                    cardStyle = "bg-rose-50/20 rounded-2xl border-2 border-rose-300/80 p-3.5 shadow-xs opacity-70 hover:opacity-90 transition-all flex flex-col justify-between ring-1 ring-rose-200/50";
+                    statusNotice = `
+                        <div class="px-3 py-2 rounded-xl bg-rose-50 border border-rose-200 text-rose-800 text-[11px] font-semibold flex items-start gap-2">
+                            <i class="fa-solid fa-circle-exclamation text-rose-600 text-xs shrink-0 mt-0.5"></i>
+                            <div class="leading-tight">
+                                <p class="font-bold">Bài viết đã bị quản trị viên tạm ẩn</p>
+                                ${post.hidden_reason ? `<p class="text-[10px] text-rose-700 mt-0.5 font-medium">Lý do: <span class="font-bold underline">${escapeHTML(post.hidden_reason)}</span></p>` : ''}
+                            </div>
+                        </div>
+                    `;
+                }
 
                 return `
-                    <article class="bg-white rounded-2xl border border-beige-border/90 p-3.5 shadow-sm hover:shadow-md transition-all flex flex-col justify-between" id="my-post-card-${post.id_post}">
+                    <article class="${cardStyle}" id="my-post-card-${post.id_post}">
                         <div class="space-y-2.5">
                             <div class="flex items-center justify-between">
                                 <div class="flex items-center gap-2">
@@ -733,12 +788,22 @@ const Profile = {
                                         <span class="text-[10px] text-text-muted">${formatDate(post.created_at)}</span>
                                     </div>
                                 </div>
-                                <span class="text-[10px] bg-primary-subtle text-primary font-bold px-2 py-0.5 rounded-full border border-primary/20">Bài của bạn</span>
+                                ${statusBadge}
                             </div>
 
+                            ${statusNotice}
+
                             ${postImg ? `
-                                <div class="rounded-xl overflow-hidden aspect-video bg-gray-100 border border-beige-border/50">
-                                    <img src="${postImg}" alt="Ảnh món ăn" class="w-full h-full object-cover">
+                                <div class="rounded-xl overflow-hidden aspect-video bg-gray-100 border border-beige-border/50 relative">
+                                    <img src="${postImg}" alt="Ảnh món ăn" class="w-full h-full object-cover ${isPending ? 'filter blur-[0.5px]' : ''}">
+                                    ${isPending ? `
+                                        <div class="absolute inset-0 bg-amber-950/20 backdrop-blur-[1px] flex items-center justify-center">
+                                            <span class="bg-black/60 backdrop-blur-md text-amber-200 text-xs font-extrabold px-3 py-1.5 rounded-full border border-amber-300/40 shadow-md flex items-center gap-1.5">
+                                                <i class="fa-solid fa-clock text-amber-400"></i>
+                                                Chờ duyệt bài viết
+                                            </span>
+                                        </div>
+                                    ` : ''}
                                 </div>
                             ` : ''}
 
@@ -757,7 +822,7 @@ const Profile = {
 
                         <div class="pt-3 mt-3 border-t border-gray-100 flex items-center justify-between text-xs">
                             <div class="flex items-center gap-3">
-                                <button type="button" class="btn-like-post flex items-center gap-1.5 font-bold ${isLiked ? 'text-rose-500' : 'text-text-muted hover:text-rose-500'} cursor-pointer transition-colors" data-id="${post.id_post}">
+                                <button type="button" class="btn-like-post flex items-center gap-1.5 font-bold ${isLiked ? 'text-rose-500' : 'text-text-muted hover:text-rose-500'} ${isPending || isHidden ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer'} transition-colors" data-id="${post.id_post}" ${isPending || isHidden ? 'disabled' : ''}>
                                     <i class="${isLiked ? 'fa-solid text-rose-500' : 'fa-regular'} fa-heart"></i>
                                     <span class="like-number">${likes}</span>
                                 </button>
@@ -768,14 +833,26 @@ const Profile = {
                             </div>
 
                             <div class="flex items-center gap-1.5">
-                                <button type="button" class="btn-share-post px-2.5 py-1 rounded-lg bg-cream-card hover:bg-cream-soft border border-beige-border/70 text-text-muted text-xs font-semibold flex items-center gap-1 cursor-pointer transition-colors" data-id="${post.id_post}" title="Chia sẻ bài viết">
-                                    <i class="fa-solid fa-share-nodes text-[10px]"></i>
-                                    <span>Chia sẻ</span>
-                                </button>
-                                <a href="#/cong-dong" class="px-2.5 py-1 rounded-lg bg-primary hover:bg-primary-deep text-white text-xs font-semibold flex items-center gap-1 transition-colors shadow-2xs">
-                                    <span>Chi tiết</span>
-                                    <i class="fa-solid fa-chevron-right text-[9px]"></i>
-                                </a>
+                                ${isPending ? `
+                                    <span class="px-3 py-1 rounded-lg bg-amber-100 text-[#8C5300] text-xs font-bold flex items-center gap-1.5 border border-amber-300/70 shadow-2xs">
+                                        <i class="fa-solid fa-hourglass-half text-[10px] text-amber-600"></i>
+                                        <span>Đang chờ duyệt</span>
+                                    </span>
+                                ` : isHidden ? `
+                                    <span class="px-3 py-1 rounded-lg bg-rose-100 text-rose-700 text-xs font-bold flex items-center gap-1.5 border border-rose-300/70 shadow-2xs">
+                                        <i class="fa-solid fa-eye-slash text-[10px] text-rose-600"></i>
+                                        <span>Đã bị ẩn</span>
+                                    </span>
+                                ` : `
+                                    <button type="button" class="btn-share-post px-2.5 py-1 rounded-lg bg-cream-card hover:bg-cream-soft border border-beige-border/70 text-text-muted text-xs font-semibold flex items-center gap-1 cursor-pointer transition-colors" data-id="${post.id_post}" title="Chia sẻ bài viết">
+                                        <i class="fa-solid fa-share-nodes text-[10px]"></i>
+                                        <span>Chia sẻ</span>
+                                    </button>
+                                    <a href="#/cong-dong" class="px-2.5 py-1 rounded-lg bg-primary hover:bg-primary-deep text-white text-xs font-semibold flex items-center gap-1 transition-colors shadow-2xs">
+                                        <span>Chi tiết</span>
+                                        <i class="fa-solid fa-chevron-right text-[9px]"></i>
+                                    </a>
+                                `}
                             </div>
                         </div>
                     </article>
