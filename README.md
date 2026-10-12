@@ -122,3 +122,105 @@ Mở trình duyệt truy cập:
 | API trả về lỗi `500 Internal Server Error` | Sai mật khẩu MySQL hoặc sai tên database trong `.env` | Kiểm tra lại file `backend/.env`. Chú ý mã hóa ký tự `@` thành `%40` nếu mật khẩu có chứa `@`. |
 | Giao diện bị lệch mảng trắng khi chọn nguyên liệu | Trình duyệt tự cuộn focus vào input ẩn | Đã được khắc phục sẵn với thuộc tính `overflow-clip` và `relative` trong `frontend/js/views/khach/Home.js`. |
 | Không load được icon FontAwesome | Chế độ Tracking Prevention của trình duyệt Edge | Không ảnh hưởng đến giao diện, icon vẫn hiển thị bình thường. |
+
+---
+
+## Link web
+
+http://localhost:3000/#/
+
+---
+
+## Link gọi API
+
+> Base URL backend: `http://localhost:5000/api`
+>
+> Các API có ghi **cần đăng nhập** phải gửi header:
+> ```http
+> Authorization: Bearer <token_dang_nhap>
+> ```
+> Lấy token từ API đăng nhập hoặc sau khi đăng nhập trên frontend.
+
+### Auth
+
+| Method | Link API | Chức năng |
+| :--- | :--- | :--- |
+| POST | `http://localhost:5000/api/auth/login` | Đăng nhập |
+| POST | `http://localhost:5000/api/auth/register` | Đăng ký |
+| POST | `http://localhost:5000/api/auth/logout` | Đăng xuất, cần đăng nhập |
+| GET | `http://localhost:5000/api/auth/me` | Lấy thông tin tài khoản đang đăng nhập |
+
+### Random món ăn
+
+| Method | Link API | Chức năng |
+| :--- | :--- | :--- |
+| GET | `http://localhost:5000/api/random/options` | Lấy danh sách nguyên liệu và danh mục cho máy random |
+| GET | `http://localhost:5000/api/random?quantity=3` | Random 3 món |
+| GET | `http://localhost:5000/api/random?quantity=6&ingredients=Bi%20do,Ca%20basa&categories=mon-canh,mon-chien&cook_time=medium` | Random theo nguyên liệu, danh mục, thời gian nấu |
+
+`cook_time` hỗ trợ: `quick` là dưới hoặc bằng 15 phút, `medium` là 15 - 30 phút, `long` là trên 30 phút.
+
+### Món ăn
+
+| Method | Link API | Chức năng |
+| :--- | :--- | :--- |
+| GET | `http://localhost:5000/api/foods` | Lấy danh sách món ăn |
+| GET | `http://localhost:5000/api/foods?search=ga&page=1&limit=12` | Tìm kiếm món ăn |
+| GET | `http://localhost:5000/api/foods?category=mon-canh&cook_time=under_15&sort=time_asc` | Lọc món ăn theo danh mục, thời gian, sắp xếp |
+| GET | `http://localhost:5000/api/foods/options` | Lấy danh mục và nguyên liệu cho bộ lọc |
+| GET | `http://localhost:5000/api/foods/quick-suggestions` | Lấy gợi ý nhanh |
+| GET | `http://localhost:5000/api/foods/1` | Xem chi tiết món ăn theo ID hoặc slug |
+
+`cook_time` của `/api/foods` hỗ trợ: `all`, `under_15`, `15_to_30`, `above_30`.
+`sort` hỗ trợ: `newest`, `time_asc`, `time_desc`, `name_asc`.
+
+### Bài viết cộng đồng
+
+| Method | Link API | Chức năng |
+| :--- | :--- | :--- |
+| GET | `http://localhost:5000/api/posts?filter=all&page=1&limit=10` | Lấy danh sách bài viết |
+| GET | `http://localhost:5000/api/posts?filter=newest` | Lọc bài viết mới nhất |
+| GET | `http://localhost:5000/api/posts?filter=liked` | Lọc bài viết nhiều lượt thích |
+| GET | `http://localhost:5000/api/posts?filter=trending` | Lọc bài viết nổi bật |
+| GET | `http://localhost:5000/api/posts?filter=random` | Lấy bài viết ngẫu nhiên |
+| GET | `http://localhost:5000/api/posts/featured?limit=4` | Lấy bài viết nổi bật cho trang chủ |
+| GET | `http://localhost:5000/api/posts/1` | Xem chi tiết bài viết |
+| POST | `http://localhost:5000/api/posts` | Tạo bài viết, cần đăng nhập |
+| POST | `http://localhost:5000/api/posts/1/like` | Thả tim hoặc bỏ tim bài viết, cần đăng nhập |
+
+### Bình luận
+
+| Method | Link API | Chức năng |
+| :--- | :--- | :--- |
+| GET | `http://localhost:5000/api/posts/1/comments?page=1&limit=10` | Lấy bình luận của bài viết |
+| POST | `http://localhost:5000/api/posts/1/comments` | Thêm bình luận, cần đăng nhập |
+| PATCH | `http://localhost:5000/api/comments/1` | Sửa bình luận, cần đăng nhập |
+| DELETE | `http://localhost:5000/api/comments/1` | Ẩn/xóa mềm bình luận, cần đăng nhập |
+
+### Admin
+
+> Các API admin cần tài khoản đăng nhập có `role = admin`.
+
+| Method | Link API | Chức năng |
+| :--- | :--- | :--- |
+| GET | `http://localhost:5000/api/admin/dashboard` | Lấy số liệu tổng quan dashboard |
+| GET | `http://localhost:5000/api/admin/users?page=1&limit=10` | Lấy danh sách người dùng |
+| GET | `http://localhost:5000/api/admin/users?search=admin&role=admin&status=active` | Tìm/lọc người dùng |
+| POST | `http://localhost:5000/api/admin/users` | Tạo người dùng |
+| GET | `http://localhost:5000/api/admin/users/1` | Xem chi tiết người dùng |
+| PATCH | `http://localhost:5000/api/admin/users/1/status` | Khóa/mở khóa người dùng |
+| GET | `http://localhost:5000/api/admin/foods/options` | Lấy options quản lý món ăn |
+| GET | `http://localhost:5000/api/admin/foods?page=1&limit=10` | Lấy danh sách món ăn trong admin |
+| GET | `http://localhost:5000/api/admin/foods?search=ga&status=active&sort=time_asc` | Tìm/lọc món ăn trong admin |
+| POST | `http://localhost:5000/api/admin/foods` | Tạo món ăn |
+| GET | `http://localhost:5000/api/admin/foods/1` | Xem chi tiết món ăn |
+| PATCH | `http://localhost:5000/api/admin/foods/1` | Cập nhật món ăn |
+| PATCH | `http://localhost:5000/api/admin/foods/1/status` | Ẩn/hiện món ăn |
+
+### Ảnh tĩnh từ backend
+
+| Link | Chức năng |
+| :--- | :--- |
+| `http://localhost:5000/images/foods/thit-kho-trung.jpg` | Ảnh món ăn |
+| `http://localhost:5000/images/posts/post-1.jpg` | Ảnh bài viết |
+| `http://localhost:5000/images/users/admin.jpg` | Ảnh người dùng |

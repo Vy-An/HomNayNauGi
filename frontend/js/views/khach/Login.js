@@ -474,7 +474,7 @@ const Login = {
         `;
     },
 
-    afterRender: async () => {
+    afterRender: async (params) => {
         // State
         let currentMode = 'login'; // 'login' | 'register'
 
@@ -596,6 +596,10 @@ const Login = {
             });
         }
 
+        if (params?.get?.('mode') === 'register') {
+            switchMode('register');
+        }
+
         // Show/Hide Password Toggle helper
         const setupPasswordToggle = (toggleBtn, inputEl) => {
             if (!toggleBtn || !inputEl) return;
@@ -672,7 +676,7 @@ const Login = {
                         localStorage.setItem('auth_user', JSON.stringify(res.user));
                         showToast('Đăng nhập thành công!', 'success');
                         setTimeout(() => {
-                            window.location.hash = '#/cong-dong';
+                            window.location.hash = res.user?.role === 'admin' ? '#/admin/dashboard' : '#/cong-dong';
                         }, 800);
                     } else {
                         showError('error-login-password', res?.message || 'Đăng nhập không thành công.');

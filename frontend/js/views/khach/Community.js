@@ -738,7 +738,7 @@ const Community = {
                         avatar: p.user?.avatar || p.author?.avatar || 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=150'
                     },
                     created_at: p.created_at,
-                    likes: typeof p.likes === 'number' ? p.likes : (p._count?.post_likes || 0),
+                    likes: Number(p.likesCount ?? p.likes_count ?? p._count?.post_likes ?? (typeof p.likes === 'number' ? p.likes : 0)) || 0,
                     liked: Boolean(p.isLiked)
                 }));
 
@@ -954,8 +954,10 @@ const Community = {
                     likeBtn.disabled = true;
                     try {
                         const res = await fetchAPI(`/posts/${postId}/like`, { method: 'POST' });
-                        if (res?.success && res.data) {
-                            const { isLiked, likesCount } = res.data;
+                        const likeData = res?.data || res;
+                        if (res?.success && likeData) {
+                            const isLiked = Boolean(likeData.isLiked ?? likeData.liked);
+                            const likesCount = Number(likeData.likesCount ?? likeData.likes_count ?? likeData.likes) || 0;
                             const post = allPosts.find(p => p.id_post === postId);
                             if (post) {
                                 post.liked = isLiked;

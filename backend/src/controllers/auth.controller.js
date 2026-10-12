@@ -1,22 +1,39 @@
 const prisma = require('../lib/prisma');
 const { signToken } = require('../middleware/auth.middleware');
 const { resolveAssetUrl } = require('../utils/assetUrl');
+const { hashPassword, isHashedPassword, verifyPassword } = require('../utils/password');
 
 function formatUser(user) {
     return {
         id: user.id_user,
+        id_user: user.id_user,
         name: user.name,
         email: user.email,
         avatar: resolveAssetUrl(user.avatar),
         role: user.role,
-        status: user.status
+        status: user.status,
+        created_at: user.created_at,
+        updated_at: user.updated_at
     };
+}
+
+function normalizeEmail(value) {
+    return String(value || '').trim().toLowerCase();
+}
+
+function normalizeName(value) {
+    return String(value || '').trim().replace(/\s+/g, ' ');
+}
+
+function isValidEmail(value) {
+    return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
 }
 
 async function login(req, res) {
     try {
-        const { email, account, password } = req.body;
-        const identifier = (email || account || '').trim();
+        const { email, account, password } = req.body || {};
+        const identifier = String(email || account || '').trim();
+        const normalizedIdentifier = normalizeEmail(identifier);
 
         if (!identifier || !password) {
             return res.status(400).json({
@@ -28,13 +45,13 @@ async function login(req, res) {
         const user = await prisma.users.findFirst({
             where: {
                 OR: [
-                    { email: identifier },
+                    { email: normalizedIdentifier },
                     { name: identifier }
                 ]
             }
         });
 
-        if (!user || user.password !== password) {
+        if (!user || !verifyPassword(password, user.password)) {
             return res.status(401).json({
                 success: false,
                 message: 'Email hoặc mật khẩu không chính xác.'
@@ -45,6 +62,16 @@ async function login(req, res) {
             return res.status(403).json({
                 success: false,
                 message: 'Tài khoản của bạn đã bị khóa hoặc vô hiệu hóa.'
+            });
+        }
+
+        if (!isHashedPassword(user.password)) {
+            await prisma.users.update({
+                where: { id_user: user.id_user },
+                data: {
+                    password: hashPassword(password),
+                    updated_at: new Date()
+                }
             });
         }
 
@@ -66,14 +93,21 @@ async function login(req, res) {
 
 async function register(req, res) {
     try {
-        const { name, email, password } = req.body;
-        const trimmedName = (name || '').trim();
-        const trimmedEmail = (email || '').trim().toLowerCase();
+        const { name, email, password } = req.body || {};
+        const trimmedName = normalizeName(name);
+        const trimmedEmail = normalizeEmail(email);
 
         if (!trimmedName || !trimmedEmail || !password) {
             return res.status(400).json({
                 success: false,
                 message: 'Vui lòng điền đầy đủ họ tên, email và mật khẩu.'
+            });
+        }
+
+        if (!isValidEmail(trimmedEmail)) {
+            return res.status(400).json({
+                success: false,
+                message: 'Email không hợp lệ.'
             });
         }
 
@@ -99,7 +133,7 @@ async function register(req, res) {
             data: {
                 name: trimmedName,
                 email: trimmedEmail,
-                password: password,
+                password: hashPassword(password),
                 avatar: '/images/users/admin.jpg',
                 role: 'user',
                 status: 'active'
@@ -120,6 +154,13 @@ async function register(req, res) {
             message: 'Không thể tạo tài khoản lúc này.'
         });
     }
+}
+
+async function logout(req, res) {
+    return res.json({
+        success: true,
+        message: 'Đăng xuất thành công.'
+    });
 }
 
 async function getMe(req, res) {
@@ -146,5 +187,6 @@ async function getMe(req, res) {
 module.exports = {
     login,
     register,
+    logout,
     getMe
 };
