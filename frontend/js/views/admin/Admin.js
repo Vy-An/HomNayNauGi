@@ -1489,7 +1489,7 @@ const Admin = {
                             <tbody>
                                 <tr class="border-b border-gray-50 hover:bg-gray-50 transition">
                                     <td class="p-4 font-medium text-text-main">Minh Anh</td>
-                                    <td class="p-4 text-text-muted text-sm line-clamp-2">Cuối tuần trổ tài làm bún đậu mắm tôm theo công thức trên Hôm Nay Ăn Gì. Nước mắm pha bao dính...</td>
+                                    <td class="p-4 text-text-muted text-sm line-clamp-2">Cuối tuần trổ tài làm bún đậu mắm tôm theo công thức trên Hôm Nay Nấu Gì. Nước mắm pha bao dính...</td>
                                     <td class="p-4 text-text-muted text-sm"><i class="fa-solid fa-heart text-red-500"></i> 342 | <i class="fa-solid fa-comment text-blue-500"></i> 48</td>
                                     <td class="p-4"><span class="bg-gray-100 text-gray-700 px-3 py-1 rounded-full text-xs font-bold">0</span></td>
                                     <td class="p-4 text-right space-x-2">

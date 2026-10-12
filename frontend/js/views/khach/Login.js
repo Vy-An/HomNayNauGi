@@ -18,7 +18,7 @@ const Login = {
                     </div>
                     <div class="flex flex-col">
                         <span class="text-lg sm:text-xl font-extrabold tracking-tight text-primary flex items-center gap-1.5">
-                            Hôm Nay Ăn Gì
+                            Hôm Nay Nấu Gì
                             <span class="w-2 h-2 rounded-full bg-accent inline-block"></span>
                         </span>
                         <span class="text-[10px] font-semibold text-text-muted tracking-wider uppercase">Gợi ý món ngon gia đình</span>
@@ -457,7 +457,7 @@ const Login = {
 
             <!-- Bottom Minimal Footer for Cozy Feel -->
             <footer class="relative z-20 w-full px-6 lg:px-12 py-4 text-center text-xs text-text-muted font-medium flex flex-col sm:flex-row items-center justify-between gap-2 border-t border-beige-border/50 bg-cream/40 backdrop-blur-sm">
-                <p>© 2026 Hôm Nay Ăn Gì? • Tự tay chuẩn bị bữa cơm ấm cúng</p>
+                <p>© 2026 Hôm Nay Nấu Gì? • Tự tay chuẩn bị bữa cơm ấm cúng</p>
                 <div class="flex items-center gap-4 text-text-muted">
                     <a href="#/danh-sach" class="hover:text-primary transition-colors">Danh sách món ăn</a>
                     <span>•</span>

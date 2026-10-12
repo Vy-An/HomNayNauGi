@@ -6,14 +6,15 @@ import FoodList from './views/khach/FoodList.js';
 import FoodDetail from './views/khach/FoodDetail.js';
 import Community from './views/khach/Community.js';
 import Login from './views/khach/Login.js';
+import Profile from './views/khach/Profile.js';
 
-// Hệ thống Router định tuyến
 const routes = {
     '/': Home,
     '/admin': Admin,
     '/danh-sach': FoodList,
     '/cong-dong': Community,
-    '/login': Login
+    '/login': Login,
+    '/ca-nhan': Profile
 };
 
 const router = async () => {
@@ -40,6 +41,9 @@ const router = async () => {
         const footerContainer = document.getElementById('footer-container');
 
         if (path === '/login') {
+            if (navbarContainer) navbarContainer.innerHTML = '';
+            if (footerContainer) footerContainer.style.display = 'none';
+        } else if (path === '/ca-nhan') {
             if (navbarContainer) navbarContainer.innerHTML = '';
             if (footerContainer) footerContainer.style.display = 'none';
         } else {

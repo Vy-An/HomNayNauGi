@@ -42,7 +42,7 @@ const Home = {
                                         <!-- Template Artwork Base Background Image -->
                                         <img 
                                             src="./assets/images/gacha-machine-blank.png" 
-                                            alt="Máy Random Hôm Nay Ăn Gì" 
+                                            alt="Máy Random Hôm Nay Nấu Gì" 
                                             class="absolute inset-0 w-full h-full object-contain pointer-events-none z-0" 
                                             onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1546069901-ba9599a7e63c?auto=format&fit=crop&w=600&q=80'" 
                                         />
@@ -412,7 +412,7 @@ const Home = {
             image: food.image || fallbackImage,
             time: food.time || (food.cookingTime ? `${food.cookingTime} phút` : '30 phút'),
             likes: food.likes || '1.2k',
-            author: food.author || { name: 'Hôm Nay Ăn Gì' },
+            author: food.author || { name: 'Hôm Nay Nấu Gì' },
             ingredients: Array.isArray(food.ingredients) ? food.ingredients : [
                 '300g nguyên liệu chính tươi ngon',
                 '2 củ hành tím băm nhỏ',

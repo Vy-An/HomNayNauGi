@@ -7,7 +7,7 @@ export default function Footer() {
                 <div class="space-y-3.5">
                     <a href="#/" class="inline-flex items-center gap-2 text-xl font-extrabold tracking-wide hover:opacity-90 transition">
                         <i class="fa-solid fa-kitchen-set text-accent text-2xl"></i>
-                        <span>Hôm Nay Ăn Gì?</span>
+                        <span>Hôm Nay Nấu Gì?</span>
                     </a>
                     <p class="text-white/75 text-xs sm:text-sm leading-relaxed font-normal">
                         Nền tảng gợi ý thực đơn gia đình thông minh, chia sẻ công thức và kết nối cộng đồng yêu ẩm thực ấm cúng.
@@ -71,7 +71,7 @@ export default function Footer() {
 
             <!-- Bottom Sub-Footer -->
             <div class="max-w-[1360px] mx-auto px-4 sm:px-6 lg:px-8 mt-10 pt-6 border-t border-white/15 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-white/60">
-                <p>&copy; 2026 Hôm Nay Ăn Gì? All rights reserved.</p>
+                <p>&copy; 2026 Hôm Nay Nấu Gì? All rights reserved.</p>
                 <div class="flex items-center gap-4">
                     <a href="#" class="hover:text-white transition-colors">Điều khoản sử dụng</a>
                     <span>•</span>

@@ -19,7 +19,7 @@ const Community = {
                         </div>
 
                         <h1 class="text-2xl sm:text-3xl lg:text-[32px] font-extrabold text-text-main tracking-tight leading-snug">
-                            Cộng đồng <span class="text-primary font-caveat text-3xl sm:text-4xl lg:text-[42px] font-bold inline-block">Hôm Nay Ăn Gì?</span>
+                            Cộng đồng <span class="text-primary font-caveat text-3xl sm:text-4xl lg:text-[42px] font-bold inline-block">Hôm Nay Nấu Gì?</span>
                         </h1>
 
                         <p class="text-text-muted text-xs sm:text-sm leading-relaxed font-medium">
@@ -127,7 +127,7 @@ const Community = {
                                 </h3>
 
                                 <p class="text-white/80 text-xs leading-relaxed font-normal">
-                                    Để Hôm Nay Ăn Gì? chọn giúp bạn nhé.
+                                    Để Hôm Nay Nấu Gì? chọn giúp bạn nhé.
                                 </p>
 
                                 <div class="pt-0.5">
@@ -277,7 +277,7 @@ const Community = {
                             </p>
 
                             <div class="mt-2.5 flex items-center justify-between text-[10px] text-text-muted font-medium pt-1.5 border-t border-[#EFE9DC]">
-                                <span>— Bếp Hôm Nay Ăn Gì?</span>
+                                <span>— Bếp Hôm Nay Nấu Gì?</span>
                                 <span>🍲</span>
                             </div>
                         </div>
@@ -445,16 +445,27 @@ const Community = {
                     ` : ''}
 
                     <div class="flex items-center justify-between pt-2.5 border-t border-[#F0EBE0] text-text-muted">
-                        <button 
-                            class="btn-like inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full hover:bg-rose-50 text-text-muted hover:text-rose-600 transition-all font-bold text-xs cursor-pointer active:scale-95" 
-                            data-id="${post.id_post}" 
-                            data-liked="${post.liked}" 
-                            data-count="${post.likes}"
-                        >
-                            <i class="${post.liked ? 'fa-solid fa-heart text-rose-500' : 'fa-regular fa-heart'} text-sm transition-colors"></i>
-                            <span class="like-count ${post.liked ? 'text-rose-600 font-extrabold' : ''}">${post.likes}</span>
-                            <span class="font-semibold text-[11px] text-text-muted">lượt thích</span>
-                        </button>
+                        <div class="flex items-center gap-1.5 sm:gap-2">
+                            <button 
+                                class="btn-like inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full hover:bg-rose-50 text-text-muted hover:text-rose-600 transition-all font-bold text-xs cursor-pointer active:scale-95" 
+                                data-id="${post.id_post}" 
+                                data-liked="${post.liked}" 
+                                data-count="${post.likes}"
+                            >
+                                <i class="${post.liked ? 'fa-solid fa-heart text-rose-500' : 'fa-regular fa-heart'} text-sm transition-colors"></i>
+                                <span class="like-count ${post.liked ? 'text-rose-600 font-extrabold' : ''}">${post.likes}</span>
+                                <span class="font-semibold text-[11px] text-text-muted hidden sm:inline">lượt thích</span>
+                            </button>
+
+                            <button 
+                                class="btn-toggle-comments inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full hover:bg-primary-subtle text-text-muted hover:text-primary transition-all font-bold text-xs cursor-pointer active:scale-95" 
+                                data-id="${post.id_post}"
+                            >
+                                <i class="fa-regular fa-message text-sm"></i>
+                                <span class="comments-count font-bold">${post.comments || 0}</span>
+                                <span class="font-semibold text-[11px] text-text-muted hidden sm:inline">bình luận</span>
+                            </button>
+                        </div>
 
                         <button 
                             class="btn-share inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full hover:bg-primary-subtle text-text-muted hover:text-primary transition-all font-bold text-xs cursor-pointer active:scale-95" 
@@ -464,6 +475,47 @@ const Community = {
                             <i class="fa-solid fa-share-nodes text-sm"></i>
                             <span class="font-semibold">Chia sẻ</span>
                         </button>
+                    </div>
+
+                    <div id="comments-section-${post.id_post}" class="hidden pt-3 mt-3 border-t border-[#F0EBE0]/80 space-y-3">
+                        <div class="comments-composer flex items-start gap-2.5">
+                            <img src="${currentUser?.avatar || 'http://localhost:5000/images/users/admin.jpg'}" alt="Avatar" class="w-8 h-8 rounded-full object-cover shrink-0 ring-1 ring-beige-border" loading="lazy">
+                            <div class="flex-1 space-y-1.5">
+                                <div class="relative">
+                                    <textarea 
+                                        id="comment-input-${post.id_post}" 
+                                        rows="2" 
+                                        placeholder="${currentUser ? 'Viết bình luận hoặc cảm nghĩ của bạn...' : 'Vui lòng đăng nhập để bình luận...'}" 
+                                        class="w-full text-xs sm:text-sm bg-[#FAF8F5] border border-beige-border rounded-xl px-3 py-2 text-text-main focus:bg-white focus:border-primary focus:ring-2 focus:ring-primary/15 outline-none resize-none transition-all placeholder:text-text-muted/70"
+                                        ${currentUser ? '' : 'readonly'}
+                                    ></textarea>
+                                </div>
+                                <div class="flex items-center justify-between">
+                                    <span class="text-[11px] text-text-muted">Nhấn Gửi để đăng bình luận</span>
+                                    ${currentUser ? `
+                                        <button 
+                                            type="button" 
+                                            class="btn-submit-comment inline-flex items-center gap-1 px-3 py-1.5 rounded-xl bg-primary hover:bg-[#1B4633] text-white font-bold text-xs shadow-2xs cursor-pointer transition-colors"
+                                            data-id="${post.id_post}"
+                                        >
+                                            <i class="fa-solid fa-paper-plane text-[10px]"></i>
+                                            <span>Gửi</span>
+                                        </button>
+                                    ` : `
+                                        <a href="#/login" class="inline-flex items-center gap-1 px-3 py-1.5 rounded-xl bg-accent hover:bg-accent-hover text-primary-deep font-bold text-xs transition-colors">
+                                            <span>Đăng nhập để gửi</span>
+                                        </a>
+                                    `}
+                                </div>
+                            </div>
+                        </div>
+
+                        <div id="comments-list-${post.id_post}" class="space-y-2.5 pt-1">
+                            <div class="py-3 text-center text-xs text-text-muted">
+                                <i class="fa-solid fa-spinner animate-spin text-primary text-sm mr-1.5"></i>
+                                <span>Đang tải bình luận...</span>
+                            </div>
+                        </div>
                     </div>
                 </article>
             `;
@@ -739,7 +791,8 @@ const Community = {
                     },
                     created_at: p.created_at,
                     likes: Number(p.likesCount ?? p.likes_count ?? p._count?.post_likes ?? (typeof p.likes === 'number' ? p.likes : 0)) || 0,
-                    liked: Boolean(p.isLiked)
+                    liked: Boolean(p.isLiked),
+                    comments: Number(p.commentsCount ?? p.comments ?? p._count?.post_comments ?? 0) || 0
                 }));
 
                 currentFilteredPosts = [...allPosts];
@@ -897,7 +950,8 @@ const Community = {
                             },
                             created_at: newPostData.created_at || new Date().toISOString(),
                             likes: 0,
-                            liked: false
+                            liked: false,
+                            comments: 0
                         };
 
                         allPosts.unshift(createdPost);
@@ -1038,6 +1092,264 @@ const Community = {
                 const moreBtn = e.target.closest('.btn-more-options');
                 if (moreBtn) {
                     showToast('Tùy chọn bài viết', 'info');
+                    return;
+                }
+
+                const toggleCommentBtn = e.target.closest('.btn-toggle-comments');
+                if (toggleCommentBtn) {
+                    const postId = parseInt(toggleCommentBtn.getAttribute('data-id'), 10);
+                    const commentsSection = document.getElementById(`comments-section-${postId}`);
+                    if (!commentsSection) return;
+
+                    const isOpening = commentsSection.classList.contains('hidden');
+                    commentsSection.classList.toggle('hidden');
+
+                    if (isOpening) {
+                        const commentsList = document.getElementById(`comments-list-${postId}`);
+                        if (commentsList) {
+                            commentsList.innerHTML = `
+                                <div class="py-3 text-center text-xs text-text-muted">
+                                    <i class="fa-solid fa-spinner animate-spin text-primary text-sm mr-1.5"></i>
+                                    <span>Đang tải bình luận...</span>
+                                </div>
+                            `;
+
+                            try {
+                                const res = await fetchAPI(`/posts/${postId}/comments`);
+                                const comments = Array.isArray(res?.data) ? res.data : [];
+                                
+                                const post = allPosts.find(p => p.id_post === postId);
+                                if (post) {
+                                    post.comments = comments.length;
+                                }
+                                const countBadge = toggleCommentBtn.querySelector('.comments-count');
+                                if (countBadge) countBadge.textContent = comments.length;
+
+                                if (comments.length === 0) {
+                                    commentsList.innerHTML = `
+                                        <div class="py-3 text-center text-xs text-text-muted">
+                                            Chưa có bình luận nào. Hãy là người đầu tiên chia sẻ cảm nghĩ!
+                                        </div>
+                                    `;
+                                } else {
+                                    commentsList.innerHTML = comments.map(c => {
+                                        const cAuthor = c.author || c.user || {};
+                                        const isMyComment = currentUser && (c.id_user === currentUser.id_user || c.id_user === currentUser.id || currentUser.role === 'admin');
+                                        const cTime = c.time || formatTimeAgo(c.created_at);
+                                        const cId = c.id_comment || c.id;
+
+                                        return `
+                                            <div class="comment-item bg-[#FBF9F5] rounded-xl p-2.5 sm:p-3 border border-beige-border/60 text-xs transition-all" id="comment-item-${cId}">
+                                                <div class="flex items-start justify-between gap-2">
+                                                    <div class="flex items-center gap-2">
+                                                        <img src="${cAuthor.avatar || 'http://localhost:5000/images/users/admin.jpg'}" alt="${cAuthor.name || 'Người dùng'}" class="w-6 h-6 rounded-full object-cover ring-1 ring-beige-border">
+                                                        <div>
+                                                            <strong class="text-text-main text-xs font-bold">${cAuthor.name || 'Thành viên'}</strong>
+                                                            <span class="text-[10px] text-text-muted ml-1.5">${cTime}</span>
+                                                        </div>
+                                                    </div>
+
+                                                    ${isMyComment ? `
+                                                        <div class="flex items-center gap-1.5">
+                                                            <button type="button" class="btn-edit-comment text-text-muted hover:text-primary transition-colors cursor-pointer text-[11px] p-0.5" data-comment-id="${cId}" data-post-id="${postId}" title="Chỉnh sửa bình luận">
+                                                                <i class="fa-solid fa-pen"></i>
+                                                            </button>
+                                                            <button type="button" class="btn-delete-comment text-text-muted hover:text-rose-600 transition-colors cursor-pointer text-[11px] p-0.5" data-comment-id="${cId}" data-post-id="${postId}" title="Xóa bình luận">
+                                                                <i class="fa-solid fa-trash-can"></i>
+                                                            </button>
+                                                        </div>
+                                                    ` : ''}
+                                                </div>
+
+                                                <div class="comment-body mt-1.5 text-text-main text-xs leading-relaxed" id="comment-content-${cId}">
+                                                    ${c.content}
+                                                </div>
+                                            </div>
+                                        `;
+                                    }).join('');
+                                }
+                            } catch {
+                                commentsList.innerHTML = `
+                                    <div class="py-2 text-center text-xs text-red-500">
+                                        Không thể tải danh sách bình luận.
+                                    </div>
+                                `;
+                            }
+                        }
+                    }
+                    return;
+                }
+
+                const submitCommentBtn = e.target.closest('.btn-submit-comment');
+                if (submitCommentBtn) {
+                    const postId = parseInt(submitCommentBtn.getAttribute('data-id'), 10);
+                    const token = localStorage.getItem('auth_token');
+                    if (!token) {
+                        showToast('Vui lòng đăng nhập để bình luận!', 'warning');
+                        setTimeout(() => { window.location.hash = '#/dang-nhap'; }, 1000);
+                        return;
+                    }
+
+                    const inputEl = document.getElementById(`comment-input-${postId}`);
+                    const content = inputEl?.value.trim();
+                    if (!content) {
+                        showToast('Vui lòng nhập nội dung bình luận.', 'warning');
+                        inputEl?.focus();
+                        return;
+                    }
+
+                    submitCommentBtn.disabled = true;
+                    submitCommentBtn.innerHTML = '<i class="fa-solid fa-spinner animate-spin text-[10px]"></i><span>Đang gửi...</span>';
+
+                    try {
+                        const res = await fetchAPI(`/posts/${postId}/comments`, {
+                            method: 'POST',
+                            body: JSON.stringify({ content })
+                        });
+
+                        if (res?.success && res.data) {
+                            showToast('Đã gửi bình luận thành công!', 'success');
+                            if (inputEl) inputEl.value = '';
+
+                            const commentsList = document.getElementById(`comments-list-${postId}`);
+                            const newC = res.data;
+                            const cAuthor = newC.author || newC.user || currentUser;
+                            const cId = newC.id_comment || newC.id;
+                            const cHTML = `
+                                <div class="comment-item bg-[#FBF9F5] rounded-xl p-2.5 sm:p-3 border border-beige-border/60 text-xs transition-all" id="comment-item-${cId}">
+                                    <div class="flex items-start justify-between gap-2">
+                                        <div class="flex items-center gap-2">
+                                            <img src="${cAuthor.avatar || currentUser?.avatar || 'http://localhost:5000/images/users/admin.jpg'}" alt="${cAuthor.name || currentUser?.name}" class="w-6 h-6 rounded-full object-cover ring-1 ring-beige-border">
+                                            <div>
+                                                <strong class="text-text-main text-xs font-bold">${cAuthor.name || currentUser?.name || 'Bạn'}</strong>
+                                                <span class="text-[10px] text-text-muted ml-1.5">Vừa xong</span>
+                                            </div>
+                                        </div>
+                                        <div class="flex items-center gap-1.5">
+                                            <button type="button" class="btn-edit-comment text-text-muted hover:text-primary transition-colors cursor-pointer text-[11px] p-0.5" data-comment-id="${cId}" data-post-id="${postId}" title="Chỉnh sửa bình luận">
+                                                <i class="fa-solid fa-pen"></i>
+                                            </button>
+                                            <button type="button" class="btn-delete-comment text-text-muted hover:text-rose-600 transition-colors cursor-pointer text-[11px] p-0.5" data-comment-id="${cId}" data-post-id="${postId}" title="Xóa bình luận">
+                                                <i class="fa-solid fa-trash-can"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+                                    <div class="comment-body mt-1.5 text-text-main text-xs leading-relaxed" id="comment-content-${cId}">
+                                        ${newC.content}
+                                    </div>
+                                </div>
+                            `;
+
+                            if (commentsList) {
+                                if (commentsList.querySelector('.text-text-muted')?.textContent.includes('Chưa có bình luận')) {
+                                    commentsList.innerHTML = cHTML;
+                                } else {
+                                    commentsList.insertAdjacentHTML('beforeend', cHTML);
+                                }
+                            }
+
+                            const post = allPosts.find(p => p.id_post === postId);
+                            const updatedCount = Number(res.commentsCount ?? ((post?.comments || 0) + 1));
+                            if (post) post.comments = updatedCount;
+
+                            const toggleBtn = document.querySelector(`.btn-toggle-comments[data-id="${postId}"]`);
+                            const countSpan = toggleBtn?.querySelector('.comments-count');
+                            if (countSpan) countSpan.textContent = updatedCount;
+                        } else {
+                            showToast(res?.message || 'Không thể đăng bình luận.', 'error');
+                        }
+                    } catch (err) {
+                        showToast(err.message || 'Lỗi khi gửi bình luận.', 'error');
+                    } finally {
+                        submitCommentBtn.disabled = false;
+                        submitCommentBtn.innerHTML = '<i class="fa-solid fa-paper-plane text-[10px]"></i><span>Gửi</span>';
+                    }
+                    return;
+                }
+
+                const deleteCommentBtn = e.target.closest('.btn-delete-comment');
+                if (deleteCommentBtn) {
+                    const commentId = deleteCommentBtn.getAttribute('data-comment-id');
+                    const postId = parseInt(deleteCommentBtn.getAttribute('data-post-id'), 10);
+
+                    if (!confirm('Bạn có chắc chắn muốn xóa bình luận này không?')) return;
+
+                    try {
+                        const res = await fetchAPI(`/comments/${commentId}`, { method: 'DELETE' });
+                        if (res?.success) {
+                            showToast('Đã xóa bình luận.', 'success');
+                            const itemEl = document.getElementById(`comment-item-${commentId}`);
+                            if (itemEl) itemEl.remove();
+
+                            const post = allPosts.find(p => p.id_post === postId);
+                            if (post && post.comments > 0) post.comments--;
+                            const toggleBtn = document.querySelector(`.btn-toggle-comments[data-id="${postId}"]`);
+                            const countSpan = toggleBtn?.querySelector('.comments-count');
+                            if (countSpan && post) countSpan.textContent = post.comments;
+
+                            const commentsList = document.getElementById(`comments-list-${postId}`);
+                            if (commentsList && commentsList.children.length === 0) {
+                                commentsList.innerHTML = `
+                                    <div class="py-3 text-center text-xs text-text-muted">
+                                        Chưa có bình luận nào. Hãy là người đầu tiên chia sẻ cảm nghĩ!
+                                    </div>
+                                `;
+                            }
+                        } else {
+                            showToast(res?.message || 'Không thể xóa bình luận.', 'error');
+                        }
+                    } catch (err) {
+                        showToast(err.message || 'Lỗi khi xóa bình luận.', 'error');
+                    }
+                    return;
+                }
+
+                const editCommentBtn = e.target.closest('.btn-edit-comment');
+                if (editCommentBtn) {
+                    const commentId = editCommentBtn.getAttribute('data-comment-id');
+                    const contentEl = document.getElementById(`comment-content-${commentId}`);
+                    if (!contentEl) return;
+
+                    if (contentEl.querySelector('textarea')) return;
+
+                    const oldText = contentEl.textContent.trim();
+                    contentEl.innerHTML = `
+                        <div class="space-y-1.5 mt-1">
+                            <textarea class="w-full text-xs bg-white border border-beige-border rounded-lg p-2 outline-none focus:border-primary focus:ring-1 focus:ring-primary/20">${oldText}</textarea>
+                            <div class="flex items-center justify-end gap-1.5">
+                                <button type="button" class="btn-cancel-edit-comment px-2 py-0.5 rounded-md bg-gray-100 hover:bg-gray-200 text-text-muted text-[11px] font-semibold cursor-pointer">Hủy</button>
+                                <button type="button" class="btn-save-edit-comment px-2.5 py-0.5 rounded-md bg-primary hover:bg-[#1B4633] text-white text-[11px] font-bold cursor-pointer" data-comment-id="${commentId}">Lưu</button>
+                            </div>
+                        </div>
+                    `;
+
+                    contentEl.querySelector('.btn-cancel-edit-comment')?.addEventListener('click', () => {
+                        contentEl.textContent = oldText;
+                    });
+
+                    contentEl.querySelector('.btn-save-edit-comment')?.addEventListener('click', async () => {
+                        const newText = contentEl.querySelector('textarea')?.value.trim();
+                        if (!newText) {
+                            showToast('Nội dung bình luận không được rỗng.', 'warning');
+                            return;
+                        }
+
+                        try {
+                            const res = await fetchAPI(`/comments/${commentId}`, {
+                                method: 'PATCH',
+                                body: JSON.stringify({ content: newText })
+                            });
+
+                            if (res?.success) {
+                                contentEl.textContent = newText;
+                                showToast('Đã cập nhật bình luận!', 'success');
+                            } else {
+                                showToast(res?.message || 'Không thể cập nhật bình luận.', 'error');
+                            }
+                        } catch (err) {
+                            showToast(err.message || 'Lỗi khi cập nhật bình luận.', 'error');
+                        }
+                    });
                     return;
                 }
             });

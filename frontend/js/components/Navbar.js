@@ -49,7 +49,7 @@ export default function Navbar() {
                         <i class="fa-solid fa-kitchen-set text-lg sm:text-xl"></i>
                     </div>
                     <div class="flex flex-col">
-                        <span class="text-lg sm:text-xl font-black tracking-tight text-white leading-tight font-sans">Hôm Nay Ăn Gì?</span>
+                        <span class="text-lg sm:text-xl font-black tracking-tight text-white leading-tight font-sans">Hôm Nay Nấu Gì?</span>
                         <span class="text-[9px] uppercase tracking-[0.2em] text-[#F4A62A] font-black leading-none">MÓN NGON MỖI NGÀY</span>
                     </div>
                 </a>
@@ -113,11 +113,11 @@ export default function Navbar() {
                     <!-- Auth Links -->
                     <div class="flex items-center gap-2">
                         ${isLoggedIn ? `
-                            <div class="hidden sm:flex items-center gap-2 px-2.5 py-1 rounded-full bg-white/10 border border-white/10">
+                            <a href="#/ca-nhan" class="flex items-center gap-2 px-2.5 py-1 rounded-full bg-white/10 hover:bg-white/20 border border-white/10 transition-all text-white group cursor-pointer" title="Xem trang cá nhân">
                                 <img src="${authAvatar}" alt="${authName}" class="w-7 h-7 rounded-full object-cover bg-white/20">
-                                <span class="max-w-28 truncate text-xs font-bold text-white">${authName}</span>
-                            </div>
-                            <button onclick="window.logoutAuth && window.logoutAuth()" class="px-3 sm:px-4 py-1.5 bg-[#F4A62A] hover:bg-[#E59516] text-[#0F4937] font-black rounded-full text-xs sm:text-sm shadow-sm transition-all hover:scale-105 active:scale-95">Đăng xuất</button>
+                                <span class="max-w-28 truncate text-xs font-bold group-hover:text-[#F4A62A] transition-colors">${authName}</span>
+                            </a>
+                            <button onclick="window.logoutAuth && window.logoutAuth()" class="px-3 sm:px-4 py-1.5 bg-[#F4A62A] hover:bg-[#E59516] text-[#0F4937] font-black rounded-full text-xs sm:text-sm shadow-sm transition-all hover:scale-105 active:scale-95 cursor-pointer">Đăng xuất</button>
                         ` : `
                             <a href="#/login" class="text-white/85 hover:text-white font-bold text-xs sm:text-sm px-2 py-1 rounded-lg hover:bg-white/10 transition">Đăng nhập</a>
                             <a href="#/login?mode=register" class="px-3 sm:px-4 py-1.5 bg-[#F4A62A] hover:bg-[#E59516] text-[#0F4937] font-black rounded-full text-xs sm:text-sm shadow-sm transition-all hover:scale-105 active:scale-95">Đăng ký</a>

@@ -23,7 +23,7 @@ app.use('/api/comments', commentRoutes);
 app.use('/api/admin', adminRoutes);
 
 app.get('/', (req, res) => {
-    res.send('Server Hôm Nay Ăn Gì đang chạy (Kiến trúc chuẩn)!');
+    res.send('Server Hôm Nay Nấu Gì đang chạy (Kiến trúc chuẩn)!');
 });
 
 const PORT = process.env.PORT || 5000;
