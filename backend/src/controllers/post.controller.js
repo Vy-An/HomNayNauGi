@@ -36,6 +36,7 @@ function formatRelativeTime(date) {
 function formatPost(post, currentUserId = null) {
     const food = post.foods;
     const likesCount = post._count?.post_likes ?? (Array.isArray(post.post_likes) ? post.post_likes.length : 0);
+    const commentsCount = post._count?.comments || 0;
     const userLikes = Array.isArray(post.post_likes) ? post.post_likes : [];
     const isLiked = currentUserId ? userLikes.some((l) => l.id_user === currentUserId) : false;
 
@@ -51,6 +52,8 @@ function formatPost(post, currentUserId = null) {
         time: formatRelativeTime(post.created_at),
         likesCount,
         likes: formatLikes(likesCount),
+        commentsCount,
+        comments: commentsCount,
         isLiked,
         liked: isLiked,
         author: {
@@ -72,6 +75,7 @@ function formatPost(post, currentUserId = null) {
 function formatCommunityPost(post) {
     const food = post.foods;
     const likesCount = post._count?.post_likes || 0;
+    const commentsCount = post._count?.comments || 0;
 
     return {
         id: food?.id_food || post.id_post,
@@ -85,6 +89,8 @@ function formatCommunityPost(post) {
         cookingTime: food?.cooking_time || null,
         likes: formatLikes(likesCount),
         likesCount,
+        commentsCount,
+        comments: commentsCount,
         author: {
             id: post.users?.id_user || null,
             name: post.users?.name || 'Cộng đồng',
@@ -121,7 +127,8 @@ async function featuredPosts(req, res) {
                 },
                 _count: {
                     select: {
-                        post_likes: true
+                        post_likes: true,
+                        comments: true
                     }
                 }
             },
@@ -189,7 +196,8 @@ async function getPosts(req, res) {
             },
             _count: {
                 select: {
-                    post_likes: true
+                    post_likes: true,
+                    comments: true
                 }
             },
             post_likes: {
@@ -283,7 +291,8 @@ async function getPostById(req, res) {
                 },
                 _count: {
                     select: {
-                        post_likes: true
+                        post_likes: true,
+                        comments: true
                     }
                 },
                 post_likes: {
@@ -407,7 +416,8 @@ async function createPost(req, res) {
                 },
                 _count: {
                     select: {
-                        post_likes: true
+                        post_likes: true,
+                        comments: true
                     }
                 },
                 post_likes: {

@@ -6,6 +6,11 @@ const router = express.Router();
 
 router.post('/login', authController.login);
 router.post('/register', authController.register);
+router.post('/logout', requireAuth, authController.logout);
 router.get('/me', requireAuth, authController.getMe);
+router.patch('/me', requireAuth, authController.updateProfile);
+router.get('/me/posts', requireAuth, authController.getMyPosts);
+router.get('/me/favorites', requireAuth, authController.getMyFavorites);
+router.delete('/me/favorites/:id', requireAuth, authController.removeFavorite);
 
 module.exports = router;

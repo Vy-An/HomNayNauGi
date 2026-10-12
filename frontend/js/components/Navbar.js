@@ -4,6 +4,24 @@ export default function Navbar() {
     const isList = currentHash.startsWith('/danh-sach');
     const isCommunity = currentHash.startsWith('/cong-dong');
     const isAdmin = currentHash.startsWith('/admin');
+    let authUser = null;
+
+    try {
+        authUser = JSON.parse(localStorage.getItem('auth_user') || 'null');
+    } catch (e) {
+        authUser = null;
+    }
+
+    const isLoggedIn = Boolean(localStorage.getItem('auth_token') && authUser);
+    const escapeHTML = (value) => String(value ?? '').replace(/[&<>"']/g, (char) => ({
+        '&': '&amp;',
+        '<': '&lt;',
+        '>': '&gt;',
+        '"': '&quot;',
+        "'": '&#39;'
+    }[char]));
+    const authName = escapeHTML(authUser?.name || 'Tài khoản');
+    const authAvatar = escapeHTML(authUser?.avatar || 'http://localhost:5000/images/users/admin.jpg');
 
     const getLinkClass = (isActive) => isActive 
         ? "text-[#F4A62A] font-extrabold relative py-1 after:content-[''] after:absolute after:w-full after:h-0.5 after:bg-[#F4A62A] after:left-0 after:bottom-0 transition-all" 
@@ -31,7 +49,7 @@ export default function Navbar() {
                         <i class="fa-solid fa-kitchen-set text-lg sm:text-xl"></i>
                     </div>
                     <div class="flex flex-col">
-                        <span class="text-lg sm:text-xl font-black tracking-tight text-white leading-tight font-sans">Hôm Nay Ăn Gì?</span>
+                        <span class="text-lg sm:text-xl font-black tracking-tight text-white leading-tight font-sans">Hôm Nay Nấu Gì?</span>
                         <span class="text-[9px] uppercase tracking-[0.2em] text-[#F4A62A] font-black leading-none">MÓN NGON MỖI NGÀY</span>
                     </div>
                 </a>
@@ -41,7 +59,7 @@ export default function Navbar() {
                     <a href="#/" class="${getLinkClass(isHome)}">Trang chủ</a>
                     <a href="#/danh-sach" class="${getLinkClass(isList)}">Danh sách món ăn</a>
                     <a href="#/cong-dong" class="${getLinkClass(isCommunity)}">Cộng đồng</a>
-                    <a href="#/admin" class="${getLinkClass(isAdmin)}">Admin</a>
+                    ${authUser?.role === 'admin' ? `<a href="#/admin" class="${getLinkClass(isAdmin)}">Admin</a>` : ''}
                 </nav>
 
                 <!-- Right Action Icons & Auth -->
@@ -94,8 +112,16 @@ export default function Navbar() {
 
                     <!-- Auth Links -->
                     <div class="flex items-center gap-2">
-                        <a href="#/login" class="text-white/85 hover:text-white font-bold text-xs sm:text-sm px-2 py-1 rounded-lg hover:bg-white/10 transition">Đăng nhập</a>
-                        <a href="#/login" class="px-3 sm:px-4 py-1.5 bg-[#F4A62A] hover:bg-[#E59516] text-[#0F4937] font-black rounded-full text-xs sm:text-sm shadow-sm transition-all hover:scale-105 active:scale-95">Đăng ký</a>
+                        ${isLoggedIn ? `
+                            <a href="#/ca-nhan" class="flex items-center gap-2 px-2.5 py-1 rounded-full bg-white/10 hover:bg-white/20 border border-white/10 transition-all text-white group cursor-pointer" title="Xem trang cá nhân">
+                                <img src="${authAvatar}" alt="${authName}" class="w-7 h-7 rounded-full object-cover bg-white/20">
+                                <span class="max-w-28 truncate text-xs font-bold group-hover:text-[#F4A62A] transition-colors">${authName}</span>
+                            </a>
+                            <button onclick="window.logoutAuth && window.logoutAuth()" class="px-3 sm:px-4 py-1.5 bg-[#F4A62A] hover:bg-[#E59516] text-[#0F4937] font-black rounded-full text-xs sm:text-sm shadow-sm transition-all hover:scale-105 active:scale-95 cursor-pointer">Đăng xuất</button>
+                        ` : `
+                            <a href="#/login" class="text-white/85 hover:text-white font-bold text-xs sm:text-sm px-2 py-1 rounded-lg hover:bg-white/10 transition">Đăng nhập</a>
+                            <a href="#/login?mode=register" class="px-3 sm:px-4 py-1.5 bg-[#F4A62A] hover:bg-[#E59516] text-[#0F4937] font-black rounded-full text-xs sm:text-sm shadow-sm transition-all hover:scale-105 active:scale-95">Đăng ký</a>
+                        `}
                     </div>
                 </div>
             </div>
@@ -133,6 +159,25 @@ export default function Navbar() {
 }
 
 if (typeof window !== 'undefined') {
+    window.logoutAuth = async () => {
+        const token = localStorage.getItem('auth_token');
+
+        if (token) {
+            try {
+                await fetch('http://localhost:5000/api/auth/logout', {
+                    method: 'POST',
+                    headers: {
+                        Authorization: `Bearer ${token}`
+                    }
+                });
+            } catch (e) {}
+        }
+
+        localStorage.removeItem('auth_token');
+        localStorage.removeItem('auth_user');
+        window.location.hash = '#/login';
+    };
+
     window.closeNavDrawers = () => {
         const overlay = document.getElementById('nav-drawer-overlay');
         const favModal = document.getElementById('nav-fav-modal');

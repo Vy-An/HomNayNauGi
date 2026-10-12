@@ -42,7 +42,7 @@ const Home = {
                                         <!-- Template Artwork Base Background Image -->
                                         <img 
                                             src="./assets/images/gacha-machine-blank.png" 
-                                            alt="Máy Random Hôm Nay Ăn Gì" 
+                                            alt="Máy Random Hôm Nay Nấu Gì" 
                                             class="absolute inset-0 w-full h-full object-contain pointer-events-none z-0" 
                                             onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1546069901-ba9599a7e63c?auto=format&fit=crop&w=600&q=80'" 
                                         />
@@ -412,7 +412,7 @@ const Home = {
             image: food.image || fallbackImage,
             time: food.time || (food.cookingTime ? `${food.cookingTime} phút` : '30 phút'),
             likes: food.likes || '1.2k',
-            author: food.author || { name: 'Hôm Nay Ăn Gì' },
+            author: food.author || { name: 'Hôm Nay Nấu Gì' },
             ingredients: Array.isArray(food.ingredients) ? food.ingredients : [
                 '300g nguyên liệu chính tươi ngon',
                 '2 củ hành tím băm nhỏ',
@@ -536,7 +536,7 @@ const Home = {
                 return;
             }
 
-            container.innerHTML = won.slice(0, 10).map((dish) => `
+            container.innerHTML = won.map((dish) => `
                 <div class="result-thumb cursor-pointer border border-[#E5E1D6] hover:border-[#F4A62A] rounded-xl overflow-hidden shadow-2xs hover:shadow-xs transition-all duration-200 group bg-white hover:-translate-y-0.5 w-16 sm:w-20 aspect-square flex-shrink-0 snap-start relative" title="${dish.name}">
                     <img src="${dish.image}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" onerror="this.src='${fallbackImage}'">
                     <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent"></div>
@@ -549,6 +549,26 @@ const Home = {
             container.querySelectorAll('.result-thumb').forEach((thumb, idx) => {
                 thumb.addEventListener('click', () => showResultModal(won[idx]));
             });
+        };
+
+        const addWonDishes = (dishes) => {
+            const items = (Array.isArray(dishes) ? dishes : [dishes]).filter(Boolean);
+            if (!items.length) return;
+
+            try {
+                const current = JSON.parse(localStorage.getItem('won_dishes') || '[]');
+                const seen = new Set();
+                const merged = [...items, ...current].filter((dish) => {
+                    const key = String(dish.id || dish.name || '').trim();
+                    if (!key || seen.has(key)) return false;
+                    seen.add(key);
+                    return true;
+                });
+
+                localStorage.setItem('won_dishes', JSON.stringify(merged.slice(0, 50)));
+                if (window.renderWonDishesList) window.renderWonDishesList();
+                if (window.renderRecentWonDishes) window.renderRecentWonDishes();
+            } catch (e) {}
         };
 
         const showResultModal = (dish, onBack = null) => {
@@ -752,22 +772,17 @@ const Home = {
                 console.error(error);
                 resultDishes = [getRandomPoolFood()];
             }
-
-            for (let i = 0; i < resultDishes.length; i++) {
-                if (spinBtnText && resultDishes.length > 1) {
-                    spinBtnText.innerHTML = `<i class="fa-solid fa-spinner fa-spin text-xs"></i><span>LẦN ${i + 1}/${resultDishes.length}</span>`;
-                }
-                await performSingleSpin(resultDishes[i]);
-                
-                // Add to navbar cart & localStorage
-                if (window.addWonDish) {
-                    window.addWonDish(resultDishes[i]);
-                }
-
-                if (i < resultDishes.length - 1) {
-                    await new Promise(r => setTimeout(r, 500));
-                }
+            resultDishes = resultDishes.filter(Boolean);
+            if (resultDishes.length === 0) {
+                resultDishes = [getRandomPoolFood()];
             }
+
+            if (spinBtnText && resultDishes.length > 1) {
+                spinBtnText.innerHTML = `<i class="fa-solid fa-spinner fa-spin text-xs"></i><span>${resultDishes.length} MÓN</span>`;
+            }
+
+            await performSingleSpin(resultDishes[0]);
+            addWonDishes(resultDishes);
 
             isSpinning = false;
             if (spinBtn) spinBtn.disabled = false;
