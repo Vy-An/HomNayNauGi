@@ -260,10 +260,10 @@ if (typeof window !== 'undefined') {
     window._favListCache = null;
     window._userFavIds = new Set();
 
-    // Lấy danh sách khách từ sessionStorage (tắt web là mất)
+    // Lấy danh sách khách từ localStorage (tồn tại sau khi tải lại trang)
     window.getGuestFavorites = () => {
         try {
-            return JSON.parse(sessionStorage.getItem('guest_favorites') || '[]');
+            return JSON.parse(localStorage.getItem('guest_favorites') || sessionStorage.getItem('guest_favorites') || '[]');
         } catch (e) {
             return [];
         }
@@ -271,7 +271,7 @@ if (typeof window !== 'undefined') {
 
     window.setGuestFavorites = (list) => {
         try {
-            sessionStorage.setItem('guest_favorites', JSON.stringify(list || []));
+            localStorage.setItem('guest_favorites', JSON.stringify(list || []));
         } catch (e) {}
     };
 
@@ -380,9 +380,9 @@ if (typeof window !== 'undefined') {
                 `;
             } else {
                 hintEl.innerHTML = `
-                    <span class="text-amber-800 font-bold flex items-center gap-1.5" title="Dữ liệu lưu tạm trên phiên trình duyệt, khi tắt web sẽ mất">
+                    <span class="text-amber-800 font-bold flex items-center gap-1.5" title="Dữ liệu lưu tạm trên trình duyệt hiện tại bằng localStorage">
                         <i class="fa-solid fa-clock-rotate-left text-amber-600"></i>
-                        <span>Phiên tạm thời (Tắt web là mất)</span>
+                        <span>Lưu tạm trên trình duyệt (Chưa đăng nhập)</span>
                     </span>
                 `;
             }
@@ -564,7 +564,7 @@ if (typeof window !== 'undefined') {
                 return false;
             }
         } else {
-            // Khách chưa đăng nhập: lưu vào sessionStorage (tắt web là mất)
+            // Khách chưa đăng nhập: lưu vào localStorage (tồn tại khi tải lại trang)
             let guestList = window.getGuestFavorites();
             guestList = guestList.filter(item => Number(item.id_food || item.id) !== foodId);
             guestList.unshift({
@@ -578,7 +578,7 @@ if (typeof window !== 'undefined') {
             window.setGuestFavorites(guestList);
             if (window._userFavIds) window._userFavIds.add(foodId);
             if (window.Popup) {
-                window.Popup.toast(`Đã lưu "${foodName}" vào Yêu thích phiên này! (Tắt web là mất)`, 'success');
+                window.Popup.toast(`Đã lưu "${foodName}" vào Món yêu thích! ❤️`, 'success');
             }
         }
 
@@ -636,6 +636,7 @@ if (typeof window !== 'undefined') {
             window._favListCache = [];
             window._userFavIds = new Set();
         } else {
+            localStorage.removeItem('guest_favorites');
             sessionStorage.removeItem('guest_favorites');
             window._userFavIds = new Set();
         }
