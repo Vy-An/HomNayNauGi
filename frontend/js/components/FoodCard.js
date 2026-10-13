@@ -18,8 +18,8 @@ export default function FoodCard({ id, name, image, time, likes, author, descrip
                 </div>
 
                 <!-- Nút Thích -->
-                <button class="absolute top-2.5 right-2.5 bg-white/90 backdrop-blur-md rounded-full w-8.5 h-8.5 flex items-center justify-center text-gray-500 hover:text-rose-500 transition-all hover:scale-110 z-30 shadow-sm" onclick="event.preventDefault(); event.stopPropagation(); const isLiked = this.classList.contains('bg-rose-500'); if(!isLiked) { this.className = 'absolute top-2.5 right-2.5 bg-rose-500 backdrop-blur-md rounded-full w-8.5 h-8.5 flex items-center justify-center text-white transition-all hover:scale-110 z-30 shadow-sm'; this.querySelector('i').className = 'fa-solid fa-heart text-sm'; } else { this.className = 'absolute top-2.5 right-2.5 bg-white/90 backdrop-blur-md rounded-full w-8.5 h-8.5 flex items-center justify-center text-gray-500 hover:text-rose-500 transition-all hover:scale-110 z-30 shadow-sm'; this.querySelector('i').className = 'fa-regular fa-heart text-sm'; }">
-                    <i class="fa-regular fa-heart text-sm"></i>
+                <button class="btn-favorite-dish absolute top-2.5 right-2.5 ${typeof window !== 'undefined' && window.isDishFavorite && window.isDishFavorite(id) ? 'bg-rose-500 text-white' : 'bg-white/90 text-gray-500 hover:text-rose-500'} backdrop-blur-md rounded-full w-8.5 h-8.5 flex items-center justify-center transition-all hover:scale-110 z-30 shadow-sm" data-id="${id || 1}" onclick="event.preventDefault(); event.stopPropagation(); if (window.toggleFavoriteDish) window.toggleFavoriteDish({ id: ${id || 1}, name: '${(name || '').replace(/'/g, "\\'")}', image: '${(image || '').replace(/'/g, "\\'")}', time: '${time || '30 phút'}' });">
+                    <i class="${typeof window !== 'undefined' && window.isDishFavorite && window.isDishFavorite(id) ? 'fa-solid fa-heart' : 'fa-regular fa-heart'} text-sm"></i>
                 </button>
             </div>
 

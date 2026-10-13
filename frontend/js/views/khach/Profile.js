@@ -23,90 +23,6 @@ const Profile = {
     render: async () => {
         return `
         <div class="cozy-kitchen-bg text-text-main font-sans min-h-screen flex flex-col antialiased selection:bg-primary/20 selection:text-primary">
-            <header class="h-[70px] bg-white border-b border-beige-border sticky top-0 z-50 px-4 sm:px-6 lg:px-8 flex items-center justify-between gap-4 shadow-2xs">
-                <div class="flex items-center gap-3 shrink-0">
-                    <a href="#/" class="flex items-center gap-2.5 group">
-                        <div class="w-10 h-10 rounded-xl bg-accent flex items-center justify-center text-primary-deep shadow-2xs group-hover:scale-105 transition-transform">
-                            <i class="fa-solid fa-kitchen-set text-lg sm:text-xl"></i>
-                        </div>
-                        <div class="flex flex-col">
-                            <span class="text-base sm:text-lg font-black tracking-tight text-primary-deep leading-tight font-sans">Hôm Nay Nấu Gì</span>
-                            <span class="text-[9px] uppercase tracking-[0.2em] text-accent font-black leading-none">MÓN NGON MỖI NGÀY</span>
-                        </div>
-                    </a>
-                </div>
-
-                <div class="flex-1 max-w-xl mx-4 hidden sm:block">
-                    <form id="profile-top-search-form" class="relative">
-                        <span class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-text-muted">
-                            <i class="fa-solid fa-magnifying-glass text-xs"></i>
-                        </span>
-                        <input 
-                            type="search" 
-                            id="profile-top-search-input"
-                            placeholder="Tìm kiếm món ăn, công thức hoặc nguyên liệu..." 
-                            class="w-full pl-9 pr-4 py-2 bg-cream-card hover:bg-cream-soft focus:bg-white border border-beige-border focus:border-primary focus:ring-2 focus:ring-primary/15 rounded-xl text-xs sm:text-sm text-text-main placeholder:text-text-muted outline-none transition-all"
-                        >
-                    </form>
-                </div>
-
-                <div class="flex items-center gap-2.5 sm:gap-3 shrink-0">
-                    <div class="relative">
-                        <button 
-                            id="btn-profile-top-notif" 
-                            type="button" 
-                            class="w-9 h-9 rounded-xl bg-cream-card hover:bg-cream-soft text-text-muted hover:text-primary flex items-center justify-center transition-colors relative cursor-pointer border border-beige-border/80 shadow-2xs"
-                            title="Thông báo"
-                        >
-                            <i class="fa-regular fa-bell text-sm"></i>
-                            <span class="absolute top-1.5 right-1.5 w-2 h-2 rounded-full bg-rose-500"></span>
-                        </button>
-                        <div id="profile-top-notif-popover" class="hidden absolute right-0 top-full mt-2 w-72 bg-white rounded-2xl shadow-xl border border-beige-border p-3.5 z-50 text-xs">
-                            <div class="flex items-center justify-between pb-2 mb-2 border-b border-beige-border/60">
-                                <span class="font-extrabold text-text-main">Thông báo của bạn</span>
-                                <span class="text-[10px] text-text-muted">Gần đây</span>
-                            </div>
-                            <div class="py-3 text-center text-text-muted">
-                                <i class="fa-regular fa-bell-slash text-lg mb-1 block"></i>
-                                <span>Chưa có thông báo mới nào</span>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="relative">
-                        <button 
-                            id="btn-profile-top-user-menu" 
-                            type="button" 
-                            class="flex items-center gap-2 p-1 pl-1.5 pr-2.5 rounded-xl bg-cream-card hover:bg-cream-soft border border-beige-border/80 transition-colors cursor-pointer"
-                        >
-                            <img 
-                                id="header-avatar" 
-                                src="http://localhost:5000/images/users/admin.jpg" 
-                                alt="Avatar" 
-                                class="w-8 h-8 rounded-full object-cover border border-white shadow-2xs"
-                            >
-                            <span id="header-name" class="text-xs font-bold text-text-main hidden md:inline-block max-w-[110px] truncate">Người dùng</span>
-                            <i class="fa-solid fa-chevron-down text-[10px] text-text-muted"></i>
-                        </button>
-                        <div id="profile-top-user-popover" class="hidden absolute right-0 top-full mt-2 w-48 bg-white rounded-2xl shadow-xl border border-beige-border py-1.5 z-50 text-xs">
-                            <a href="#/ca-nhan" class="flex items-center gap-2.5 px-3.5 py-2 text-primary hover:bg-primary-subtle font-bold">
-                                <i class="fa-regular fa-user text-xs text-primary"></i>
-                                <span>Trang cá nhân</span>
-                            </a>
-                            <a href="#/" class="flex items-center gap-2.5 px-3.5 py-2 text-text-main hover:bg-cream-soft font-semibold">
-                                <i class="fa-solid fa-house text-xs text-text-muted"></i>
-                                <span>Trang chủ</span>
-                            </a>
-                            <div class="my-1 border-t border-beige-border/60"></div>
-                            <button id="btn-top-logout" type="button" class="w-full text-left flex items-center gap-2.5 px-3.5 py-2 text-rose-600 hover:bg-rose-50 font-semibold cursor-pointer">
-                                <i class="fa-solid fa-arrow-right-from-bracket text-xs"></i>
-                                <span>Đăng xuất</span>
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            </header>
-
             <div class="max-w-[1360px] w-full mx-auto px-4 sm:px-6 lg:px-8 pt-5 pb-3">
                 <section class="relative rounded-2xl overflow-hidden shadow-sm border border-beige-border/80 bg-gradient-to-r from-[#145A43] via-[#0F4937] to-[#0A3628] text-white">
                     <div class="absolute inset-0 bg-cover bg-center opacity-25 mix-blend-overlay" style="background-image: url('http://localhost:5000/images/foods/thit-kho-trung.jpg');"></div>
@@ -492,44 +408,10 @@ const Profile = {
             }, 3000);
         };
 
-        const topSearchForm = document.getElementById('profile-top-search-form');
-        const topSearchInput = document.getElementById('profile-top-search-input');
-        if (topSearchForm && topSearchInput) {
-            topSearchForm.addEventListener('submit', (e) => {
-                e.preventDefault();
-                const q = topSearchInput.value.trim();
-                if (q) {
-                    window.location.hash = `#/danh-sach?search=${encodeURIComponent(q)}`;
-                }
-            });
-        }
-
-        const btnNotif = document.getElementById('btn-profile-top-notif');
-        const notifPopover = document.getElementById('profile-top-notif-popover');
-        if (btnNotif && notifPopover) {
-            btnNotif.addEventListener('click', (e) => {
-                e.stopPropagation();
-                notifPopover.classList.toggle('hidden');
-                document.getElementById('profile-top-user-popover')?.classList.add('hidden');
-            });
-        }
-
-        const btnUserMenu = document.getElementById('btn-profile-top-user-menu');
-        const userPopover = document.getElementById('profile-top-user-popover');
-        if (btnUserMenu && userPopover) {
-            btnUserMenu.addEventListener('click', (e) => {
-                e.stopPropagation();
-                userPopover.classList.toggle('hidden');
-                notifPopover?.classList.add('hidden');
-            });
-        }
-
-        document.addEventListener('click', () => {
-            notifPopover?.classList.add('hidden');
-            userPopover?.classList.add('hidden');
-        });
-
         const handleLogout = async () => {
+            if (window.logoutAuth) {
+                return window.logoutAuth();
+            }
             if (window.Popup) {
                 const confirmed = await window.Popup.confirm({
                     title: 'Đăng xuất tài khoản',
@@ -550,7 +432,6 @@ const Profile = {
             }
         };
 
-        document.getElementById('btn-top-logout')?.addEventListener('click', handleLogout);
         document.getElementById('sidebar-btn-logout')?.addEventListener('click', handleLogout);
 
         document.getElementById('sidebar-btn-notifs')?.addEventListener('click', () => {
@@ -667,14 +548,14 @@ const Profile = {
             const heroAvatar = document.getElementById('profile-hero-avatar');
             const heroJoined = document.getElementById('profile-hero-joined');
             const heroBadge = document.getElementById('profile-hero-badge');
-            const headerAvatar = document.getElementById('header-avatar');
-            const headerName = document.getElementById('header-name');
+            const navAvatar = document.getElementById('nav-user-avatar');
+            const navName = document.getElementById('nav-user-name');
 
             if (heroName) heroName.textContent = user.name || 'Người dùng';
             if (heroEmail) heroEmail.textContent = user.email || '';
             if (heroAvatar) heroAvatar.src = user.avatar || 'http://localhost:5000/images/users/admin.jpg';
-            if (headerAvatar) headerAvatar.src = user.avatar || 'http://localhost:5000/images/users/admin.jpg';
-            if (headerName) headerName.textContent = user.name || 'Tài khoản';
+            if (navAvatar) navAvatar.src = user.avatar || 'http://localhost:5000/images/users/admin.jpg';
+            if (navName) navName.textContent = user.name || 'Tài khoản';
             if (heroJoined) heroJoined.textContent = formatDate(user.created_at);
             if (heroBadge) heroBadge.textContent = user.role === 'admin' ? 'Quản trị viên' : 'Thành viên Bếp';
 
@@ -934,7 +815,7 @@ const Profile = {
                 const link = foodId ? `#/mon-an/${foodId}` : '#/danh-sach';
 
                 return `
-                    <div class="bg-white rounded-2xl border border-beige-border/90 p-3 shadow-sm hover:shadow-md transition-all flex flex-col justify-between group">
+                    <div class="bg-white rounded-2xl border border-beige-border/90 p-3 shadow-sm hover:shadow-md transition-all flex flex-col justify-between group cursor-pointer" data-fav-link="${link}">
                         <div>
                             <div class="relative rounded-xl overflow-hidden aspect-[4/3] mb-2.5 bg-gray-100 border border-beige-border/50">
                                 <img src="${food.image || 'http://localhost:5000/images/foods/thit-kho-trung.jpg'}" alt="${escapeHTML(food.name)}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">
@@ -1055,6 +936,16 @@ const Profile = {
                     if (tabBadgeFavs) tabBadgeFavs.textContent = newCount;
                     if (fullFavBadge) fullFavBadge.textContent = `${newCount} món`;
 
+                    if (window._favListCache) {
+                        window._favListCache = window._favListCache.filter(item => Number(item.id_food || item.id) !== Number(foodId));
+                    }
+                    if (window._userFavIds) {
+                        window._userFavIds.delete(Number(foodId));
+                    }
+                    if (typeof window !== 'undefined' && window.syncFavBadge) {
+                        window.syncFavBadge();
+                    }
+
                     showToast(`Đã bỏ lưu "${foodName}" khỏi danh sách yêu thích.`, 'info');
                 } else {
                     showToast(res?.message || 'Không thể bỏ yêu thích món ăn.', 'error');
@@ -1086,6 +977,13 @@ const Profile = {
                     const foodName = btn.getAttribute('data-name') || 'Món ăn';
                     btn.disabled = true;
                     handleRemoveFavorite(foodId, foodName);
+                    return;
+                }
+
+                const card = e.target.closest('[data-fav-link]');
+                if (card) {
+                    const link = card.getAttribute('data-fav-link');
+                    if (link) window.location.hash = link;
                 }
             });
         }
