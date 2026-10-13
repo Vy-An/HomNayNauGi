@@ -45,22 +45,22 @@ export default function Navbar() {
         <!-- Overlay for Cart / Favorite Drawer -->
         <div id="nav-drawer-overlay" onclick="window.closeNavDrawers && window.closeNavDrawers()" class="fixed inset-0 bg-black/50 z-[65] hidden transition-opacity backdrop-blur-xs"></div>
 
-        <header class="bg-[#0F4937] text-white sticky top-0 z-50 shadow-sm border-b border-white/10">
-            <div class="max-w-[1360px] mx-auto px-4 sm:px-6 lg:px-8 h-16 sm:h-[68px] flex items-center justify-between gap-4">
+        <header class="bg-[#0F4937] text-white sticky top-0 z-50 shadow-sm border-b border-white/10 overflow-x-clip">
+            <div class="max-w-[1360px] mx-auto px-2 sm:px-4 lg:px-8 h-16 sm:h-[68px] flex items-center justify-between gap-1 sm:gap-2 lg:gap-4">
                 
                 <!-- Logo -->
-                <a href="#/" class="flex items-center gap-2.5 group shrink-0">
-                    <div class="w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-[#F4A62A] flex items-center justify-center text-[#0F4937] shadow-sm group-hover:scale-105 transition-transform">
-                        <i class="fa-solid fa-kitchen-set text-lg sm:text-xl"></i>
+                <a href="#/" class="flex items-center gap-1 sm:gap-2 group shrink-0">
+                    <div class="w-6.5 h-6.5 sm:w-10 sm:h-10 rounded-xl bg-[#F4A62A] flex items-center justify-center text-[#0F4937] shadow-sm group-hover:scale-105 transition-transform">
+                        <i class="fa-solid fa-kitchen-set text-xs sm:text-xl"></i>
                     </div>
                     <div class="flex flex-col">
-                        <span class="text-lg sm:text-xl font-black tracking-tight text-white leading-tight font-sans">Hôm Nay Nấu Gì?</span>
-                        <span class="text-[9px] uppercase tracking-[0.2em] text-[#F4A62A] font-black leading-none">MÓN NGON MỖI NGÀY</span>
+                        <span class="text-xs sm:text-base lg:text-xl font-black tracking-tight text-white leading-tight font-sans">Hôm Nay Nấu Gì?</span>
+                        <span class="text-[8px] sm:text-[9px] uppercase tracking-[0.15em] sm:tracking-[0.2em] text-[#F4A62A] font-black leading-none hidden min-[400px]:block">MÓN NGON MỖI NGÀY</span>
                     </div>
                 </a>
                 
                 <!-- Center Navigation -->
-                <nav class="hidden md:flex items-center gap-6 lg:gap-8 text-sm">
+                <nav class="hidden md:flex items-center gap-3 lg:gap-8 text-xs lg:text-sm">
                     <a href="#/" class="${getLinkClass(isHome)}">Trang chủ</a>
                     <a href="#/danh-sach" class="${getLinkClass(isList)}">Danh sách món ăn</a>
                     <a href="#/cong-dong" class="${getLinkClass(isCommunity)}">Cộng đồng</a>
@@ -68,23 +68,23 @@ export default function Navbar() {
                 </nav>
 
                 <!-- Right Action Icons & Auth -->
-                <div class="flex items-center gap-2 sm:gap-3">
+                <div class="flex items-center gap-1 sm:gap-2 lg:gap-3 shrink-0">
                     <!-- Quick Search Button -->
-                    <button onclick="document.getElementById('nav-search-bar').classList.toggle('hidden'); document.getElementById('nav-search-input')?.focus();" class="w-8.5 h-8.5 rounded-full bg-white/10 hover:bg-white/20 text-white flex items-center justify-center transition-all hover:text-[#F4A62A] cursor-pointer" title="Tìm kiếm món">
-                        <i class="fa-solid fa-magnifying-glass text-xs sm:text-sm"></i>
+                    <button onclick="document.getElementById('nav-search-bar').classList.toggle('hidden'); document.getElementById('nav-search-input')?.focus();" class="w-7 h-7 sm:w-8.5 sm:h-8.5 rounded-full bg-white/10 hover:bg-white/20 text-white flex items-center justify-center transition-all hover:text-[#F4A62A] cursor-pointer" title="Tìm kiếm món">
+                        <i class="fa-solid fa-magnifying-glass text-[11px] sm:text-sm"></i>
                     </button>
 
                     <!-- Favorites Heart Button -->
-                    <button onclick="window.openFavoritesDrawer && window.openFavoritesDrawer()" class="w-8.5 h-8.5 rounded-full bg-white/10 hover:bg-white/20 text-white flex items-center justify-center transition-all hover:text-rose-400 relative cursor-pointer" title="Món yêu thích">
-                        <i class="fa-solid fa-heart text-xs sm:text-sm"></i>
-                        <span id="nav-fav-badge" class="hidden absolute -top-1 -right-1 bg-rose-500 text-white text-[10px] font-black w-4.5 h-4.5 rounded-full flex items-center justify-center shadow-sm ring-2 ring-[#0F4937] animate-pulse">0</span>
+                    <button onclick="window.openFavoritesDrawer && window.openFavoritesDrawer()" class="w-7 h-7 sm:w-8.5 sm:h-8.5 rounded-full bg-white/10 hover:bg-white/20 text-white flex items-center justify-center transition-all hover:text-rose-400 relative cursor-pointer" title="Món yêu thích">
+                        <i class="fa-solid fa-heart text-[11px] sm:text-sm"></i>
+                        <span id="nav-fav-badge" class="hidden absolute -top-1 -right-1 bg-rose-500 text-white text-[9px] sm:text-[10px] font-black w-4 h-4 sm:w-4.5 sm:h-4.5 rounded-full flex items-center justify-center shadow-sm ring-2 ring-[#0F4937] animate-pulse">0</span>
                     </button>
 
                     <!-- Won Dishes / Random Cart Basket -->
                     <div class="relative">
-                        <button onclick="window.toggleWonDishesPopover && window.toggleWonDishesPopover()" class="w-8.5 h-8.5 rounded-full bg-white/10 hover:bg-white/20 text-white flex items-center justify-center transition-all hover:text-[#F4A62A] relative cursor-pointer" title="Mâm cơm đã quay">
-                            <i class="fa-solid fa-basket-shopping text-xs sm:text-sm"></i>
-                            <span id="nav-won-badge" class="${wonCount > 0 ? '' : 'hidden'} absolute -top-1 -right-1 bg-[#F4A62A] text-[#0F4937] text-[10px] font-black w-4.5 h-4.5 rounded-full flex items-center justify-center shadow-sm ring-2 ring-[#0F4937] animate-pulse">
+                        <button onclick="window.toggleWonDishesPopover && window.toggleWonDishesPopover()" class="w-7 h-7 sm:w-8.5 sm:h-8.5 rounded-full bg-white/10 hover:bg-white/20 text-white flex items-center justify-center transition-all hover:text-[#F4A62A] relative cursor-pointer" title="Mâm cơm đã quay">
+                            <i class="fa-solid fa-basket-shopping text-[11px] sm:text-sm"></i>
+                            <span id="nav-won-badge" class="${wonCount > 0 ? '' : 'hidden'} absolute -top-1 -right-1 bg-[#F4A62A] text-[#0F4937] text-[9px] sm:text-[10px] font-black w-4 h-4 sm:w-4.5 sm:h-4.5 rounded-full flex items-center justify-center shadow-sm ring-2 ring-[#0F4937] animate-pulse">
                                 ${wonCount}
                             </span>
                         </button>
@@ -109,15 +109,15 @@ export default function Navbar() {
                     </div>
 
                     <!-- Notification Button -->
-                    <button onclick="window.Popup ? window.Popup.info('Bạn chưa có thông báo mới.', 'Thông báo hệ thống') : alert('Bạn chưa có thông báo mới.')" class="w-8.5 h-8.5 rounded-full bg-white/10 hover:bg-white/20 text-white flex items-center justify-center transition-all hover:text-amber-300 cursor-pointer hidden sm:flex" title="Thông báo">
+                    <button onclick="window.Popup ? window.Popup.info('Bạn chưa có thông báo mới.', 'Thông báo hệ thống') : alert('Bạn chưa có thông báo mới.')" class="w-8.5 h-8.5 rounded-full bg-white/10 hover:bg-white/20 text-white flex items-center justify-center transition-all hover:text-amber-300 cursor-pointer hidden lg:flex" title="Thông báo">
                         <i class="fa-solid fa-bell text-xs sm:text-sm"></i>
                     </button>
 
                     <!-- Divider -->
-                    <div class="h-5 w-px bg-white/20 mx-0.5 hidden sm:block"></div>
+                    <div class="h-5 w-px bg-white/20 mx-0.5 hidden lg:block"></div>
 
                     <!-- Auth Links -->
-                    <div class="flex items-center gap-2">
+                    <div class="flex items-center gap-1 sm:gap-2">
                         ${isLoggedIn ? `
                             <div class="relative group/user py-2">
                                 <!-- User Trigger Pill -->
@@ -191,8 +191,8 @@ export default function Navbar() {
                                 </div>
                             </div>
                         ` : `
-                            <a href="#/login" class="text-white/85 hover:text-white font-bold text-xs sm:text-sm px-2 py-1 rounded-lg hover:bg-white/10 transition">Đăng nhập</a>
-                            <a href="#/login?mode=register" class="px-3 sm:px-4 py-1.5 bg-[#F4A62A] hover:bg-[#E59516] text-[#0F4937] font-black rounded-full text-xs sm:text-sm shadow-sm transition-all hover:scale-105 active:scale-95">Đăng ký</a>
+                            <a href="#/login" class="text-white/85 hover:text-white font-bold text-[11px] sm:text-xs lg:text-sm px-1.5 sm:px-2 py-1 rounded-lg hover:bg-white/10 transition whitespace-nowrap">Đăng nhập</a>
+                            <a href="#/login?mode=register" class="px-2.5 sm:px-3 lg:px-4 py-1 sm:py-1.5 bg-[#F4A62A] hover:bg-[#E59516] text-[#0F4937] font-black rounded-full text-xs lg:text-sm shadow-sm transition-all hover:scale-105 active:scale-95 whitespace-nowrap hidden sm:inline-flex">Đăng ký</a>
                         `}
                     </div>
                 </div>
@@ -210,7 +210,7 @@ export default function Navbar() {
             </div>
         </header>
 
-        <div id="nav-fav-modal" class="fixed inset-y-0 right-0 w-[85vw] sm:w-96 bg-white shadow-2xl z-[70] transform translate-x-full invisible pointer-events-none transition-transform duration-300 ease-in-out flex flex-col border-l border-gray-200">
+        <div id="nav-fav-modal" class="fixed inset-y-0 right-0 w-[85vw] sm:w-96 bg-white shadow-2xl z-[70] transform translate-x-full invisible pointer-events-none hidden transition-transform duration-300 ease-in-out flex flex-col border-l border-gray-200">
             <div class="p-4 border-b border-gray-100 flex items-center justify-between bg-[#0F4937] text-white">
                 <div class="flex items-center gap-2">
                     <h3 class="text-base font-bold flex items-center gap-2"><i class="fa-solid fa-heart text-[#F4A62A]"></i> Món yêu thích</h3>
@@ -706,7 +706,7 @@ if (typeof window !== 'undefined') {
             favModal.classList.add('translate-x-full');
             setTimeout(() => {
                 if (favModal.classList.contains('translate-x-full')) {
-                    favModal.classList.add('invisible', 'pointer-events-none');
+                    favModal.classList.add('invisible', 'pointer-events-none', 'hidden');
                 }
             }, 300);
         }
@@ -718,7 +718,10 @@ if (typeof window !== 'undefined') {
         const favModal = document.getElementById('nav-fav-modal');
         if (overlay) overlay.classList.remove('hidden');
         if (favModal) {
-            favModal.classList.remove('invisible', 'pointer-events-none', 'translate-x-full');
+            favModal.classList.remove('hidden');
+            requestAnimationFrame(() => {
+                favModal.classList.remove('invisible', 'pointer-events-none', 'translate-x-full');
+            });
             window.renderFavoritesList();
         }
         if (window.loadNavbarFavorites) {
