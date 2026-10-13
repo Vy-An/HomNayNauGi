@@ -1373,13 +1373,18 @@ async function getReports(req, res) {
         const skip = (page - 1) * limit;
         const search = String(req.query.search || '').trim();
         const status = String(req.query.status || '').trim().toLowerCase();
+        const targetType = String(req.query.target_type || '').trim().toLowerCase();
 
-        const where = {
-            target_type: 'post'
-        };
+        const where = {};
+
+        if (['post', 'comment'].includes(targetType)) {
+            where.target_type = targetType;
+        }
 
         if (['pending', 'resolved', 'rejected'].includes(status)) {
             where.status = status;
+        } else if (status === 'handled') {
+            where.status = { in: ['resolved', 'rejected'] };
         }
 
         if (search) {
@@ -1390,9 +1395,12 @@ async function getReports(req, res) {
             ];
         }
 
-        const [total, pendingTotal, reports] = await Promise.all([
+        const [total, pendingTotal, resolvedTotal, rejectedTotal, allTotal, reports] = await Promise.all([
             prisma.reports.count({ where }),
-            prisma.reports.count({ where: { target_type: 'post', status: 'pending' } }),
+            prisma.reports.count({ where: { status: 'pending' } }),
+            prisma.reports.count({ where: { status: 'resolved' } }),
+            prisma.reports.count({ where: { status: 'rejected' } }),
+            prisma.reports.count(),
             prisma.reports.findMany({
                 where,
                 skip,
@@ -1411,9 +1419,12 @@ async function getReports(req, res) {
             })
         ]);
 
-        // Lấy thông tin bài viết bị báo cáo
-        const postIds = [...new Set(reports.map(r => r.target_id))];
+        // Lấy thông tin bài viết và bình luận bị báo cáo
+        const postIds = [...new Set(reports.filter(r => r.target_type === 'post').map(r => r.target_id))];
+        const commentIds = [...new Set(reports.filter(r => r.target_type === 'comment').map(r => r.target_id))];
+
         let postsMap = new Map();
+        let commentsMap = new Map();
 
         if (postIds.length > 0) {
             const targetPosts = await prisma.posts.findMany({
@@ -1439,8 +1450,33 @@ async function getReports(req, res) {
             targetPosts.forEach(p => postsMap.set(p.id_post, p));
         }
 
+        if (commentIds.length > 0) {
+            const targetComments = await prisma.comments.findMany({
+                where: { id_comment: { in: commentIds } },
+                include: {
+                    users: {
+                        select: {
+                            id_user: true,
+                            name: true,
+                            email: true,
+                            avatar: true
+                        }
+                    },
+                    posts: {
+                        select: {
+                            id_post: true,
+                            title: true
+                        }
+                    }
+                }
+            });
+
+            targetComments.forEach(c => commentsMap.set(c.id_comment, c));
+        }
+
         const formattedReports = reports.map(r => {
-            const targetPost = postsMap.get(r.target_id);
+            const targetPost = r.target_type === 'post' ? postsMap.get(r.target_id) : null;
+            const targetComment = r.target_type === 'comment' ? commentsMap.get(r.target_id) : null;
 
             return {
                 id_report: r.id_report,
@@ -1464,6 +1500,7 @@ async function getReports(req, res) {
                     content: targetPost.content,
                     image: resolveAssetUrl(targetPost.image),
                     status: targetPost.status,
+                    hidden_reason: targetPost.hidden_reason,
                     likes_count: targetPost._count?.post_likes || 0,
                     comments_count: targetPost._count?.comments || 0,
                     author: {
@@ -1471,6 +1508,20 @@ async function getReports(req, res) {
                         name: targetPost.users?.name || 'Tác giả',
                         email: targetPost.users?.email,
                         avatar: resolveAssetUrl(targetPost.users?.avatar || '/images/users/default.png')
+                    }
+                } : null,
+                comment: targetComment ? {
+                    id_comment: targetComment.id_comment,
+                    id_post: targetComment.id_post,
+                    post_title: targetComment.posts?.title || `Bài viết #${targetComment.id_post}`,
+                    content: targetComment.content,
+                    status: targetComment.status,
+                    created_at: targetComment.created_at,
+                    author: {
+                        id_user: targetComment.users?.id_user,
+                        name: targetComment.users?.name || 'Tác giả bình luận',
+                        email: targetComment.users?.email,
+                        avatar: resolveAssetUrl(targetComment.users?.avatar || '/images/users/default.png')
                     }
                 } : null
             };
@@ -1484,7 +1535,10 @@ async function getReports(req, res) {
                 limit,
                 total,
                 totalPages: Math.ceil(total / limit) || 1,
-                pendingTotal
+                pendingTotal,
+                resolvedTotal,
+                rejectedTotal,
+                allTotal
             }
         });
     } catch (error) {
@@ -1499,7 +1553,7 @@ async function getReports(req, res) {
 async function updateReportStatus(req, res) {
     try {
         const id = parsePositiveInt(req.params.id);
-        const { status } = req.body || {};
+        const { status, action, reason } = req.body || {};
 
         if (!id || !['pending', 'resolved', 'rejected'].includes(status)) {
             return res.status(400).json({
@@ -1508,9 +1562,56 @@ async function updateReportStatus(req, res) {
             });
         }
 
+        const report = await prisma.reports.findUnique({
+            where: { id_report: id }
+        });
+
+        if (!report) {
+            return res.status(404).json({
+                success: false,
+                message: 'Không tìm thấy báo cáo vi phạm.'
+            });
+        }
+
+        // Tùy chọn ẩn hoặc khôi phục nội dung bị báo cáo
+        if (action === 'hide') {
+            if (report.target_type === 'post') {
+                await prisma.posts.update({
+                    where: { id_post: report.target_id },
+                    data: {
+                        status: 'hidden',
+                        hidden_reason: reason || `Bị ẩn do vi phạm báo cáo #${id} (${report.reason})`
+                    }
+                });
+            } else if (report.target_type === 'comment') {
+                await prisma.comments.update({
+                    where: { id_comment: report.target_id },
+                    data: { status: 'hidden' }
+                });
+            }
+        } else if (action === 'restore') {
+            if (report.target_type === 'post') {
+                await prisma.posts.update({
+                    where: { id_post: report.target_id },
+                    data: {
+                        status: 'active',
+                        hidden_reason: null
+                    }
+                });
+            } else if (report.target_type === 'comment') {
+                await prisma.comments.update({
+                    where: { id_comment: report.target_id },
+                    data: { status: 'active' }
+                });
+            }
+        }
+
         const updated = await prisma.reports.update({
             where: { id_report: id },
-            data: { status }
+            data: {
+                status,
+                updated_at: new Date()
+            }
         });
 
         const statusLabel = status === 'resolved' ? 'Đã giải quyết' : (status === 'rejected' ? 'Bỏ qua vi phạm' : 'Đang chờ xử lý');
@@ -1521,7 +1622,41 @@ async function updateReportStatus(req, res) {
             data: updated
         });
     } catch (error) {
+        console.error('updateReportStatus error:', error);
         return res.status(500).json({ success: false, message: 'Không thể cập nhật báo cáo vi phạm.' });
+    }
+}
+
+async function updateCommentStatus(req, res) {
+    try {
+        const id = parsePositiveInt(req.params.id);
+        const { status } = req.body || {};
+
+        if (!id || !['active', 'hidden'].includes(status)) {
+            return res.status(400).json({
+                success: false,
+                message: 'Trạng thái bình luận không hợp lệ. Chấp nhận: active, hidden.'
+            });
+        }
+
+        const updated = await prisma.comments.update({
+            where: { id_comment: id },
+            data: {
+                status,
+                updated_at: new Date()
+            }
+        });
+
+        const statusLabel = status === 'hidden' ? 'Đã ẩn bình luận' : 'Hiển thị bình luận';
+
+        return res.json({
+            success: true,
+            message: `Đã cập nhật: ${statusLabel}.`,
+            data: updated
+        });
+    } catch (error) {
+        console.error('updateCommentStatus error:', error);
+        return res.status(500).json({ success: false, message: 'Không thể cập nhật trạng thái bình luận.' });
     }
 }
 
@@ -1542,6 +1677,7 @@ module.exports = {
     updatePostStatus,
     deletePost,
     getReports,
-    updateReportStatus
+    updateReportStatus,
+    updateCommentStatus
 };
 
