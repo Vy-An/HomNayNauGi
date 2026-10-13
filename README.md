@@ -158,6 +158,7 @@ http://localhost:3000/#/
 | PATCH  | <nobr>`http://localhost:5000/api/auth/me`</nobr> | Cập nhật thông tin cá nhân (tên, số điện thoại, bio, avatar), cần đăng nhập |
 | GET    | <nobr>`http://localhost:5000/api/auth/me/posts`</nobr> | Lấy danh sách bài viết của tôi (kèm trạng thái: pending, active, hidden & lý do ẩn), cần đăng nhập |
 | GET    | <nobr>`http://localhost:5000/api/auth/me/favorites`</nobr> | Lấy danh sách món ăn yêu thích của tôi, cần đăng nhập |
+| POST   | <nobr>`http://localhost:5000/api/auth/me/favorites/1`</nobr> | Thêm món ăn vào danh sách yêu thích của tôi, cần đăng nhập |
 | DELETE | <nobr>`http://localhost:5000/api/auth/me/favorites/1`</nobr> | Xóa món ăn khỏi danh sách yêu thích, cần đăng nhập |
 
 ### Random món ăn
@@ -197,6 +198,7 @@ http://localhost:3000/#/
 | GET    | <nobr>`http://localhost:5000/api/posts/1`</nobr> | Xem chi tiết bài viết |
 | POST   | <nobr>`http://localhost:5000/api/posts`</nobr> | Đăng bài viết (trạng thái ban đầu `pending` chờ kiểm duyệt), cần đăng nhập |
 | POST   | <nobr>`http://localhost:5000/api/posts/1/like`</nobr> | Thả tim hoặc bỏ tim bài viết, cần đăng nhập |
+| POST   | <nobr>`http://localhost:5000/api/posts/1/report`</nobr> | Báo cáo vi phạm bài viết (kèm `reason`, `description`), cần đăng nhập |
 
 ### Bình luận
 
@@ -206,6 +208,7 @@ http://localhost:3000/#/
 | POST   | <nobr>`http://localhost:5000/api/posts/1/comments`</nobr> | Thêm bình luận, cần đăng nhập |
 | PATCH  | <nobr>`http://localhost:5000/api/comments/1`</nobr> | Sửa bình luận, cần đăng nhập |
 | DELETE | <nobr>`http://localhost:5000/api/comments/1`</nobr> | Ẩn/xóa mềm bình luận, cần đăng nhập |
+| POST   | <nobr>`http://localhost:5000/api/comments/1/report`</nobr> | Báo cáo vi phạm bình luận (kèm `reason`, `description`), cần đăng nhập |
 
 ### Admin
 
@@ -232,6 +235,7 @@ http://localhost:3000/#/
 | DELETE | <nobr>`http://localhost:5000/api/admin/posts/1`</nobr> | Xóa bài viết vĩnh viễn (xóa kèm các báo cáo, bình luận, lượt thích liên quan) |
 | GET    | <nobr>`http://localhost:5000/api/admin/reports?status=pending&page=1&limit=10`</nobr> | Lấy danh sách báo cáo vi phạm cộng đồng (lọc `status`: `pending`, `resolved`, `rejected`) |
 | PATCH  | <nobr>`http://localhost:5000/api/admin/reports/1/status`</nobr> | Cập nhật trạng thái xử lý báo cáo vi phạm (`resolved`, `rejected`, `pending`) |
+| PATCH  | <nobr>`http://localhost:5000/api/admin/comments/1/status`</nobr> | Cập nhật trạng thái bình luận (`active`, `hidden`), ẩn hoặc khôi phục bình luận vi phạm |
 
 ### Ảnh tĩnh từ backend
 
