@@ -94,26 +94,54 @@ function renderDashboardPage() {
         <div id="admin-dashboard-alert" class="hidden mb-4 rounded-xl border px-4 py-3 text-sm font-semibold"></div>
 
         <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6 mb-8">
-            <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 border-l-4 border-l-primary">
-                <p class="text-text-muted text-sm font-semibold mb-1">Tổng món ăn</p>
-                <h3 id="admin-dashboard-foods-total" class="text-3xl font-bold text-text-main">0</h3>
+            <a href="#/admin/foods" class="group block bg-white p-6 rounded-2xl shadow-sm border border-gray-100 border-l-4 border-l-primary hover:shadow-md hover:-translate-y-1 transition duration-200 cursor-pointer">
+                <div class="flex items-center justify-between">
+                    <p class="text-text-muted text-sm font-semibold">Tổng món ăn</p>
+                    <i class="fa-solid fa-arrow-right text-xs text-gray-300 group-hover:text-primary group-hover:translate-x-1 transition"></i>
+                </div>
+                <h3 id="admin-dashboard-foods-total" class="text-3xl font-bold text-text-main mt-1">0</h3>
                 <p id="admin-dashboard-foods-sub" class="text-xs text-text-muted mt-2">Đang tải...</p>
-            </div>
-            <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 border-l-4 border-l-blue-500">
-                <p class="text-text-muted text-sm font-semibold mb-1">Người dùng</p>
-                <h3 id="admin-dashboard-users-total" class="text-3xl font-bold text-text-main">0</h3>
+                <div class="mt-4 pt-3 border-t border-gray-100 flex items-center justify-between text-xs text-primary font-bold">
+                    <span>Mở danh sách món</span>
+                    <i class="fa-solid fa-chevron-right text-[10px]"></i>
+                </div>
+            </a>
+            <a href="#/admin/users" class="group block bg-white p-6 rounded-2xl shadow-sm border border-gray-100 border-l-4 border-l-blue-500 hover:shadow-md hover:-translate-y-1 transition duration-200 cursor-pointer">
+                <div class="flex items-center justify-between">
+                    <p class="text-text-muted text-sm font-semibold">Người dùng</p>
+                    <i class="fa-solid fa-arrow-right text-xs text-gray-300 group-hover:text-blue-500 group-hover:translate-x-1 transition"></i>
+                </div>
+                <h3 id="admin-dashboard-users-total" class="text-3xl font-bold text-text-main mt-1">0</h3>
                 <p id="admin-dashboard-users-sub" class="text-xs text-text-muted mt-2">Đang tải...</p>
-            </div>
-            <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 border-l-4 border-l-accent">
-                <p class="text-text-muted text-sm font-semibold mb-1">Bài viết cộng đồng</p>
-                <h3 id="admin-dashboard-posts-total" class="text-3xl font-bold text-text-main">0</h3>
+                <div class="mt-4 pt-3 border-t border-gray-100 flex items-center justify-between text-xs text-blue-600 font-bold">
+                    <span>Mở quản lý người dùng</span>
+                    <i class="fa-solid fa-chevron-right text-[10px]"></i>
+                </div>
+            </a>
+            <a href="#/admin/community" class="group block bg-white p-6 rounded-2xl shadow-sm border border-gray-100 border-l-4 border-l-accent hover:shadow-md hover:-translate-y-1 transition duration-200 cursor-pointer">
+                <div class="flex items-center justify-between">
+                    <p class="text-text-muted text-sm font-semibold">Kiểm duyệt bài viết</p>
+                    <i class="fa-solid fa-arrow-right text-xs text-gray-300 group-hover:text-accent group-hover:translate-x-1 transition"></i>
+                </div>
+                <h3 id="admin-dashboard-posts-total" class="text-3xl font-bold text-text-main mt-1">0</h3>
                 <p id="admin-dashboard-posts-sub" class="text-xs text-text-muted mt-2">Đang tải...</p>
-            </div>
-            <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 border-l-4 border-l-red-500">
-                <p class="text-text-muted text-sm font-semibold mb-1">Báo cáo vi phạm</p>
-                <h3 id="admin-dashboard-reports-total" class="text-3xl font-bold text-text-main">0</h3>
+                <div class="mt-4 pt-3 border-t border-gray-100 flex items-center justify-between text-xs text-accent font-bold">
+                    <span>Mở kiểm duyệt bài viết</span>
+                    <i class="fa-solid fa-chevron-right text-[10px]"></i>
+                </div>
+            </a>
+            <a href="#/admin/reports" class="group block bg-white p-6 rounded-2xl shadow-sm border border-gray-100 border-l-4 border-l-red-500 hover:shadow-md hover:-translate-y-1 transition duration-200 cursor-pointer">
+                <div class="flex items-center justify-between">
+                    <p class="text-text-muted text-sm font-semibold">Báo cáo vi phạm</p>
+                    <i class="fa-solid fa-arrow-right text-xs text-gray-300 group-hover:text-red-500 group-hover:translate-x-1 transition"></i>
+                </div>
+                <h3 id="admin-dashboard-reports-total" class="text-3xl font-bold text-text-main mt-1">0</h3>
                 <p id="admin-dashboard-reports-sub" class="text-xs text-text-muted mt-2">Đang tải...</p>
-            </div>
+                <div class="mt-4 pt-3 border-t border-gray-100 flex items-center justify-between text-xs text-red-600 font-bold">
+                    <span>Xem danh sách vi phạm</span>
+                    <i class="fa-solid fa-chevron-right text-[10px]"></i>
+                </div>
+            </a>
         </div>
 
         <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
@@ -185,7 +213,9 @@ function updateDashboardStats(stats = {}) {
     const pendingText = Number(posts.pending) > 0 ? ` · ${formatNumber(posts.pending)} chờ duyệt` : '';
     setText('admin-dashboard-posts-sub', `${formatNumber(posts.active)} đang hiển thị · ${formatNumber(posts.hidden)} đã ẩn${pendingText}`);
     setText('admin-dashboard-reports-total', formatNumber(reports.total));
-    setText('admin-dashboard-reports-sub', `${formatNumber(reports.pending)} đang chờ xử lý`);
+    const repPending = Number(reports.pending) || 0;
+    const repResolved = Math.max(0, (Number(reports.total) || 0) - repPending);
+    setText('admin-dashboard-reports-sub', `${formatNumber(repPending)} chờ xử lý · ${formatNumber(repResolved)} đã giải quyết`);
 }
 
 function renderDashboardFoods(foods = []) {
@@ -249,22 +279,46 @@ function renderUsersPage() {
             </div>
         </header>
 
-        <div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4 mb-6">
-            <div class="bg-white rounded-2xl border border-gray-100 shadow-sm p-5">
-                <p class="text-xs font-bold uppercase tracking-wide text-text-muted">Tổng người dùng</p>
+        <div id="admin-users-stats-container" class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4 mb-6">
+            <div data-user-filter="all" class="admin-user-stat-card cursor-pointer bg-white rounded-2xl border border-gray-100 shadow-sm p-5 hover:shadow-md hover:-translate-y-0.5 transition duration-200 select-none border-l-4 border-l-slate-400 group">
+                <div class="flex items-center justify-between">
+                    <p class="text-xs font-bold uppercase tracking-wide text-text-muted group-hover:text-primary transition">Tổng người dùng</p>
+                    <i class="fa-solid fa-users text-sm text-gray-300 group-hover:text-primary transition"></i>
+                </div>
                 <strong id="admin-users-stat-total" class="block text-3xl text-text-main mt-2">0</strong>
+                <p class="text-[11px] text-text-muted mt-1 flex items-center gap-1 group-hover:text-primary transition">
+                    <span>Xem tất cả</span> <i class="fa-solid fa-arrow-right text-[10px]"></i>
+                </p>
             </div>
-            <div class="bg-white rounded-2xl border border-gray-100 shadow-sm p-5">
-                <p class="text-xs font-bold uppercase tracking-wide text-text-muted">Hoạt động</p>
+            <div data-user-filter="active" class="admin-user-stat-card cursor-pointer bg-white rounded-2xl border border-gray-100 shadow-sm p-5 hover:shadow-md hover:-translate-y-0.5 transition duration-200 select-none border-l-4 border-l-green-500 group">
+                <div class="flex items-center justify-between">
+                    <p class="text-xs font-bold uppercase tracking-wide text-text-muted group-hover:text-green-600 transition">Hoạt động</p>
+                    <i class="fa-solid fa-user-check text-sm text-green-300 group-hover:text-green-600 transition"></i>
+                </div>
                 <strong id="admin-users-stat-active" class="block text-3xl text-green-700 mt-2">0</strong>
+                <p class="text-[11px] text-text-muted mt-1 flex items-center gap-1 group-hover:text-green-600 transition">
+                    <span>Lọc tài khoản hoạt động</span> <i class="fa-solid fa-arrow-right text-[10px]"></i>
+                </p>
             </div>
-            <div class="bg-white rounded-2xl border border-gray-100 shadow-sm p-5">
-                <p class="text-xs font-bold uppercase tracking-wide text-text-muted">Đã khóa</p>
+            <div data-user-filter="blocked" class="admin-user-stat-card cursor-pointer bg-white rounded-2xl border border-gray-100 shadow-sm p-5 hover:shadow-md hover:-translate-y-0.5 transition duration-200 select-none border-l-4 border-l-red-500 group">
+                <div class="flex items-center justify-between">
+                    <p class="text-xs font-bold uppercase tracking-wide text-text-muted group-hover:text-red-600 transition">Đã khóa</p>
+                    <i class="fa-solid fa-user-slash text-sm text-red-300 group-hover:text-red-600 transition"></i>
+                </div>
                 <strong id="admin-users-stat-blocked" class="block text-3xl text-red-700 mt-2">0</strong>
+                <p class="text-[11px] text-text-muted mt-1 flex items-center gap-1 group-hover:text-red-600 transition">
+                    <span>Lọc tài khoản bị khóa</span> <i class="fa-solid fa-arrow-right text-[10px]"></i>
+                </p>
             </div>
-            <div class="bg-white rounded-2xl border border-gray-100 shadow-sm p-5">
-                <p class="text-xs font-bold uppercase tracking-wide text-text-muted">Quản trị viên</p>
+            <div data-user-filter="admin" class="admin-user-stat-card cursor-pointer bg-white rounded-2xl border border-gray-100 shadow-sm p-5 hover:shadow-md hover:-translate-y-0.5 transition duration-200 select-none border-l-4 border-l-purple-500 group">
+                <div class="flex items-center justify-between">
+                    <p class="text-xs font-bold uppercase tracking-wide text-text-muted group-hover:text-purple-600 transition">Quản trị viên</p>
+                    <i class="fa-solid fa-user-shield text-sm text-purple-300 group-hover:text-purple-600 transition"></i>
+                </div>
                 <strong id="admin-users-stat-admins" class="block text-3xl text-purple-700 mt-2">0</strong>
+                <p class="text-[11px] text-text-muted mt-1 flex items-center gap-1 group-hover:text-purple-600 transition">
+                    <span>Lọc vai trò Admin</span> <i class="fa-solid fa-arrow-right text-[10px]"></i>
+                </p>
             </div>
         </div>
 
@@ -491,6 +545,41 @@ function updateUsersPagination(pagination = {}) {
     if (next) next.disabled = !pagination.hasMore;
 }
 
+function updateUserStatCardsUI() {
+    const cards = document.querySelectorAll('#admin-users-stats-container [data-user-filter]');
+    if (!cards.length) return;
+
+    let activeFilter = null;
+    if (adminUsersState.role === 'admin' && !adminUsersState.status) {
+        activeFilter = 'admin';
+    } else if (adminUsersState.status === 'active' && !adminUsersState.role) {
+        activeFilter = 'active';
+    } else if (adminUsersState.status === 'blocked' && !adminUsersState.role) {
+        activeFilter = 'blocked';
+    } else if (!adminUsersState.role && !adminUsersState.status) {
+        activeFilter = 'all';
+    }
+
+    cards.forEach((card) => {
+        const filter = card.dataset.userFilter;
+        const isActive = filter === activeFilter;
+
+        card.classList.remove(
+            'ring-2', 'ring-offset-2',
+            'ring-slate-400', 'ring-green-500', 'ring-red-500', 'ring-purple-500',
+            'bg-slate-50', 'bg-green-50/60', 'bg-red-50/60', 'bg-purple-50/60'
+        );
+
+        if (isActive) {
+            card.classList.add('ring-2', 'ring-offset-2');
+            if (filter === 'all') card.classList.add('ring-slate-400', 'bg-slate-50');
+            if (filter === 'active') card.classList.add('ring-green-500', 'bg-green-50/60');
+            if (filter === 'blocked') card.classList.add('ring-red-500', 'bg-red-50/60');
+            if (filter === 'admin') card.classList.add('ring-purple-500', 'bg-purple-50/60');
+        }
+    });
+}
+
 async function loadAdminUsers() {
     setUsersAlert();
     setUsersLoading();
@@ -510,6 +599,7 @@ async function loadAdminUsers() {
         adminUsersState.users = [];
         renderUsersTable([]);
         updateUsersStats();
+        updateUserStatCardsUI();
         updateUsersPagination({ page: 1, totalPages: 1, total: 0, hasMore: false });
         setUsersAlert(res.message || 'Không thể tải danh sách người dùng.', 'error');
         return;
@@ -518,6 +608,7 @@ async function loadAdminUsers() {
     adminUsersState.users = res.data || [];
     renderUsersTable(adminUsersState.users);
     updateUsersStats(res.stats);
+    updateUserStatCardsUI();
     updateUsersPagination(res.pagination);
 }
 
@@ -691,6 +782,36 @@ function bindAdminUsersEvents() {
     const prev = document.getElementById('admin-users-prev');
     const next = document.getElementById('admin-users-next');
     const form = document.getElementById('admin-user-form');
+    const statsContainer = document.getElementById('admin-users-stats-container');
+
+    // Click tương tác thẻ thống kê
+    statsContainer?.addEventListener('click', (event) => {
+        const card = event.target.closest('[data-user-filter]');
+        if (!card) return;
+
+        const filter = card.dataset.userFilter;
+        if (filter === 'all') {
+            adminUsersState.role = '';
+            adminUsersState.status = '';
+        } else if (filter === 'active') {
+            adminUsersState.role = '';
+            adminUsersState.status = 'active';
+        } else if (filter === 'blocked') {
+            adminUsersState.role = '';
+            adminUsersState.status = 'blocked';
+        } else if (filter === 'admin') {
+            adminUsersState.role = 'admin';
+            adminUsersState.status = '';
+        }
+
+        // Đồng bộ giá trị dropdown lọc
+        if (role) role.value = adminUsersState.role;
+        if (status) status.value = adminUsersState.status;
+
+        adminUsersState.page = 1;
+        updateUserStatCardsUI();
+        loadAdminUsers();
+    });
 
     let searchTimer = null;
     search?.addEventListener('input', () => {
@@ -705,12 +826,14 @@ function bindAdminUsersEvents() {
     role?.addEventListener('change', () => {
         adminUsersState.role = role.value;
         adminUsersState.page = 1;
+        updateUserStatCardsUI();
         loadAdminUsers();
     });
 
     status?.addEventListener('change', () => {
         adminUsersState.status = status.value;
         adminUsersState.page = 1;
+        updateUserStatCardsUI();
         loadAdminUsers();
     });
 
@@ -753,6 +876,7 @@ function bindAdminUsersEvents() {
 
 async function initAdminUsersPage() {
     bindAdminUsersEvents();
+    updateUserStatCardsUI();
     await loadAdminUsers();
 }
 
@@ -785,22 +909,46 @@ function renderFoodsPage() {
             </div>
         </header>
 
-        <div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4 mb-6">
-            <div class="bg-white rounded-2xl border border-gray-100 shadow-sm p-5">
-                <p class="text-xs font-bold uppercase tracking-wide text-text-muted">Tổng món ăn</p>
+        <div id="admin-foods-stats-container" class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4 mb-6">
+            <div data-food-filter="all" class="admin-food-stat-card cursor-pointer bg-white rounded-2xl border border-gray-100 shadow-sm p-5 hover:shadow-md hover:-translate-y-0.5 transition duration-200 select-none border-l-4 border-l-slate-400 group">
+                <div class="flex items-center justify-between">
+                    <p class="text-xs font-bold uppercase tracking-wide text-text-muted group-hover:text-primary transition">Tổng món ăn</p>
+                    <i class="fa-solid fa-utensils text-sm text-gray-300 group-hover:text-primary transition"></i>
+                </div>
                 <strong id="admin-foods-stat-total" class="block text-3xl text-text-main mt-2">0</strong>
+                <p class="text-[11px] text-text-muted mt-1 flex items-center gap-1 group-hover:text-primary transition">
+                    <span>Xem tất cả món</span> <i class="fa-solid fa-arrow-right text-[10px]"></i>
+                </p>
             </div>
-            <div class="bg-white rounded-2xl border border-gray-100 shadow-sm p-5">
-                <p class="text-xs font-bold uppercase tracking-wide text-text-muted">Đang hiển thị</p>
+            <div data-food-filter="active" class="admin-food-stat-card cursor-pointer bg-white rounded-2xl border border-gray-100 shadow-sm p-5 hover:shadow-md hover:-translate-y-0.5 transition duration-200 select-none border-l-4 border-l-green-500 group">
+                <div class="flex items-center justify-between">
+                    <p class="text-xs font-bold uppercase tracking-wide text-text-muted group-hover:text-green-600 transition">Đang hiển thị</p>
+                    <i class="fa-solid fa-eye text-sm text-green-300 group-hover:text-green-600 transition"></i>
+                </div>
                 <strong id="admin-foods-stat-active" class="block text-3xl text-green-700 mt-2">0</strong>
+                <p class="text-[11px] text-text-muted mt-1 flex items-center gap-1 group-hover:text-green-600 transition">
+                    <span>Lọc món đang hiển thị</span> <i class="fa-solid fa-arrow-right text-[10px]"></i>
+                </p>
             </div>
-            <div class="bg-white rounded-2xl border border-gray-100 shadow-sm p-5">
-                <p class="text-xs font-bold uppercase tracking-wide text-text-muted">Đã ẩn</p>
+            <div data-food-filter="inactive" class="admin-food-stat-card cursor-pointer bg-white rounded-2xl border border-gray-100 shadow-sm p-5 hover:shadow-md hover:-translate-y-0.5 transition duration-200 select-none border-l-4 border-l-gray-500 group">
+                <div class="flex items-center justify-between">
+                    <p class="text-xs font-bold uppercase tracking-wide text-text-muted group-hover:text-gray-700 transition">Đã ẩn</p>
+                    <i class="fa-solid fa-eye-slash text-sm text-gray-300 group-hover:text-gray-700 transition"></i>
+                </div>
                 <strong id="admin-foods-stat-inactive" class="block text-3xl text-gray-700 mt-2">0</strong>
+                <p class="text-[11px] text-text-muted mt-1 flex items-center gap-1 group-hover:text-gray-700 transition">
+                    <span>Lọc món đã ẩn</span> <i class="fa-solid fa-arrow-right text-[10px]"></i>
+                </p>
             </div>
-            <div class="bg-white rounded-2xl border border-gray-100 shadow-sm p-5">
-                <p class="text-xs font-bold uppercase tracking-wide text-text-muted">Danh mục</p>
+            <div data-food-filter="categories" class="admin-food-stat-card cursor-pointer bg-white rounded-2xl border border-gray-100 shadow-sm p-5 hover:shadow-md hover:-translate-y-0.5 transition duration-200 select-none border-l-4 border-l-amber-500 group">
+                <div class="flex items-center justify-between">
+                    <p class="text-xs font-bold uppercase tracking-wide text-text-muted group-hover:text-amber-600 transition">Danh mục</p>
+                    <i class="fa-solid fa-layer-group text-sm text-amber-300 group-hover:text-amber-600 transition"></i>
+                </div>
                 <strong id="admin-foods-stat-categories" class="block text-3xl text-amber-700 mt-2">0</strong>
+                <p id="admin-foods-category-hint" class="text-[11px] text-text-muted mt-1 flex items-center gap-1 group-hover:text-amber-600 transition">
+                    <span>Lọc theo danh mục</span> <i class="fa-solid fa-filter text-[10px]"></i>
+                </p>
             </div>
         </div>
 
@@ -927,6 +1075,31 @@ function renderFoodsPage() {
                 <div id="admin-food-detail-body" class="p-5 text-sm text-text-muted"></div>
             </div>
         </div>
+
+        <div id="admin-food-category-modal" class="fixed inset-0 bg-black/40 hidden items-center justify-center z-50 p-4">
+            <div class="bg-white rounded-2xl shadow-xl border border-gray-100 w-full max-w-md overflow-hidden animate-scaleIn">
+                <div class="p-5 border-b border-gray-100 flex items-center justify-between">
+                    <div class="flex items-center gap-2">
+                        <i class="fa-solid fa-layer-group text-amber-600 text-lg"></i>
+                        <h3 class="text-lg font-bold text-text-main">Lọc món theo danh mục</h3>
+                    </div>
+                    <button type="button" id="admin-food-category-modal-close" class="w-9 h-9 rounded-full hover:bg-gray-100 text-text-muted flex items-center justify-center">
+                        <i class="fa-solid fa-xmark"></i>
+                    </button>
+                </div>
+                <div class="p-5">
+                    <p class="text-xs text-text-muted mb-4">Nhấp vào một danh mục bên dưới để lọc danh sách món ăn ngay:</p>
+                    <div id="admin-food-category-modal-list" class="flex flex-wrap gap-2.5 max-h-72 overflow-y-auto pr-1">
+                    </div>
+                </div>
+                <div class="p-4 border-t border-gray-100 bg-gray-50 flex justify-between items-center">
+                    <button type="button" id="admin-food-category-modal-clear" class="text-xs text-text-muted hover:text-red-600 font-semibold transition">
+                        <i class="fa-solid fa-arrow-rotate-left mr-1"></i> Bỏ lọc danh mục
+                    </button>
+                    <button type="button" id="admin-food-category-modal-cancel" class="px-4 py-2 rounded-lg border border-gray-200 text-sm font-semibold hover:bg-gray-100">Đóng</button>
+                </div>
+            </div>
+        </div>
     `;
 }
 
@@ -1043,6 +1216,92 @@ function updateFoodsPagination(pagination = {}) {
     if (next) next.disabled = !pagination.hasMore;
 }
 
+function openCategoryFilterModal() {
+    const modal = document.getElementById('admin-food-category-modal');
+    const list = document.getElementById('admin-food-category-modal-list');
+    if (!modal || !list) return;
+
+    const currentCatId = String(adminFoodsState.category || '');
+
+    let html = `
+        <button type="button" data-select-category="" class="px-3.5 py-2 rounded-xl text-xs font-semibold transition cursor-pointer ${!currentCatId ? 'bg-primary text-white shadow-sm' : 'bg-gray-100 text-text-muted hover:bg-gray-200'}">
+            <i class="fa-solid fa-border-all mr-1.5"></i> Tất cả danh mục
+        </button>
+    `;
+
+    (adminFoodsState.categories || []).forEach((cat) => {
+        const isSelected = String(cat.id_category) === currentCatId;
+        const btnClass = isSelected
+            ? 'bg-amber-600 text-white font-bold ring-2 ring-amber-300 shadow-sm'
+            : 'bg-amber-50 hover:bg-amber-100 text-amber-900 border border-amber-200/60';
+
+        html += `
+            <button type="button" data-select-category="${cat.id_category}" class="px-3.5 py-2 rounded-xl text-xs font-medium transition cursor-pointer ${btnClass}">
+                <i class="fa-solid fa-utensils mr-1.5 opacity-70"></i> ${escapeHTML(cat.name)}
+            </button>
+        `;
+    });
+
+    list.innerHTML = html;
+    modal.classList.remove('hidden');
+    modal.classList.add('flex');
+}
+
+function closeCategoryFilterModal() {
+    const modal = document.getElementById('admin-food-category-modal');
+    if (modal) {
+        modal.classList.add('hidden');
+        modal.classList.remove('flex');
+    }
+}
+
+function updateFoodStatCardsUI() {
+    const cards = document.querySelectorAll('#admin-foods-stats-container [data-food-filter]');
+    if (!cards.length) return;
+
+    let activeFilter = null;
+    if (adminFoodsState.category) {
+        activeFilter = 'categories';
+    } else if (adminFoodsState.status === 'active' && !adminFoodsState.category) {
+        activeFilter = 'active';
+    } else if (adminFoodsState.status === 'inactive' && !adminFoodsState.category) {
+        activeFilter = 'inactive';
+    } else if (!adminFoodsState.status && !adminFoodsState.category) {
+        activeFilter = 'all';
+    }
+
+    cards.forEach((card) => {
+        const filter = card.dataset.foodFilter;
+        const isActive = filter === activeFilter;
+
+        card.classList.remove(
+            'ring-2', 'ring-offset-2',
+            'ring-slate-400', 'ring-green-500', 'ring-gray-600', 'ring-amber-500',
+            'bg-slate-50', 'bg-green-50/60', 'bg-gray-100/60', 'bg-amber-50/60'
+        );
+
+        if (isActive) {
+            card.classList.add('ring-2', 'ring-offset-2');
+            if (filter === 'all') card.classList.add('ring-slate-400', 'bg-slate-50');
+            if (filter === 'active') card.classList.add('ring-green-500', 'bg-green-50/60');
+            if (filter === 'inactive') card.classList.add('ring-gray-600', 'bg-gray-100/60');
+            if (filter === 'categories') card.classList.add('ring-amber-500', 'bg-amber-50/60');
+        }
+    });
+
+    // Cập nhật hint text trên card danh mục nếu đang lọc danh mục
+    const catHint = document.getElementById('admin-foods-category-hint');
+    if (catHint) {
+        if (adminFoodsState.category) {
+            const currentCat = (adminFoodsState.categories || []).find((c) => String(c.id_category) === String(adminFoodsState.category));
+            const catName = currentCat ? currentCat.name : 'Đã chọn';
+            catHint.innerHTML = `<span class="text-amber-700 font-bold">Lọc: ${escapeHTML(catName)}</span> <i class="fa-solid fa-xmark text-[11px] text-red-500 hover:text-red-700 ml-1 cursor-pointer" title="Bỏ lọc"></i>`;
+        } else {
+            catHint.innerHTML = `<span>Lọc theo danh mục</span> <i class="fa-solid fa-filter text-[10px]"></i>`;
+        }
+    }
+}
+
 function renderFoodOptions() {
     const categoryFilter = document.getElementById('admin-foods-category-filter');
     const categoryInput = document.getElementById('admin-food-category');
@@ -1097,6 +1356,7 @@ async function loadAdminFoods() {
         adminFoodsState.foods = [];
         renderFoodsTable([]);
         updateFoodsStats();
+        updateFoodStatCardsUI();
         updateFoodsPagination({ page: 1, totalPages: 1, total: 0, hasMore: false });
         setFoodsAlert(res.message || 'Không thể tải danh sách món ăn.', 'error');
         return;
@@ -1105,6 +1365,7 @@ async function loadAdminFoods() {
     adminFoodsState.foods = res.data || [];
     renderFoodsTable(adminFoodsState.foods);
     updateFoodsStats(res.stats);
+    updateFoodStatCardsUI();
     updateFoodsPagination(res.pagination);
 }
 
@@ -1301,6 +1562,82 @@ function bindAdminFoodsEvents() {
     const prev = document.getElementById('admin-foods-prev');
     const next = document.getElementById('admin-foods-next');
     const form = document.getElementById('admin-food-form');
+    const statsContainer = document.getElementById('admin-foods-stats-container');
+
+    // Click tương tác thẻ thống kê món ăn
+    statsContainer?.addEventListener('click', (event) => {
+        // Kiểm tra nếu bấm vào icon bỏ lọc danh mục
+        if (event.target.closest('#admin-foods-category-hint .fa-xmark')) {
+            event.stopPropagation();
+            adminFoodsState.category = '';
+            if (category) category.value = '';
+            adminFoodsState.page = 1;
+            updateFoodStatCardsUI();
+            loadAdminFoods();
+            return;
+        }
+
+        const card = event.target.closest('[data-food-filter]');
+        if (!card) return;
+
+        const filter = card.dataset.foodFilter;
+        if (filter === 'all') {
+            adminFoodsState.status = '';
+            adminFoodsState.category = '';
+            if (status) status.value = '';
+            if (category) category.value = '';
+            adminFoodsState.page = 1;
+            updateFoodStatCardsUI();
+            loadAdminFoods();
+        } else if (filter === 'active') {
+            adminFoodsState.status = 'active';
+            adminFoodsState.category = '';
+            if (status) status.value = 'active';
+            if (category) category.value = '';
+            adminFoodsState.page = 1;
+            updateFoodStatCardsUI();
+            loadAdminFoods();
+        } else if (filter === 'inactive') {
+            adminFoodsState.status = 'inactive';
+            adminFoodsState.category = '';
+            if (status) status.value = 'inactive';
+            if (category) category.value = '';
+            adminFoodsState.page = 1;
+            updateFoodStatCardsUI();
+            loadAdminFoods();
+        } else if (filter === 'categories') {
+            openCategoryFilterModal();
+        }
+    });
+
+    // Lắng nghe chọn danh mục trong modal danh mục
+    const catModalList = document.getElementById('admin-food-category-modal-list');
+    catModalList?.addEventListener('click', (event) => {
+        const btn = event.target.closest('[data-select-category]');
+        if (!btn) return;
+
+        const catId = btn.dataset.selectCategory || '';
+        adminFoodsState.category = catId;
+        if (category) category.value = catId;
+        adminFoodsState.page = 1;
+        closeCategoryFilterModal();
+        updateFoodStatCardsUI();
+        loadAdminFoods();
+    });
+
+    document.getElementById('admin-food-category-modal-close')?.addEventListener('click', closeCategoryFilterModal);
+    document.getElementById('admin-food-category-modal-cancel')?.addEventListener('click', closeCategoryFilterModal);
+    document.getElementById('admin-food-category-modal-clear')?.addEventListener('click', () => {
+        adminFoodsState.category = '';
+        if (category) category.value = '';
+        adminFoodsState.page = 1;
+        closeCategoryFilterModal();
+        updateFoodStatCardsUI();
+        loadAdminFoods();
+    });
+    document.getElementById('admin-food-category-modal')?.addEventListener('click', (event) => {
+        if (event.target.id === 'admin-food-category-modal') closeCategoryFilterModal();
+    });
 
     let searchTimer = null;
     search?.addEventListener('input', () => {
@@ -1315,12 +1652,14 @@ function bindAdminFoodsEvents() {
     category?.addEventListener('change', () => {
         adminFoodsState.category = category.value;
         adminFoodsState.page = 1;
+        updateFoodStatCardsUI();
         loadAdminFoods();
     });
 
     status?.addEventListener('change', () => {
         adminFoodsState.status = status.value;
         adminFoodsState.page = 1;
+        updateFoodStatCardsUI();
         loadAdminFoods();
     });
 
@@ -1365,22 +1704,20 @@ function bindAdminFoodsEvents() {
 async function initAdminFoodsPage() {
     bindAdminFoodsEvents();
     await loadFoodOptions();
+    updateFoodStatCardsUI();
     await loadAdminFoods();
 }
 
 // ==========================================
-// QUẢN LÝ BÀI VIẾT CỘNG ĐỒNG & BÁO CÁO VI PHẠM
+// 1. QUẢN LÝ KIỂM DUYỆT BÀI VIẾT (COMMUNITY POSTS)
 // ==========================================
 
 const adminCommunityState = {
-    activeTab: 'moderation', // 'moderation' | 'reports'
     page: 1,
     limit: 10,
     search: '',
-    status: '',
-    posts: [],
-    reports: [],
-    pendingReportsCount: 0
+    status: '', // '' = Tất cả, 'pending' = Chờ duyệt, 'active' = Đã duyệt, 'hidden' = Đã từ chối / Đã ẩn
+    posts: []
 };
 
 function renderCommunityPage() {
@@ -1391,8 +1728,11 @@ function renderCommunityPage() {
     return `
         <header class="flex flex-col lg:flex-row lg:justify-between lg:items-center gap-4 mb-6 bg-white p-4 rounded-2xl shadow-sm border border-gray-100">
             <div>
-                <h1 class="text-2xl font-bold text-text-main">Quản lý bài viết & Kiểm duyệt cộng đồng</h1>
-                <p class="text-sm text-text-muted mt-1">Kiểm duyệt các bài chia sẻ từ người dùng và xử lý các báo cáo vi phạm tiêu chuẩn cộng đồng.</p>
+                <h1 class="text-2xl font-bold text-text-main flex items-center gap-2.5">
+                    <i class="fa-solid fa-clipboard-check text-primary"></i>
+                    <span>Kiểm duyệt bài viết cộng đồng</span>
+                </h1>
+                <p class="text-sm text-text-muted mt-1">Quy trình kiểm duyệt bài viết mới của người dùng (Chờ duyệt, Đã duyệt, Đã ẩn / Bị từ chối).</p>
             </div>
             <div class="flex items-center gap-4">
                 <span class="text-text-muted">Xin chào, <strong>${escapeHTML(adminName)}</strong></span>
@@ -1400,140 +1740,112 @@ function renderCommunityPage() {
             </div>
         </header>
 
-        <!-- Stats Overview Cards (5 Thẻ Thống Kê Chi Tiết) -->
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-3.5 mb-6" id="admin-comm-stats-container">
-            <div data-comm-filter="all" class="admin-comm-stat-card bg-white rounded-2xl border border-gray-100 shadow-sm p-4.5 border-l-4 border-l-primary cursor-pointer hover:shadow-md hover:-translate-y-0.5 transition-all select-none group" title="Xem tất cả bài viết">
+        <!-- 4 Thẻ Thống Kê Quy Trình Duyệt Bài -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-6" id="admin-comm-stats-container">
+            <div data-comm-filter="pending" class="admin-comm-stat-card bg-white rounded-2xl border border-amber-200/80 shadow-sm p-4.5 border-l-4 border-l-[#E59F3F] bg-amber-50/20 cursor-pointer hover:shadow-md hover:-translate-y-0.5 transition-all select-none group" title="Xem các bài viết đang chờ duyệt">
                 <div class="flex items-center justify-between">
-                    <p class="text-[11px] font-bold uppercase tracking-wide text-text-muted">Tổng bài viết</p>
-                    <i class="fa-solid fa-arrow-right text-[10px] text-gray-300 group-hover:text-primary group-hover:translate-x-0.5 transition-all"></i>
-                </div>
-                <strong id="admin-comm-stat-total" class="block text-2xl font-black text-text-main mt-1.5">0</strong>
-            </div>
-            <div data-comm-filter="pending" class="admin-comm-stat-card bg-white rounded-2xl border border-amber-200/80 shadow-sm p-4.5 border-l-4 border-l-[#E59F3F] bg-amber-50/20 cursor-pointer hover:shadow-md hover:-translate-y-0.5 transition-all select-none group" title="Lọc bài viết chờ duyệt">
-                <div class="flex items-center justify-between">
-                    <p class="text-[11px] font-bold uppercase tracking-wide text-[#C27E25] flex items-center gap-1">
-                        <i class="fa-solid fa-hourglass-half text-xs"></i> Chờ duyệt
+                    <p class="text-xs font-bold uppercase tracking-wide text-[#C27E25] flex items-center gap-1.5">
+                        <i class="fa-solid fa-hourglass-half"></i> Chờ kiểm duyệt
                     </p>
                     <i class="fa-solid fa-arrow-right text-[10px] text-amber-300 group-hover:text-[#C27E25] group-hover:translate-x-0.5 transition-all"></i>
                 </div>
                 <strong id="admin-comm-stat-pending" class="block text-2xl font-black text-[#C27E25] mt-1.5">0</strong>
+                <p class="text-[11px] text-[#C27E25]/80 mt-1">Bài viết mới cần admin phê duyệt</p>
             </div>
-            <div data-comm-filter="active" class="admin-comm-stat-card bg-white rounded-2xl border border-gray-100 shadow-sm p-4.5 border-l-4 border-l-green-600 cursor-pointer hover:shadow-md hover:-translate-y-0.5 transition-all select-none group" title="Lọc bài viết đã duyệt">
+
+            <div data-comm-filter="active" class="admin-comm-stat-card bg-white rounded-2xl border border-green-200/80 shadow-sm p-4.5 border-l-4 border-l-green-600 bg-green-50/20 cursor-pointer hover:shadow-md hover:-translate-y-0.5 transition-all select-none group" title="Xem các bài viết đã duyệt thành công">
                 <div class="flex items-center justify-between">
-                    <p class="text-[11px] font-bold uppercase tracking-wide text-green-700 flex items-center gap-1">
-                        <i class="fa-solid fa-circle-check text-xs"></i> Đã duyệt
+                    <p class="text-xs font-bold uppercase tracking-wide text-green-700 flex items-center gap-1.5">
+                        <i class="fa-solid fa-circle-check"></i> Đã duyệt thành công
                     </p>
-                    <i class="fa-solid fa-arrow-right text-[10px] text-gray-300 group-hover:text-green-600 group-hover:translate-x-0.5 transition-all"></i>
+                    <i class="fa-solid fa-arrow-right text-[10px] text-green-300 group-hover:text-green-600 group-hover:translate-x-0.5 transition-all"></i>
                 </div>
                 <strong id="admin-comm-stat-active" class="block text-2xl font-black text-green-700 mt-1.5">0</strong>
+                <p class="text-[11px] text-green-700/80 mt-1">Đang hiển thị công khai trên web</p>
             </div>
-            <div data-comm-filter="hidden" class="admin-comm-stat-card bg-white rounded-2xl border border-gray-100 shadow-sm p-4.5 border-l-4 border-l-stone-500 cursor-pointer hover:shadow-md hover:-translate-y-0.5 transition-all select-none group" title="Lọc bài viết đã ẩn">
+
+            <div data-comm-filter="hidden" class="admin-comm-stat-card bg-white rounded-2xl border border-stone-200/80 shadow-sm p-4.5 border-l-4 border-l-stone-500 bg-stone-50/20 cursor-pointer hover:shadow-md hover:-translate-y-0.5 transition-all select-none group" title="Xem các bài viết đã từ chối hoặc bị ẩn">
                 <div class="flex items-center justify-between">
-                    <p class="text-[11px] font-bold uppercase tracking-wide text-stone-600">Đã ẩn / Tạm khóa</p>
+                    <p class="text-xs font-bold uppercase tracking-wide text-stone-600 flex items-center gap-1.5">
+                        <i class="fa-solid fa-eye-slash"></i> Đã từ chối / Đã ẩn
+                    </p>
                     <i class="fa-solid fa-arrow-right text-[10px] text-gray-300 group-hover:text-stone-600 group-hover:translate-x-0.5 transition-all"></i>
                 </div>
                 <strong id="admin-comm-stat-hidden" class="block text-2xl font-black text-stone-600 mt-1.5">0</strong>
+                <p class="text-[11px] text-stone-500 mt-1">Bài viết không đạt tiêu chuẩn</p>
             </div>
-            <div data-comm-filter="reports" class="admin-comm-stat-card bg-white rounded-2xl border border-rose-200/80 shadow-sm p-4.5 border-l-4 border-l-rose-500 bg-rose-50/20 cursor-pointer hover:shadow-md hover:-translate-y-0.5 transition-all select-none group" title="Xem báo cáo vi phạm">
+
+            <div data-comm-filter="" class="admin-comm-stat-card bg-white rounded-2xl border border-gray-100 shadow-sm p-4.5 border-l-4 border-l-primary cursor-pointer hover:shadow-md hover:-translate-y-0.5 transition-all select-none group" title="Xem tất cả bài viết">
                 <div class="flex items-center justify-between">
-                    <p class="text-[11px] font-bold uppercase tracking-wide text-rose-600 flex items-center gap-1">
-                        <i class="fa-solid fa-triangle-exclamation text-xs"></i> Báo cáo vi phạm
-                    </p>
-                    <i class="fa-solid fa-arrow-right text-[10px] text-rose-300 group-hover:text-rose-600 group-hover:translate-x-0.5 transition-all"></i>
+                    <p class="text-xs font-bold uppercase tracking-wide text-text-muted">Tổng tất cả bài viết</p>
+                    <i class="fa-solid fa-arrow-right text-[10px] text-gray-300 group-hover:text-primary group-hover:translate-x-0.5 transition-all"></i>
                 </div>
-                <strong id="admin-comm-stat-reports" class="block text-2xl font-black text-rose-600 mt-1.5">0</strong>
+                <strong id="admin-comm-stat-total" class="block text-2xl font-black text-text-main mt-1.5">0</strong>
+                <p class="text-[11px] text-text-muted mt-1">Toàn bộ bài viết trong hệ thống</p>
             </div>
         </div>
 
-        <!-- 2 Tabs Chuyển đổi: Kiểm duyệt vs Báo cáo vi phạm -->
-        <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 mb-6 bg-white/80 backdrop-blur-md p-2 rounded-2xl border border-[#E9D8B7]/60 shadow-xs">
-            <button type="button" id="admin-tab-moderation" class="flex-1 flex items-center justify-center gap-3 px-6 py-3.5 rounded-xl font-black text-sm transition-all cursor-pointer bg-[#245B43] text-white shadow-md shadow-[#245B43]/20">
-                <i class="fa-solid fa-list-check text-base"></i>
-                <span>Kiểm duyệt bài viết</span>
-                <span id="admin-community-posts-badge" class="px-2.5 py-0.5 rounded-full text-xs font-bold bg-white/20 text-white">0</span>
-            </button>
+        <!-- Toolbar: Tabs Lọc Trạng Thái & Tìm Kiếm -->
+        <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-6 bg-white p-3 rounded-2xl border border-gray-100 shadow-xs">
+            <!-- Tabs lọc 3 quy trình chính -->
+            <div class="flex flex-wrap items-center gap-2" id="admin-comm-tabs-container">
+                <button type="button" data-comm-tab="" class="admin-comm-tab-btn px-4 py-2.5 rounded-xl font-bold text-xs sm:text-sm transition flex items-center gap-2 bg-[#245B43] text-white shadow-sm">
+                    <i class="fa-solid fa-list"></i>
+                    <span>Tất cả</span>
+                    <span id="admin-comm-tab-all-badge" class="px-2 py-0.5 rounded-full text-[11px] font-extrabold bg-white/20 text-white">0</span>
+                </button>
+                <button type="button" data-comm-tab="pending" class="admin-comm-tab-btn px-4 py-2.5 rounded-xl font-bold text-xs sm:text-sm transition flex items-center gap-2 text-text-muted hover:bg-stone-100">
+                    <i class="fa-solid fa-hourglass-half text-amber-500"></i>
+                    <span>Chờ duyệt</span>
+                    <span id="admin-comm-tab-pending-badge" class="px-2 py-0.5 rounded-full text-[11px] font-extrabold bg-amber-100 text-amber-800">0</span>
+                </button>
+                <button type="button" data-comm-tab="active" class="admin-comm-tab-btn px-4 py-2.5 rounded-xl font-bold text-xs sm:text-sm transition flex items-center gap-2 text-text-muted hover:bg-stone-100">
+                    <i class="fa-solid fa-circle-check text-green-600"></i>
+                    <span>Đã duyệt (Thành công)</span>
+                    <span id="admin-comm-tab-active-badge" class="px-2 py-0.5 rounded-full text-[11px] font-extrabold bg-green-100 text-green-800">0</span>
+                </button>
+                <button type="button" data-comm-tab="hidden" class="admin-comm-tab-btn px-4 py-2.5 rounded-xl font-bold text-xs sm:text-sm transition flex items-center gap-2 text-text-muted hover:bg-stone-100">
+                    <i class="fa-solid fa-eye-slash text-stone-500"></i>
+                    <span>Đã từ chối / Đã ẩn</span>
+                    <span id="admin-comm-tab-hidden-badge" class="px-2 py-0.5 rounded-full text-[11px] font-extrabold bg-stone-100 text-stone-700">0</span>
+                </button>
+            </div>
 
-            <button type="button" id="admin-tab-reports" class="flex-1 flex items-center justify-center gap-3 px-6 py-3.5 rounded-xl font-black text-sm transition-all cursor-pointer bg-transparent text-[#66736B] hover:bg-stone-100">
-                <i class="fa-solid fa-triangle-exclamation text-base text-rose-500"></i>
-                <span>Cảnh báo vi phạm</span>
-                <span id="admin-community-reports-badge" class="px-2.5 py-0.5 rounded-full text-xs font-black bg-rose-500 text-white animate-pulse">0 vi phạm</span>
-            </button>
+            <!-- Tìm kiếm & Tải lại -->
+            <div class="flex items-center gap-2.5">
+                <div class="relative flex-1 sm:flex-initial">
+                    <i class="fa-solid fa-magnifying-glass absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-400 text-xs"></i>
+                    <input type="text" id="admin-community-search" placeholder="Tìm tiêu đề, tác giả..." class="pl-9 pr-3.5 py-2 border border-gray-200 rounded-xl text-xs sm:text-sm focus:outline-none focus:border-primary w-full sm:w-60 transition">
+                </div>
+
+                <button type="button" id="admin-community-refresh" class="px-3.5 py-2 rounded-xl border border-gray-200 hover:bg-stone-50 text-text-muted hover:text-primary transition font-bold text-xs sm:text-sm cursor-pointer" title="Tải lại">
+                    <i class="fa-solid fa-arrows-rotate"></i>
+                </button>
+            </div>
         </div>
 
-        <!-- Khung nội dung bảng -->
+        <!-- Khung bảng danh sách bài viết -->
         <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
-            <!-- Filter toolbar -->
-            <div class="p-6 border-b border-gray-100 flex flex-col md:flex-row md:items-center justify-between gap-4">
-                <div>
-                    <h2 id="admin-community-table-title" class="text-lg font-bold text-text-main flex items-center gap-2">
-                        <i class="fa-solid fa-newspaper text-primary"></i>
-                        <span>Danh sách bài viết cộng đồng</span>
-                    </h2>
-                    <p id="admin-community-table-subtitle" class="text-xs text-text-muted mt-0.5">Kiểm tra nội dung, duyệt bài viết mới hoặc ẩn bài viết vi phạm tiêu chuẩn.</p>
-                </div>
-
-                <div class="flex flex-wrap items-center gap-2.5">
-                    <div class="relative">
-                        <i class="fa-solid fa-magnifying-glass absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-400 text-xs"></i>
-                        <input type="text" id="admin-community-search" placeholder="Tìm kiếm tiêu đề, tác giả..." class="pl-9 pr-4 py-2 border border-gray-200 rounded-xl text-xs sm:text-sm focus:outline-none focus:border-primary w-52 sm:w-64 transition">
-                    </div>
-
-                    <select id="admin-community-status-filter" class="px-3 py-2 border border-gray-200 rounded-xl text-xs sm:text-sm focus:outline-none focus:border-primary text-text-main bg-white cursor-pointer font-medium">
-                        <option value="">Tất cả trạng thái</option>
-                        <option value="pending">Chờ kiểm duyệt</option>
-                        <option value="active">Đã duyệt (Hiển thị)</option>
-                        <option value="hidden">Bị từ chối / Đã ẩn</option>
-                    </select>
-
-                    <button type="button" id="admin-community-refresh" class="px-3.5 py-2 rounded-xl border border-gray-200 hover:bg-stone-50 text-text-muted hover:text-primary transition font-bold text-xs sm:text-sm cursor-pointer" title="Tải lại">
-                        <i class="fa-solid fa-arrows-rotate"></i>
-                    </button>
-                </div>
-            </div>
-
-            <!-- Bảng 1: Kiểm duyệt bài viết -->
-            <div id="admin-community-posts-section" class="overflow-x-auto">
+            <div class="overflow-x-auto">
                 <table class="w-full text-left border-collapse">
                     <thead>
                         <tr class="bg-gray-50 text-text-muted text-xs uppercase tracking-wider border-b border-gray-100">
                             <th class="p-4 font-bold whitespace-nowrap w-48 sm:w-56">Tác giả</th>
                             <th class="p-4 font-bold max-w-xs md:max-w-sm">Bài viết & Nội dung</th>
                             <th class="p-4 font-bold text-center whitespace-nowrap w-24">Tương tác</th>
-                            <th class="p-4 font-bold text-center whitespace-nowrap w-28">Báo cáo</th>
                             <th class="p-4 font-bold text-center whitespace-nowrap w-36">Trạng thái</th>
-                            <th class="p-4 font-bold text-right whitespace-nowrap w-36">Hành động</th>
+                            <th class="p-4 font-bold text-right whitespace-nowrap w-36">Thao tác</th>
                         </tr>
                     </thead>
                     <tbody id="admin-community-posts-body" class="divide-y divide-gray-100 text-sm">
                         <tr>
-                            <td colspan="6" class="p-8 text-center text-text-muted">Đang tải dữ liệu bài viết...</td>
+                            <td colspan="5" class="p-8 text-center text-text-muted">Đang tải dữ liệu bài viết...</td>
                         </tr>
                     </tbody>
                 </table>
             </div>
 
-            <!-- Bảng 2: Cảnh báo vi phạm (mặc định ẩn) -->
-            <div id="admin-community-reports-section" class="hidden overflow-x-auto">
-                <table class="w-full text-left border-collapse">
-                    <thead>
-                        <tr class="bg-rose-50/50 text-rose-900 text-xs uppercase tracking-wider border-b border-rose-100">
-                            <th class="p-4 font-bold max-w-xs md:max-w-sm">Bài viết bị tố cáo</th>
-                            <th class="p-4 font-bold whitespace-nowrap w-44">Tác giả bài</th>
-                            <th class="p-4 font-bold whitespace-nowrap">Người báo cáo & Lý do</th>
-                            <th class="p-4 font-bold whitespace-nowrap w-28 text-center">Thời gian</th>
-                            <th class="p-4 font-bold text-center whitespace-nowrap w-32">Xử lý</th>
-                            <th class="p-4 font-bold text-right whitespace-nowrap w-32">Thao tác</th>
-                        </tr>
-                    </thead>
-                    <tbody id="admin-community-reports-body" class="divide-y divide-gray-100 text-sm">
-                        <tr>
-                            <td colspan="6" class="p-8 text-center text-text-muted">Đang tải danh sách báo cáo vi phạm...</td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-
-            <!-- Pagination Toolbar -->
+            <!-- Phân trang -->
             <div class="p-4 border-t border-gray-100 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs sm:text-sm text-text-muted">
                 <span id="admin-community-pagination-info">Hiển thị trang 1</span>
                 <div class="flex items-center gap-2">
@@ -1547,15 +1859,13 @@ function renderCommunityPage() {
             </div>
         </div>
 
-        <!-- Modal xem chi tiết bài viết / báo cáo -->
+        <!-- Modal xem chi tiết bài viết -->
         <div id="admin-community-detail-modal" class="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm hidden items-center justify-center p-4">
             <div class="relative bg-white rounded-3xl max-w-2xl w-full max-h-[90vh] overflow-y-auto p-6 sm:p-7 shadow-2xl border border-gray-100">
                 <button type="button" id="admin-community-detail-close" class="absolute top-5 right-5 w-8 h-8 rounded-full bg-gray-100 hover:bg-gray-200 text-gray-500 flex items-center justify-center transition cursor-pointer text-sm">
                     <i class="fa-solid fa-xmark"></i>
                 </button>
-                <div id="admin-community-detail-content">
-                    <!-- Nội dung nạp động -->
-                </div>
+                <div id="admin-community-detail-content"></div>
             </div>
         </div>
     `;
@@ -1568,11 +1878,11 @@ function renderCommunityPostsTable(posts) {
     if (!posts || posts.length === 0) {
         tbody.innerHTML = `
             <tr>
-                <td colspan="6" class="p-10 text-center text-text-muted">
+                <td colspan="5" class="p-10 text-center text-text-muted">
                     <div class="w-12 h-12 rounded-2xl bg-gray-100 text-gray-400 flex items-center justify-center mx-auto mb-3 text-lg">
                         <i class="fa-solid fa-folder-open"></i>
                     </div>
-                    Không tìm thấy bài viết nào phù hợp.
+                    Không tìm thấy bài viết nào trong mục này.
                 </td>
             </tr>
         `;
@@ -1583,66 +1893,27 @@ function renderCommunityPostsTable(posts) {
         const isPending = p.status === 'pending';
         const isHidden = p.status === 'hidden';
         const isActive = p.status === 'active';
-        const reportsCount = Number(p.reports_count) || (Array.isArray(p.reports) ? p.reports.length : 0);
-        const reportsList = Array.isArray(p.reports) ? p.reports : [];
 
-        // 1. Cột BÁO CÁO: Hover popover badge
-        let reportBadge = '';
-        if (reportsCount > 0) {
-            reportBadge = `
-                <div class="relative inline-block group">
-                    <button type="button" class="inline-flex items-center gap-1.5 bg-rose-100 hover:bg-rose-200 text-rose-700 px-3 py-1 rounded-full text-xs font-black transition cursor-pointer shadow-xs animate-pulse">
-                        <i class="fa-solid fa-triangle-exclamation text-rose-600"></i>
-                        <span>${reportsCount} vi phạm</span>
-                    </button>
-                    <!-- Popup Popover xuất hiện khi Hover -->
-                    <div class="absolute z-50 bottom-full left-1/2 -translate-x-1/2 mb-2 w-72 sm:w-80 p-3.5 bg-white border border-rose-200 rounded-2xl shadow-xl pointer-events-none opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 transform translate-y-1 group-hover:translate-y-0 text-left">
-                        <div class="flex items-center justify-between pb-2 mb-2 border-b border-rose-100">
-                            <span class="text-xs font-black text-rose-800 flex items-center gap-1.5">
-                                <i class="fa-solid fa-flag text-rose-600"></i> Báo cáo vi phạm (${reportsCount})
-                            </span>
-                            <span class="text-[10px] text-stone-400 font-semibold">Tóm tắt</span>
-                        </div>
-                        <div class="space-y-2 max-h-48 overflow-y-auto">
-                            ${reportsList.map(r => `
-                                <div class="p-2 rounded-xl bg-rose-50/70 border border-rose-100 text-xs">
-                                    <div class="flex items-center justify-between font-bold text-rose-900 text-[11px]">
-                                        <span>${escapeHTML(r.reason || 'Vi phạm tiêu chuẩn')}</span>
-                                        <span class="text-[10px] text-stone-400 font-normal">${formatDate(r.created_at)}</span>
-                                    </div>
-                                    ${r.description ? `<p class="text-stone-600 text-[11px] mt-0.5 line-clamp-2">${escapeHTML(r.description)}</p>` : ''}
-                                    <span class="block text-[10px] text-rose-700 font-semibold mt-1">Gửi bởi: <strong>${escapeHTML(r.reporter?.name || 'Người dùng')}</strong></span>
-                                </div>
-                            `).join('')}
-                        </div>
-                        <div class="absolute top-full left-1/2 -translate-x-1/2 -mt-1 border-4 border-transparent border-t-white"></div>
-                    </div>
-                </div>
-            `;
-        } else {
-            reportBadge = `<span class="text-stone-400 text-xs font-bold">0</span>`;
-        }
-
-        // 2. Cột TRẠNG THÁI
-        let statusBadge = '';
+        // 1. Cột TRẠNG THÁI
+        let statusBadgeHTML = '';
         if (isPending) {
-            statusBadge = `<span class="bg-amber-100 text-[#C27E25] border border-amber-300 px-3 py-1 rounded-full text-xs font-extrabold inline-flex items-center gap-1.5 animate-pulse"><i class="fa-solid fa-hourglass-half text-[10px]"></i> Chờ duyệt</span>`;
+            statusBadgeHTML = `<span class="bg-amber-100 text-[#C27E25] border border-amber-300 px-3 py-1 rounded-full text-xs font-extrabold inline-flex items-center gap-1.5 animate-pulse"><i class="fa-solid fa-hourglass-half text-[10px]"></i> Chờ duyệt</span>`;
         } else if (isHidden) {
-            statusBadge = `
+            statusBadgeHTML = `
                 <div class="inline-flex flex-col items-center">
-                    <span class="bg-stone-100 text-stone-600 border border-stone-300 px-3 py-1 rounded-full text-xs font-bold inline-flex items-center gap-1.5">
-                        <i class="fa-solid fa-eye-slash text-[10px]"></i> Đã ẩn
+                    <span class="bg-stone-100 text-stone-700 border border-stone-300 px-3 py-1 rounded-full text-xs font-bold inline-flex items-center gap-1.5">
+                        <i class="fa-solid fa-eye-slash text-[10px]"></i> Đã ẩn / Từ chối
                     </span>
-                    ${p.hidden_reason ? `<span class="text-[10px] text-rose-600 line-clamp-1 mt-0.5 max-w-28 text-center" title="${escapeHTML(p.hidden_reason)}">Lý do: ${escapeHTML(p.hidden_reason)}</span>` : ''}
+                    ${p.hidden_reason ? `<span class="text-[10px] text-rose-600 line-clamp-1 mt-0.5 max-w-32 text-center" title="${escapeHTML(p.hidden_reason)}">Lý do: ${escapeHTML(p.hidden_reason)}</span>` : ''}
                 </div>
             `;
         } else {
-            statusBadge = `<span class="bg-green-100 text-green-700 border border-green-300 px-3 py-1 rounded-full text-xs font-bold inline-flex items-center gap-1.5"><i class="fa-solid fa-check text-[10px]"></i> Đã duyệt</span>`;
+            statusBadgeHTML = `<span class="bg-green-100 text-green-700 border border-green-300 px-3 py-1 rounded-full text-xs font-bold inline-flex items-center gap-1.5"><i class="fa-solid fa-check text-[10px]"></i> Đã duyệt</span>`;
         }
 
         const foodTag = p.food ? `<span class="inline-block mt-1 text-[11px] bg-amber-50 text-amber-800 border border-amber-200 px-2 py-0.5 rounded-md font-bold"><i class="fa-solid fa-utensils text-[10px] mr-1 text-amber-600"></i>${escapeHTML(p.food.name)}</span>` : '';
 
-        // 3. Cột HÀNH ĐỘNG: Duyệt bài / Duyệt lại dạng icon phẳng không hộp nền (no background box)
+        // 2. Cột THAO TÁC
         let approveBtnHTML = '';
         if (isPending) {
             approveBtnHTML = `
@@ -1699,107 +1970,18 @@ function renderCommunityPostsTable(posts) {
                     </div>
                 </td>
                 <td class="p-4 align-top text-center whitespace-nowrap">
-                    ${reportBadge}
-                </td>
-                <td class="p-4 align-top text-center whitespace-nowrap">
-                    ${statusBadge}
+                    ${statusBadgeHTML}
                 </td>
                 <td class="p-4 align-top text-right whitespace-nowrap">
                     <div class="flex items-center justify-end gap-1.5">
-                        <button type="button" class="w-8 h-8 rounded-lg text-blue-600 hover:bg-blue-50 flex items-center justify-center transition cursor-pointer text-xs" data-post-action="view" data-id="${p.id_post}" title="Xem chi tiết">
+                        <button type="button" class="w-8 h-8 rounded-lg text-blue-600 hover:bg-blue-50 flex items-center justify-center transition cursor-pointer text-xs" data-post-action="view" data-id="${p.id_post}" title="Xem chi tiết bài viết">
                             <i class="fa-solid fa-eye"></i>
                         </button>
                         ${approveBtnHTML}
                         ${hideBtnHTML}
-                        <button type="button" class="w-8 h-8 rounded-lg text-rose-600 hover:bg-rose-50 flex items-center justify-center transition cursor-pointer text-xs" data-post-action="delete" data-id="${p.id_post}" title="Xóa bài viết">
+                        <button type="button" class="w-8 h-8 rounded-lg text-rose-600 hover:bg-rose-50 flex items-center justify-center transition cursor-pointer text-xs" data-post-action="delete" data-id="${p.id_post}" title="Xóa vĩnh viễn bài viết">
                             <i class="fa-solid fa-trash-can"></i>
                         </button>
-                    </div>
-                </td>
-            </tr>
-        `;
-    }).join('');
-}
-
-function renderCommunityReportsTable(reports) {
-    const tbody = document.getElementById('admin-community-reports-body');
-    if (!tbody) return;
-
-    if (!reports || reports.length === 0) {
-        tbody.innerHTML = `
-            <tr>
-                <td colspan="6" class="p-10 text-center text-text-muted">
-                    <div class="w-12 h-12 rounded-2xl bg-green-50 text-green-600 flex items-center justify-center mx-auto mb-3 text-lg">
-                        <i class="fa-solid fa-shield-check"></i>
-                    </div>
-                    Tuyệt vời! Hiện tại không có báo cáo vi phạm nào cần xử lý.
-                </td>
-            </tr>
-        `;
-        return;
-    }
-
-    tbody.innerHTML = reports.map(r => {
-        const post = r.post || {};
-        const isPostHidden = post.status === 'hidden';
-        
-        let statusBadge = '<span class="bg-amber-100 text-amber-800 px-3 py-1 rounded-full text-xs font-bold animate-pulse">Chờ xử lý</span>';
-        if (r.status === 'resolved') {
-            statusBadge = '<span class="bg-green-100 text-green-700 px-3 py-1 rounded-full text-xs font-bold">Đã giải quyết</span>';
-        } else if (r.status === 'rejected') {
-            statusBadge = '<span class="bg-stone-100 text-stone-600 px-3 py-1 rounded-full text-xs font-bold">Đã bỏ qua</span>';
-        }
-
-        return `
-            <tr class="hover:bg-rose-50/30 transition border-b border-gray-100">
-                <td class="p-4 align-top max-w-xs md:max-w-sm">
-                    <div class="space-y-1">
-                        <div class="flex items-center gap-2">
-                            <strong class="text-text-main text-sm font-bold line-clamp-1">${escapeHTML(post.title || 'Bài viết #' + r.target_id)}</strong>
-                            ${isPostHidden ? '<span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-stone-100 text-stone-600 shrink-0">Đã ẩn</span>' : ''}
-                        </div>
-                        <p class="text-xs text-[#66736B] line-clamp-2">${escapeHTML(post.content || '(Không có nội dung)')}</p>
-                    </div>
-                </td>
-                <td class="p-4 align-top whitespace-nowrap">
-                    <div class="flex items-center gap-2">
-                        <img src="${escapeHTML(post.author?.avatar || '/images/users/default.png')}" class="w-7 h-7 rounded-full object-cover border border-gray-200">
-                        <span class="text-xs font-bold text-text-main truncate max-w-36">${escapeHTML(post.author?.name || 'Ẩn danh')}</span>
-                    </div>
-                </td>
-                <td class="p-4 align-top">
-                    <div>
-                        <span class="inline-block px-2.5 py-0.5 rounded-full text-xs font-bold bg-rose-100 text-rose-700 mb-1">
-                            ${escapeHTML(r.reason || 'Vi phạm tiêu chuẩn')}
-                        </span>
-                        <p class="text-xs text-text-muted line-clamp-1 italic">${escapeHTML(r.description || 'Không có mô tả')}</p>
-                        <span class="text-[10px] text-stone-400">Bởi: <strong>${escapeHTML(r.reporter?.name || 'Ẩn danh')}</strong></span>
-                    </div>
-                </td>
-                <td class="p-4 align-top text-xs text-text-muted whitespace-nowrap text-center">
-                    ${formatDate(r.created_at)}
-                </td>
-                <td class="p-4 align-top text-center whitespace-nowrap">
-                    ${statusBadge}
-                </td>
-                <td class="p-4 align-top text-right whitespace-nowrap">
-                    <div class="flex items-center justify-end gap-1.5">
-                        <button type="button" class="w-8 h-8 rounded-lg text-blue-600 hover:bg-blue-50 flex items-center justify-center transition cursor-pointer text-xs" data-report-action="view" data-id="${r.id_report}" title="Xem chi tiết">
-                            <i class="fa-solid fa-eye"></i>
-                        </button>
-                        ${!isPostHidden ? `
-                            <button type="button" class="w-8 h-8 rounded-lg text-amber-600 hover:bg-amber-50 flex items-center justify-center transition cursor-pointer text-xs" data-report-action="hide-post" data-id="${r.id_report}" data-post-id="${r.target_id}" title="Ẩn bài viết">
-                                <i class="fa-solid fa-eye-slash"></i>
-                            </button>
-                        ` : ''}
-                        ${r.status === 'pending' ? `
-                            <button type="button" class="w-8 h-8 rounded-lg text-stone-600 hover:bg-stone-100 flex items-center justify-center transition cursor-pointer text-xs" data-report-action="reject" data-id="${r.id_report}" title="Bỏ qua">
-                                <i class="fa-solid fa-ban"></i>
-                            </button>
-                            <button type="button" class="w-8 h-8 rounded-lg text-emerald-600 hover:bg-emerald-50 flex items-center justify-center transition cursor-pointer text-xs" data-report-action="resolve" data-id="${r.id_report}" title="Đã giải quyết">
-                                <i class="fa-solid fa-check text-sm"></i>
-                            </button>
-                        ` : ''}
                     </div>
                 </td>
             </tr>
@@ -1810,7 +1992,7 @@ function renderCommunityReportsTable(reports) {
 async function loadAdminCommunityPosts() {
     const tbody = document.getElementById('admin-community-posts-body');
     if (tbody) {
-        tbody.innerHTML = `<tr><td colspan="6" class="p-8 text-center text-text-muted"><i class="fa-solid fa-spinner fa-spin mr-2"></i>Đang tải dữ liệu bài viết...</td></tr>`;
+        tbody.innerHTML = `<tr><td colspan="5" class="p-8 text-center text-text-muted"><i class="fa-solid fa-spinner fa-spin mr-2"></i>Đang tải dữ liệu bài viết...</td></tr>`;
     }
 
     const params = new URLSearchParams({
@@ -1824,7 +2006,7 @@ async function loadAdminCommunityPosts() {
     const res = await fetchAPI(`/admin/posts?${params.toString()}`);
     if (!res || !res.success) {
         if (tbody) {
-            tbody.innerHTML = `<tr><td colspan="6" class="p-8 text-center text-rose-600 font-bold">${res?.message || 'Không thể tải danh sách bài viết.'}</td></tr>`;
+            tbody.innerHTML = `<tr><td colspan="5" class="p-8 text-center text-rose-600 font-bold">${res?.message || 'Không thể tải danh sách bài viết.'}</td></tr>`;
         }
         return;
     }
@@ -1832,105 +2014,65 @@ async function loadAdminCommunityPosts() {
     adminCommunityState.posts = res.data || [];
     renderCommunityPostsTable(adminCommunityState.posts);
 
-    // Cập nhật thống kê đầy đủ 5 thẻ
+    // Cập nhật số liệu các thẻ & badge tabs
     const pagination = res.pagination || {};
-    const totalEl = document.getElementById('admin-comm-stat-total');
-    const badgeEl = document.getElementById('admin-community-posts-badge');
-    const pendingStatEl = document.getElementById('admin-comm-stat-pending');
-    const activeStatEl = document.getElementById('admin-comm-stat-active');
-    const hiddenStatEl = document.getElementById('admin-comm-stat-hidden');
+    const totalCount = pagination.allTotal ?? pagination.total ?? 0;
+    const pendingCount = pagination.pendingTotal || 0;
+    const activeCount = pagination.activeTotal || 0;
+    const hiddenCount = pagination.hiddenTotal || 0;
 
-    if (totalEl) totalEl.textContent = formatNumber(pagination.allTotal ?? pagination.total ?? 0);
-    if (badgeEl) badgeEl.textContent = formatNumber(pagination.allTotal ?? pagination.total ?? 0);
-    if (pendingStatEl) pendingStatEl.textContent = formatNumber(pagination.pendingTotal || 0);
-    if (activeStatEl) activeStatEl.textContent = formatNumber(pagination.activeTotal || 0);
-    if (hiddenStatEl) hiddenStatEl.textContent = formatNumber(pagination.hiddenTotal || 0);
+    const setText = (id, val) => {
+        const el = document.getElementById(id);
+        if (el) el.textContent = formatNumber(val);
+    };
+
+    setText('admin-comm-stat-total', totalCount);
+    setText('admin-comm-stat-pending', pendingCount);
+    setText('admin-comm-stat-active', activeCount);
+    setText('admin-comm-stat-hidden', hiddenCount);
+
+    setText('admin-comm-tab-all-badge', totalCount);
+    setText('admin-comm-tab-pending-badge', pendingCount);
+    setText('admin-comm-tab-active-badge', activeCount);
+    setText('admin-comm-tab-hidden-badge', hiddenCount);
 
     updateCommunityPagination(pagination);
-    updateStatCardActiveState();
+    updateCommunityTabAndCardsUI();
 }
 
-async function loadAdminCommunityReports() {
-    const tbody = document.getElementById('admin-community-reports-body');
-    if (tbody) {
-        tbody.innerHTML = `<tr><td colspan="6" class="p-8 text-center text-text-muted"><i class="fa-solid fa-spinner fa-spin mr-2"></i>Đang tải danh sách báo cáo...</td></tr>`;
-    }
-
-    const params = new URLSearchParams({
-        page: adminCommunityState.page,
-        limit: adminCommunityState.limit
-    });
-
-    if (adminCommunityState.search) params.append('search', adminCommunityState.search);
-    if (adminCommunityState.status) params.append('status', adminCommunityState.status);
-
-    const res = await fetchAPI(`/admin/reports?${params.toString()}`);
-    if (!res || !res.success) {
-        if (tbody) {
-            tbody.innerHTML = `<tr><td colspan="6" class="p-8 text-center text-rose-600 font-bold">${res?.message || 'Không thể tải danh sách báo cáo vi phạm.'}</td></tr>`;
-        }
-        return;
-    }
-
-    adminCommunityState.reports = res.data || [];
-    renderCommunityReportsTable(adminCommunityState.reports);
-
-    const pagination = res.pagination || {};
-    const pendingTotal = pagination.pendingTotal || 0;
-    adminCommunityState.pendingReportsCount = pendingTotal;
-
-    const reportStatEl = document.getElementById('admin-comm-stat-reports');
-    const reportBadgeEl = document.getElementById('admin-community-reports-badge');
-
-    if (reportStatEl) reportStatEl.textContent = formatNumber(pendingTotal);
-    if (reportBadgeEl) {
-        reportBadgeEl.textContent = `${pendingTotal} vi phạm`;
-        if (pendingTotal > 0) {
-            reportBadgeEl.classList.add('animate-pulse');
+function updateCommunityTabAndCardsUI() {
+    // 1. Cập nhật active Tabs
+    const tabBtns = document.querySelectorAll('.admin-comm-tab-btn');
+    tabBtns.forEach(btn => {
+        const tab = btn.dataset.commTab;
+        const isActive = (tab === adminCommunityState.status);
+        if (isActive) {
+            btn.className = 'admin-comm-tab-btn px-4 py-2.5 rounded-xl font-bold text-xs sm:text-sm transition flex items-center gap-2 bg-[#245B43] text-white shadow-sm';
+            const badge = btn.querySelector('span:last-child');
+            if (badge) badge.className = 'px-2 py-0.5 rounded-full text-[11px] font-extrabold bg-white/25 text-white';
         } else {
-            reportBadgeEl.classList.remove('animate-pulse');
-        }
-    }
-
-    updateCommunityPagination(pagination);
-    updateStatCardActiveState();
-}
-
-function updateStatCardActiveState() {
-    const cards = document.querySelectorAll('.admin-comm-stat-card');
-    if (!cards || cards.length === 0) return;
-
-    const ringClasses = [
-        'ring-2', 'ring-[#245B43]', 'ring-[#E59F3F]', 'ring-green-600', 'ring-stone-500', 'ring-rose-500',
-        'shadow-md', 'scale-[1.01]'
-    ];
-
-    cards.forEach(card => {
-        const filter = card.dataset.commFilter;
-        let isActive = false;
-        let ringColor = 'ring-[#245B43]';
-
-        if (adminCommunityState.activeTab === 'reports') {
-            isActive = (filter === 'reports');
-            ringColor = 'ring-rose-500';
-        } else {
-            if (filter === 'all' && !adminCommunityState.status) {
-                isActive = true;
-                ringColor = 'ring-[#245B43]';
-            } else if (filter === 'pending' && adminCommunityState.status === 'pending') {
-                isActive = true;
-                ringColor = 'ring-[#E59F3F]';
-            } else if (filter === 'active' && adminCommunityState.status === 'active') {
-                isActive = true;
-                ringColor = 'ring-green-600';
-            } else if (filter === 'hidden' && adminCommunityState.status === 'hidden') {
-                isActive = true;
-                ringColor = 'ring-stone-500';
+            btn.className = 'admin-comm-tab-btn px-4 py-2.5 rounded-xl font-bold text-xs sm:text-sm transition flex items-center gap-2 text-text-muted hover:bg-stone-100';
+            const badge = btn.querySelector('span:last-child');
+            if (badge) {
+                if (tab === 'pending') badge.className = 'px-2 py-0.5 rounded-full text-[11px] font-extrabold bg-amber-100 text-amber-800';
+                else if (tab === 'active') badge.className = 'px-2 py-0.5 rounded-full text-[11px] font-extrabold bg-green-100 text-green-800';
+                else if (tab === 'hidden') badge.className = 'px-2 py-0.5 rounded-full text-[11px] font-extrabold bg-stone-100 text-stone-700';
+                else badge.className = 'px-2 py-0.5 rounded-full text-[11px] font-extrabold bg-gray-100 text-gray-700';
             }
         }
+    });
 
-        card.classList.remove(...ringClasses);
+    // 2. Cập nhật active Stat Cards
+    const cards = document.querySelectorAll('.admin-comm-stat-card');
+    cards.forEach(card => {
+        const filter = card.dataset.commFilter;
+        const isActive = (filter === adminCommunityState.status);
+        card.classList.remove('ring-2', 'ring-[#245B43]', 'ring-[#E59F3F]', 'ring-green-600', 'ring-stone-500', 'shadow-md', 'scale-[1.01]');
         if (isActive) {
+            let ringColor = 'ring-[#245B43]';
+            if (filter === 'pending') ringColor = 'ring-[#E59F3F]';
+            if (filter === 'active') ringColor = 'ring-green-600';
+            if (filter === 'hidden') ringColor = 'ring-stone-500';
             card.classList.add('ring-2', ringColor, 'shadow-md', 'scale-[1.01]');
         }
     });
@@ -1946,85 +2088,14 @@ function updateCommunityPagination(pagination = {}) {
     const total = pagination.total || 0;
 
     if (info) {
-        info.textContent = `Trang ${page} / ${totalPages} (Tổng ${total} mục)`;
+        info.textContent = `Trang ${page} / ${totalPages} (Tổng ${total} bài viết)`;
     }
 
     if (prev) prev.disabled = page <= 1;
     if (next) next.disabled = page >= totalPages;
 }
 
-function switchCommunityTab(tabName) {
-    adminCommunityState.activeTab = tabName;
-    adminCommunityState.page = 1;
-    adminCommunityState.search = '';
-    adminCommunityState.status = '';
-
-    const searchInput = document.getElementById('admin-community-search');
-    const statusSelect = document.getElementById('admin-community-status-filter');
-    if (searchInput) searchInput.value = '';
-    if (statusSelect) statusSelect.value = '';
-
-    const tabModBtn = document.getElementById('admin-tab-moderation');
-    const tabRepBtn = document.getElementById('admin-tab-reports');
-    const postsSection = document.getElementById('admin-community-posts-section');
-    const reportsSection = document.getElementById('admin-community-reports-section');
-    const titleEl = document.getElementById('admin-community-table-title');
-    const subtitleEl = document.getElementById('admin-community-table-subtitle');
-
-    if (tabName === 'moderation') {
-        // Active Tab 1
-        tabModBtn?.classList.remove('bg-transparent', 'text-[#66736B]', 'hover:bg-stone-100');
-        tabModBtn?.classList.add('bg-[#245B43]', 'text-white', 'shadow-md', 'shadow-[#245B43]/20');
-
-        tabRepBtn?.classList.remove('bg-rose-600', 'text-white', 'shadow-md', 'shadow-rose-600/20');
-        tabRepBtn?.classList.add('bg-transparent', 'text-[#66736B]', 'hover:bg-stone-100');
-
-        postsSection?.classList.remove('hidden');
-        reportsSection?.classList.add('hidden');
-
-        if (titleEl) titleEl.innerHTML = `<i class="fa-solid fa-newspaper text-primary"></i><span>Danh sách bài viết cộng đồng</span>`;
-        if (subtitleEl) subtitleEl.textContent = 'Kiểm tra nội dung, duyệt bài viết mới hoặc ẩn bài viết vi phạm tiêu chuẩn.';
-
-        if (statusSelect) {
-            statusSelect.innerHTML = `
-                <option value="">Tất cả trạng thái</option>
-                <option value="pending">Chờ kiểm duyệt</option>
-                <option value="active">Đã duyệt (Hiển thị)</option>
-                <option value="hidden">Bị từ chối / Đã ẩn</option>
-            `;
-        }
-
-        loadAdminCommunityPosts();
-    } else {
-        // Active Tab 2
-        tabRepBtn?.classList.remove('bg-transparent', 'text-[#66736B]', 'hover:bg-stone-100');
-        tabRepBtn?.classList.add('bg-rose-600', 'text-white', 'shadow-md', 'shadow-rose-600/20');
-
-        tabModBtn?.classList.remove('bg-[#245B43]', 'text-white', 'shadow-md', 'shadow-[#245B43]/20');
-        tabModBtn?.classList.add('bg-transparent', 'text-[#66736B]', 'hover:bg-stone-100');
-
-        postsSection?.classList.add('hidden');
-        reportsSection?.classList.remove('hidden');
-
-        if (titleEl) titleEl.innerHTML = `<i class="fa-solid fa-triangle-exclamation text-rose-500"></i><span>Cảnh báo & Báo cáo vi phạm</span>`;
-        if (subtitleEl) subtitleEl.textContent = 'Danh sách các bài viết bị người dùng báo cáo vi phạm cần xử lý ngay.';
-
-        if (statusSelect) {
-            statusSelect.innerHTML = `
-                <option value="">Tất cả trạng thái</option>
-                <option value="pending">Chờ xử lý</option>
-                <option value="resolved">Đã giải quyết</option>
-                <option value="rejected">Đã bỏ qua</option>
-            `;
-        }
-
-        loadAdminCommunityReports();
-    }
-
-    updateStatCardActiveState();
-}
-
-// Modal Prompt Hỏi Lý Do Ẩn Bài Viết Hiện Đại
+// Modal Prompt Hỏi Lý Do Ẩn Bài Viết
 function askPostHideReason(postTitle = 'bài viết', isReject = false) {
     return new Promise((resolve) => {
         let modal = document.getElementById('admin-hide-reason-modal');
@@ -2087,7 +2158,7 @@ function askPostHideReason(postTitle = 'bài viết', isReject = false) {
 
         if (titleEl) titleEl.textContent = postTitle;
         if (headingEl) headingEl.textContent = isReject ? 'Lý do từ chối bài viết' : 'Lý do ẩn bài viết';
-        if (badgeEl) badgeEl.textContent = isReject ? 'Từ chối kiểm duyệt' : 'Cảnh báo vi phạm';
+        if (badgeEl) badgeEl.textContent = isReject ? 'Từ chối kiểm duyệt' : 'Ẩn bài viết';
         if (actionTextEl) actionTextEl.textContent = isReject ? 'từ chối' : 'ẩn';
         if (confirmBtn) {
             confirmBtn.innerHTML = isReject
@@ -2133,7 +2204,6 @@ function askPostHideReason(postTitle = 'bài viết', isReject = false) {
     });
 }
 
-// Hàm Duyệt bài viết
 async function approveCommunityPost(id) {
     const post = adminCommunityState.posts.find(p => p.id_post == id);
     const postTitle = post?.title || `Bài viết #${id}`;
@@ -2158,11 +2228,11 @@ async function approveCommunityPost(id) {
         return;
     }
 
-    Popup.toast('Đã duyệt bài viết thành công! Bài viết đã hiển thị trên cộng đồng.', 'success');
+    Popup.toast('Đã duyệt bài viết thành công!', 'success');
     await loadAdminCommunityPosts();
+    updateSidebarBadges();
 }
 
-// Hàm Ẩn hoặc Từ chối bài viết kèm Lý do
 async function hideCommunityPost(id) {
     const post = adminCommunityState.posts.find(p => p.id_post == id);
     const postTitle = post?.title || `Bài viết #${id}`;
@@ -2183,6 +2253,7 @@ async function hideCommunityPost(id) {
 
     Popup.toast(isPending ? `Đã từ chối bài viết. Lý do: "${reason}"` : `Đã ẩn bài viết. Lý do: "${reason}"`, 'success');
     await loadAdminCommunityPosts();
+    updateSidebarBadges();
 }
 
 async function deleteCommunityPost(id) {
@@ -2208,41 +2279,612 @@ async function deleteCommunityPost(id) {
         return;
     }
 
-    Popup.toast('Đã xóa bài viết vi phạm thành công!', 'success');
+    Popup.toast('Đã xóa bài viết thành công!', 'success');
     await loadAdminCommunityPosts();
+    updateSidebarBadges();
 }
 
-async function handleReportAction(reportId, action, targetPostId = null) {
-    const report = adminCommunityState.reports.find(r => r.id_report == reportId);
+async function openCommunityDetailModal(id) {
+    const modal = document.getElementById('admin-community-detail-modal');
+    const content = document.getElementById('admin-community-detail-content');
+    if (!modal || !content) return;
+
+    content.innerHTML = `<div class="p-8 text-center text-text-muted"><i class="fa-solid fa-spinner fa-spin mr-2"></i>Đang tải chi tiết bài viết...</div>`;
+    modal.classList.remove('hidden');
+    modal.classList.add('flex');
+
+    const res = await fetchAPI(`/admin/posts/${id}`);
+    if (!res || !res.success) {
+        content.innerHTML = `<p class="text-center text-red-500 font-bold p-6">${res?.message || 'Không thể tải chi tiết bài viết.'}</p>`;
+        return;
+    }
+
+    const post = res.data;
+    let detailStatusBadge = '<span class="px-3 py-1 rounded-full text-xs bg-amber-100 text-amber-800 font-bold">Chờ duyệt</span>';
+    if (post.status === 'active') {
+        detailStatusBadge = '<span class="px-3 py-1 rounded-full text-xs bg-green-100 text-green-700 font-bold">Đã duyệt (Hiển thị)</span>';
+    } else if (post.status === 'hidden') {
+        detailStatusBadge = '<span class="px-3 py-1 rounded-full text-xs bg-stone-100 text-stone-600 font-bold">Đã ẩn / Từ chối</span>';
+    }
+
+    content.innerHTML = `
+        <div class="space-y-4">
+            <div class="flex items-center gap-3">
+                <img src="${escapeHTML(post.author?.avatar || '/images/users/default.png')}" class="w-12 h-12 rounded-full object-cover border border-gray-200">
+                <div>
+                    <h4 class="font-bold text-text-main text-base">${escapeHTML(post.author?.name || 'Ẩn danh')}</h4>
+                    <span class="text-xs text-text-muted">${escapeHTML(post.author?.email || '')} • ${formatDate(post.created_at)}</span>
+                </div>
+            </div>
+
+            <div class="pt-2">
+                <h3 class="text-lg font-black text-text-main">${escapeHTML(post.title || '')}</h3>
+                <p class="text-sm text-[#4A5550] leading-relaxed mt-2 whitespace-pre-line">${escapeHTML(post.content || '')}</p>
+            </div>
+
+            ${post.hidden_reason ? `
+                <div class="p-3.5 rounded-2xl bg-rose-50 border border-rose-200 text-xs text-rose-800">
+                    <strong class="font-black"><i class="fa-solid fa-triangle-exclamation mr-1"></i>Lý do từ chối/ẩn:</strong> ${escapeHTML(post.hidden_reason)}
+                </div>
+            ` : ''}
+
+            ${post.image ? `
+                <div class="rounded-2xl overflow-hidden border border-gray-100 max-h-72">
+                    <img src="${escapeHTML(post.image)}" class="w-full h-full object-cover" onerror="this.style.display='none'">
+                </div>
+            ` : ''}
+
+            <div class="flex items-center gap-4 text-xs font-bold text-text-muted pt-2 border-t border-gray-100">
+                <span class="flex items-center gap-1.5 text-rose-500"><i class="fa-solid fa-heart"></i> ${formatNumber(post.likes_count)} thích</span>
+                <span class="flex items-center gap-1.5 text-blue-500"><i class="fa-solid fa-comment"></i> ${formatNumber(post.comments_count)} bình luận</span>
+                <span class="ml-auto">${detailStatusBadge}</span>
+            </div>
+        </div>
+    `;
+}
+
+function closeCommunityDetailModal() {
+    const modal = document.getElementById('admin-community-detail-modal');
+    if (modal) {
+        modal.classList.add('hidden');
+        modal.classList.remove('flex');
+    }
+}
+
+function bindAdminCommunityEvents() {
+    const search = document.getElementById('admin-community-search');
+    const refresh = document.getElementById('admin-community-refresh');
+    const prev = document.getElementById('admin-community-prev');
+    const next = document.getElementById('admin-community-next');
+    const postsBody = document.getElementById('admin-community-posts-body');
+    const modalClose = document.getElementById('admin-community-detail-close');
+    const modal = document.getElementById('admin-community-detail-modal');
+
+    // Chuyển Tabs (Tất cả, Chờ duyệt, Đã duyệt, Đã ẩn)
+    const tabsContainer = document.getElementById('admin-comm-tabs-container');
+    tabsContainer?.addEventListener('click', (e) => {
+        const btn = e.target.closest('.admin-comm-tab-btn');
+        if (!btn) return;
+        adminCommunityState.status = btn.dataset.commTab || '';
+        adminCommunityState.page = 1;
+        loadAdminCommunityPosts();
+    });
+
+    // Click thẻ thống kê -> Lọc theo tab tương ứng
+    const statsContainer = document.getElementById('admin-comm-stats-container');
+    statsContainer?.addEventListener('click', (e) => {
+        const card = e.target.closest('.admin-comm-stat-card');
+        if (!card) return;
+        adminCommunityState.status = card.dataset.commFilter || '';
+        adminCommunityState.page = 1;
+        loadAdminCommunityPosts();
+    });
+
+    // Tìm kiếm
+    let searchTimer = null;
+    search?.addEventListener('input', () => {
+        window.clearTimeout(searchTimer);
+        searchTimer = window.setTimeout(() => {
+            adminCommunityState.search = search.value.trim();
+            adminCommunityState.page = 1;
+            loadAdminCommunityPosts();
+        }, 300);
+    });
+
+    // Tải lại
+    refresh?.addEventListener('click', () => {
+        loadAdminCommunityPosts();
+    });
+
+    // Phân trang
+    prev?.addEventListener('click', () => {
+        if (adminCommunityState.page <= 1) return;
+        adminCommunityState.page -= 1;
+        loadAdminCommunityPosts();
+    });
+
+    next?.addEventListener('click', () => {
+        adminCommunityState.page += 1;
+        loadAdminCommunityPosts();
+    });
+
+    // Thao tác trên từng dòng bài viết
+    postsBody?.addEventListener('click', (e) => {
+        const btn = e.target.closest('[data-post-action]');
+        if (!btn) return;
+
+        const id = btn.dataset.id;
+        const action = btn.dataset.postAction;
+
+        if (action === 'view') openCommunityDetailModal(id);
+        if (action === 'approve') approveCommunityPost(id);
+        if (action === 'hide' || action === 'reject') hideCommunityPost(id);
+        if (action === 'delete') deleteCommunityPost(id);
+    });
+
+    // Đóng Modal
+    modalClose?.addEventListener('click', closeCommunityDetailModal);
+    modal?.addEventListener('click', (e) => {
+        if (e.target === modal) closeCommunityDetailModal();
+    });
+}
+
+async function initAdminCommunityPage() {
+    bindAdminCommunityEvents();
+    await loadAdminCommunityPosts();
+    updateSidebarBadges();
+}
+
+// ==========================================
+// 2. QUẢN LÝ BÁO CÁO VI PHẠM (REPORTS)
+// ==========================================
+
+const adminReportsState = {
+    page: 1,
+    limit: 10,
+    search: '',
+    status: '', // '' = Tất cả, 'pending' = Chờ xử lý, 'handled' = Đã giải quyết (resolved/rejected)
+    targetType: '', // '' = Tất cả, 'post' = Bài viết, 'comment' = Bình luận
+    reports: []
+};
+
+function renderReportsPage() {
+    const currentUser = getStoredAdminUser();
+    const adminName = currentUser?.name || 'Admin';
+    const adminAvatar = currentUser?.avatar || 'http://localhost:5000/images/users/admin.jpg';
+
+    return `
+        <header class="flex flex-col lg:flex-row lg:justify-between lg:items-center gap-4 mb-6 bg-white p-4 rounded-2xl shadow-sm border border-gray-100">
+            <div>
+                <h1 class="text-2xl font-bold text-text-main flex items-center gap-2.5">
+                    <i class="fa-solid fa-triangle-exclamation text-rose-500"></i>
+                    <span>Quản lý Báo cáo vi phạm</span>
+                </h1>
+                <p class="text-sm text-text-muted mt-1">Xử lý các bài viết hoặc bình luận bị người dùng tố cáo vi phạm tiêu chuẩn cộng đồng.</p>
+            </div>
+            <div class="flex items-center gap-4">
+                <span class="text-text-muted">Xin chào, <strong>${escapeHTML(adminName)}</strong></span>
+                <img src="${escapeHTML(adminAvatar)}" class="w-10 h-10 rounded-full object-cover" alt="Admin">
+            </div>
+        </header>
+
+        <!-- 4 Thẻ Thống Kê Vi Phạm -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-6" id="admin-rep-stats-container">
+            <div data-rep-filter="pending" class="admin-rep-stat-card bg-white rounded-2xl border border-amber-200 shadow-sm p-4.5 border-l-4 border-l-amber-500 bg-amber-50/20 cursor-pointer hover:shadow-md hover:-translate-y-0.5 transition-all select-none group" title="Xem các báo cáo chờ xử lý">
+                <div class="flex items-center justify-between">
+                    <p class="text-xs font-bold uppercase tracking-wide text-amber-700 flex items-center gap-1.5">
+                        <i class="fa-solid fa-hourglass-half"></i> Chờ xử lý
+                    </p>
+                    <i class="fa-solid fa-arrow-right text-[10px] text-amber-300 group-hover:text-amber-600 group-hover:translate-x-0.5 transition-all"></i>
+                </div>
+                <strong id="admin-rep-stat-pending" class="block text-2xl font-black text-amber-600 mt-1.5">0</strong>
+                <p class="text-[11px] text-amber-700/80 mt-1">Cần Admin kiểm tra & đưa ra quyết định</p>
+            </div>
+
+            <div data-rep-filter="resolved" class="admin-rep-stat-card bg-white rounded-2xl border border-green-200 shadow-sm p-4.5 border-l-4 border-l-green-600 bg-green-50/20 cursor-pointer hover:shadow-md hover:-translate-y-0.5 transition-all select-none group" title="Xem các báo cáo đã giải quyết">
+                <div class="flex items-center justify-between">
+                    <p class="text-xs font-bold uppercase tracking-wide text-green-700 flex items-center gap-1.5">
+                        <i class="fa-solid fa-circle-check"></i> Đã giải quyết
+                    </p>
+                    <i class="fa-solid fa-arrow-right text-[10px] text-green-300 group-hover:text-green-600 group-hover:translate-x-0.5 transition-all"></i>
+                </div>
+                <strong id="admin-rep-stat-resolved" class="block text-2xl font-black text-green-700 mt-1.5">0</strong>
+                <p class="text-[11px] text-green-700/80 mt-1">Đã xử lý (ẩn nội dung hoặc xác nhận)</p>
+            </div>
+
+            <div data-rep-filter="rejected" class="admin-rep-stat-card bg-white rounded-2xl border border-stone-200 shadow-sm p-4.5 border-l-4 border-l-stone-500 bg-stone-50/20 cursor-pointer hover:shadow-md hover:-translate-y-0.5 transition-all select-none group" title="Xem các báo cáo đã bỏ qua">
+                <div class="flex items-center justify-between">
+                    <p class="text-xs font-bold uppercase tracking-wide text-stone-600 flex items-center gap-1.5">
+                        <i class="fa-solid fa-ban"></i> Đã bỏ qua / Bác bỏ
+                    </p>
+                    <i class="fa-solid fa-arrow-right text-[10px] text-stone-300 group-hover:text-stone-600 group-hover:translate-x-0.5 transition-all"></i>
+                </div>
+                <strong id="admin-rep-stat-rejected" class="block text-2xl font-black text-stone-600 mt-1.5">0</strong>
+                <p class="text-[11px] text-stone-500 mt-1">Đánh giá nội dung không vi phạm</p>
+            </div>
+
+            <div data-rep-filter="" class="admin-rep-stat-card bg-white rounded-2xl border border-gray-100 shadow-sm p-4.5 border-l-4 border-l-primary cursor-pointer hover:shadow-md hover:-translate-y-0.5 transition-all select-none group" title="Xem tất cả báo cáo">
+                <div class="flex items-center justify-between">
+                    <p class="text-xs font-bold uppercase tracking-wide text-text-muted">Tổng số báo cáo</p>
+                    <i class="fa-solid fa-arrow-right text-[10px] text-gray-300 group-hover:text-primary group-hover:translate-x-0.5 transition-all"></i>
+                </div>
+                <strong id="admin-rep-stat-total" class="block text-2xl font-black text-text-main mt-1.5">0</strong>
+                <p class="text-[11px] text-text-muted mt-1">Toàn bộ báo cáo đã ghi nhận</p>
+            </div>
+        </div>
+
+        <!-- Toolbar: Tabs Lọc & Bộ Lọc Đối Tượng -->
+        <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-6 bg-white p-3 rounded-2xl border border-gray-100 shadow-xs">
+            <!-- Tabs lọc 3 quy trình báo cáo -->
+            <div class="flex flex-wrap items-center gap-2" id="admin-rep-tabs-container">
+                <button type="button" data-rep-tab="" class="admin-rep-tab-btn px-4 py-2.5 rounded-xl font-bold text-xs sm:text-sm transition flex items-center gap-2 bg-[#245B43] text-white shadow-sm">
+                    <i class="fa-solid fa-list"></i>
+                    <span>Tất cả báo cáo</span>
+                    <span id="admin-rep-tab-all-badge" class="px-2 py-0.5 rounded-full text-[11px] font-extrabold bg-white/20 text-white">0</span>
+                </button>
+                <button type="button" data-rep-tab="pending" class="admin-rep-tab-btn px-4 py-2.5 rounded-xl font-bold text-xs sm:text-sm transition flex items-center gap-2 text-text-muted hover:bg-stone-100">
+                    <i class="fa-solid fa-hourglass-half text-amber-500"></i>
+                    <span>Chờ xử lý</span>
+                    <span id="admin-rep-tab-pending-badge" class="px-2 py-0.5 rounded-full text-[11px] font-extrabold bg-amber-100 text-amber-800">0</span>
+                </button>
+                <button type="button" data-rep-tab="handled" class="admin-rep-tab-btn px-4 py-2.5 rounded-xl font-bold text-xs sm:text-sm transition flex items-center gap-2 text-text-muted hover:bg-stone-100">
+                    <i class="fa-solid fa-check-double text-green-600"></i>
+                    <span>Đã giải quyết</span>
+                    <span id="admin-rep-tab-resolved-badge" class="px-2 py-0.5 rounded-full text-[11px] font-extrabold bg-green-100 text-green-800">0</span>
+                </button>
+            </div>
+
+            <!-- Bộ lọc đối tượng & Tìm kiếm -->
+            <div class="flex flex-wrap items-center gap-2.5">
+                <select id="admin-reports-target-filter" class="px-3 py-2 border border-gray-200 rounded-xl text-xs sm:text-sm focus:outline-none focus:border-primary bg-white cursor-pointer font-medium">
+                    <option value="">Tất cả đối tượng</option>
+                    <option value="post">Chỉ bài viết</option>
+                    <option value="comment">Chỉ bình luận</option>
+                </select>
+
+                <div class="relative">
+                    <i class="fa-solid fa-magnifying-glass absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-400 text-xs"></i>
+                    <input type="text" id="admin-reports-search" placeholder="Tìm theo lý do, người báo..." class="pl-9 pr-3.5 py-2 border border-gray-200 rounded-xl text-xs sm:text-sm focus:outline-none focus:border-primary w-44 sm:w-56 transition">
+                </div>
+
+                <button type="button" id="admin-reports-refresh" class="px-3.5 py-2 rounded-xl border border-gray-200 hover:bg-stone-50 text-text-muted hover:text-primary transition font-bold text-xs sm:text-sm cursor-pointer" title="Tải lại">
+                    <i class="fa-solid fa-arrows-rotate"></i>
+                </button>
+            </div>
+        </div>
+
+        <!-- Khung bảng danh sách báo cáo -->
+        <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
+            <div class="overflow-x-auto">
+                <table class="w-full text-left border-collapse">
+                    <thead>
+                        <tr class="bg-rose-50/50 text-rose-900 text-xs uppercase tracking-wider border-b border-rose-100">
+                            <th class="p-4 font-bold max-w-xs md:max-w-sm">Nội dung bị tố cáo</th>
+                            <th class="p-4 font-bold whitespace-nowrap w-44">Tác giả nội dung</th>
+                            <th class="p-4 font-bold whitespace-nowrap">Người báo cáo & Lý do</th>
+                            <th class="p-4 font-bold whitespace-nowrap w-28 text-center">Thời gian</th>
+                            <th class="p-4 font-bold text-center whitespace-nowrap w-32">Xử lý</th>
+                            <th class="p-4 font-bold text-right whitespace-nowrap w-36">Thao tác</th>
+                        </tr>
+                    </thead>
+                    <tbody id="admin-reports-body" class="divide-y divide-gray-100 text-sm">
+                        <tr>
+                            <td colspan="6" class="p-8 text-center text-text-muted">Đang tải danh sách báo cáo vi phạm...</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Phân trang -->
+            <div class="p-4 border-t border-gray-100 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs sm:text-sm text-text-muted">
+                <span id="admin-reports-pagination-info">Hiển thị trang 1</span>
+                <div class="flex items-center gap-2">
+                    <button type="button" id="admin-reports-prev" class="px-3 py-1.5 rounded-lg border border-gray-200 hover:bg-stone-50 font-bold transition disabled:opacity-40 disabled:cursor-not-allowed">
+                        <i class="fa-solid fa-chevron-left"></i> Trước
+                    </button>
+                    <button type="button" id="admin-reports-next" class="px-3 py-1.5 rounded-lg border border-gray-200 hover:bg-stone-50 font-bold transition disabled:opacity-40 disabled:cursor-not-allowed">
+                        Sau <i class="fa-solid fa-chevron-right"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Modal chi tiết báo cáo vi phạm -->
+        <div id="admin-report-detail-modal" class="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm hidden items-center justify-center p-4">
+            <div class="relative bg-white rounded-3xl max-w-2xl w-full max-h-[90vh] overflow-y-auto p-6 sm:p-7 shadow-2xl border border-gray-100">
+                <button type="button" id="admin-report-detail-close" class="absolute top-5 right-5 w-8 h-8 rounded-full bg-gray-100 hover:bg-gray-200 text-gray-500 flex items-center justify-center transition cursor-pointer text-sm">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+                <div id="admin-report-detail-content"></div>
+            </div>
+        </div>
+    `;
+}
+
+function renderReportsTable(reports) {
+    const tbody = document.getElementById('admin-reports-body');
+    if (!tbody) return;
+
+    if (!reports || reports.length === 0) {
+        tbody.innerHTML = `
+            <tr>
+                <td colspan="6" class="p-10 text-center text-text-muted">
+                    <div class="w-12 h-12 rounded-2xl bg-green-50 text-green-600 flex items-center justify-center mx-auto mb-3 text-lg">
+                        <i class="fa-solid fa-shield-check"></i>
+                    </div>
+                    Tuyệt vời! Không có báo cáo vi phạm nào phù hợp với bộ lọc.
+                </td>
+            </tr>
+        `;
+        return;
+    }
+
+    tbody.innerHTML = reports.map(r => {
+        const isPost = (r.target_type === 'post');
+        const targetData = isPost ? (r.post || {}) : (r.comment || {});
+        const isHidden = (targetData.status === 'hidden');
+
+        // Phân loại tag
+        const typeBadge = isPost
+            ? `<span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-blue-100 text-blue-700 shrink-0"><i class="fa-solid fa-newspaper text-[10px]"></i> Bài viết #${r.target_id}</span>`
+            : `<span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-purple-100 text-purple-700 shrink-0"><i class="fa-solid fa-comment-dots text-[10px]"></i> Bình luận #${r.target_id}</span>`;
+
+        // Trạng thái nội dung
+        const contentStatusBadge = isHidden
+            ? `<span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-stone-100 text-stone-600 border border-stone-200 shrink-0">Đã ẩn</span>`
+            : `<span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-green-50 text-green-700 border border-green-200 shrink-0">Hiển thị</span>`;
+
+        // Tiêu đề & nội dung bị tố cáo
+        let titleHTML = '';
+        let snippetText = '';
+        if (isPost) {
+            titleHTML = escapeHTML(r.post?.title || `Bài viết #${r.target_id}`);
+            snippetText = escapeHTML(r.post?.content || '(Không có nội dung)');
+        } else {
+            titleHTML = `Bình luận trong: "${escapeHTML(r.comment?.post_title || 'Bài viết')}"`;
+            snippetText = escapeHTML(r.comment?.content || '(Không có nội dung)');
+        }
+
+        // Tác giả nội dung
+        const author = targetData.author || {};
+
+        // Trạng thái xử lý báo cáo
+        let statusBadge = '<span class="bg-amber-100 text-amber-800 border border-amber-300 px-3 py-1 rounded-full text-xs font-bold inline-flex items-center gap-1.5 animate-pulse"><i class="fa-solid fa-hourglass-half text-[10px]"></i> Chờ xử lý</span>';
+        if (r.status === 'resolved') {
+            statusBadge = '<span class="bg-green-100 text-green-700 border border-green-300 px-3 py-1 rounded-full text-xs font-bold inline-flex items-center gap-1.5"><i class="fa-solid fa-circle-check text-[10px]"></i> Đã giải quyết</span>';
+        } else if (r.status === 'rejected') {
+            statusBadge = '<span class="bg-stone-100 text-stone-600 border border-stone-300 px-3 py-1 rounded-full text-xs font-bold inline-flex items-center gap-1.5"><i class="fa-solid fa-ban text-[10px]"></i> Đã bỏ qua</span>';
+        }
+
+        return `
+            <tr class="hover:bg-rose-50/30 transition border-b border-gray-100">
+                <td class="p-4 align-top max-w-xs md:max-w-sm">
+                    <div class="space-y-1.5">
+                        <div class="flex items-center gap-2">
+                            ${typeBadge}
+                            ${contentStatusBadge}
+                        </div>
+                        <h4 class="font-bold text-text-main text-sm line-clamp-1 hover:text-primary transition cursor-pointer" data-rep-action="view" data-id="${r.id_report}">
+                            ${titleHTML}
+                        </h4>
+                        <p class="text-xs text-[#66736B] line-clamp-2 leading-relaxed">${snippetText}</p>
+                    </div>
+                </td>
+                <td class="p-4 align-top whitespace-nowrap">
+                    <div class="flex items-center gap-2.5">
+                        <img src="${escapeHTML(author.avatar || '/images/users/default.png')}" class="w-8 h-8 rounded-full object-cover border border-gray-200" onerror="this.src='https://i.pravatar.cc/150?u=user'">
+                        <div class="min-w-0">
+                            <span class="block text-xs font-bold text-text-main truncate max-w-32">${escapeHTML(author.name || 'Tác giả')}</span>
+                            <span class="block text-[10px] text-text-muted truncate max-w-32">${escapeHTML(author.email || '')}</span>
+                        </div>
+                    </div>
+                </td>
+                <td class="p-4 align-top">
+                    <div>
+                        <span class="inline-block px-2.5 py-0.5 rounded-full text-xs font-bold bg-rose-100 text-rose-700 mb-1">
+                            ${escapeHTML(r.reason || 'Vi phạm tiêu chuẩn')}
+                        </span>
+                        <p class="text-xs text-text-muted line-clamp-1 italic">${escapeHTML(r.description || 'Không có mô tả')}</p>
+                        <span class="text-[10px] text-stone-400">Báo bởi: <strong>${escapeHTML(r.reporter?.name || 'Ẩn danh')}</strong></span>
+                    </div>
+                </td>
+                <td class="p-4 align-top text-xs text-text-muted whitespace-nowrap text-center">
+                    ${formatDate(r.created_at)}
+                </td>
+                <td class="p-4 align-top text-center whitespace-nowrap">
+                    ${statusBadge}
+                </td>
+                <td class="p-4 align-top text-right whitespace-nowrap">
+                    <div class="flex items-center justify-end gap-1.5">
+                        <button type="button" class="w-8 h-8 rounded-lg text-blue-600 hover:bg-blue-50 flex items-center justify-center transition cursor-pointer text-xs" data-rep-action="view" data-id="${r.id_report}" title="Xem chi tiết báo cáo">
+                            <i class="fa-solid fa-eye"></i>
+                        </button>
+                        ${!isHidden ? `
+                            <button type="button" class="w-8 h-8 rounded-lg text-amber-600 hover:bg-amber-50 flex items-center justify-center transition cursor-pointer text-xs" data-rep-action="hide-content" data-id="${r.id_report}" title="Ẩn nội dung vi phạm">
+                                <i class="fa-solid fa-eye-slash"></i>
+                            </button>
+                        ` : `
+                            <button type="button" class="w-8 h-8 rounded-lg text-emerald-600 hover:bg-emerald-50 flex items-center justify-center transition cursor-pointer text-xs" data-rep-action="restore-content" data-id="${r.id_report}" title="Khôi phục hiển thị">
+                                <i class="fa-solid fa-rotate-left"></i>
+                            </button>
+                        `}
+                        ${r.status === 'pending' ? `
+                            <button type="button" class="w-8 h-8 rounded-lg text-stone-600 hover:bg-stone-100 flex items-center justify-center transition cursor-pointer text-xs" data-rep-action="reject" data-id="${r.id_report}" title="Bác bỏ / Bỏ qua">
+                                <i class="fa-solid fa-ban"></i>
+                            </button>
+                            <button type="button" class="w-8 h-8 rounded-lg text-emerald-600 hover:bg-emerald-50 flex items-center justify-center transition cursor-pointer text-xs" data-rep-action="resolve" data-id="${r.id_report}" title="Đánh dấu đã giải quyết">
+                                <i class="fa-solid fa-check text-sm"></i>
+                            </button>
+                        ` : ''}
+                    </div>
+                </td>
+            </tr>
+        `;
+    }).join('');
+}
+
+async function loadAdminReports() {
+    const tbody = document.getElementById('admin-reports-body');
+    if (tbody) {
+        tbody.innerHTML = `<tr><td colspan="6" class="p-8 text-center text-text-muted"><i class="fa-solid fa-spinner fa-spin mr-2"></i>Đang tải danh sách báo cáo vi phạm...</td></tr>`;
+    }
+
+    const params = new URLSearchParams({
+        page: adminReportsState.page,
+        limit: adminReportsState.limit
+    });
+
+    if (adminReportsState.search) params.append('search', adminReportsState.search);
+    if (adminReportsState.status) params.append('status', adminReportsState.status);
+    if (adminReportsState.targetType) params.append('target_type', adminReportsState.targetType);
+
+    const res = await fetchAPI(`/admin/reports?${params.toString()}`);
+    if (!res || !res.success) {
+        if (tbody) {
+            tbody.innerHTML = `<tr><td colspan="6" class="p-8 text-center text-rose-600 font-bold">${res?.message || 'Không thể tải danh sách báo cáo vi phạm.'}</td></tr>`;
+        }
+        return;
+    }
+
+    adminReportsState.reports = res.data || [];
+    renderReportsTable(adminReportsState.reports);
+
+    const pagination = res.pagination || {};
+    const totalCount = pagination.allTotal ?? pagination.total ?? 0;
+    const pendingCount = pagination.pendingTotal || 0;
+    const resolvedCount = pagination.resolvedTotal || 0;
+    const rejectedCount = pagination.rejectedTotal || 0;
+
+    const setText = (id, val) => {
+        const el = document.getElementById(id);
+        if (el) el.textContent = formatNumber(val);
+    };
+
+    setText('admin-rep-stat-total', totalCount);
+    setText('admin-rep-stat-pending', pendingCount);
+    setText('admin-rep-stat-resolved', resolvedCount);
+    setText('admin-rep-stat-rejected', rejectedCount);
+
+    setText('admin-rep-tab-all-badge', totalCount);
+    setText('admin-rep-tab-pending-badge', pendingCount);
+    setText('admin-rep-tab-resolved-badge', resolvedCount + rejectedCount);
+
+    updateReportsPagination(pagination);
+    updateReportsTabAndCardsUI();
+}
+
+function updateReportsTabAndCardsUI() {
+    // 1. Cập nhật active Tabs
+    const tabBtns = document.querySelectorAll('.admin-rep-tab-btn');
+    tabBtns.forEach(btn => {
+        const tab = btn.dataset.repTab;
+        const isActive = (tab === adminReportsState.status);
+        if (isActive) {
+            btn.className = 'admin-rep-tab-btn px-4 py-2.5 rounded-xl font-bold text-xs sm:text-sm transition flex items-center gap-2 bg-[#245B43] text-white shadow-sm';
+            const badge = btn.querySelector('span:last-child');
+            if (badge) badge.className = 'px-2 py-0.5 rounded-full text-[11px] font-extrabold bg-white/25 text-white';
+        } else {
+            btn.className = 'admin-rep-tab-btn px-4 py-2.5 rounded-xl font-bold text-xs sm:text-sm transition flex items-center gap-2 text-text-muted hover:bg-stone-100';
+            const badge = btn.querySelector('span:last-child');
+            if (badge) {
+                if (tab === 'pending') badge.className = 'px-2 py-0.5 rounded-full text-[11px] font-extrabold bg-amber-100 text-amber-800';
+                else if (tab === 'handled') badge.className = 'px-2 py-0.5 rounded-full text-[11px] font-extrabold bg-green-100 text-green-800';
+                else badge.className = 'px-2 py-0.5 rounded-full text-[11px] font-extrabold bg-gray-100 text-gray-700';
+            }
+        }
+    });
+
+    // 2. Cập nhật active Stat Cards
+    const cards = document.querySelectorAll('.admin-rep-stat-card');
+    cards.forEach(card => {
+        const filter = card.dataset.repFilter;
+        let isActive = (filter === adminReportsState.status);
+        if (adminReportsState.status === 'handled' && (filter === 'resolved' || filter === 'rejected')) {
+            isActive = true;
+        }
+
+        card.classList.remove('ring-2', 'ring-[#245B43]', 'ring-amber-500', 'ring-green-600', 'ring-stone-500', 'shadow-md', 'scale-[1.01]');
+        if (isActive) {
+            let ringColor = 'ring-[#245B43]';
+            if (filter === 'pending') ringColor = 'ring-amber-500';
+            if (filter === 'resolved') ringColor = 'ring-green-600';
+            if (filter === 'rejected') ringColor = 'ring-stone-500';
+            card.classList.add('ring-2', ringColor, 'shadow-md', 'scale-[1.01]');
+        }
+    });
+}
+
+function updateReportsPagination(pagination = {}) {
+    const prev = document.getElementById('admin-reports-prev');
+    const next = document.getElementById('admin-reports-next');
+    const info = document.getElementById('admin-reports-pagination-info');
+
+    const page = pagination.page || 1;
+    const totalPages = pagination.totalPages || 1;
+    const total = pagination.total || 0;
+
+    if (info) {
+        info.textContent = `Trang ${page} / ${totalPages} (Tổng ${total} báo cáo)`;
+    }
+
+    if (prev) prev.disabled = page <= 1;
+    if (next) next.disabled = page >= totalPages;
+}
+
+async function handleReportAction(reportId, action) {
+    const report = adminReportsState.reports.find(r => r.id_report == reportId);
     if (!report) return;
 
-    if (action === 'hide-post' && targetPostId) {
-        const postTitle = report.post?.title || `Bài viết #${targetPostId}`;
-        const reason = await askPostHideReason(postTitle);
-        if (!reason) return;
-
-        // 1. Ẩn bài viết kèm lý do
-        await fetchAPI(`/admin/posts/${targetPostId}/status`, {
-            method: 'PATCH',
-            body: JSON.stringify({ status: 'hidden', hidden_reason: reason })
+    if (action === 'hide-content') {
+        const isPost = (report.target_type === 'post');
+        const confirmed = await Popup.confirm({
+            title: `Ẩn ${isPost ? 'bài viết' : 'bình luận'} vi phạm`,
+            message: `Bạn có chắc muốn <strong>ẩn nội dung</strong> này và đánh dấu báo cáo là <strong>Đã giải quyết</strong>?`,
+            type: 'warning',
+            confirmText: 'Ẩn & Giải quyết',
+            cancelText: 'Hủy bỏ'
         });
+        if (!confirmed) return;
 
-        // 2. Cập nhật report thành resolved
         const res = await fetchAPI(`/admin/reports/${reportId}/status`, {
             method: 'PATCH',
-            body: JSON.stringify({ status: 'resolved' })
+            body: JSON.stringify({ status: 'resolved', action: 'hide' })
         });
 
         if (res?.success) {
-            Popup.toast(`Đã ẩn bài viết và xử lý báo cáo thành công! (Lý do: "${reason}")`, 'success');
-            await loadAdminCommunityReports();
+            Popup.toast(`Đã ẩn ${isPost ? 'bài viết' : 'bình luận'} và giải quyết báo cáo!`, 'success');
+            await loadAdminReports();
+            updateSidebarBadges();
         } else {
-            Popup.error(res?.message || 'Không thể cập nhật báo cáo.');
+            Popup.error(res?.message || 'Không thể xử lý báo cáo.');
+        }
+    } else if (action === 'restore-content') {
+        const isPost = (report.target_type === 'post');
+        const confirmed = await Popup.confirm({
+            title: `Khôi phục ${isPost ? 'bài viết' : 'bình luận'}`,
+            message: `Khôi phục hiển thị công khai cho nội dung này?`,
+            type: 'question',
+            confirmText: 'Khôi phục ngay',
+            cancelText: 'Hủy bỏ'
+        });
+        if (!confirmed) return;
+
+        const res = await fetchAPI(`/admin/reports/${reportId}/status`, {
+            method: 'PATCH',
+            body: JSON.stringify({ status: 'resolved', action: 'restore' })
+        });
+
+        if (res?.success) {
+            Popup.toast('Đã khôi phục hiển thị nội dung thành công!', 'success');
+            await loadAdminReports();
+            updateSidebarBadges();
+        } else {
+            Popup.error(res?.message || 'Không thể khôi phục nội dung.');
         }
     } else if (action === 'reject') {
         const confirmed = await Popup.confirm({
-            title: 'Bỏ qua báo cáo vi phạm',
-            message: `Bạn có chắc muốn bỏ qua báo cáo này (đánh giá nội dung không vi phạm)?`,
+            title: 'Bác bỏ / Bỏ qua báo cáo',
+            message: 'Đánh dấu báo cáo này là không vi phạm tiêu chuẩn?',
             type: 'question',
             confirmText: 'Bỏ qua báo cáo',
             cancelText: 'Hủy bỏ'
@@ -2255,8 +2897,9 @@ async function handleReportAction(reportId, action, targetPostId = null) {
         });
 
         if (res?.success) {
-            Popup.toast('Đã đánh dấu bỏ qua báo cáo vi phạm.', 'info');
-            await loadAdminCommunityReports();
+            Popup.toast('Đã bác bỏ báo cáo vi phạm.', 'info');
+            await loadAdminReports();
+            updateSidebarBadges();
         } else {
             Popup.error(res?.message || 'Không thể cập nhật báo cáo.');
         }
@@ -2267,305 +2910,268 @@ async function handleReportAction(reportId, action, targetPostId = null) {
         });
 
         if (res?.success) {
-            Popup.toast('Đã đánh dấu giải quyết báo cáo.', 'success');
-            await loadAdminCommunityReports();
+            Popup.toast('Đã đánh dấu báo cáo là Đã giải quyết.', 'success');
+            await loadAdminReports();
+            updateSidebarBadges();
         } else {
             Popup.error(res?.message || 'Không thể cập nhật báo cáo.');
         }
     }
 }
 
-async function openCommunityDetailModal(id, type = 'post') {
-    const modal = document.getElementById('admin-community-detail-modal');
-    const content = document.getElementById('admin-community-detail-content');
+async function openReportDetailModal(id) {
+    const modal = document.getElementById('admin-report-detail-modal');
+    const content = document.getElementById('admin-report-detail-content');
     if (!modal || !content) return;
 
-    content.innerHTML = `<div class="p-8 text-center text-text-muted"><i class="fa-solid fa-spinner fa-spin mr-2"></i>Đang tải chi tiết...</div>`;
-    modal.classList.remove('hidden');
-    modal.classList.add('flex');
+    const report = adminReportsState.reports.find(r => r.id_report == id);
+    if (!report) {
+        content.innerHTML = `<p class="text-center text-red-500 p-6">Không tìm thấy thông tin báo cáo.</p>`;
+        modal.classList.remove('hidden');
+        modal.classList.add('flex');
+        return;
+    }
 
-    if (type === 'post') {
-        const res = await fetchAPI(`/admin/posts/${id}`);
-        if (!res || !res.success) {
-            content.innerHTML = `<p class="text-center text-red-500 font-bold p-6">${res?.message || 'Không thể tải chi tiết bài viết.'}</p>`;
-            return;
-        }
+    const isPost = (report.target_type === 'post');
+    const targetData = isPost ? (report.post || {}) : (report.comment || {});
+    const author = targetData.author || {};
+    const isHidden = (targetData.status === 'hidden');
 
-        const post = res.data;
-        const reportsHTML = post.reports && post.reports.length > 0
-            ? `
-                <div class="mt-5 pt-4 border-t border-gray-100">
-                    <h5 class="text-xs font-black uppercase text-rose-700 mb-2 flex items-center gap-1.5">
-                        <i class="fa-solid fa-triangle-exclamation"></i>
-                        <span>Các báo cáo vi phạm (${post.reports.length})</span>
-                    </h5>
-                    <div class="space-y-2 max-h-36 overflow-y-auto">
-                        ${post.reports.map(r => `
-                            <div class="p-2.5 rounded-xl bg-rose-50 border border-rose-200 text-xs">
-                                <span class="font-bold text-rose-800">${escapeHTML(r.reason)}:</span>
-                                <span class="text-rose-700">${escapeHTML(r.description || 'Không có mô tả thêm')}</span>
-                                <span class="block text-[10px] text-stone-500 mt-1">Gửi bởi: ${escapeHTML(r.users?.name || 'Ẩn danh')} - ${formatDate(r.created_at)}</span>
-                            </div>
-                        `).join('')}
-                    </div>
-                </div>
-            `
-            : '';
-
-        let detailStatusBadge = '<span class="px-3 py-1 rounded-full text-xs bg-amber-100 text-amber-800 font-bold">Chờ duyệt</span>';
-        if (post.status === 'active') {
-            detailStatusBadge = '<span class="px-3 py-1 rounded-full text-xs bg-green-100 text-green-700 font-bold">Đã duyệt (Hiển thị)</span>';
-        } else if (post.status === 'hidden') {
-            detailStatusBadge = '<span class="px-3 py-1 rounded-full text-xs bg-stone-100 text-stone-600 font-bold">Đã ẩn</span>';
-        }
-
-        content.innerHTML = `
-            <div class="space-y-4">
-                <div class="flex items-center gap-3">
-                    <img src="${escapeHTML(post.author?.avatar || '/images/users/default.png')}" class="w-12 h-12 rounded-full object-cover border border-gray-200">
-                    <div>
-                        <h4 class="font-bold text-text-main text-base">${escapeHTML(post.author?.name || 'Ẩn danh')}</h4>
-                        <span class="text-xs text-text-muted">${escapeHTML(post.author?.email || '')} • ${formatDate(post.created_at)}</span>
-                    </div>
-                </div>
-
-                <div class="pt-2">
-                    <h3 class="text-lg font-black text-text-main">${escapeHTML(post.title || '')}</h3>
-                    <p class="text-sm text-[#4A5550] leading-relaxed mt-2 whitespace-pre-line">${escapeHTML(post.content || '')}</p>
-                </div>
-
-                ${post.hidden_reason ? `
-                    <div class="p-3 rounded-2xl bg-rose-50 border border-rose-200 text-xs text-rose-800">
-                        <strong class="font-black"><i class="fa-solid fa-triangle-exclamation mr-1"></i>Lý do ẩn:</strong> ${escapeHTML(post.hidden_reason)}
-                    </div>
-                ` : ''}
-
-                ${post.image ? `
-                    <div class="rounded-2xl overflow-hidden border border-gray-100 max-h-72">
-                        <img src="${escapeHTML(post.image)}" class="w-full h-full object-cover" onerror="this.style.display='none'">
-                    </div>
-                ` : ''}
-
-                <div class="flex items-center gap-4 text-xs font-bold text-text-muted pt-2 border-t border-gray-100">
-                    <span class="flex items-center gap-1.5 text-rose-500"><i class="fa-solid fa-heart"></i> ${formatNumber(post.likes_count)} lượt thích</span>
-                    <span class="flex items-center gap-1.5 text-blue-500"><i class="fa-solid fa-comment"></i> ${formatNumber(post.comments_count)} bình luận</span>
-                    <span class="ml-auto">
-                        ${detailStatusBadge}
-                    </span>
-                </div>
-
-                ${reportsHTML}
-            </div>
-        `;
-    } else {
-        // Chi tiết báo cáo
-        const report = adminCommunityState.reports.find(r => r.id_report == id);
-        if (!report) {
-            content.innerHTML = `<p class="text-center text-red-500 p-6">Không tìm thấy thông tin báo cáo.</p>`;
-            return;
-        }
-
-        content.innerHTML = `
-            <div class="space-y-4">
-                <div class="flex items-center gap-2 text-rose-600 font-bold text-base">
+    content.innerHTML = `
+        <div class="space-y-5">
+            <div class="flex items-center justify-between pb-3 border-b border-gray-100">
+                <div class="flex items-center gap-2.5 text-rose-600 font-bold text-base">
                     <i class="fa-solid fa-triangle-exclamation text-lg"></i>
                     <span>Chi tiết Báo Cáo Vi Phạm #${report.id_report}</span>
                 </div>
+                <span class="text-xs text-stone-400 font-medium">${formatDate(report.created_at)}</span>
+            </div>
 
-                <div class="p-4 rounded-2xl bg-rose-50/70 border border-rose-200 space-y-2">
-                    <div class="flex items-center justify-between text-xs">
-                        <span class="font-bold text-rose-800">Lý do: ${escapeHTML(report.reason)}</span>
-                        <span class="text-stone-500">${formatDate(report.created_at)}</span>
-                    </div>
-                    <p class="text-xs text-rose-700">${escapeHTML(report.description || 'Không có mô tả chi tiết')}</p>
-                    <span class="block text-[11px] text-stone-600 pt-1">Người báo cáo: <strong>${escapeHTML(report.reporter?.name || 'Ẩn danh')}</strong> (${escapeHTML(report.reporter?.email || '')})</span>
+            <!-- Khối 1: Thông tin người báo cáo & lý do -->
+            <div class="p-4.5 rounded-2xl bg-rose-50/70 border border-rose-200 space-y-2">
+                <div class="flex items-center justify-between">
+                    <span class="text-xs font-black uppercase text-rose-800 tracking-wide">Thông tin tố cáo</span>
+                    <span class="px-2.5 py-0.5 rounded-full text-xs font-black bg-rose-200 text-rose-900">${escapeHTML(report.reason)}</span>
                 </div>
-
-                <div class="border-t border-gray-100 pt-3">
-                    <h5 class="text-xs font-black uppercase tracking-wider text-text-muted mb-2">Bài viết bị tố cáo</h5>
-                    <h4 class="font-bold text-text-main text-base">${escapeHTML(report.post?.title || 'Bài viết #' + report.target_id)}</h4>
-                    <p class="text-xs text-[#66736B] mt-1 whitespace-pre-line leading-relaxed">${escapeHTML(report.post?.content || '')}</p>
-                    ${report.post?.image ? `
-                        <img src="${escapeHTML(report.post.image)}" class="w-full max-h-56 object-cover rounded-xl mt-3 border border-gray-100" onerror="this.style.display='none'">
-                    ` : ''}
+                <p class="text-xs text-rose-800 leading-relaxed">${escapeHTML(report.description || 'Không có mô tả chi tiết')}</p>
+                <div class="pt-2 border-t border-rose-200/60 flex items-center gap-2.5">
+                    <img src="${escapeHTML(report.reporter?.avatar || '/images/users/default.png')}" class="w-7 h-7 rounded-full object-cover border border-rose-200">
+                    <span class="text-xs text-stone-700">Người báo cáo: <strong>${escapeHTML(report.reporter?.name || 'Ẩn danh')}</strong> (${escapeHTML(report.reporter?.email || '')})</span>
                 </div>
             </div>
-        `;
-    }
+
+            <!-- Khối 2: Nội dung bị tố cáo -->
+            <div class="p-4.5 rounded-2xl bg-stone-50 border border-stone-200 space-y-3">
+                <div class="flex items-center justify-between">
+                    <span class="text-xs font-black uppercase text-stone-600 tracking-wide flex items-center gap-1.5">
+                        <i class="fa-solid ${isPost ? 'fa-newspaper' : 'fa-comment-dots'} text-primary"></i>
+                        Đối tượng bị tố cáo: ${isPost ? 'Bài viết' : 'Bình luận'}
+                    </span>
+                    <span class="px-2 py-0.5 rounded-full text-[11px] font-bold ${isHidden ? 'bg-stone-200 text-stone-700' : 'bg-green-100 text-green-700'}">
+                        ${isHidden ? 'Đang bị ẩn' : 'Đang hiển thị'}
+                    </span>
+                </div>
+
+                <div class="flex items-center gap-2.5">
+                    <img src="${escapeHTML(author.avatar || '/images/users/default.png')}" class="w-8 h-8 rounded-full object-cover border border-gray-200">
+                    <div>
+                        <strong class="block text-xs text-text-main">${escapeHTML(author.name || 'Tác giả')}</strong>
+                        <span class="block text-[11px] text-text-muted">${escapeHTML(author.email || '')}</span>
+                    </div>
+                </div>
+
+                ${isPost ? `
+                    <div class="pt-2">
+                        <h4 class="font-bold text-text-main text-base">${escapeHTML(report.post?.title || '')}</h4>
+                        <p class="text-xs text-[#4A5550] mt-1.5 whitespace-pre-line leading-relaxed">${escapeHTML(report.post?.content || '')}</p>
+                        ${report.post?.image ? `
+                            <img src="${escapeHTML(report.post.image)}" class="w-full max-h-56 object-cover rounded-xl mt-3 border border-gray-200" onerror="this.style.display='none'">
+                        ` : ''}
+                    </div>
+                ` : `
+                    <div class="pt-2">
+                        <span class="text-[11px] text-stone-500 font-semibold block mb-1">Thuộc bài viết: <strong>${escapeHTML(report.comment?.post_title || '')}</strong></span>
+                        <div class="p-3 bg-white rounded-xl border border-stone-200 text-xs text-[#4A5550] leading-relaxed">
+                            "${escapeHTML(report.comment?.content || '')}"
+                        </div>
+                    </div>
+                `}
+            </div>
+
+            <!-- Khối 3: Thao tác xử lý nhanh -->
+            <div class="pt-2 flex flex-wrap items-center justify-end gap-2.5 border-t border-gray-100">
+                ${!isHidden ? `
+                    <button type="button" class="px-4 py-2 rounded-xl bg-rose-600 hover:bg-rose-700 text-white font-bold text-xs transition cursor-pointer" onclick="window.__adminReportAction(${report.id_report}, 'hide-content')">
+                        <i class="fa-solid fa-eye-slash mr-1"></i> Ẩn nội dung & Giải quyết
+                    </button>
+                ` : `
+                    <button type="button" class="px-4 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs transition cursor-pointer" onclick="window.__adminReportAction(${report.id_report}, 'restore-content')">
+                        <i class="fa-solid fa-rotate-left mr-1"></i> Khôi phục hiển thị
+                    </button>
+                `}
+                ${report.status === 'pending' ? `
+                    <button type="button" class="px-4 py-2 rounded-xl bg-stone-100 hover:bg-stone-200 text-stone-700 font-bold text-xs transition cursor-pointer" onclick="window.__adminReportAction(${report.id_report}, 'reject')">
+                        <i class="fa-solid fa-ban mr-1"></i> Bỏ qua báo cáo
+                    </button>
+                    <button type="button" class="px-4 py-2 rounded-xl bg-green-600 hover:bg-green-700 text-white font-bold text-xs transition cursor-pointer" onclick="window.__adminReportAction(${report.id_report}, 'resolve')">
+                        <i class="fa-solid fa-check mr-1"></i> Đã giải quyết
+                    </button>
+                ` : ''}
+                <button type="button" class="px-4 py-2 rounded-xl border border-gray-200 hover:bg-stone-50 text-text-muted font-bold text-xs transition cursor-pointer" onclick="document.getElementById('admin-report-detail-close').click()">
+                    Đóng
+                </button>
+            </div>
+        </div>
+    `;
+
+    modal.classList.remove('hidden');
+    modal.classList.add('flex');
 }
 
-function closeCommunityDetailModal() {
-    const modal = document.getElementById('admin-community-detail-modal');
+function closeReportDetailModal() {
+    const modal = document.getElementById('admin-report-detail-modal');
     if (modal) {
         modal.classList.add('hidden');
         modal.classList.remove('flex');
     }
 }
 
-function bindAdminCommunityEvents() {
-    const tabModBtn = document.getElementById('admin-tab-moderation');
-    const tabRepBtn = document.getElementById('admin-tab-reports');
-    const search = document.getElementById('admin-community-search');
-    const status = document.getElementById('admin-community-status-filter');
-    const refresh = document.getElementById('admin-community-refresh');
-    const prev = document.getElementById('admin-community-prev');
-    const next = document.getElementById('admin-community-next');
-    const postsBody = document.getElementById('admin-community-posts-body');
-    const reportsBody = document.getElementById('admin-community-reports-body');
-    const modalClose = document.getElementById('admin-community-detail-close');
-    const modal = document.getElementById('admin-community-detail-modal');
+// Global hook cho các nút trong modal chi tiết
+window.__adminReportAction = async (id, action) => {
+    closeReportDetailModal();
+    await handleReportAction(id, action);
+};
 
-    // Chuyển 2 Tabs
-    tabModBtn?.addEventListener('click', () => switchCommunityTab('moderation'));
-    tabRepBtn?.addEventListener('click', () => switchCommunityTab('reports'));
+function bindAdminReportsEvents() {
+    const search = document.getElementById('admin-reports-search');
+    const targetFilter = document.getElementById('admin-reports-target-filter');
+    const refresh = document.getElementById('admin-reports-refresh');
+    const prev = document.getElementById('admin-reports-prev');
+    const next = document.getElementById('admin-reports-next');
+    const reportsBody = document.getElementById('admin-reports-body');
+    const modalClose = document.getElementById('admin-report-detail-close');
+    const modal = document.getElementById('admin-report-detail-modal');
+
+    // Chuyển Tabs báo cáo (Tất cả, Chờ xử lý, Đã giải quyết)
+    const tabsContainer = document.getElementById('admin-rep-tabs-container');
+    tabsContainer?.addEventListener('click', (e) => {
+        const btn = e.target.closest('.admin-rep-tab-btn');
+        if (!btn) return;
+        adminReportsState.status = btn.dataset.repTab || '';
+        adminReportsState.page = 1;
+        loadAdminReports();
+    });
+
+    // Click thẻ thống kê
+    const statsContainer = document.getElementById('admin-rep-stats-container');
+    statsContainer?.addEventListener('click', (e) => {
+        const card = e.target.closest('.admin-rep-stat-card');
+        if (!card) return;
+        const filter = card.dataset.repFilter;
+        adminReportsState.status = (filter === 'resolved' || filter === 'rejected') ? filter : (filter || '');
+        adminReportsState.page = 1;
+        loadAdminReports();
+    });
+
+    // Lọc đối tượng (Bài viết / Bình luận)
+    targetFilter?.addEventListener('change', () => {
+        adminReportsState.targetType = targetFilter.value;
+        adminReportsState.page = 1;
+        loadAdminReports();
+    });
 
     // Tìm kiếm
     let searchTimer = null;
     search?.addEventListener('input', () => {
         window.clearTimeout(searchTimer);
         searchTimer = window.setTimeout(() => {
-            adminCommunityState.search = search.value.trim();
-            adminCommunityState.page = 1;
-            if (adminCommunityState.activeTab === 'moderation') {
-                loadAdminCommunityPosts();
-            } else {
-                loadAdminCommunityReports();
-            }
+            adminReportsState.search = search.value.trim();
+            adminReportsState.page = 1;
+            loadAdminReports();
         }, 300);
     });
 
-    // Lọc trạng thái từ dropdown
-    status?.addEventListener('change', () => {
-        adminCommunityState.status = status.value;
-        adminCommunityState.page = 1;
-        if (adminCommunityState.activeTab === 'moderation') {
-            loadAdminCommunityPosts();
-        } else {
-            loadAdminCommunityReports();
-        }
-        updateStatCardActiveState();
-    });
-
-    // 5 Thẻ thống kê: Click để lọc dữ liệu tương ứng ngay lập tức
-    const statsContainer = document.getElementById('admin-comm-stats-container');
-    statsContainer?.addEventListener('click', (e) => {
-        const card = e.target.closest('.admin-comm-stat-card');
-        if (!card) return;
-
-        const filter = card.dataset.commFilter;
-        if (!filter) return;
-
-        if (filter === 'reports') {
-            if (adminCommunityState.activeTab !== 'reports') {
-                switchCommunityTab('reports');
-            }
-            updateStatCardActiveState();
-            return;
-        }
-
-        // Với all, pending, active, hidden:
-        // Đảm bảo đang ở tab Kiểm duyệt bài viết
-        if (adminCommunityState.activeTab !== 'moderation') {
-            switchCommunityTab('moderation');
-        }
-
-        const newStatus = (filter === 'all') ? '' : filter;
-        adminCommunityState.status = newStatus;
-        adminCommunityState.page = 1;
-
-        const statusSelect = document.getElementById('admin-community-status-filter');
-        if (statusSelect) {
-            statusSelect.value = newStatus;
-        }
-
-        loadAdminCommunityPosts();
-        updateStatCardActiveState();
-    });
-
-    // Làm mới
+    // Tải lại
     refresh?.addEventListener('click', () => {
-        if (adminCommunityState.activeTab === 'moderation') {
-            loadAdminCommunityPosts();
-        } else {
-            loadAdminCommunityReports();
-        }
-        updateStatCardActiveState();
+        loadAdminReports();
     });
 
     // Phân trang
     prev?.addEventListener('click', () => {
-        if (adminCommunityState.page <= 1) return;
-        adminCommunityState.page -= 1;
-        if (adminCommunityState.activeTab === 'moderation') {
-            loadAdminCommunityPosts();
-        } else {
-            loadAdminCommunityReports();
-        }
+        if (adminReportsState.page <= 1) return;
+        adminReportsState.page -= 1;
+        loadAdminReports();
     });
 
     next?.addEventListener('click', () => {
-        adminCommunityState.page += 1;
-        if (adminCommunityState.activeTab === 'moderation') {
-            loadAdminCommunityPosts();
-        } else {
-            loadAdminCommunityReports();
-        }
+        adminReportsState.page += 1;
+        loadAdminReports();
     });
 
-    // Hành động bài viết: Xem, Duyệt bài, Ẩn bài, Xóa bài
-    postsBody?.addEventListener('click', (e) => {
-        const btn = e.target.closest('[data-post-action]');
-        if (!btn) return;
-
-        const id = btn.dataset.id;
-        const action = btn.dataset.postAction;
-
-        if (action === 'view') openCommunityDetailModal(id, 'post');
-        if (action === 'approve') approveCommunityPost(id);
-        if (action === 'hide' || action === 'reject') hideCommunityPost(id);
-        if (action === 'delete') deleteCommunityPost(id);
-    });
-
-    // Hành động báo cáo
+    // Thao tác trên từng dòng báo cáo
     reportsBody?.addEventListener('click', (e) => {
-        const btn = e.target.closest('[data-report-action]');
+        const btn = e.target.closest('[data-rep-action]');
         if (!btn) return;
 
         const id = btn.dataset.id;
-        const action = btn.dataset.reportAction;
-        const postId = btn.dataset.postId;
+        const action = btn.dataset.repAction;
 
-        if (action === 'view') openCommunityDetailModal(id, 'report');
-        if (action === 'hide-post') handleReportAction(id, 'hide-post', postId);
+        if (action === 'view') openReportDetailModal(id);
+        if (action === 'hide-content') handleReportAction(id, 'hide-content');
+        if (action === 'restore-content') handleReportAction(id, 'restore-content');
         if (action === 'reject') handleReportAction(id, 'reject');
         if (action === 'resolve') handleReportAction(id, 'resolve');
     });
 
-    // Đóng modal
-    modalClose?.addEventListener('click', closeCommunityDetailModal);
+    // Đóng Modal
+    modalClose?.addEventListener('click', closeReportDetailModal);
     modal?.addEventListener('click', (e) => {
-        if (e.target === modal) closeCommunityDetailModal();
+        if (e.target === modal) closeReportDetailModal();
     });
 }
 
-async function initAdminCommunityPage() {
-    bindAdminCommunityEvents();
-    await loadAdminCommunityPosts();
-    // Tải trước số lượng báo cáo pending để hiển thị badge
-    const repRes = await fetchAPI('/admin/reports?limit=1&status=pending');
-    if (repRes?.success) {
-        const pendingCount = repRes.pagination?.pendingTotal || 0;
-        const statEl = document.getElementById('admin-comm-stat-reports');
-        const badgeEl = document.getElementById('admin-community-reports-badge');
-        if (statEl) statEl.textContent = formatNumber(pendingCount);
-        if (badgeEl) {
-            badgeEl.textContent = `${pendingCount} vi phạm`;
-            if (pendingCount > 0) badgeEl.classList.add('animate-pulse');
-        }
-    }
-    updateStatCardActiveState();
+async function initAdminReportsPage() {
+    bindAdminReportsEvents();
+    await loadAdminReports();
+    updateSidebarBadges();
 }
 
+// Cập nhật badges cảnh báo cho Sidebar
+async function updateSidebarBadges() {
+    try {
+        const [postsRes, repRes] = await Promise.all([
+            fetchAPI('/admin/posts?limit=1&status=pending'),
+            fetchAPI('/admin/reports?limit=1&status=pending')
+        ]);
+
+        const postsPending = postsRes?.pagination?.pendingTotal || 0;
+        const reportsPending = repRes?.pagination?.pendingTotal || 0;
+
+        const postsBadge = document.getElementById('admin-sidebar-posts-badge');
+        const repBadge = document.getElementById('admin-sidebar-reports-badge');
+
+        if (postsBadge) {
+            if (postsPending > 0) {
+                postsBadge.textContent = postsPending;
+                postsBadge.classList.remove('hidden');
+            } else {
+                postsBadge.classList.add('hidden');
+            }
+        }
+
+        if (repBadge) {
+            if (reportsPending > 0) {
+                repBadge.textContent = reportsPending;
+                repBadge.classList.remove('hidden');
+                repBadge.classList.add('animate-pulse');
+            } else {
+                repBadge.classList.add('hidden');
+            }
+        }
+    } catch (e) {
+        // ignore
+    }
+}
 
 const Admin = {
     render: async (params) => {
@@ -2579,6 +3185,8 @@ const Admin = {
             contentHTML = renderFoodsPage();
         } else if (page === 'community') {
             contentHTML = renderCommunityPage();
+        } else if (page === 'reports') {
+            contentHTML = renderReportsPage();
         } else {
             contentHTML = renderDashboardPage();
         }
@@ -2602,8 +3210,17 @@ const Admin = {
                         <a href="#/admin/foods" class="flex items-center gap-3 px-4 py-3 ${page === 'foods' ? 'bg-primary text-white font-bold shadow-sm' : 'text-text-muted hover:bg-cream-soft hover:text-primary font-semibold'} rounded-xl transition cursor-pointer">
                             <i class="fa-solid fa-kitchen-set w-5 text-center"></i> Quản lý món ăn
                         </a>
-                        <a href="#/admin/community" class="flex items-center gap-3 px-4 py-3 ${page === 'community' ? 'bg-primary text-white font-bold shadow-sm' : 'text-text-muted hover:bg-cream-soft hover:text-primary font-semibold'} rounded-xl transition cursor-pointer">
-                            <i class="fa-solid fa-comments w-5 text-center"></i> Quản lý cộng đồng
+                        <a href="#/admin/community" class="flex items-center justify-between px-4 py-3 ${page === 'community' ? 'bg-primary text-white font-bold shadow-sm' : 'text-text-muted hover:bg-cream-soft hover:text-primary font-semibold'} rounded-xl transition cursor-pointer">
+                            <span class="flex items-center gap-3">
+                                <i class="fa-solid fa-clipboard-check w-5 text-center"></i> Kiểm duyệt bài viết
+                            </span>
+                            <span id="admin-sidebar-posts-badge" class="hidden text-xs px-2 py-0.5 rounded-full bg-amber-100 text-amber-800 font-bold"></span>
+                        </a>
+                        <a href="#/admin/reports" class="flex items-center justify-between px-4 py-3 ${page === 'reports' ? 'bg-primary text-white font-bold shadow-sm' : 'text-text-muted hover:bg-cream-soft hover:text-primary font-semibold'} rounded-xl transition cursor-pointer">
+                            <span class="flex items-center gap-3">
+                                <i class="fa-solid fa-triangle-exclamation w-5 text-center text-rose-500"></i> Báo cáo vi phạm
+                            </span>
+                            <span id="admin-sidebar-reports-badge" class="hidden text-xs px-2 py-0.5 rounded-full bg-red-100 text-red-700 font-bold"></span>
                         </a>
                     </nav>
                 </aside>
@@ -2635,6 +3252,13 @@ const Admin = {
         if (page === 'community') {
             await initAdminCommunityPage();
         }
+
+        if (page === 'reports') {
+            await initAdminReportsPage();
+        }
+
+        // Cập nhật số lượng pending trên sidebar
+        updateSidebarBadges();
     }
 };
 
