@@ -1,9 +1,5 @@
 const express = require('express');
 const foodController = require('../controllers/food.controller');
-<<<<<<< HEAD
-const authController = require('../controllers/auth.controller');
-=======
->>>>>>> c217107e829a23c28d6011ad1e764d46a2bd4f12
 const { requireAuth, optionalAuth } = require('../middleware/auth.middleware');
 
 const router = express.Router();
@@ -18,12 +14,7 @@ router.get('/options', foodController.getFoodOptions);
 router.get('/quick-suggestions', foodController.getQuickSuggestions);
 router.get('/:id', optionalAuth, foodController.getFoodById);
 
-<<<<<<< HEAD
-// Lưu / bỏ lưu món ăn yêu thích
-router.post('/:id/favorite', requireAuth, authController.toggleFavorite);
-=======
 // Lưu hoặc bỏ lưu món ăn yêu thích
 router.post('/:id/favorite', requireAuth, foodController.toggleFavorite);
->>>>>>> c217107e829a23c28d6011ad1e764d46a2bd4f12
 
 module.exports = router;

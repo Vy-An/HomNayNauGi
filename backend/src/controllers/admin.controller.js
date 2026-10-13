@@ -1046,275 +1046,6 @@ async function updateFoodStatus(req, res) {
 }
 
 // ==========================================
-<<<<<<< HEAD
-// 3. QUẢN LÝ DANH MỤC (CATEGORIES)
-// ==========================================
-
-async function getCategories(req, res) {
-    try {
-        const search = String(req.query?.search || '').trim();
-        const status = req.query?.status;
-        const where = {};
-        if (search) {
-            where.OR = [
-                { name: { contains: search } },
-                { slug: { contains: search } }
-            ];
-        }
-        if (status === 'active' || status === 'hidden') {
-            where.status = status;
-        }
-
-        const categories = await prisma.categories.findMany({
-            where,
-            include: {
-                _count: {
-                    select: { foods: true }
-                }
-            },
-            orderBy: { id_category: 'asc' }
-        });
-
-        const formatted = categories.map((cat) => ({
-            id: cat.id_category,
-            id_category: cat.id_category,
-            name: cat.name,
-            slug: cat.slug,
-            status: cat.status || 'active',
-            foodsCount: cat._count?.foods || 0,
-            created_at: cat.created_at,
-            updated_at: cat.updated_at
-        }));
-
-        return res.json({
-            success: true,
-            total: formatted.length,
-            data: formatted
-        });
-    } catch (error) {
-        console.error('Lỗi getCategories:', error);
-        return res.status(500).json({
-            success: false,
-            message: 'Không thể tải danh sách danh mục lúc này.',
-            data: []
-        });
-    }
-}
-
-async function createCategory(req, res) {
-    try {
-        const name = String(req.body?.name || '').trim();
-        let slug = String(req.body?.slug || '').trim();
-
-        if (!name) {
-            return res.status(400).json({
-                success: false,
-                message: 'Tên danh mục không được để trống.'
-            });
-        }
-
-        if (!slug) {
-            slug = createSlug(name);
-        } else {
-            slug = createSlug(slug);
-        }
-
-        const existing = await prisma.categories.findFirst({
-            where: {
-                OR: [{ name }, { slug }]
-            }
-        });
-
-        if (existing) {
-            return res.status(409).json({
-                success: false,
-                message: 'Tên hoặc đường dẫn (slug) danh mục đã tồn tại.'
-            });
-        }
-
-        const category = await prisma.categories.create({
-            data: { name, slug }
-        });
-
-        return res.json({
-            success: true,
-            message: 'Tạo danh mục thành công.',
-            data: category
-        });
-    } catch (error) {
-        console.error('Lỗi createCategory:', error);
-        return res.status(500).json({
-            success: false,
-            message: 'Không thể tạo danh mục lúc này.'
-        });
-    }
-}
-
-async function updateCategory(req, res) {
-    try {
-        const id = parsePositiveInt(req.params.id);
-        if (!id) {
-            return res.status(400).json({
-                success: false,
-                message: 'ID danh mục không hợp lệ.'
-            });
-        }
-
-        const category = await prisma.categories.findUnique({
-            where: { id_category: id }
-        });
-
-        if (!category) {
-            return res.status(404).json({
-                success: false,
-                message: 'Không tìm thấy danh mục.'
-            });
-        }
-
-        const name = req.body?.name ? String(req.body.name).trim() : category.name;
-        let slug = req.body?.slug ? createSlug(req.body.slug) : (req.body?.name ? createSlug(req.body.name) : category.slug);
-
-        const duplicate = await prisma.categories.findFirst({
-            where: {
-                id_category: { not: id },
-                OR: [{ name }, { slug }]
-            }
-        });
-
-        if (duplicate) {
-            return res.status(409).json({
-                success: false,
-                message: 'Tên hoặc slug danh mục đã bị trùng với danh mục khác.'
-            });
-        }
-
-        const updated = await prisma.categories.update({
-            where: { id_category: id },
-            data: {
-                name,
-                slug,
-                updated_at: new Date()
-            }
-        });
-
-        return res.json({
-            success: true,
-            message: 'Cập nhật danh mục thành công.',
-            data: updated
-        });
-    } catch (error) {
-        console.error('Lỗi updateCategory:', error);
-        return res.status(500).json({
-            success: false,
-            message: 'Không thể cập nhật danh mục lúc này.'
-        });
-    }
-}
-
-async function updateCategoryStatus(req, res) {
-    try {
-        const id = parsePositiveInt(req.params.id);
-        const status = req.body?.status;
-
-        if (!id) {
-            return res.status(400).json({
-                success: false,
-                message: 'ID danh mục không hợp lệ.'
-            });
-        }
-
-        if (status !== 'active' && status !== 'hidden') {
-            return res.status(400).json({
-                success: false,
-                message: 'Trạng thái danh mục không hợp lệ (phải là active hoặc hidden).'
-            });
-        }
-
-        const category = await prisma.categories.findUnique({
-            where: { id_category: id }
-        });
-
-        if (!category) {
-            return res.status(404).json({
-                success: false,
-                message: 'Không tìm thấy danh mục.'
-            });
-        }
-
-        const updated = await prisma.categories.update({
-            where: { id_category: id },
-            data: {
-                status,
-                updated_at: new Date()
-            }
-        });
-
-        return res.json({
-            success: true,
-            message: status === 'active' ? 'Đã cho phép hiển thị danh mục.' : 'Đã ẩn danh mục.',
-            data: updated
-        });
-    } catch (error) {
-        console.error('Lỗi updateCategoryStatus:', error);
-        return res.status(500).json({
-            success: false,
-            message: 'Không thể cập nhật trạng thái danh mục lúc này.'
-        });
-    }
-}
-
-async function deleteCategory(req, res) {
-    try {
-        const id = parsePositiveInt(req.params.id);
-        if (!id) {
-            return res.status(400).json({
-                success: false,
-                message: 'ID danh mục không hợp lệ.'
-            });
-        }
-
-        const foodsCount = await prisma.foods.count({
-            where: { id_category: id }
-        });
-
-        if (foodsCount > 0) {
-            return res.status(400).json({
-                success: false,
-                message: `Không thể xóa vì danh mục đang có ${foodsCount} món ăn liên kết. Vui lòng chuyển các món sang danh mục khác trước khi xóa.`
-            });
-        }
-
-        await prisma.categories.delete({
-            where: { id_category: id }
-        });
-
-        return res.json({
-            success: true,
-            message: 'Đã xóa danh mục thành công.'
-        });
-    } catch (error) {
-        console.error('Lỗi deleteCategory:', error);
-        return res.status(500).json({
-            success: false,
-            message: 'Không thể xóa danh mục lúc này.'
-        });
-    }
-}
-
-// ==========================================
-// 4. QUẢN LÝ BÀI VIẾT & BÁO CÁO CỘNG ĐỒNG
-// ==========================================
-
-async function getAdminPosts(req, res) {
-    try {
-        const page = Math.max(1, Number.parseInt(req.query?.page, 10) || 1);
-        const limit = clampLimit(req.query?.limit, 10, 100);
-        const skip = (page - 1) * limit;
-        const search = String(req.query?.search || '').trim();
-        const status = req.query?.status;
-
-        const where = {};
-=======
 // QUẢN LÝ BÀI VIẾT CỘNG ĐỒNG & KIỂM DUYỆT
 // ==========================================
 
@@ -1331,7 +1062,6 @@ async function getPosts(req, res) {
             where.status = status;
         }
 
->>>>>>> c217107e829a23c28d6011ad1e764d46a2bd4f12
         if (search) {
             where.OR = [
                 { title: { contains: search } },
@@ -1339,16 +1069,6 @@ async function getPosts(req, res) {
                 { users: { name: { contains: search } } }
             ];
         }
-<<<<<<< HEAD
-        if (status === 'active' || status === 'hidden') {
-            where.status = status;
-        }
-
-        const [total, posts] = await Promise.all([
-            prisma.posts.count({ where }),
-            prisma.posts.findMany({
-                where,
-=======
 
         const [total, pendingTotal, activeTotal, hiddenTotal, posts] = await Promise.all([
             prisma.posts.count({ where }),
@@ -1709,7 +1429,6 @@ async function getReports(req, res) {
         if (postIds.length > 0) {
             const targetPosts = await prisma.posts.findMany({
                 where: { id_post: { in: postIds } },
->>>>>>> c217107e829a23c28d6011ad1e764d46a2bd4f12
                 include: {
                     users: {
                         select: {
@@ -1719,64 +1438,12 @@ async function getReports(req, res) {
                             avatar: true
                         }
                     },
-<<<<<<< HEAD
-                    foods: {
-                        select: {
-                            id_food: true,
-                            name: true
-                        }
-                    },
-=======
->>>>>>> c217107e829a23c28d6011ad1e764d46a2bd4f12
                     _count: {
                         select: {
                             post_likes: true,
                             comments: true
                         }
                     }
-<<<<<<< HEAD
-                },
-                orderBy: { id_post: 'desc' },
-                skip,
-                take: limit
-            })
-        ]);
-
-        const formatted = posts.map((post) => ({
-            id: post.id_post,
-            id_post: post.id_post,
-            title: post.title,
-            content: post.content,
-            image: resolveAssetUrl(post.image || '/images/posts/post-1.jpg'),
-            status: post.status,
-            created_at: post.created_at,
-            updated_at: post.updated_at,
-            author: {
-                id: post.users?.id_user,
-                name: post.users?.name || 'Ẩn danh',
-                email: post.users?.email || '',
-                avatar: resolveAssetUrl(post.users?.avatar || '/images/users/admin.jpg')
-            },
-            food: post.foods ? { id: post.foods.id_food, name: post.foods.name } : null,
-            likesCount: post._count?.post_likes || 0,
-            commentsCount: post._count?.comments || 0
-        }));
-
-        return res.json({
-            success: true,
-            total,
-            page,
-            limit,
-            totalPages: Math.ceil(total / limit) || 1,
-            data: formatted
-        });
-    } catch (error) {
-        console.error('Lỗi getAdminPosts:', error);
-        return res.status(500).json({
-            success: false,
-            message: 'Không thể tải danh sách bài viết cộng đồng lúc này.',
-            data: []
-=======
                 }
             });
 
@@ -1879,166 +1546,10 @@ async function getReports(req, res) {
         return res.status(500).json({
             success: false,
             message: 'Không thể tải danh sách báo cáo vi phạm.'
->>>>>>> c217107e829a23c28d6011ad1e764d46a2bd4f12
         });
     }
 }
 
-<<<<<<< HEAD
-async function updatePostStatus(req, res) {
-    try {
-        const id = parsePositiveInt(req.params.id);
-        const status = req.body?.status;
-
-        if (!id) {
-            return res.status(400).json({
-                success: false,
-                message: 'ID bài viết không hợp lệ.'
-            });
-        }
-
-        if (status !== 'active' && status !== 'hidden') {
-            return res.status(400).json({
-                success: false,
-                message: 'Trạng thái bài viết không hợp lệ (phải là active hoặc hidden).'
-            });
-        }
-
-        const post = await prisma.posts.findUnique({
-            where: { id_post: id }
-        });
-
-        if (!post) {
-            return res.status(404).json({
-                success: false,
-                message: 'Không tìm thấy bài viết.'
-            });
-        }
-
-        const updated = await prisma.posts.update({
-            where: { id_post: id },
-            data: {
-                status,
-                updated_at: new Date()
-            }
-        });
-
-        return res.json({
-            success: true,
-            message: status === 'active' ? 'Đã cho phép hiển thị bài viết.' : 'Đã ẩn bài viết khỏi cộng đồng.',
-            data: updated
-        });
-    } catch (error) {
-        console.error('Lỗi updatePostStatus:', error);
-        return res.status(500).json({
-            success: false,
-            message: 'Không thể cập nhật trạng thái bài viết lúc này.'
-        });
-    }
-}
-
-async function deleteAdminPost(req, res) {
-    try {
-        const id = parsePositiveInt(req.params.id);
-        if (!id) {
-            return res.status(400).json({
-                success: false,
-                message: 'ID bài viết không hợp lệ.'
-            });
-        }
-
-        const post = await prisma.posts.findUnique({
-            where: { id_post: id }
-        });
-
-        if (!post) {
-            return res.status(404).json({
-                success: false,
-                message: 'Không tìm thấy bài viết.'
-            });
-        }
-
-        await prisma.posts.delete({
-            where: { id_post: id }
-        });
-
-        return res.json({
-            success: true,
-            message: 'Đã xóa bài viết thành công.'
-        });
-    } catch (error) {
-        console.error('Lỗi deleteAdminPost:', error);
-        return res.status(500).json({
-            success: false,
-            message: 'Không thể xóa bài viết lúc này.'
-        });
-    }
-}
-
-async function getAdminReports(req, res) {
-    try {
-        const status = req.query?.status;
-        const where = {};
-        if (['pending', 'resolved', 'rejected'].includes(status)) {
-            where.status = status;
-        }
-
-        const reports = await prisma.reports.findMany({
-            where,
-            include: {
-                users: {
-                    select: {
-                        id_user: true,
-                        name: true,
-                        email: true
-                    }
-                }
-            },
-            orderBy: { created_at: 'desc' }
-        });
-
-        const enriched = await Promise.all(reports.map(async (rep) => {
-            let targetInfo = null;
-            if (rep.target_type === 'post') {
-                const targetPost = await prisma.posts.findUnique({
-                    where: { id_post: rep.target_id },
-                    select: { id_post: true, title: true, status: true }
-                });
-                targetInfo = targetPost;
-            } else if (rep.target_type === 'comment') {
-                const targetComment = await prisma.comments.findUnique({
-                    where: { id_comment: rep.target_id },
-                    select: { id_comment: true, content: true, status: true }
-                });
-                targetInfo = targetComment;
-            }
-
-            return {
-                id: rep.id_report,
-                id_report: rep.id_report,
-                reporter: rep.users ? { id: rep.users.id_user, name: rep.users.name, email: rep.users.email } : null,
-                target_type: rep.target_type,
-                target_id: rep.target_id,
-                target_info: targetInfo,
-                reason: rep.reason,
-                description: rep.description,
-                status: rep.status,
-                created_at: rep.created_at,
-                updated_at: rep.updated_at
-            };
-        }));
-
-        return res.json({
-            success: true,
-            total: enriched.length,
-            data: enriched
-        });
-    } catch (error) {
-        console.error('Lỗi getAdminReports:', error);
-        return res.status(500).json({
-            success: false,
-            message: 'Không thể tải báo cáo lúc này.',
-=======
 async function updateReportStatus(req, res) {
     try {
         const id = parsePositiveInt(req.params.id);
@@ -2198,53 +1709,11 @@ async function getCategories(req, res) {
         return res.status(500).json({
             success: false,
             message: 'Không thể tải danh sách danh mục lúc này.',
->>>>>>> c217107e829a23c28d6011ad1e764d46a2bd4f12
             data: []
         });
     }
 }
 
-<<<<<<< HEAD
-async function handleAdminReport(req, res) {
-    try {
-        const id = parsePositiveInt(req.params.id);
-        const status = req.body?.status;
-
-        if (!id) {
-            return res.status(400).json({
-                success: false,
-                message: 'ID báo cáo không hợp lệ.'
-            });
-        }
-
-        if (!['resolved', 'rejected', 'pending'].includes(status)) {
-            return res.status(400).json({
-                success: false,
-                message: 'Trạng thái báo cáo không hợp lệ.'
-            });
-        }
-
-        const report = await prisma.reports.update({
-            where: { id_report: id },
-            data: {
-                status,
-                updated_at: new Date()
-            }
-        });
-
-        if (status === 'resolved' && req.body?.hideTarget) {
-            if (report.target_type === 'post') {
-                await prisma.posts.update({
-                    where: { id_post: report.target_id },
-                    data: { status: 'hidden' }
-                }).catch(() => {});
-            } else if (report.target_type === 'comment') {
-                await prisma.comments.update({
-                    where: { id_comment: report.target_id },
-                    data: { status: 'hidden' }
-                }).catch(() => {});
-            }
-=======
 async function getCategoryById(req, res) {
     try {
         const id = parsePositiveInt(req.params.id);
@@ -2274,22 +1743,10 @@ async function getCategoryById(req, res) {
 
         if (!category) {
             return res.status(404).json({ success: false, message: 'Không tìm thấy thông tin danh mục.' });
->>>>>>> c217107e829a23c28d6011ad1e764d46a2bd4f12
         }
 
         return res.json({
             success: true,
-<<<<<<< HEAD
-            message: status === 'resolved' ? 'Đã xử lý xong báo cáo vi phạm.' : 'Đã từ chối báo cáo vi phạm.',
-            data: report
-        });
-    } catch (error) {
-        console.error('Lỗi handleAdminReport:', error);
-        return res.status(500).json({
-            success: false,
-            message: 'Không thể xử lý báo cáo lúc này.'
-        });
-=======
             data: {
                 id: category.id_category,
                 id_category: category.id_category,
@@ -2530,7 +1987,6 @@ async function updateCategoryStatus(req, res) {
     } catch (error) {
         console.error('Lỗi khi cập nhật trạng thái danh mục:', error);
         return res.status(500).json({ success: false, message: 'Không thể thay đổi trạng thái danh mục.' });
->>>>>>> c217107e829a23c28d6011ad1e764d46a2bd4f12
     }
 }
 
@@ -2590,18 +2046,6 @@ module.exports = {
     createFood,
     updateFood,
     updateFoodStatus,
-<<<<<<< HEAD
-    getCategories,
-    createCategory,
-    updateCategory,
-    updateCategoryStatus,
-    deleteCategory,
-    getAdminPosts,
-    updatePostStatus,
-    deleteAdminPost,
-    getAdminReports,
-    handleAdminReport
-=======
     getPosts,
     getPostById,
     updatePostStatus,
@@ -2613,7 +2057,10 @@ module.exports = {
     getCategoryById,
     createCategory,
     updateCategory,
-    updateCategoryStatus
->>>>>>> c217107e829a23c28d6011ad1e764d46a2bd4f12
+    updateCategoryStatus,
+    getAdminPosts: getPosts,
+    deleteAdminPost: deletePost,
+    getAdminReports: getReports,
+    handleAdminReport: updateReportStatus
 };
 

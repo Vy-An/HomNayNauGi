@@ -5,11 +5,7 @@ const foodService = require('../services/food.service');
  */
 async function getFoods(req, res) {
     try {
-<<<<<<< HEAD
-        const userId = req.user ? req.user.id_user : null;
-=======
-        const userId = req.user?.id_user;
->>>>>>> c217107e829a23c28d6011ad1e764d46a2bd4f12
+        const userId = req.user?.id_user || null;
         const result = await foodService.getFoods(req.query, userId);
 
         return res.json({
@@ -37,11 +33,7 @@ async function getFoods(req, res) {
 async function getFoodById(req, res) {
     try {
         const { id } = req.params;
-<<<<<<< HEAD
-        const userId = req.user ? req.user.id_user : null;
-=======
-        const userId = req.user?.id_user;
->>>>>>> c217107e829a23c28d6011ad1e764d46a2bd4f12
+        const userId = req.user?.id_user || null;
         const food = await foodService.getFoodById(id, userId);
 
         if (!food) {

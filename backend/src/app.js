@@ -21,6 +21,7 @@ app.use('/api/random', randomRoutes);
 app.use('/api/posts', postRoutes);
 app.use('/api/foods', foodRoutes);
 app.use('/api/shopping', shoppingRoutes);
+app.use('/api/shopping-list', shoppingRoutes);
 app.use('/api/comments', commentRoutes);
 app.use('/api/admin', adminRoutes);
 
