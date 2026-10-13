@@ -182,7 +182,8 @@ function updateDashboardStats(stats = {}) {
     setText('admin-dashboard-users-total', formatNumber(users.total));
     setText('admin-dashboard-users-sub', `${formatNumber(users.active)} hoạt động · ${formatNumber(users.blocked)} đã khóa`);
     setText('admin-dashboard-posts-total', formatNumber(posts.total));
-    setText('admin-dashboard-posts-sub', `${formatNumber(posts.active)} đang hiển thị · ${formatNumber(posts.hidden)} đã ẩn`);
+    const pendingText = Number(posts.pending) > 0 ? ` · ${formatNumber(posts.pending)} chờ duyệt` : '';
+    setText('admin-dashboard-posts-sub', `${formatNumber(posts.active)} đang hiển thị · ${formatNumber(posts.hidden)} đã ẩn${pendingText}`);
     setText('admin-dashboard-reports-total', formatNumber(reports.total));
     setText('admin-dashboard-reports-sub', `${formatNumber(reports.pending)} đang chờ xử lý`);
 }
@@ -1481,7 +1482,7 @@ function renderCommunityPage() {
                         <option value="">Tất cả trạng thái</option>
                         <option value="pending">Chờ kiểm duyệt</option>
                         <option value="active">Đã duyệt (Hiển thị)</option>
-                        <option value="hidden">Đã ẩn</option>
+                        <option value="hidden">Bị từ chối / Đã ẩn</option>
                     </select>
 
                     <button type="button" id="admin-community-refresh" class="px-3.5 py-2 rounded-xl border border-gray-200 hover:bg-stone-50 text-text-muted hover:text-primary transition font-bold text-xs sm:text-sm cursor-pointer" title="Tải lại">
@@ -1658,7 +1659,13 @@ function renderCommunityPostsTable(posts) {
         }
 
         let hideBtnHTML = '';
-        if (isActive || isPending) {
+        if (isPending) {
+            hideBtnHTML = `
+                <button type="button" class="w-8 h-8 rounded-lg text-rose-600 hover:bg-rose-50 flex items-center justify-center transition cursor-pointer text-xs" data-post-action="reject" data-id="${p.id_post}" title="Từ chối bài viết">
+                    <i class="fa-solid fa-xmark text-sm"></i>
+                </button>
+            `;
+        } else if (isActive) {
             hideBtnHTML = `
                 <button type="button" class="w-8 h-8 rounded-lg text-amber-600 hover:bg-amber-50 flex items-center justify-center transition cursor-pointer text-xs" data-post-action="hide" data-id="${p.id_post}" title="Ẩn bài viết">
                     <i class="fa-solid fa-eye-slash"></i>
@@ -1983,7 +1990,7 @@ function switchCommunityTab(tabName) {
                 <option value="">Tất cả trạng thái</option>
                 <option value="pending">Chờ kiểm duyệt</option>
                 <option value="active">Đã duyệt (Hiển thị)</option>
-                <option value="hidden">Đã ẩn</option>
+                <option value="hidden">Bị từ chối / Đã ẩn</option>
             `;
         }
 
@@ -2018,7 +2025,7 @@ function switchCommunityTab(tabName) {
 }
 
 // Modal Prompt Hỏi Lý Do Ẩn Bài Viết Hiện Đại
-function askPostHideReason(postTitle = 'bài viết') {
+function askPostHideReason(postTitle = 'bài viết', isReject = false) {
     return new Promise((resolve) => {
         let modal = document.getElementById('admin-hide-reason-modal');
         if (!modal) {
@@ -2035,21 +2042,21 @@ function askPostHideReason(postTitle = 'bài viết') {
                             <i class="fa-solid fa-triangle-exclamation"></i>
                         </div>
                         <div>
-                            <span class="inline-block px-2.5 py-0.5 rounded-full text-[11px] font-black uppercase tracking-wider bg-rose-100 text-rose-700 mb-1">Cảnh báo vi phạm</span>
-                            <h3 class="text-lg font-extrabold text-[#26382F]">Lý do ẩn bài viết</h3>
+                            <span id="admin-hide-reason-badge" class="inline-block px-2.5 py-0.5 rounded-full text-[11px] font-black uppercase tracking-wider bg-rose-100 text-rose-700 mb-1">Kiểm duyệt bài viết</span>
+                            <h3 id="admin-hide-reason-heading" class="text-lg font-extrabold text-[#26382F]">Lý do từ chối bài viết</h3>
                         </div>
                     </div>
                     <p class="text-xs text-[#66736B] leading-relaxed mb-4">
-                        Vui lòng nêu rõ lý do ẩn bài viết "<strong id="admin-hide-reason-title"></strong>" để gửi phản hồi đến tác giả:
+                        Vui lòng nêu rõ lý do <span id="admin-hide-reason-action-text">từ chối</span> bài viết "<strong id="admin-hide-reason-title"></strong>" để gửi phản hồi đến tác giả:
                     </p>
                     <div class="space-y-3">
                         <label class="block text-xs font-bold text-text-main">Chọn lý do phổ biến:</label>
                         <select id="admin-hide-reason-quick" class="w-full px-3.5 py-2.5 rounded-xl border border-stone-200 text-xs sm:text-sm bg-white focus:outline-none focus:border-rose-500 cursor-pointer">
+                            <option value="Bài viết chứa nội dung không phù hợp">Bài viết chứa nội dung không phù hợp</option>
                             <option value="Vi phạm tiêu chuẩn cộng đồng">Vi phạm tiêu chuẩn cộng đồng</option>
                             <option value="Nội dung phản cảm, kích động hoặc từ ngữ không phù hợp">Nội dung phản cảm, kích động hoặc từ ngữ không phù hợp</option>
                             <option value="Spam hoặc quảng cáo không được phép">Spam hoặc quảng cáo không được phép</option>
                             <option value="Thông tin hoặc hình ảnh sai lệch, không đúng thực tế">Thông tin hoặc hình ảnh sai lệch, không đúng thực tế</option>
-                            <option value="Bị nhiều người dùng báo cáo vi phạm">Bị nhiều người dùng báo cáo vi phạm</option>
                             <option value="custom">Lý do khác (tự nhập bên dưới)...</option>
                         </select>
                         <label class="block text-xs font-bold text-text-main mt-2">Chi tiết lý do gửi tác giả:</label>
@@ -2060,7 +2067,7 @@ function askPostHideReason(postTitle = 'bài viết') {
                             Hủy bỏ
                         </button>
                         <button type="button" id="admin-hide-reason-confirm" class="px-5.5 py-2.5 rounded-2xl bg-rose-600 hover:bg-rose-700 text-white font-extrabold text-xs sm:text-sm shadow-md shadow-rose-900/20 cursor-pointer transition">
-                            <i class="fa-solid fa-eye-slash mr-1.5"></i>Ẩn bài viết
+                            <i class="fa-solid fa-xmark mr-1.5"></i>Từ chối bài viết
                         </button>
                     </div>
                 </div>
@@ -2069,6 +2076,9 @@ function askPostHideReason(postTitle = 'bài viết') {
         }
 
         const titleEl = document.getElementById('admin-hide-reason-title');
+        const headingEl = document.getElementById('admin-hide-reason-heading');
+        const badgeEl = document.getElementById('admin-hide-reason-badge');
+        const actionTextEl = document.getElementById('admin-hide-reason-action-text');
         const quickSelect = document.getElementById('admin-hide-reason-quick');
         const textarea = document.getElementById('admin-hide-reason-text');
         const closeBtn = document.getElementById('admin-hide-reason-close');
@@ -2076,8 +2086,18 @@ function askPostHideReason(postTitle = 'bài viết') {
         const confirmBtn = document.getElementById('admin-hide-reason-confirm');
 
         if (titleEl) titleEl.textContent = postTitle;
-        if (quickSelect) quickSelect.value = 'Vi phạm tiêu chuẩn cộng đồng';
-        if (textarea) textarea.value = 'Vi phạm tiêu chuẩn cộng đồng';
+        if (headingEl) headingEl.textContent = isReject ? 'Lý do từ chối bài viết' : 'Lý do ẩn bài viết';
+        if (badgeEl) badgeEl.textContent = isReject ? 'Từ chối kiểm duyệt' : 'Cảnh báo vi phạm';
+        if (actionTextEl) actionTextEl.textContent = isReject ? 'từ chối' : 'ẩn';
+        if (confirmBtn) {
+            confirmBtn.innerHTML = isReject
+                ? '<i class="fa-solid fa-xmark mr-1.5"></i>Từ chối bài viết'
+                : '<i class="fa-solid fa-eye-slash mr-1.5"></i>Ẩn bài viết';
+        }
+
+        const defaultReason = isReject ? 'Bài viết chứa nội dung không phù hợp' : 'Vi phạm tiêu chuẩn cộng đồng';
+        if (quickSelect) quickSelect.value = defaultReason;
+        if (textarea) textarea.value = defaultReason;
 
         quickSelect.onchange = () => {
             if (quickSelect.value === 'custom') {
@@ -2098,8 +2118,11 @@ function askPostHideReason(postTitle = 'bài viết') {
         };
 
         confirmBtn.onclick = () => {
-            const reason = (textarea.value || '').trim() || quickSelect.value;
-            cleanup(reason || 'Vi phạm tiêu chuẩn cộng đồng');
+            let reason = (textarea.value || '').trim();
+            if (!reason || reason === 'custom') {
+                reason = quickSelect.value !== 'custom' ? quickSelect.value : defaultReason;
+            }
+            cleanup(reason || defaultReason);
         };
 
         cancelBtn.onclick = () => cleanup(null);
@@ -2139,12 +2162,13 @@ async function approveCommunityPost(id) {
     await loadAdminCommunityPosts();
 }
 
-// Hàm Ẩn bài viết kèm Lý do
+// Hàm Ẩn hoặc Từ chối bài viết kèm Lý do
 async function hideCommunityPost(id) {
     const post = adminCommunityState.posts.find(p => p.id_post == id);
     const postTitle = post?.title || `Bài viết #${id}`;
+    const isPending = post?.status === 'pending';
 
-    const reason = await askPostHideReason(postTitle);
+    const reason = await askPostHideReason(postTitle, isPending);
     if (!reason) return;
 
     const res = await fetchAPI(`/admin/posts/${id}/status`, {
@@ -2153,11 +2177,11 @@ async function hideCommunityPost(id) {
     });
 
     if (!res || !res.success) {
-        Popup.error(res?.message || 'Không thể ẩn bài viết lúc này.');
+        Popup.error(res?.message || (isPending ? 'Không thể từ chối bài viết lúc này.' : 'Không thể ẩn bài viết lúc này.'));
         return;
     }
 
-    Popup.toast(`Đã ẩn bài viết. Lý do: "${reason}"`, 'success');
+    Popup.toast(isPending ? `Đã từ chối bài viết. Lý do: "${reason}"` : `Đã ẩn bài viết. Lý do: "${reason}"`, 'success');
     await loadAdminCommunityPosts();
 }
 
@@ -2498,7 +2522,7 @@ function bindAdminCommunityEvents() {
 
         if (action === 'view') openCommunityDetailModal(id, 'post');
         if (action === 'approve') approveCommunityPost(id);
-        if (action === 'hide') hideCommunityPost(id);
+        if (action === 'hide' || action === 'reject') hideCommunityPost(id);
         if (action === 'delete') deleteCommunityPost(id);
     });
 

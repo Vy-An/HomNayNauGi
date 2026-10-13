@@ -303,6 +303,7 @@ const Community = {
         let selectedFoodName = null;
         let uploadedImageSrc = null;
         let currentFilter = 'all';
+        let isSubmittingPost = false;
 
         const formCreatePost = document.getElementById('form-create-post');
         const postTitleInput = document.getElementById('post-title-input');
@@ -418,7 +419,7 @@ const Community = {
                             </div>
                         </div>
 
-                        <button class="btn-more-options text-text-muted hover:text-text-main p-1.5 rounded-full hover:bg-gray-100 transition-colors cursor-pointer" title="Tùy chọn">
+                        <button class="btn-more-options text-text-muted hover:text-text-main p-1.5 rounded-full hover:bg-gray-100 transition-colors cursor-pointer" data-id="${post.id_post}" title="Báo cáo vi phạm">
                             <i class="fa-solid fa-ellipsis"></i>
                         </button>
                     </div>
@@ -899,6 +900,8 @@ const Community = {
         if (formCreatePost) {
             formCreatePost.addEventListener('submit', async (e) => {
                 e.preventDefault();
+                if (isSubmittingPost) return;
+
                 const content = postContentInput?.value.trim() || '';
                 const title = postTitleInput?.value.trim() || '';
 
@@ -917,9 +920,10 @@ const Community = {
                     return;
                 }
 
+                isSubmittingPost = true;
                 if (btnSubmitPost) {
                     btnSubmitPost.disabled = true;
-                    btnSubmitPost.innerHTML = '<span>Đang đăng...</span><i class="fa-solid fa-spinner animate-spin text-xs"></i>';
+                    btnSubmitPost.innerHTML = '<span>Đang gửi...</span><i class="fa-solid fa-spinner animate-spin text-xs"></i>';
                 }
 
                 try {
@@ -937,37 +941,7 @@ const Community = {
 
                     if (response?.success && response.data) {
                         const newPostData = response.data;
-                        const createdPost = {
-                            id_post: newPostData.id_post || newPostData.id,
-                            id_user: newPostData.id_user,
-                            id_food: newPostData.id_food,
-                            title: newPostData.title || title,
-                            content: newPostData.content || content,
-                            image: newPostData.image || uploadedImageSrc,
-                            foodName: newPostData.food?.name || selectedFoodName || '',
-                            author: {
-                                name: newPostData.user?.name || currentUser?.name || 'Bạn',
-                                avatar: newPostData.user?.avatar || currentUser?.avatar || 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=150'
-                            },
-                            created_at: newPostData.created_at || new Date().toISOString(),
-                            likes: 0,
-                            liked: false,
-                            comments: 0
-                        };
-
-                        allPosts.unshift(createdPost);
-                        currentFilteredPosts.unshift(createdPost);
-                        displayedCount++;
-
-                        if (feedContainer) {
-                            const tempDiv = document.createElement('div');
-                            tempDiv.innerHTML = createPostCardHTML(createdPost, true);
-                            const newCard = tempDiv.firstElementChild;
-                            feedContainer.insertBefore(newCard, feedContainer.firstChild);
-                        }
-
-                        updateFeedBadge();
-                        renderSidebars();
+                        const isPending = newPostData.status === 'pending';
 
                         formCreatePost.reset();
                         uploadedImageSrc = null;
@@ -977,13 +951,50 @@ const Community = {
                         if (imagePreviewImg) imagePreviewImg.src = '';
                         if (attachedFoodPill) attachedFoodPill.classList.add('hidden');
 
-                        showToast('Đăng bài chia sẻ thành công!', 'success');
+                        if (isPending) {
+                            showToast('Đã gửi bài viết. Bài viết đang chờ Admin duyệt.', 'info');
+                        } else {
+                            const createdPost = {
+                                id_post: newPostData.id_post || newPostData.id,
+                                id_user: newPostData.id_user,
+                                id_food: newPostData.id_food,
+                                title: newPostData.title || title,
+                                content: newPostData.content || content,
+                                image: newPostData.image || uploadedImageSrc,
+                                foodName: newPostData.food?.name || selectedFoodName || '',
+                                author: {
+                                    name: newPostData.user?.name || currentUser?.name || 'Bạn',
+                                    avatar: newPostData.user?.avatar || currentUser?.avatar || 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=150'
+                                },
+                                created_at: newPostData.created_at || new Date().toISOString(),
+                                likes: 0,
+                                liked: false,
+                                comments: 0
+                            };
+
+                            allPosts.unshift(createdPost);
+                            currentFilteredPosts.unshift(createdPost);
+                            displayedCount++;
+
+                            if (feedContainer) {
+                                const tempDiv = document.createElement('div');
+                                tempDiv.innerHTML = createPostCardHTML(createdPost, true);
+                                const newCard = tempDiv.firstElementChild;
+                                feedContainer.insertBefore(newCard, feedContainer.firstChild);
+                            }
+
+                            updateFeedBadge();
+                            renderSidebars();
+
+                            showToast('Đăng bài chia sẻ thành công!', 'success');
+                        }
                     } else {
-                        showToast(response?.message || 'Không thể đăng bài viết.', 'error');
+                        showToast(response?.message || 'Không thể gửi bài viết. Vui lòng thử lại.', 'error');
                     }
                 } catch (err) {
-                    showToast(err.message || 'Lỗi khi gửi yêu cầu đăng bài.', 'error');
+                    showToast('Không thể gửi bài viết. Vui lòng thử lại.', 'error');
                 } finally {
+                    isSubmittingPost = false;
                     if (btnSubmitPost) {
                         btnSubmitPost.disabled = false;
                         btnSubmitPost.innerHTML = '<span>Đăng bài</span><span class="text-xs">→</span>';
@@ -1092,7 +1103,39 @@ const Community = {
 
                 const moreBtn = e.target.closest('.btn-more-options');
                 if (moreBtn) {
-                    showToast('Tùy chọn bài viết', 'info');
+                    const postId = parseInt(moreBtn.getAttribute('data-id'), 10);
+                    if (!postId) return;
+
+                    const token = localStorage.getItem('token') || sessionStorage.getItem('token');
+                    if (!token) {
+                        showToast('Vui lòng đăng nhập để gửi báo cáo vi phạm.', 'info');
+                        return;
+                    }
+
+                    const confirmed = await Popup.confirm({
+                        title: 'Báo cáo vi phạm',
+                        message: 'Bạn có chắc chắn muốn gửi báo cáo bài viết này tới Ban quản trị vì vi phạm tiêu chuẩn cộng đồng?',
+                        type: 'warning',
+                        confirmText: 'Gửi báo cáo',
+                        cancelText: 'Hủy bỏ',
+                        confirmButtonColor: 'warning'
+                    });
+
+                    if (confirmed) {
+                        try {
+                            const res = await fetchAPI(`/posts/${postId}/report`, {
+                                method: 'POST',
+                                body: JSON.stringify({ reason: 'Vi phạm tiêu chuẩn cộng đồng' })
+                            });
+                            if (res?.success) {
+                                showToast(res.message || 'Báo cáo vi phạm đã được gửi thành công.', 'success');
+                            } else {
+                                showToast(res?.message || 'Không thể gửi báo cáo vi phạm lúc này.', 'error');
+                            }
+                        } catch (err) {
+                            showToast(err.message || 'Lỗi khi gửi báo cáo bài viết.', 'error');
+                        }
+                    }
                     return;
                 }
 
@@ -1135,7 +1178,7 @@ const Community = {
                                 } else {
                                     commentsList.innerHTML = comments.map(c => {
                                         const cAuthor = c.author || c.user || {};
-                                        const isMyComment = currentUser && (c.id_user === currentUser.id_user || c.id_user === currentUser.id || currentUser.role === 'admin');
+                                        const isMyComment = currentUser && (c.id_user === currentUser.id_user || c.id_user === currentUser.id);
                                         const cTime = c.time || formatTimeAgo(c.created_at);
                                         const cId = c.id_comment || c.id;
 

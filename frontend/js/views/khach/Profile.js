@@ -678,7 +678,8 @@ const Profile = {
             if (heroJoined) heroJoined.textContent = formatDate(user.created_at);
             if (heroBadge) heroBadge.textContent = user.role === 'admin' ? 'Quản trị viên' : 'Thành viên Bếp';
 
-            const postsCount = user.stats?.posts ?? myPosts.length ?? 0;
+            const approvedPostsCount = myPosts.filter(p => p.status === 'active').length || user.stats?.activePosts || user.stats?.posts || 0;
+            const totalPostsCount = myPosts.length || user.stats?.posts || 0;
             const favsCount = user.stats?.favorites ?? myFavorites.length ?? 0;
 
             const statPosts = document.getElementById('stat-posts-count');
@@ -688,11 +689,11 @@ const Profile = {
             const secCounter = document.getElementById('section-posts-counter');
             const fullFavBadge = document.getElementById('full-favs-count-badge');
 
-            if (statPosts) statPosts.textContent = postsCount;
+            if (statPosts) statPosts.textContent = approvedPostsCount;
             if (statFavs) statFavs.textContent = favsCount;
-            if (tabBadgePosts) tabBadgePosts.textContent = postsCount;
+            if (tabBadgePosts) tabBadgePosts.textContent = totalPostsCount;
             if (tabBadgeFavs) tabBadgeFavs.textContent = favsCount;
-            if (secCounter) secCounter.textContent = `(${postsCount})`;
+            if (secCounter) secCounter.textContent = `(${totalPostsCount})`;
             if (fullFavBadge) fullFavBadge.textContent = `${favsCount} món`;
 
             const tabName = document.getElementById('tab-info-name');
@@ -739,8 +740,8 @@ const Profile = {
                 const isHidden = post.status === 'hidden';
 
                 let statusBadge = `
-                    <span class="text-[10px] bg-emerald-50 text-emerald-700 font-bold px-2 py-0.5 rounded-full border border-emerald-200 flex items-center gap-1">
-                        <i class="fa-solid fa-check text-emerald-600"></i> Đã duyệt
+                    <span class="text-[10px] bg-emerald-50 text-emerald-700 font-extrabold px-2 py-0.5 rounded-full border border-emerald-200 flex items-center gap-1">
+                        <span>🟢</span> Đã đăng
                     </span>
                 `;
                 let cardStyle = "bg-white rounded-2xl border border-beige-border/90 p-3.5 shadow-sm hover:shadow-md transition-all flex flex-col justify-between";
@@ -748,21 +749,21 @@ const Profile = {
 
                 if (isPending) {
                     statusBadge = `
-                        <span class="text-[10px] bg-amber-100 text-[#C27E25] font-extrabold px-2.5 py-0.5 rounded-full border border-amber-300 shadow-2xs flex items-center gap-1">
-                            <i class="fa-solid fa-clock text-amber-600"></i> Chờ duyệt bài viết
+                        <span class="text-[10px] bg-amber-50 text-amber-700 font-extrabold px-2.5 py-0.5 rounded-full border border-amber-300 shadow-2xs flex items-center gap-1">
+                            <span>🟡</span> Đang chờ duyệt
                         </span>
                     `;
                     cardStyle = "bg-amber-50/20 rounded-2xl border-2 border-amber-300/80 p-3.5 shadow-xs opacity-75 hover:opacity-95 transition-all flex flex-col justify-between ring-1 ring-amber-200/50";
                     statusNotice = `
                         <div class="px-3 py-2 rounded-xl bg-amber-100/70 border border-amber-300/70 text-[#8C5300] text-[11px] font-semibold flex items-center gap-2">
                             <i class="fa-solid fa-hourglass-half text-amber-600 text-xs shrink-0"></i>
-                            <span>Bài viết đang chờ duyệt, chưa hiển thị công khai trên cộng đồng.</span>
+                            <span>Bài viết đang chờ Admin duyệt.</span>
                         </div>
                     `;
                 } else if (isHidden) {
                     statusBadge = `
-                        <span class="text-[10px] bg-rose-100 text-rose-700 font-extrabold px-2.5 py-0.5 rounded-full border border-rose-300 shadow-2xs flex items-center gap-1">
-                            <i class="fa-solid fa-eye-slash text-rose-600"></i> Đã bị ẩn
+                        <span class="text-[10px] bg-rose-50 text-rose-700 font-extrabold px-2.5 py-0.5 rounded-full border border-rose-300 shadow-2xs flex items-center gap-1">
+                            <span>🔴</span> Bị từ chối
                         </span>
                     `;
                     cardStyle = "bg-rose-50/20 rounded-2xl border-2 border-rose-300/80 p-3.5 shadow-xs opacity-70 hover:opacity-90 transition-all flex flex-col justify-between ring-1 ring-rose-200/50";
@@ -770,7 +771,7 @@ const Profile = {
                         <div class="px-3 py-2 rounded-xl bg-rose-50 border border-rose-200 text-rose-800 text-[11px] font-semibold flex items-start gap-2">
                             <i class="fa-solid fa-circle-exclamation text-rose-600 text-xs shrink-0 mt-0.5"></i>
                             <div class="leading-tight">
-                                <p class="font-bold">Bài viết đã bị quản trị viên tạm ẩn</p>
+                                <p class="font-bold">Bài viết bị từ chối</p>
                                 ${post.hidden_reason ? `<p class="text-[10px] text-rose-700 mt-0.5 font-medium">Lý do: <span class="font-bold underline">${escapeHTML(post.hidden_reason)}</span></p>` : ''}
                             </div>
                         </div>
@@ -799,8 +800,8 @@ const Profile = {
                                     ${isPending ? `
                                         <div class="absolute inset-0 bg-amber-950/20 backdrop-blur-[1px] flex items-center justify-center">
                                             <span class="bg-black/60 backdrop-blur-md text-amber-200 text-xs font-extrabold px-3 py-1.5 rounded-full border border-amber-300/40 shadow-md flex items-center gap-1.5">
-                                                <i class="fa-solid fa-clock text-amber-400"></i>
-                                                Chờ duyệt bài viết
+                                                <span>🟡</span>
+                                                Đang chờ duyệt
                                             </span>
                                         </div>
                                     ` : ''}
@@ -1108,13 +1109,14 @@ const Profile = {
             if (postsRes?.success && Array.isArray(postsRes.data)) {
                 myPosts = postsRes.data;
                 renderPostsGrid();
-                const count = myPosts.length;
+                const approvedCount = myPosts.filter(p => p.status === 'active').length;
+                const totalCount = myPosts.length;
                 const statPosts = document.getElementById('stat-posts-count');
                 const tabBadgePosts = document.getElementById('tab-badge-posts');
                 const secCounter = document.getElementById('section-posts-counter');
-                if (statPosts) statPosts.textContent = count;
-                if (tabBadgePosts) tabBadgePosts.textContent = count;
-                if (secCounter) secCounter.textContent = `(${count})`;
+                if (statPosts) statPosts.textContent = approvedCount;
+                if (tabBadgePosts) tabBadgePosts.textContent = totalCount;
+                if (secCounter) secCounter.textContent = `(${totalCount})`;
             } else {
                 renderPostsGrid();
             }
