@@ -1545,19 +1545,13 @@ async function getCategories(req, res) {
             ];
         }
 
-        if (status === 'active' || status === 'inactive') {
-            where.status = status;
-        }
-
         let orderBy = { created_at: 'desc' };
         if (sort === 'oldest') orderBy = { created_at: 'asc' };
         else if (sort === 'name_asc') orderBy = { name: 'asc' };
         else if (sort === 'name_desc') orderBy = { name: 'desc' };
 
-        const [totalMatching, activeCount, inactiveCount, totalAll, rawCategories] = await Promise.all([
+        const [totalMatching, totalAll, rawCategories] = await Promise.all([
             prisma.categories.count({ where }),
-            prisma.categories.count({ where: { status: 'active' } }),
-            prisma.categories.count({ where: { status: 'inactive' } }),
             prisma.categories.count(),
             prisma.categories.findMany({
                 where,
@@ -1576,7 +1570,7 @@ async function getCategories(req, res) {
             id_category: c.id_category,
             name: c.name,
             slug: c.slug,
-            status: c.status,
+            status: c.status || 'active',
             created_at: c.created_at,
             updated_at: c.updated_at,
             foodsCount: c._count?.foods || 0
@@ -1597,8 +1591,8 @@ async function getCategories(req, res) {
             data: formattedCategories,
             stats: {
                 total: totalAll,
-                active: activeCount,
-                inactive: inactiveCount,
+                active: totalAll,
+                inactive: 0,
                 totalFoodsAssigned
             },
             pagination: {
@@ -1710,8 +1704,7 @@ async function createCategory(req, res) {
         const newCategory = await prisma.categories.create({
             data: {
                 name: trimmedName,
-                slug: finalSlug,
-                status: categoryStatus
+                slug: finalSlug
             }
         });
 
@@ -1723,7 +1716,7 @@ async function createCategory(req, res) {
                 id_category: newCategory.id_category,
                 name: newCategory.name,
                 slug: newCategory.slug,
-                status: newCategory.status,
+                status: categoryStatus,
                 created_at: newCategory.created_at,
                 updated_at: newCategory.updated_at,
                 foodsCount: 0
@@ -1812,7 +1805,6 @@ async function updateCategory(req, res) {
                     message: 'Trạng thái danh mục chỉ có thể là "active" hoặc "inactive".'
                 });
             }
-            data.status = status;
         }
 
         data.updated_at = new Date();
@@ -1835,7 +1827,7 @@ async function updateCategory(req, res) {
                 id_category: updated.id_category,
                 name: updated.name,
                 slug: updated.slug,
-                status: updated.status,
+                status: status || 'active',
                 created_at: updated.created_at,
                 updated_at: updated.updated_at,
                 foodsCount: updated._count?.foods || 0
@@ -1867,13 +1859,12 @@ async function updateCategoryStatus(req, res) {
 
         let targetStatus = req.body.status;
         if (!targetStatus || !['active', 'inactive'].includes(targetStatus)) {
-            targetStatus = category.status === 'active' ? 'inactive' : 'active';
+            targetStatus = 'active';
         }
 
         const updated = await prisma.categories.update({
             where: { id_category: id },
             data: {
-                status: targetStatus,
                 updated_at: new Date()
             }
         });
@@ -1888,13 +1879,57 @@ async function updateCategoryStatus(req, res) {
                 id_category: updated.id_category,
                 name: updated.name,
                 slug: updated.slug,
-                status: updated.status,
+                status: targetStatus,
                 foodsCount: category._count?.foods || 0
             }
         });
     } catch (error) {
         console.error('Lỗi khi cập nhật trạng thái danh mục:', error);
         return res.status(500).json({ success: false, message: 'Không thể thay đổi trạng thái danh mục.' });
+    }
+}
+
+async function updateCommentStatus(req, res) {
+    try {
+        const id = parsePositiveInt(req.params.id);
+        const { status } = req.body || {};
+
+        if (!id || !['active', 'hidden'].includes(status)) {
+            return res.status(400).json({
+                success: false,
+                message: 'Trạng thái bình luận không hợp lệ. Chấp nhận: active, hidden.'
+            });
+        }
+
+        const comment = await prisma.comments.findUnique({
+            where: { id_comment: id }
+        });
+
+        if (!comment) {
+            return res.status(404).json({
+                success: false,
+                message: 'Bình luận không tồn tại.'
+            });
+        }
+
+        const updated = await prisma.comments.update({
+            where: { id_comment: id },
+            data: {
+                status,
+                updated_at: new Date()
+            }
+        });
+
+        const statusLabel = status === 'hidden' ? 'Đã ẩn bình luận' : 'Hiển thị bình luận';
+
+        return res.json({
+            success: true,
+            message: `Đã cập nhật: ${statusLabel}.`,
+            data: updated
+        });
+    } catch (error) {
+        console.error('updateCommentStatus error:', error);
+        return res.status(500).json({ success: false, message: 'Không thể cập nhật trạng thái bình luận.' });
     }
 }
 
@@ -1916,6 +1951,7 @@ module.exports = {
     deletePost,
     getReports,
     updateReportStatus,
+    updateCommentStatus,
     getCategories,
     getCategoryById,
     createCategory,

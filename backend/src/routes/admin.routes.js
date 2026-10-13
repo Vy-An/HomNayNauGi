@@ -36,5 +36,6 @@ router.delete('/posts/:id', adminController.deletePost);
 router.get('/reports', adminController.getReports);
 router.patch('/reports/:id/status', adminController.updateReportStatus);
 router.put('/reports/:id/status', adminController.updateReportStatus);
+router.patch('/comments/:id/status', adminController.updateCommentStatus);
 
 module.exports = router;

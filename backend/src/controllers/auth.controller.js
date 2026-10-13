@@ -473,6 +473,80 @@ async function removeFavorite(req, res) {
     }
 }
 
+async function addFavorite(req, res) {
+    try {
+        if (!req.user) {
+            return res.status(401).json({
+                success: false,
+                message: 'Chưa đăng nhập.'
+            });
+        }
+
+        const foodId = Number(req.params.id || req.body?.id_food || req.body?.foodId || req.body?.id);
+        if (!foodId || Number.isNaN(foodId)) {
+            return res.status(400).json({
+                success: false,
+                message: 'ID món ăn không hợp lệ.'
+            });
+        }
+
+        const food = await prisma.foods.findUnique({
+            where: { id_food: foodId },
+            include: { categories: true }
+        });
+
+        if (!food) {
+            return res.status(404).json({
+                success: false,
+                message: 'Không tìm thấy món ăn này.'
+            });
+        }
+
+        const existing = await prisma.favorites.findUnique({
+            where: {
+                id_user_id_food: {
+                    id_user: req.user.id_user,
+                    id_food: foodId
+                }
+            }
+        });
+
+        if (!existing) {
+            await prisma.favorites.create({
+                data: {
+                    id_user: req.user.id_user,
+                    id_food: foodId
+                }
+            });
+        }
+
+        const totalCount = await prisma.favorites.count({
+            where: { id_user: req.user.id_user }
+        });
+
+        return res.json({
+            success: true,
+            message: 'Đã thêm món vào danh sách yêu thích.',
+            id_food: foodId,
+            totalCount,
+            food: {
+                id: food.id_food,
+                id_food: food.id_food,
+                name: food.name,
+                image: resolveAssetUrl(food.image || '/images/foods/thit-kho-trung.jpg'),
+                cooking_time: food.cooking_time,
+                time: food.cooking_time ? `${food.cooking_time} phút` : '30 phút',
+                category: food.categories?.name || 'Món ngon'
+            }
+        });
+    } catch (error) {
+        return res.status(500).json({
+            success: false,
+            message: 'Không thể thêm món yêu thích lúc này.'
+        });
+    }
+}
+
 async function toggleFavorite(req, res) {
     try {
         if (!req.user) {
@@ -482,7 +556,7 @@ async function toggleFavorite(req, res) {
             });
         }
 
-        const foodId = Number(req.params.id);
+        const foodId = Number(req.params.id || req.body?.id_food || req.body?.foodId || req.body?.id);
         if (!foodId || Number.isNaN(foodId)) {
             return res.status(400).json({
                 success: false,
@@ -510,6 +584,7 @@ module.exports = {
     updateProfile,
     getMyPosts,
     getMyFavorites,
+    addFavorite,
     removeFavorite,
     toggleFavorite
 };
