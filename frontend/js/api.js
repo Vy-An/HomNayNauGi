@@ -14,7 +14,16 @@ export async function fetchAPI(endpoint, options = {}) {
             headers
         });
 
-        return await response.json();
+        const contentType = response.headers.get('content-type');
+        if (contentType && contentType.includes('application/json')) {
+            const data = await response.json();
+            return data;
+        }
+
+        return { 
+            success: response.ok, 
+            message: response.ok ? 'Thành công' : `Lỗi ${response.status}: Yêu cầu không thành công.` 
+        };
     } catch (error) {
         console.error('Lỗi khi gọi API:', error);
         return { success: false, message: 'Không thể kết nối đến máy chủ.' };

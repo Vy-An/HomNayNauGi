@@ -5,7 +5,8 @@ const foodService = require('../services/food.service');
  */
 async function getFoods(req, res) {
     try {
-        const result = await foodService.getFoods(req.query);
+        const userId = req.user ? req.user.id_user : null;
+        const result = await foodService.getFoods(req.query, userId);
 
         return res.json({
             success: true,
@@ -32,7 +33,8 @@ async function getFoods(req, res) {
 async function getFoodById(req, res) {
     try {
         const { id } = req.params;
-        const food = await foodService.getFoodById(id);
+        const userId = req.user ? req.user.id_user : null;
+        const food = await foodService.getFoodById(id, userId);
 
         if (!food) {
             return res.status(404).json({

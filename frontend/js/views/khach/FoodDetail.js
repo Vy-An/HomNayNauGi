@@ -122,9 +122,9 @@ const FoodDetail = {
 
                                 <!-- Action Buttons Row -->
                                 <div class="flex items-center gap-3">
-                                    <button id="fav-btn" class="flex-1 py-3 px-4 rounded-2xl bg-white border border-beige-border/80 text-text-main font-semibold hover:bg-cream-soft transition flex items-center justify-center gap-2 text-xs md:text-sm shadow-sm cursor-pointer">
-                                        <i class="fa-regular fa-heart text-rose-500"></i>
-                                        <span>Lưu món</span>
+                                    <button id="fav-btn" class="flex-1 py-3 px-4 rounded-2xl ${food.is_favorite ? 'bg-rose-50 border border-rose-200 text-rose-600' : 'bg-white border border-beige-border/80 text-text-main'} font-semibold hover:bg-cream-soft transition flex items-center justify-center gap-2 text-xs md:text-sm shadow-sm cursor-pointer">
+                                        <i class="${food.is_favorite ? 'fa-solid' : 'fa-regular'} fa-heart text-rose-500"></i>
+                                        <span>${food.is_favorite ? 'Đã lưu món' : 'Lưu món'}</span>
                                     </button>
                                     <button id="add-to-cart-btn" class="flex-[2] py-3 px-5 bg-primary hover:bg-[#1B4633] active:bg-[#143627] text-white font-bold rounded-2xl transition shadow-md shadow-primary/20 flex items-center justify-center gap-2 text-xs md:text-sm cursor-pointer">
                                         <i class="fa-solid fa-cart-shopping text-accent-light"></i>
@@ -236,18 +236,75 @@ const FoodDetail = {
         }
 
         if (btnAdd) {
-            btnAdd.addEventListener('click', () => {
-                let cart = JSON.parse(localStorage.getItem('shoppingCart') || '[]');
-                cart.push({ id, name: 'Cơm Tấm Sườn Bì Chả', addedAt: new Date().toISOString() });
-                localStorage.setItem('shoppingCart', JSON.stringify(cart));
-                showToast('Đã thêm nguyên liệu vào Danh sách đi chợ!');
+            btnAdd.addEventListener('click', async () => {
+                const token = localStorage.getItem('auth_token');
+                if (!token) {
+                    showToast('Vui lòng đăng nhập để lưu danh sách đi chợ! 🔒');
+                    setTimeout(() => { window.location.hash = '#/login'; }, 1200);
+                    return;
+                }
+
+                if (!currentFoodDetail) return;
+                btnAdd.disabled = true;
+                const originalText = btnAdd.innerHTML;
+                btnAdd.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i><span>Đang thêm...</span>';
+
+                try {
+                    const res = await fetchAPI('/shopping-list/add-food', {
+                        method: 'POST',
+                        body: JSON.stringify({ foodId: currentFoodDetail.id })
+                    });
+
+                    if (res && res.success) {
+                        showToast(`Đã thêm nguyên liệu món "${currentFoodDetail.name}" vào Đi chợ! 🛒`);
+                        if (window.loadShoppingListInNav) window.loadShoppingListInNav();
+                        if (window.openShoppingDrawer) {
+                            setTimeout(() => window.openShoppingDrawer(), 800);
+                        }
+                    } else {
+                        showToast(res.message || 'Không thể thêm vào đi chợ.');
+                    }
+                } catch (err) {
+                    showToast('Lỗi khi thêm nguyên liệu.');
+                } finally {
+                    btnAdd.disabled = false;
+                    btnAdd.innerHTML = originalText;
+                }
             });
         }
 
         if (btnFav) {
-            btnFav.addEventListener('click', () => {
-                btnFav.classList.toggle('text-red-500');
-                showToast('Đã lưu món ăn vào danh sách yêu thích!');
+            btnFav.addEventListener('click', async () => {
+                const token = localStorage.getItem('auth_token');
+                if (!token) {
+                    showToast('Vui lòng đăng nhập để lưu món yêu thích! 🔒');
+                    setTimeout(() => { window.location.hash = '#/login'; }, 1200);
+                    return;
+                }
+
+                if (!currentFoodDetail) return;
+                btnFav.disabled = true;
+
+                try {
+                    const res = await fetchAPI(`/auth/me/favorites/${currentFoodDetail.id}/toggle`, {
+                        method: 'POST'
+                    });
+
+                    if (res && res.success) {
+                        currentFoodDetail.is_favorite = res.is_favorite;
+                        const isFav = res.is_favorite;
+                        btnFav.className = `flex-1 py-3 px-4 rounded-2xl ${isFav ? 'bg-rose-50 border border-rose-200 text-rose-600' : 'bg-white border border-beige-border/80 text-text-main'} font-semibold hover:bg-cream-soft transition flex items-center justify-center gap-2 text-xs md:text-sm shadow-sm cursor-pointer`;
+                        btnFav.innerHTML = `<i class="${isFav ? 'fa-solid' : 'fa-regular'} fa-heart text-rose-500"></i><span>${isFav ? 'Đã lưu món' : 'Lưu món'}</span>`;
+                        showToast(res.message);
+                        if (window.loadFavoritesInNav) window.loadFavoritesInNav();
+                    } else {
+                        showToast(res.message || 'Không thể cập nhật yêu thích.');
+                    }
+                } catch (err) {
+                    showToast('Lỗi kết nối khi cập nhật yêu thích.');
+                } finally {
+                    btnFav.disabled = false;
+                }
             });
         }
     }

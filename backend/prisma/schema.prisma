@@ -8,11 +8,12 @@ datasource db {
 }
 
 model categories {
-  id_category Int      @id @default(autoincrement()) @db.UnsignedInt
-  name        String   @unique(map: "uq_categories_name") @db.VarChar(100)
-  slug        String   @unique(map: "uq_categories_slug") @db.VarChar(150)
-  created_at  DateTime @default(now()) @db.Timestamp(0)
-  updated_at  DateTime @default(now()) @db.Timestamp(0)
+  id_category Int               @id @default(autoincrement()) @db.UnsignedInt
+  name        String            @unique(map: "uq_categories_name") @db.VarChar(100)
+  slug        String            @unique(map: "uq_categories_slug") @db.VarChar(150)
+  status      categories_status @default(active)
+  created_at  DateTime          @default(now()) @db.Timestamp(0)
+  updated_at  DateTime          @default(now()) @db.Timestamp(0)
   foods       foods[]
 }
 
@@ -241,4 +242,9 @@ enum users_status {
 enum foods_status {
   active
   inactive
+}
+
+enum categories_status {
+  active
+  hidden
 }

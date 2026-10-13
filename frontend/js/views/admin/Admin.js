@@ -21,6 +21,28 @@ const adminFoodsState = {
     editingId: null
 };
 
+const adminCategoriesState = {
+    search: '',
+    categories: [],
+    editingId: null
+};
+
+const adminCommunityState = {
+    tab: 'posts',
+    posts: {
+        page: 1,
+        limit: 10,
+        search: '',
+        status: '',
+        total: 0,
+        items: []
+    },
+    reports: {
+        status: '',
+        items: []
+    }
+};
+
 function getStoredAdminUser() {
     try {
         return JSON.parse(localStorage.getItem('auth_user') || 'null');
@@ -1338,252 +1360,753 @@ async function initAdminFoodsPage() {
     await loadAdminFoods();
 }
 
+// ==========================================
+// 3. QUẢN LÝ DANH MỤC (CATEGORIES)
+// ==========================================
+
+function renderCategoriesPage() {
+    const currentUser = getStoredAdminUser();
+    const adminName = currentUser?.name || 'Admin';
+    const adminAvatar = currentUser?.avatar || 'http://localhost:5000/images/users/admin.jpg';
+
+    return `
+        <header class="flex flex-col lg:flex-row lg:justify-between lg:items-center gap-4 mb-8 bg-white p-4 rounded-2xl shadow-sm border border-gray-100">
+            <div>
+                <h1 class="text-2xl font-bold text-text-main">Quản lý danh mục món ăn</h1>
+                <p class="text-sm text-text-muted mt-1">Quản lý, thêm, sửa, xóa các danh mục ẩm thực cho hệ thống.</p>
+            </div>
+            <div class="flex items-center gap-4">
+                <span class="text-text-muted">Xin chào, <strong>${escapeHTML(adminName)}</strong></span>
+                <img src="${escapeHTML(adminAvatar)}" class="w-10 h-10 rounded-full object-cover" alt="Admin">
+            </div>
+        </header>
+
+        <div id="admin-category-alert" class="hidden mb-4 rounded-xl border px-4 py-3 text-sm font-semibold"></div>
+
+        <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
+            <div class="p-6 border-b border-gray-100 flex flex-col sm:flex-row gap-3 sm:items-center sm:justify-between">
+                <div class="flex items-center gap-3 flex-1 max-w-md">
+                    <div class="relative w-full">
+                        <i class="fa-solid fa-magnifying-glass absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-400 text-xs"></i>
+                        <input id="admin-category-search-input" type="text" placeholder="Tìm kiếm danh mục..." class="w-full pl-9 pr-3 py-2 bg-gray-50 border border-gray-200 rounded-xl text-xs focus:outline-none focus:ring-1 focus:ring-primary focus:bg-white transition">
+                    </div>
+                </div>
+                <button id="admin-category-btn-open-create" class="px-4 py-2 bg-primary hover:bg-[#1B4633] text-white rounded-xl text-xs font-bold shadow-sm transition flex items-center gap-2 cursor-pointer shrink-0">
+                    <i class="fa-solid fa-plus"></i>
+                    <span>Thêm danh mục mới</span>
+                </button>
+            </div>
+
+            <div class="overflow-x-auto">
+                <table class="w-full text-left border-collapse">
+                    <thead>
+                        <tr class="bg-gray-50 text-text-muted text-xs border-b border-gray-100 uppercase tracking-wider">
+                            <th class="p-4 font-semibold">ID</th>
+                            <th class="p-4 font-semibold">Tên danh mục</th>
+                            <th class="p-4 font-semibold">Đường dẫn (Slug)</th>
+                            <th class="p-4 font-semibold">Món liên kết</th>
+                            <th class="p-4 font-semibold">Trạng thái</th>
+                            <th class="p-4 font-semibold">Ngày tạo</th>
+                            <th class="p-4 font-semibold text-right">Thao tác</th>
+                        </tr>
+                    </thead>
+                    <tbody id="admin-categories-table-body" class="divide-y divide-gray-50 text-xs text-text-main">
+                        <tr>
+                            <td colspan="7" class="p-8 text-center text-text-muted">Đang tải danh mục...</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- MODAL THÊM / SỬA DANH MỤC -->
+        <div id="admin-category-modal" class="hidden fixed inset-0 z-50 bg-black/50 backdrop-blur-xs flex items-center justify-center p-4">
+            <div class="bg-white rounded-2xl shadow-2xl max-w-md w-full overflow-hidden border border-gray-100 animate-in fade-in zoom-in-95 duration-200">
+                <div class="p-4 bg-[#0F4937] text-white flex items-center justify-between">
+                    <h3 id="admin-category-modal-title" class="font-bold text-sm flex items-center gap-2">
+                        <i class="fa-solid fa-layer-group text-[#F4A62A]"></i>
+                        <span>Thêm danh mục mới</span>
+                    </h3>
+                    <button id="admin-category-btn-close-modal" class="text-white/80 hover:text-white transition text-lg">&times;</button>
+                </div>
+                <form id="admin-category-form" class="p-5 space-y-4">
+                    <input type="hidden" id="admin-category-form-id">
+                    <div>
+                        <label class="block text-xs font-bold text-text-main mb-1">Tên danh mục <span class="text-rose-500">*</span></label>
+                        <input type="text" id="admin-category-form-name" placeholder="Ví dụ: Món Cuốn, Món Hấp..." class="w-full px-3 py-2 border border-gray-200 rounded-xl text-xs focus:outline-none focus:ring-1 focus:ring-primary" required>
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-text-main mb-1">Đường dẫn (Slug)</label>
+                        <input type="text" id="admin-category-form-slug" placeholder="Để trống để tự động sinh (mon-cuon)" class="w-full px-3 py-2 border border-gray-200 rounded-xl text-xs focus:outline-none focus:ring-1 focus:ring-primary font-mono text-[11px]">
+                    </div>
+                    <div id="admin-category-form-error" class="hidden text-xs text-rose-600 bg-rose-50 p-2.5 rounded-lg border border-rose-100 font-semibold"></div>
+                    <div class="pt-3 border-t border-gray-100 flex justify-end gap-2">
+                        <button type="button" id="admin-category-btn-cancel-modal" class="px-4 py-2 border border-gray-200 text-text-muted hover:bg-gray-50 rounded-xl text-xs font-semibold transition">Hủy</button>
+                        <button type="submit" id="admin-category-btn-submit" class="px-5 py-2 bg-primary hover:bg-[#1B4633] text-white rounded-xl text-xs font-bold shadow-sm transition">Lưu danh mục</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    `;
+}
+
+function setCategoryAlert(message = '', type = 'info') {
+    const alert = document.getElementById('admin-category-alert');
+    if (!alert) return;
+    if (!message) {
+        alert.classList.add('hidden');
+        alert.textContent = '';
+        return;
+    }
+    const classes = type === 'error'
+        ? 'bg-red-50 border-red-200 text-red-700'
+        : 'bg-green-50 border-green-200 text-green-700';
+    alert.className = `mb-4 rounded-xl border px-4 py-3 text-sm font-semibold ${classes}`;
+    alert.textContent = message;
+}
+
+async function loadAdminCategories() {
+    const body = document.getElementById('admin-categories-table-body');
+    if (!body) return;
+
+    try {
+        const query = adminCategoriesState.search ? `?search=${encodeURIComponent(adminCategoriesState.search)}` : '';
+        const res = await fetchAPI(`/admin/categories${query}`);
+
+        if (!res || !res.success || !Array.isArray(res.data)) {
+            body.innerHTML = '<tr><td colspan="6" class="p-8 text-center text-red-500">Không thể tải danh sách danh mục.</td></tr>';
+            return;
+        }
+
+        adminCategoriesState.categories = res.data;
+
+        if (res.data.length === 0) {
+            body.innerHTML = '<tr><td colspan="6" class="p-8 text-center text-text-muted">Không tìm thấy danh mục nào.</td></tr>';
+            return;
+        }
+
+        body.innerHTML = res.data.map((cat) => `
+            <tr class="hover:bg-gray-50 transition border-b border-gray-50">
+                <td class="p-4 font-mono font-bold text-gray-500">#${cat.id_category}</td>
+                <td class="p-4 font-bold text-text-main">${escapeHTML(cat.name)}</td>
+                <td class="p-4 font-mono text-[11px] text-gray-500 bg-gray-50/50 px-2 rounded">${escapeHTML(cat.slug)}</td>
+                <td class="p-4 font-semibold">
+                    <span class="px-2.5 py-0.5 rounded-full text-xs font-bold ${cat.foodsCount > 0 ? 'bg-emerald-50 text-emerald-700 border border-emerald-200' : 'bg-gray-100 text-gray-500'}">
+                        ${cat.foodsCount} món
+                    </span>
+                </td>
+                <td class="p-4 font-semibold">
+                    <span class="px-2.5 py-0.5 rounded-full text-xs font-bold ${cat.status === 'active' ? 'bg-emerald-50 text-emerald-700 border border-emerald-200' : 'bg-amber-50 text-amber-700 border border-amber-200'}">
+                        ${cat.status === 'active' ? 'Đang hiển thị' : 'Đã ẩn'}
+                    </span>
+                </td>
+                <td class="p-4 text-text-muted">${formatDate(cat.created_at)}</td>
+                <td class="p-4 text-right space-x-2">
+                    <button class="btn-toggle-category-status p-2 rounded-lg transition cursor-pointer ${cat.status === 'active' ? 'text-amber-600 hover:bg-amber-50' : 'text-emerald-600 hover:bg-emerald-50'}" data-id="${cat.id_category}" data-status="${cat.status}" title="${cat.status === 'active' ? 'Ẩn danh mục' : 'Hiển thị danh mục'}">
+                        <i class="fa-solid ${cat.status === 'active' ? 'fa-eye-slash' : 'fa-eye'}"></i>
+                    </button>
+                    <button class="btn-edit-category text-blue-600 hover:bg-blue-50 p-2 rounded-lg transition cursor-pointer" data-id="${cat.id_category}" title="Chỉnh sửa">
+                        <i class="fa-solid fa-pen-to-square"></i>
+                    </button>
+                </td>
+            </tr>
+        `).join('');
+    } catch (e) {
+        body.innerHTML = '<tr><td colspan="7" class="p-8 text-center text-red-500">Lỗi khi kết nối tải danh mục.</td></tr>';
+    }
+}
+
+function openCategoryModal(cat = null) {
+    const modal = document.getElementById('admin-category-modal');
+    const title = document.getElementById('admin-category-modal-title');
+    const idInput = document.getElementById('admin-category-form-id');
+    const nameInput = document.getElementById('admin-category-form-name');
+    const slugInput = document.getElementById('admin-category-form-slug');
+    const errBox = document.getElementById('admin-category-form-error');
+
+    if (!modal) return;
+    if (errBox) errBox.classList.add('hidden');
+
+    if (cat) {
+        adminCategoriesState.editingId = cat.id_category;
+        if (title) title.innerHTML = '<i class="fa-solid fa-pen text-[#F4A62A]"></i><span>Chỉnh sửa danh mục</span>';
+        if (idInput) idInput.value = cat.id_category;
+        if (nameInput) nameInput.value = cat.name;
+        if (slugInput) slugInput.value = cat.slug;
+    } else {
+        adminCategoriesState.editingId = null;
+        if (title) title.innerHTML = '<i class="fa-solid fa-layer-group text-[#F4A62A]"></i><span>Thêm danh mục mới</span>';
+        if (idInput) idInput.value = '';
+        if (nameInput) nameInput.value = '';
+        if (slugInput) slugInput.value = '';
+    }
+
+    modal.classList.remove('hidden');
+    nameInput?.focus();
+}
+
+function closeCategoryModal() {
+    const modal = document.getElementById('admin-category-modal');
+    if (modal) modal.classList.add('hidden');
+}
+
+async function handleCategoryFormSubmit(e) {
+    e.preventDefault();
+    const id = adminCategoriesState.editingId;
+    const nameInput = document.getElementById('admin-category-form-name');
+    const slugInput = document.getElementById('admin-category-form-slug');
+    const errBox = document.getElementById('admin-category-form-error');
+    const submitBtn = document.getElementById('admin-category-btn-submit');
+
+    const name = nameInput?.value.trim();
+    const slug = slugInput?.value.trim();
+
+    if (!name) {
+        if (errBox) {
+            errBox.textContent = 'Vui lòng nhập tên danh mục.';
+            errBox.classList.remove('hidden');
+        }
+        return;
+    }
+
+    if (submitBtn) submitBtn.disabled = true;
+
+    try {
+        const endpoint = id ? `/admin/categories/${id}` : '/admin/categories';
+        const method = id ? 'PATCH' : 'POST';
+        const res = await fetchAPI(endpoint, {
+            method,
+            body: JSON.stringify({ name, slug })
+        });
+
+        if (res && res.success) {
+            closeCategoryModal();
+            setCategoryAlert(res.message, 'success');
+            await loadAdminCategories();
+        } else {
+            if (errBox) {
+                errBox.textContent = res.message || 'Lỗi khi lưu danh mục.';
+                errBox.classList.remove('hidden');
+            }
+        }
+    } catch (err) {
+        if (errBox) {
+            errBox.textContent = 'Lỗi kết nối máy chủ.';
+            errBox.classList.remove('hidden');
+        }
+    } finally {
+        if (submitBtn) submitBtn.disabled = false;
+    }
+}
+
+async function handleToggleCategoryStatus(id, currentStatus) {
+    const newStatus = currentStatus === 'active' ? 'hidden' : 'active';
+    try {
+        const res = await fetchAPI(`/admin/categories/${id}/status`, {
+            method: 'PATCH',
+            body: JSON.stringify({ status: newStatus })
+        });
+        if (res && res.success) {
+            setCategoryAlert(res.message, 'success');
+            await loadAdminCategories();
+        } else {
+            setCategoryAlert(res.message || 'Không thể cập nhật trạng thái danh mục.', 'error');
+        }
+    } catch (err) {
+        setCategoryAlert('Lỗi kết nối khi cập nhật trạng thái danh mục.', 'error');
+    }
+}
+
+function bindAdminCategoriesEvents() {
+    const searchInput = document.getElementById('admin-category-search-input');
+    const btnOpenCreate = document.getElementById('admin-category-btn-open-create');
+    const btnCloseModal = document.getElementById('admin-category-btn-close-modal');
+    const btnCancelModal = document.getElementById('admin-category-btn-cancel-modal');
+    const form = document.getElementById('admin-category-form');
+    const tableBody = document.getElementById('admin-categories-table-body');
+
+    btnOpenCreate?.addEventListener('click', () => openCategoryModal());
+    btnCloseModal?.addEventListener('click', closeCategoryModal);
+    btnCancelModal?.addEventListener('click', closeCategoryModal);
+    form?.addEventListener('submit', handleCategoryFormSubmit);
+
+    let debounceTimer;
+    searchInput?.addEventListener('input', (e) => {
+        clearTimeout(debounceTimer);
+        debounceTimer = setTimeout(() => {
+            adminCategoriesState.search = e.target.value.trim();
+            loadAdminCategories();
+        }, 300);
+    });
+
+    tableBody?.addEventListener('click', (e) => {
+        const toggleBtn = e.target.closest('.btn-toggle-category-status');
+        if (toggleBtn) {
+            const id = Number(toggleBtn.getAttribute('data-id'));
+            const status = toggleBtn.getAttribute('data-status');
+            handleToggleCategoryStatus(id, status);
+            return;
+        }
+
+        const editBtn = e.target.closest('.btn-edit-category');
+        if (editBtn) {
+            const id = Number(editBtn.getAttribute('data-id'));
+            const cat = adminCategoriesState.categories.find(c => c.id_category === id);
+            if (cat) openCategoryModal(cat);
+        }
+    });
+}
+
+async function initAdminCategoriesPage() {
+    bindAdminCategoriesEvents();
+    await loadAdminCategories();
+}
+
+// ==========================================
+// 4. QUẢN LÝ BÀI VIẾT & BÁO CÁO CỘNG ĐỒNG
+// ==========================================
+
+function renderCommunityPage() {
+    const currentUser = getStoredAdminUser();
+    const adminName = currentUser?.name || 'Admin';
+    const adminAvatar = currentUser?.avatar || 'http://localhost:5000/images/users/admin.jpg';
+
+    return `
+        <header class="flex flex-col lg:flex-row lg:justify-between lg:items-center gap-4 mb-8 bg-white p-4 rounded-2xl shadow-sm border border-gray-100">
+            <div>
+                <h1 class="text-2xl font-bold text-text-main">Quản lý bài viết & cộng đồng</h1>
+                <p class="text-sm text-text-muted mt-1">Kiểm duyệt nội dung chia sẻ công thức và xử lý báo cáo vi phạm.</p>
+            </div>
+            <div class="flex items-center gap-4">
+                <span class="text-text-muted">Xin chào, <strong>${escapeHTML(adminName)}</strong></span>
+                <img src="${escapeHTML(adminAvatar)}" class="w-10 h-10 rounded-full object-cover" alt="Admin">
+            </div>
+        </header>
+
+        <div id="admin-community-alert" class="hidden mb-4 rounded-xl border px-4 py-3 text-sm font-semibold"></div>
+
+        <!-- TABS BAR -->
+        <div class="flex items-center gap-2 mb-6 border-b border-gray-200">
+            <button id="admin-community-tab-posts" class="px-5 py-3 font-bold text-xs border-b-2 border-primary text-primary transition flex items-center gap-2 cursor-pointer">
+                <i class="fa-solid fa-newspaper"></i>
+                <span>Bài viết cộng đồng</span>
+                <span id="admin-community-badge-posts-total" class="px-2 py-0.5 rounded-full bg-primary/10 text-primary text-[10px] font-bold">0</span>
+            </button>
+            <button id="admin-community-tab-reports" class="px-5 py-3 font-semibold text-xs border-b-2 border-transparent text-text-muted hover:text-text-main transition flex items-center gap-2 cursor-pointer">
+                <i class="fa-solid fa-triangle-exclamation text-amber-500"></i>
+                <span>Báo cáo vi phạm</span>
+                <span id="admin-community-badge-reports-total" class="px-2 py-0.5 rounded-full bg-amber-100 text-amber-700 text-[10px] font-bold">0</span>
+            </button>
+        </div>
+
+        <!-- PANEL 1: BÀI VIẾT CỘNG ĐỒNG -->
+        <div id="admin-community-panel-posts" class="space-y-4">
+            <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-4 flex flex-col sm:flex-row gap-3 sm:items-center sm:justify-between">
+                <div class="flex items-center gap-3 flex-1 max-w-md">
+                    <div class="relative w-full">
+                        <i class="fa-solid fa-magnifying-glass absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-400 text-xs"></i>
+                        <input id="admin-community-posts-search" type="text" placeholder="Tìm theo tiêu đề, tác giả..." class="w-full pl-9 pr-3 py-2 bg-gray-50 border border-gray-200 rounded-xl text-xs focus:outline-none focus:ring-1 focus:ring-primary focus:bg-white transition">
+                    </div>
+                </div>
+                <div class="flex items-center gap-2">
+                    <select id="admin-community-posts-status" class="px-3 py-2 bg-gray-50 border border-gray-200 rounded-xl text-xs font-semibold focus:outline-none focus:ring-1 focus:ring-primary">
+                        <option value="">Tất cả trạng thái</option>
+                        <option value="active">Đang hiển thị (Active)</option>
+                        <option value="hidden">Đã ẩn (Hidden)</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left border-collapse">
+                        <thead>
+                            <tr class="bg-gray-50 text-text-muted text-xs border-b border-gray-100 uppercase tracking-wider">
+                                <th class="p-4 font-semibold">Bài viết</th>
+                                <th class="p-4 font-semibold">Tác giả</th>
+                                <th class="p-4 font-semibold">Tương tác</th>
+                                <th class="p-4 font-semibold">Ngày đăng</th>
+                                <th class="p-4 font-semibold">Trạng thái</th>
+                                <th class="p-4 font-semibold text-right">Thao tác</th>
+                            </tr>
+                        </thead>
+                        <tbody id="admin-community-posts-table-body" class="divide-y divide-gray-50 text-xs text-text-main">
+                            <tr>
+                                <td colspan="6" class="p-8 text-center text-text-muted">Đang tải danh sách bài viết...</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- Pagination Bar -->
+                <div class="p-4 bg-gray-50/50 border-t border-gray-100 flex items-center justify-between text-xs">
+                    <span id="admin-community-posts-pagination-info" class="text-text-muted">Hiển thị bài viết</span>
+                    <div class="flex items-center gap-1.5" id="admin-community-posts-pagination-controls"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- PANEL 2: BÁO CÁO VI PHẠM -->
+        <div id="admin-community-panel-reports" class="hidden space-y-4">
+            <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-4 flex flex-col sm:flex-row gap-3 sm:items-center sm:justify-between">
+                <div class="flex items-center gap-2">
+                    <span class="text-xs font-bold text-text-muted">Lọc theo trạng thái:</span>
+                    <select id="admin-community-reports-status" class="px-3 py-2 bg-gray-50 border border-gray-200 rounded-xl text-xs font-semibold focus:outline-none focus:ring-1 focus:ring-primary">
+                        <option value="">Tất cả báo cáo</option>
+                        <option value="pending">Chờ xử lý (Pending)</option>
+                        <option value="resolved">Đã giải quyết (Resolved)</option>
+                        <option value="rejected">Đã từ chối (Rejected)</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left border-collapse">
+                        <thead>
+                            <tr class="bg-gray-50 text-text-muted text-xs border-b border-gray-100 uppercase tracking-wider">
+                                <th class="p-4 font-semibold">ID</th>
+                                <th class="p-4 font-semibold">Người báo cáo</th>
+                                <th class="p-4 font-semibold">Đối tượng</th>
+                                <th class="p-4 font-semibold">Lý do & Mô tả</th>
+                                <th class="p-4 font-semibold">Ngày tạo</th>
+                                <th class="p-4 font-semibold">Trạng thái</th>
+                                <th class="p-4 font-semibold text-right">Hành động</th>
+                            </tr>
+                        </thead>
+                        <tbody id="admin-community-reports-table-body" class="divide-y divide-gray-50 text-xs text-text-main">
+                            <tr>
+                                <td colspan="7" class="p-8 text-center text-text-muted">Đang tải danh sách báo cáo...</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    `;
+}
+
+function setCommunityAlert(message = '', type = 'info') {
+    const alert = document.getElementById('admin-community-alert');
+    if (!alert) return;
+    if (!message) {
+        alert.classList.add('hidden');
+        alert.textContent = '';
+        return;
+    }
+    const classes = type === 'error'
+        ? 'bg-red-50 border-red-200 text-red-700'
+        : 'bg-green-50 border-green-200 text-green-700';
+    alert.className = `mb-4 rounded-xl border px-4 py-3 text-sm font-semibold ${classes}`;
+    alert.textContent = message;
+}
+
+async function loadAdminPosts() {
+    const body = document.getElementById('admin-community-posts-table-body');
+    const badge = document.getElementById('admin-community-badge-posts-total');
+    const pageInfo = document.getElementById('admin-community-posts-pagination-info');
+    const controls = document.getElementById('admin-community-posts-pagination-controls');
+    if (!body) return;
+
+    try {
+        const { page, limit, search, status } = adminCommunityState.posts;
+        const params = new URLSearchParams({
+            page,
+            limit,
+            ...(search ? { search } : {}),
+            ...(status ? { status } : {})
+        });
+
+        const res = await fetchAPI(`/admin/posts?${params.toString()}`);
+        if (!res || !res.success || !Array.isArray(res.data)) {
+            body.innerHTML = '<tr><td colspan="6" class="p-8 text-center text-red-500">Không thể tải danh sách bài viết.</td></tr>';
+            return;
+        }
+
+        adminCommunityState.posts.total = res.total;
+        adminCommunityState.posts.items = res.data;
+        if (badge) badge.textContent = res.total;
+        if (pageInfo) pageInfo.textContent = `Tổng cộng ${res.total} bài viết (Trang ${res.page}/${res.totalPages || 1})`;
+
+        if (controls) {
+            controls.innerHTML = `
+                <button ${res.page <= 1 ? 'disabled' : ''} id="btn-posts-prev" class="px-3 py-1 bg-white border border-gray-200 rounded-lg text-xs font-bold disabled:opacity-40 transition cursor-pointer">Trước</button>
+                <button ${res.page >= res.totalPages ? 'disabled' : ''} id="btn-posts-next" class="px-3 py-1 bg-white border border-gray-200 rounded-lg text-xs font-bold disabled:opacity-40 transition cursor-pointer">Sau</button>
+            `;
+            document.getElementById('btn-posts-prev')?.addEventListener('click', () => {
+                if (adminCommunityState.posts.page > 1) {
+                    adminCommunityState.posts.page--;
+                    loadAdminPosts();
+                }
+            });
+            document.getElementById('btn-posts-next')?.addEventListener('click', () => {
+                if (adminCommunityState.posts.page < res.totalPages) {
+                    adminCommunityState.posts.page++;
+                    loadAdminPosts();
+                }
+            });
+        }
+
+        if (res.data.length === 0) {
+            body.innerHTML = '<tr><td colspan="6" class="p-8 text-center text-text-muted">Không có bài viết nào phù hợp.</td></tr>';
+            return;
+        }
+
+        body.innerHTML = res.data.map(post => `
+            <tr class="hover:bg-gray-50 transition border-b border-gray-50">
+                <td class="p-4 flex items-center gap-3">
+                    <img src="${post.image}" class="w-14 h-11 rounded-lg object-cover border border-gray-100 shrink-0">
+                    <div class="min-w-0">
+                        <span class="font-bold text-xs text-text-main line-clamp-1">${escapeHTML(post.title)}</span>
+                        <p class="text-[11px] text-gray-400 line-clamp-1 mt-0.5">${escapeHTML(post.content)}</p>
+                    </div>
+                </td>
+                <td class="p-4">
+                    <div class="flex items-center gap-2">
+                        <img src="${post.author.avatar}" class="w-7 h-7 rounded-full object-cover">
+                        <div>
+                            <span class="font-bold text-xs text-text-main block">${escapeHTML(post.author.name)}</span>
+                            <span class="text-[10px] text-gray-400 block">${escapeHTML(post.author.email)}</span>
+                        </div>
+                    </div>
+                </td>
+                <td class="p-4 text-xs font-semibold text-text-muted">
+                    <span class="text-rose-500 mr-2"><i class="fa-solid fa-heart"></i> ${post.likesCount}</span>
+                    <span class="text-blue-500"><i class="fa-solid fa-comment"></i> ${post.commentsCount}</span>
+                </td>
+                <td class="p-4 text-xs text-text-muted">${formatDate(post.created_at)}</td>
+                <td class="p-4">
+                    <span class="px-2.5 py-1 rounded-full text-xs font-bold ${post.status === 'active' ? 'bg-emerald-50 text-emerald-700 border border-emerald-200' : 'bg-rose-50 text-rose-700 border border-rose-200'}">
+                        ${post.status === 'active' ? 'Đang hiển thị' : 'Đã ẩn'}
+                    </span>
+                </td>
+                <td class="p-4 text-right shrink-0">
+                    <button class="btn-toggle-post-status ${post.status === 'active' ? 'text-amber-600 hover:bg-amber-50' : 'text-emerald-600 hover:bg-emerald-50'} p-2 rounded-lg transition cursor-pointer" data-id="${post.id_post}" data-status="${post.status}" title="${post.status === 'active' ? 'Ẩn bài viết' : 'Cho phép hiển thị'}">
+                        <i class="fa-solid ${post.status === 'active' ? 'fa-eye-slash' : 'fa-eye'}"></i>
+                    </button>
+                </td>
+            </tr>
+        `).join('');
+    } catch (e) {
+        body.innerHTML = '<tr><td colspan="6" class="p-8 text-center text-red-500">Lỗi khi kết nối tải bài viết.</td></tr>';
+    }
+}
+
+async function loadAdminReports() {
+    const body = document.getElementById('admin-community-reports-table-body');
+    const badge = document.getElementById('admin-community-badge-reports-total');
+    if (!body) return;
+
+    try {
+        const query = adminCommunityState.reports.status ? `?status=${adminCommunityState.reports.status}` : '';
+        const res = await fetchAPI(`/admin/reports${query}`);
+
+        if (!res || !res.success || !Array.isArray(res.data)) {
+            body.innerHTML = '<tr><td colspan="7" class="p-8 text-center text-red-500">Không thể tải danh sách báo cáo.</td></tr>';
+            return;
+        }
+
+        adminCommunityState.reports.items = res.data;
+        if (badge) badge.textContent = res.total;
+
+        if (res.data.length === 0) {
+            body.innerHTML = '<tr><td colspan="7" class="p-8 text-center text-text-muted">Không có báo cáo vi phạm nào.</td></tr>';
+            return;
+        }
+
+        body.innerHTML = res.data.map(rep => {
+            let statusBadge = '<span class="px-2.5 py-0.5 rounded-full text-xs font-bold bg-amber-50 text-amber-700 border border-amber-200">Chờ xử lý</span>';
+            if (rep.status === 'resolved') statusBadge = '<span class="px-2.5 py-0.5 rounded-full text-xs font-bold bg-emerald-50 text-emerald-700 border border-emerald-200">Đã giải quyết</span>';
+            if (rep.status === 'rejected') statusBadge = '<span class="px-2.5 py-0.5 rounded-full text-xs font-bold bg-gray-100 text-gray-500">Đã từ chối</span>';
+
+            const targetTitle = rep.target_info?.title || rep.target_info?.content || `ID: ${rep.target_id}`;
+
+            return `
+                <tr class="hover:bg-gray-50 transition border-b border-gray-50 text-xs">
+                    <td class="p-4 font-mono font-bold text-gray-500">#${rep.id_report}</td>
+                    <td class="p-4">
+                        <span class="font-bold text-text-main block">${escapeHTML(rep.reporter?.name || 'Ẩn danh')}</span>
+                        <span class="text-[10px] text-gray-400 block">${escapeHTML(rep.reporter?.email || '')}</span>
+                    </td>
+                    <td class="p-4">
+                        <span class="px-2 py-0.5 rounded-md font-bold text-[10px] uppercase ${rep.target_type === 'post' ? 'bg-blue-50 text-blue-700' : 'bg-purple-50 text-purple-700'}">${rep.target_type === 'post' ? 'Bài viết' : 'Bình luận'}</span>
+                        <p class="text-[11px] text-gray-600 line-clamp-1 mt-1 font-medium">${escapeHTML(targetTitle)}</p>
+                    </td>
+                    <td class="p-4">
+                        <span class="font-bold text-rose-600 block">${escapeHTML(rep.reason)}</span>
+                        <span class="text-[11px] text-text-muted block line-clamp-1">${escapeHTML(rep.description || 'Không có mô tả')}</span>
+                    </td>
+                    <td class="p-4 text-text-muted">${formatDate(rep.created_at)}</td>
+                    <td class="p-4">${statusBadge}</td>
+                    <td class="p-4 text-right space-x-1.5 shrink-0">
+                        ${rep.status === 'pending' ? `
+                            <button class="btn-resolve-report px-2.5 py-1 bg-rose-500 hover:bg-rose-600 text-white rounded-lg text-xs font-bold transition cursor-pointer" data-id="${rep.id_report}" title="Ẩn nội dung vi phạm">Duyệt & Ẩn</button>
+                            <button class="btn-reject-report px-2.5 py-1 bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-lg text-xs font-bold transition cursor-pointer" data-id="${rep.id_report}">Từ chối</button>
+                        ` : `<span class="text-gray-400 text-[11px]">Đã xử lý</span>`}
+                    </td>
+                </tr>
+            `;
+        }).join('');
+    } catch (e) {
+        body.innerHTML = '<tr><td colspan="7" class="p-8 text-center text-red-500">Lỗi khi kết nối tải báo cáo.</td></tr>';
+    }
+}
+
+async function handleTogglePostStatus(id, currentStatus) {
+    const newStatus = currentStatus === 'active' ? 'hidden' : 'active';
+    try {
+        const res = await fetchAPI(`/admin/posts/${id}/status`, {
+            method: 'PATCH',
+            body: JSON.stringify({ status: newStatus })
+        });
+        if (res && res.success) {
+            setCommunityAlert(res.message, 'success');
+            await loadAdminPosts();
+        } else {
+            setCommunityAlert(res.message || 'Không thể đổi trạng thái bài viết.', 'error');
+        }
+    } catch (err) {
+        setCommunityAlert('Lỗi kết nối khi đổi trạng thái bài viết.', 'error');
+    }
+}
+
+async function handleResolveReport(id) {
+    if (!confirm('Duyệt báo cáo này và tự động ẩn bài viết/bình luận vi phạm?')) return;
+
+    try {
+        const res = await fetchAPI(`/admin/reports/${id}`, {
+            method: 'PATCH',
+            body: JSON.stringify({ status: 'resolved', hideTarget: true })
+        });
+        if (res && res.success) {
+            setCommunityAlert(res.message, 'success');
+            await loadAdminReports();
+            await loadAdminPosts();
+        } else {
+            setCommunityAlert(res.message || 'Không thể xử lý báo cáo.', 'error');
+        }
+    } catch (err) {
+        setCommunityAlert('Lỗi kết nối khi xử lý báo cáo.', 'error');
+    }
+}
+
+async function handleRejectReport(id) {
+    try {
+        const res = await fetchAPI(`/admin/reports/${id}`, {
+            method: 'PATCH',
+            body: JSON.stringify({ status: 'rejected' })
+        });
+        if (res && res.success) {
+            setCommunityAlert(res.message, 'success');
+            await loadAdminReports();
+        } else {
+            setCommunityAlert(res.message || 'Không thể từ chối báo cáo.', 'error');
+        }
+    } catch (err) {
+        setCommunityAlert('Lỗi kết nối khi từ chối báo cáo.', 'error');
+    }
+}
+
+function bindAdminCommunityEvents() {
+    const tabPosts = document.getElementById('admin-community-tab-posts');
+    const tabReports = document.getElementById('admin-community-tab-reports');
+    const panelPosts = document.getElementById('admin-community-panel-posts');
+    const panelReports = document.getElementById('admin-community-panel-reports');
+
+    const searchInput = document.getElementById('admin-community-posts-search');
+    const statusSelect = document.getElementById('admin-community-posts-status');
+    const reportsStatusSelect = document.getElementById('admin-community-reports-status');
+
+    const postsTableBody = document.getElementById('admin-community-posts-table-body');
+    const reportsTableBody = document.getElementById('admin-community-reports-table-body');
+
+    tabPosts?.addEventListener('click', () => {
+        adminCommunityState.tab = 'posts';
+        tabPosts.className = 'px-5 py-3 font-bold text-xs border-b-2 border-primary text-primary transition flex items-center gap-2 cursor-pointer';
+        tabReports.className = 'px-5 py-3 font-semibold text-xs border-b-2 border-transparent text-text-muted hover:text-text-main transition flex items-center gap-2 cursor-pointer';
+        panelPosts?.classList.remove('hidden');
+        panelReports?.classList.add('hidden');
+    });
+
+    tabReports?.addEventListener('click', () => {
+        adminCommunityState.tab = 'reports';
+        tabReports.className = 'px-5 py-3 font-bold text-xs border-b-2 border-primary text-primary transition flex items-center gap-2 cursor-pointer';
+        tabPosts.className = 'px-5 py-3 font-semibold text-xs border-b-2 border-transparent text-text-muted hover:text-text-main transition flex items-center gap-2 cursor-pointer';
+        panelReports?.classList.remove('hidden');
+        panelPosts?.classList.add('hidden');
+        loadAdminReports();
+    });
+
+    let debounceTimer;
+    searchInput?.addEventListener('input', (e) => {
+        clearTimeout(debounceTimer);
+        debounceTimer = setTimeout(() => {
+            adminCommunityState.posts.search = e.target.value.trim();
+            adminCommunityState.posts.page = 1;
+            loadAdminPosts();
+        }, 300);
+    });
+
+    statusSelect?.addEventListener('change', (e) => {
+        adminCommunityState.posts.status = e.target.value;
+        adminCommunityState.posts.page = 1;
+        loadAdminPosts();
+    });
+
+    reportsStatusSelect?.addEventListener('change', (e) => {
+        adminCommunityState.reports.status = e.target.value;
+        loadAdminReports();
+    });
+
+    postsTableBody?.addEventListener('click', (e) => {
+        const toggleBtn = e.target.closest('.btn-toggle-post-status');
+        if (toggleBtn) {
+            const id = Number(toggleBtn.getAttribute('data-id'));
+            const status = toggleBtn.getAttribute('data-status');
+            handleTogglePostStatus(id, status);
+        }
+    });
+
+    reportsTableBody?.addEventListener('click', (e) => {
+        const resolveBtn = e.target.closest('.btn-resolve-report');
+        if (resolveBtn) {
+            const id = Number(resolveBtn.getAttribute('data-id'));
+            handleResolveReport(id);
+            return;
+        }
+
+        const rejectBtn = e.target.closest('.btn-reject-report');
+        if (rejectBtn) {
+            const id = Number(rejectBtn.getAttribute('data-id'));
+            handleRejectReport(id);
+        }
+    });
+}
+
+async function initAdminCommunityPage() {
+    bindAdminCommunityEvents();
+    await loadAdminPosts();
+    await loadAdminReports();
+}
+
+// ==========================================
+// ADMIN ROOT COMPONENT
+// ==========================================
+
 const Admin = {
     render: async (params) => {
         const page = params || 'dashboard';
-        
         let contentHTML = '';
 
         if (page === 'users') {
-            contentHTML = `
-                <header class="flex justify-between items-center mb-8 bg-white p-4 rounded-2xl shadow-sm border border-gray-100">
-                    <h1 class="text-2xl font-bold text-text-main">Quản Lý Người Dùng</h1>
-                    <div class="flex items-center gap-4">
-                        <span class="text-text-muted">Xin chào, <strong>Admin</strong></span>
-                        <img src="https://i.pravatar.cc/150?u=admin" class="w-10 h-10 rounded-full">
-                    </div>
-                </header>
-                <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
-                    <div class="p-6 border-b border-gray-100 flex justify-between items-center">
-                        <h2 class="text-lg font-bold text-text-main">Danh sách thành viên</h2>
-                        <div class="flex gap-2">
-                            <input type="text" placeholder="Tìm kiếm..." class="px-4 py-2 border border-gray-200 rounded-lg text-sm focus:outline-none focus:border-primary">
-                            <button class="bg-primary hover:bg-primary-hover text-white px-4 py-2 rounded-lg font-semibold transition shadow-sm text-sm"><i class="fa-solid fa-plus"></i> Thêm User</button>
-                        </div>
-                    </div>
-                    <div class="overflow-x-auto">
-                        <table class="w-full text-left border-collapse">
-                            <thead>
-                                <tr class="bg-gray-50 text-text-muted text-sm border-b border-gray-100">
-                                    <th class="p-4 font-semibold">Tên người dùng</th>
-                                    <th class="p-4 font-semibold">Email</th>
-                                    <th class="p-4 font-semibold">Vai trò</th>
-                                    <th class="p-4 font-semibold">Trạng thái</th>
-                                    <th class="p-4 font-semibold text-right">Hành động</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr class="border-b border-gray-50 hover:bg-gray-50 transition">
-                                    <td class="p-4 font-medium text-text-main flex items-center gap-3">
-                                        <img src="https://i.pravatar.cc/150?u=user1" class="w-8 h-8 rounded-full">
-                                        Nguyễn Văn A
-                                    </td>
-                                    <td class="p-4 text-text-muted">nva@gmail.com</td>
-                                    <td class="p-4 text-text-muted">User</td>
-                                    <td class="p-4"><span class="bg-green-100 text-green-700 px-3 py-1 rounded-full text-xs font-bold">Hoạt động</span></td>
-                                    <td class="p-4 text-right space-x-2">
-                                        <button class="text-blue-500 hover:bg-blue-50 p-2 rounded transition" title="Sửa"><i class="fa-solid fa-pen-to-square"></i></button>
-                                        <button class="text-red-500 hover:bg-red-50 p-2 rounded transition" title="Khóa"><i class="fa-solid fa-lock"></i></button>
-                                    </td>
-                                </tr>
-                                <tr class="border-b border-gray-50 hover:bg-gray-50 transition">
-                                    <td class="p-4 font-medium text-text-main flex items-center gap-3">
-                                        <img src="https://i.pravatar.cc/150?u=user2" class="w-8 h-8 rounded-full">
-                                        Trần Thị B
-                                    </td>
-                                    <td class="p-4 text-text-muted">ttb@gmail.com</td>
-                                    <td class="p-4 text-text-muted">Admin</td>
-                                    <td class="p-4"><span class="bg-green-100 text-green-700 px-3 py-1 rounded-full text-xs font-bold">Hoạt động</span></td>
-                                    <td class="p-4 text-right space-x-2">
-                                        <button class="text-blue-500 hover:bg-blue-50 p-2 rounded transition" title="Sửa"><i class="fa-solid fa-pen-to-square"></i></button>
-                                        <button class="text-red-500 hover:bg-red-50 p-2 rounded transition" title="Khóa"><i class="fa-solid fa-lock"></i></button>
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            `;
             contentHTML = renderUsersPage();
         } else if (page === 'foods') {
-            contentHTML = `
-                <header class="flex justify-between items-center mb-8 bg-white p-4 rounded-2xl shadow-sm border border-gray-100">
-                    <h1 class="text-2xl font-bold text-text-main">Quản Lý Món Ăn</h1>
-                    <div class="flex items-center gap-4">
-                        <span class="text-text-muted">Xin chào, <strong>Admin</strong></span>
-                        <img src="https://i.pravatar.cc/150?u=admin" class="w-10 h-10 rounded-full">
-                    </div>
-                </header>
-                <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
-                    <div class="p-6 border-b border-gray-100 flex justify-between items-center">
-                        <h2 class="text-lg font-bold text-text-main">Danh sách Món ăn</h2>
-                        <button class="text-sm bg-primary hover:bg-primary-hover text-white px-4 py-2 rounded-lg font-semibold transition shadow-sm border border-green-700"><i class="fa-solid fa-plus"></i> Thêm món mới</button>
-                    </div>
-                    <div class="overflow-x-auto">
-                        <table class="w-full text-left border-collapse">
-                            <thead>
-                                <tr class="bg-gray-50 text-text-muted text-sm border-b border-gray-100">
-                                    <th class="p-4 font-semibold">Hình ảnh</th>
-                                    <th class="p-4 font-semibold">Tên món</th>
-                                    <th class="p-4 font-semibold">Phân loại</th>
-                                    <th class="p-4 font-semibold">Trạng thái</th>
-                                    <th class="p-4 font-semibold text-right">Hành động</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr class="border-b border-gray-50 hover:bg-gray-50 transition">
-                                    <td class="p-4">
-                                        <img src="https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=100" class="w-16 h-12 object-cover rounded-lg">
-                                    </td>
-                                    <td class="p-4 font-medium text-text-main">Thịt Kho Trứng</td>
-                                    <td class="p-4 text-text-muted">Món Mặn</td>
-                                    <td class="p-4"><span class="bg-green-100 text-green-700 px-3 py-1 rounded-full text-xs font-bold">Đã duyệt</span></td>
-                                    <td class="p-4 text-right space-x-2">
-                                        <button class="text-blue-500 hover:bg-blue-50 p-2 rounded transition" title="Sửa"><i class="fa-solid fa-pen-to-square"></i></button>
-                                        <button class="text-red-500 hover:bg-red-50 p-2 rounded transition" title="Xóa"><i class="fa-solid fa-trash"></i></button>
-                                    </td>
-                                </tr>
-                                <tr class="border-b border-gray-50 hover:bg-gray-50 transition">
-                                    <td class="p-4">
-                                        <img src="https://images.unsplash.com/photo-1604908176997-125f25cc6f3d?w=100" class="w-16 h-12 object-cover rounded-lg">
-                                    </td>
-                                    <td class="p-4 font-medium text-text-main">Gà Xào Sả Ớt</td>
-                                    <td class="p-4 text-text-muted">Món Mặn</td>
-                                    <td class="p-4"><span class="bg-yellow-100 text-yellow-700 px-3 py-1 rounded-full text-xs font-bold">Chờ duyệt</span></td>
-                                    <td class="p-4 text-right space-x-2">
-                                        <button class="text-green-500 hover:bg-green-50 p-2 rounded transition" title="Duyệt"><i class="fa-solid fa-check"></i></button>
-                                        <button class="text-blue-500 hover:bg-blue-50 p-2 rounded transition" title="Sửa"><i class="fa-solid fa-pen-to-square"></i></button>
-                                        <button class="text-red-500 hover:bg-red-50 p-2 rounded transition" title="Xóa"><i class="fa-solid fa-trash"></i></button>
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            `;
             contentHTML = renderFoodsPage();
+        } else if (page === 'categories') {
+            contentHTML = renderCategoriesPage();
         } else if (page === 'community') {
-            contentHTML = `
-                <header class="flex justify-between items-center mb-8 bg-white p-4 rounded-2xl shadow-sm border border-gray-100">
-                    <h1 class="text-2xl font-bold text-text-main">Quản Lý Bài Viết Cộng Đồng</h1>
-                    <div class="flex items-center gap-4">
-                        <span class="text-text-muted">Xin chào, <strong>Admin</strong></span>
-                        <img src="https://i.pravatar.cc/150?u=admin" class="w-10 h-10 rounded-full">
-                    </div>
-                </header>
-                <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
-                    <div class="p-6 border-b border-gray-100 flex justify-between items-center">
-                        <h2 class="text-lg font-bold text-text-main">Quản lý nội dung (Kiểm duyệt)</h2>
-                    </div>
-                    <div class="overflow-x-auto">
-                        <table class="w-full text-left border-collapse">
-                            <thead>
-                                <tr class="bg-gray-50 text-text-muted text-sm border-b border-gray-100">
-                                    <th class="p-4 font-semibold">Tác giả</th>
-                                    <th class="p-4 font-semibold w-1/3">Nội dung</th>
-                                    <th class="p-4 font-semibold">Tương tác</th>
-                                    <th class="p-4 font-semibold">Báo cáo</th>
-                                    <th class="p-4 font-semibold text-right">Hành động</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr class="border-b border-gray-50 hover:bg-gray-50 transition">
-                                    <td class="p-4 font-medium text-text-main">Minh Anh</td>
-                                    <td class="p-4 text-text-muted text-sm line-clamp-2">Cuối tuần trổ tài làm bún đậu mắm tôm theo công thức trên Hôm Nay Nấu Gì. Nước mắm pha bao dính...</td>
-                                    <td class="p-4 text-text-muted text-sm"><i class="fa-solid fa-heart text-red-500"></i> 342 | <i class="fa-solid fa-comment text-blue-500"></i> 48</td>
-                                    <td class="p-4"><span class="bg-gray-100 text-gray-700 px-3 py-1 rounded-full text-xs font-bold">0</span></td>
-                                    <td class="p-4 text-right space-x-2">
-                                        <button class="text-blue-500 hover:bg-blue-50 p-2 rounded transition" title="Xem"><i class="fa-solid fa-eye"></i></button>
-                                        <button class="text-red-500 hover:bg-red-50 p-2 rounded transition" title="Xóa bài"><i class="fa-solid fa-trash"></i></button>
-                                    </td>
-                                </tr>
-                                <tr class="border-b border-gray-50 hover:bg-gray-50 transition bg-red-50/30">
-                                    <td class="p-4 font-medium text-text-main">Spammer123</td>
-                                    <td class="p-4 text-text-muted text-sm line-clamp-2">Click vào link này để nhận thẻ cào 500k: http://scam-link...</td>
-                                    <td class="p-4 text-text-muted text-sm"><i class="fa-solid fa-heart text-red-500"></i> 0 | <i class="fa-solid fa-comment text-blue-500"></i> 0</td>
-                                    <td class="p-4"><span class="bg-red-100 text-red-700 px-3 py-1 rounded-full text-xs font-bold">12 báo cáo</span></td>
-                                    <td class="p-4 text-right space-x-2">
-                                        <button class="text-red-500 hover:bg-red-50 p-2 rounded transition font-bold" title="Xóa & Ban"><i class="fa-solid fa-ban"></i></button>
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            `;
+            contentHTML = renderCommunityPage();
         } else {
-            // Dashboard Default
-            contentHTML = `
-                <header class="flex justify-between items-center mb-8 bg-white p-4 rounded-2xl shadow-sm border border-gray-100">
-                    <h1 class="text-2xl font-bold text-text-main">Dashboard Tổng Quan</h1>
-                    <div class="flex items-center gap-4">
-                        <span class="text-text-muted">Xin chào, <strong>Admin</strong></span>
-                        <img src="https://i.pravatar.cc/150?u=admin" class="w-10 h-10 rounded-full">
-                    </div>
-                </header>
-
-                <!-- Stats Cards -->
-                <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
-                    <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 border-l-4 border-l-primary">
-                        <p class="text-text-muted text-sm font-semibold mb-1">Tổng món ăn</p>
-                        <h3 class="text-3xl font-bold text-text-main">1,245</h3>
-                    </div>
-                    <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 border-l-4 border-l-blue-500">
-                        <p class="text-text-muted text-sm font-semibold mb-1">Người dùng</p>
-                        <h3 class="text-3xl font-bold text-text-main">8,592</h3>
-                    </div>
-                    <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 border-l-4 border-l-accent">
-                        <p class="text-text-muted text-sm font-semibold mb-1">Bài viết cộng đồng</p>
-                        <h3 class="text-3xl font-bold text-text-main">432</h3>
-                    </div>
-                    <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 border-l-4 border-l-red-500">
-                        <p class="text-text-muted text-sm font-semibold mb-1">Báo cáo vi phạm</p>
-                        <h3 class="text-3xl font-bold text-text-main">12</h3>
-                    </div>
-                </div>
-
-                <!-- Data Table -->
-                <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
-                    <div class="p-6 border-b border-gray-100 flex justify-between items-center">
-                        <h2 class="text-lg font-bold text-text-main">Món ăn chờ duyệt</h2>
-                        <button class="text-sm bg-primary hover:bg-primary-hover text-white px-4 py-2 rounded-lg font-semibold transition shadow-sm border border-green-700"><i class="fa-solid fa-plus"></i> Thêm món mới</button>
-                    </div>
-                    <div class="overflow-x-auto">
-                        <table class="w-full text-left border-collapse">
-                            <thead>
-                                <tr class="bg-gray-50 text-text-muted text-sm border-b border-gray-100">
-                                    <th class="p-4 font-semibold">Tên món</th>
-                                    <th class="p-4 font-semibold">Tác giả</th>
-                                    <th class="p-4 font-semibold">Ngày đăng</th>
-                                    <th class="p-4 font-semibold">Trạng thái</th>
-                                    <th class="p-4 font-semibold text-right">Hành động</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr class="border-b border-gray-50 hover:bg-gray-50 transition">
-                                    <td class="p-4 font-medium text-text-main">Bún chả Hà Nội chuẩn vị</td>
-                                    <td class="p-4 text-text-muted">Hoàng Nam</td>
-                                    <td class="p-4 text-text-muted">04/10/2026</td>
-                                    <td class="p-4"><span class="bg-yellow-100 text-yellow-700 px-3 py-1 rounded-full text-xs font-bold">Chờ duyệt</span></td>
-                                    <td class="p-4 text-right space-x-2">
-                                        <button class="text-green-500 hover:bg-green-50 p-2 rounded transition" title="Duyệt"><i class="fa-solid fa-check"></i></button>
-                                        <button class="text-red-500 hover:bg-red-50 p-2 rounded transition" title="Từ chối"><i class="fa-solid fa-xmark"></i></button>
-                                    </td>
-                                </tr>
-                                <tr class="border-b border-gray-50 hover:bg-gray-50 transition">
-                                    <td class="p-4 font-medium text-text-main">Salad Ức Gà Giảm Cân</td>
-                                    <td class="p-4 text-text-muted">Hương Giang</td>
-                                    <td class="p-4 text-text-muted">03/10/2026</td>
-                                    <td class="p-4"><span class="bg-green-100 text-green-700 px-3 py-1 rounded-full text-xs font-bold">Đã duyệt</span></td>
-                                    <td class="p-4 text-right space-x-2">
-                                        <button class="text-gray-400 hover:bg-gray-100 p-2 rounded transition" title="Sửa"><i class="fa-solid fa-pen-to-square"></i></button>
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            `;
             contentHTML = renderDashboardPage();
         }
 
@@ -1606,6 +2129,9 @@ const Admin = {
                         <a href="#/admin/foods" class="flex items-center gap-3 px-4 py-3 ${page === 'foods' ? 'bg-primary text-white font-bold shadow-sm' : 'text-text-muted hover:bg-cream-soft hover:text-primary font-semibold'} rounded-xl transition cursor-pointer">
                             <i class="fa-solid fa-kitchen-set w-5 text-center"></i> Quản lý món ăn
                         </a>
+                        <a href="#/admin/categories" class="flex items-center gap-3 px-4 py-3 ${page === 'categories' ? 'bg-primary text-white font-bold shadow-sm' : 'text-text-muted hover:bg-cream-soft hover:text-primary font-semibold'} rounded-xl transition cursor-pointer">
+                            <i class="fa-solid fa-layer-group w-5 text-center"></i> Quản lý danh mục
+                        </a>
                         <a href="#/admin/community" class="flex items-center gap-3 px-4 py-3 ${page === 'community' ? 'bg-primary text-white font-bold shadow-sm' : 'text-text-muted hover:bg-cream-soft hover:text-primary font-semibold'} rounded-xl transition cursor-pointer">
                             <i class="fa-solid fa-comments w-5 text-center"></i> Quản lý cộng đồng
                         </a>
@@ -1620,9 +2146,8 @@ const Admin = {
         `;
     },
     afterRender: async (page = 'dashboard') => {
-        // Tạm ẩn Footer khi ở trang Admin để layout tràn viền
         const footer = document.getElementById('footer-container');
-        if(footer) footer.style.display = 'none';
+        if (footer) footer.style.display = 'none';
 
         if (page === 'dashboard') {
             await loadAdminDashboard();
@@ -1634,6 +2159,14 @@ const Admin = {
 
         if (page === 'foods') {
             await initAdminFoodsPage();
+        }
+
+        if (page === 'categories') {
+            await initAdminCategoriesPage();
+        }
+
+        if (page === 'community') {
+            await initAdminCommunityPage();
         }
     }
 };

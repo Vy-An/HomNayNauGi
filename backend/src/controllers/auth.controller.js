@@ -469,6 +469,81 @@ async function removeFavorite(req, res) {
     }
 }
 
+async function toggleFavorite(req, res) {
+    try {
+        if (!req.user) {
+            return res.status(401).json({
+                success: false,
+                message: 'Vui lòng đăng nhập để lưu món yêu thích.'
+            });
+        }
+
+        const foodId = Number(req.params.id || req.body?.id_food || req.body?.foodId);
+        if (!foodId || Number.isNaN(foodId)) {
+            return res.status(400).json({
+                success: false,
+                message: 'ID món ăn không hợp lệ.'
+            });
+        }
+
+        const food = await prisma.foods.findUnique({
+            where: { id_food: foodId }
+        });
+
+        if (!food) {
+            return res.status(404).json({
+                success: false,
+                message: 'Món ăn không tồn tại.'
+            });
+        }
+
+        const existing = await prisma.favorites.findUnique({
+            where: {
+                id_user_id_food: {
+                    id_user: req.user.id_user,
+                    id_food: foodId
+                }
+            }
+        });
+
+        let isFavorite = false;
+        if (existing) {
+            await prisma.favorites.delete({
+                where: {
+                    id_favorite: existing.id_favorite
+                }
+            });
+            isFavorite = false;
+        } else {
+            await prisma.favorites.create({
+                data: {
+                    id_user: req.user.id_user,
+                    id_food: foodId
+                }
+            });
+            isFavorite = true;
+        }
+
+        const totalFavorites = await prisma.favorites.count({
+            where: { id_user: req.user.id_user }
+        });
+
+        return res.json({
+            success: true,
+            is_favorite: isFavorite,
+            message: isFavorite ? 'Đã lưu món vào danh sách yêu thích!' : 'Đã bỏ lưu món khỏi danh sách yêu thích.',
+            id_food: foodId,
+            totalFavorites
+        });
+    } catch (error) {
+        console.error('Toggle favorite error:', error);
+        return res.status(500).json({
+            success: false,
+            message: 'Không thể cập nhật món yêu thích lúc này.'
+        });
+    }
+}
+
 module.exports = {
     login,
     register,
@@ -477,5 +552,6 @@ module.exports = {
     updateProfile,
     getMyPosts,
     getMyFavorites,
-    removeFavorite
+    removeFavorite,
+    toggleFavorite
 };

@@ -497,7 +497,7 @@ const FoodList = {
                     rating: item.rating || 4.8,
                     rating_count: item.rating_count || '1.5k',
                     likes: item.likes || 120,
-                    is_favorite: false,
+                    is_favorite: Boolean(item.is_favorite),
                     category: item.category || item.loai_mon || 'Món mặn',
                     category_slug: item.category_slug || '',
                     sub_category: item.sub_category || 'viet',
@@ -1055,7 +1055,7 @@ const FoodList = {
                         rating: item.rating || 4.8,
                         rating_count: item.rating_count || '1.5k',
                         likes: item.likes || 120,
-                        is_favorite: false,
+                        is_favorite: Boolean(item.is_favorite),
                         category: item.category || item.loai_mon || 'Món mặn',
                         category_slug: item.category_slug || '',
                         sub_category: item.sub_category || 'viet',
@@ -1073,6 +1073,15 @@ const FoodList = {
             }
 
             currentFilteredDishes = result;
+            // Cập nhật lại trạng thái is_favorite cho masterDishes
+            result.forEach(r => {
+                const existing = masterDishes.find(m => m.id === r.id);
+                if (existing) {
+                    existing.is_favorite = r.is_favorite;
+                } else {
+                    masterDishes.push(r);
+                }
+            });
             renderFirstBatch();
         };
 
@@ -1272,24 +1281,46 @@ const FoodList = {
                     e.preventDefault();
                     e.stopPropagation();
                     const dishId = parseInt(favBtn.getAttribute('data-id'), 10);
-                    const dish = masterDishes.find(d => d.id === dishId);
+                    const dish = masterDishes.find(d => d.id === dishId) || currentFilteredDishes.find(d => d.id === dishId);
                     if (!dish) return;
 
-                    dish.is_favorite = !dish.is_favorite;
-                    const heartIcon = favBtn.querySelector('i');
-
-                    if (dish.is_favorite) {
-                        favBtn.className = "btn-favorite-dish absolute top-2.5 right-2.5 w-8.5 h-8.5 rounded-full bg-rose-500 text-white backdrop-blur-sm flex items-center justify-center shadow-sm scale-125 transition-all cursor-pointer z-20";
+                    const token = localStorage.getItem('auth_token');
+                    if (!token) {
+                        showToast('Vui lòng đăng nhập để lưu món yêu thích! 🔒', 'info');
                         setTimeout(() => {
-                            favBtn.classList.remove('scale-125');
-                        }, 150);
-                        if (heartIcon) heartIcon.className = "fa-solid fa-heart text-sm";
-                        showToast(`Đã thêm "${dish.name}" vào Yêu thích! ❤️`, 'success');
-                    } else {
-                        favBtn.className = "btn-favorite-dish absolute top-2.5 right-2.5 w-8.5 h-8.5 rounded-full bg-white/90 text-gray-500 hover:text-rose-500 backdrop-blur-sm flex items-center justify-center shadow-sm transition-all cursor-pointer z-20";
-                        if (heartIcon) heartIcon.className = "fa-regular fa-heart text-sm";
-                        showToast(`Đã bỏ lưu "${dish.name}"`, 'info');
+                            window.location.hash = '#/login';
+                        }, 1200);
+                        return;
                     }
+
+                    // Gọi API toggle favorite
+                    fetchAPI(`/auth/me/favorites/${dishId}/toggle`, { method: 'POST' })
+                        .then((res) => {
+                            if (res && res.success) {
+                                dish.is_favorite = res.is_favorite;
+                                const heartIcon = favBtn.querySelector('i');
+
+                                if (dish.is_favorite) {
+                                    favBtn.className = "btn-favorite-dish absolute top-2.5 right-2.5 w-8.5 h-8.5 rounded-full bg-rose-500 text-white backdrop-blur-sm flex items-center justify-center shadow-sm scale-125 transition-all cursor-pointer z-20";
+                                    setTimeout(() => {
+                                        favBtn.classList.remove('scale-125');
+                                    }, 150);
+                                    if (heartIcon) heartIcon.className = "fa-solid fa-heart text-sm";
+                                    showToast(`Đã thêm "${dish.name}" vào Yêu thích! ❤️`, 'success');
+                                } else {
+                                    favBtn.className = "btn-favorite-dish absolute top-2.5 right-2.5 w-8.5 h-8.5 rounded-full bg-white/90 text-gray-500 hover:text-rose-500 backdrop-blur-sm flex items-center justify-center shadow-sm transition-all cursor-pointer z-20";
+                                    if (heartIcon) heartIcon.className = "fa-regular fa-heart text-sm";
+                                    showToast(`Đã bỏ lưu "${dish.name}"`, 'info');
+                                }
+
+                                if (window.loadFavoritesInNav) window.loadFavoritesInNav();
+                            } else {
+                                showToast(res.message || 'Không thể lưu món yêu thích lúc này.', 'info');
+                            }
+                        })
+                        .catch(() => {
+                            showToast('Lỗi kết nối khi cập nhật món yêu thích.', 'info');
+                        });
                 }
             });
         }

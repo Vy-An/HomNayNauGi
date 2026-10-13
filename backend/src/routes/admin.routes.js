@@ -19,4 +19,18 @@ router.get('/foods/:id', adminController.getFoodById);
 router.patch('/foods/:id', adminController.updateFood);
 router.patch('/foods/:id/status', adminController.updateFoodStatus);
 
+// Categories
+router.get('/categories', adminController.getCategories);
+router.post('/categories', adminController.createCategory);
+router.patch('/categories/:id', adminController.updateCategory);
+router.patch('/categories/:id/status', adminController.updateCategoryStatus);
+
+// Community Posts
+router.get('/posts', adminController.getAdminPosts);
+router.patch('/posts/:id/status', adminController.updatePostStatus);
+
+// Community Reports
+router.get('/reports', adminController.getAdminReports);
+router.patch('/reports/:id', adminController.handleAdminReport);
+
 module.exports = router;

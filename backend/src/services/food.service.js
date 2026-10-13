@@ -26,7 +26,7 @@ function normalizeList(value) {
         .filter(Boolean);
 }
 
-function formatFoodSummary(food) {
+function formatFoodSummary(food, userId = null) {
     const rawIngredients = (food.food_ingredients || [])
         .map((fi) => fi.ingredients?.name)
         .filter(Boolean);
@@ -47,7 +47,7 @@ function formatFoodSummary(food) {
         rating: 4.8,
         rating_count: '1.5k',
         likes: (food.favorites && food.favorites.length) ? (food.favorites.length * 120 + 250) : 850,
-        is_favorite: false,
+        is_favorite: Boolean(userId && food.favorites && food.favorites.some((f) => f.id_user === userId)),
         category: categoryName,
         category_slug: categorySlug,
         sub_category: categorySlug === 'mon-chay' ? 'chay' : (cookingTime <= 20 ? 'nhanh' : 'viet'),
@@ -61,7 +61,7 @@ function formatFoodSummary(food) {
     };
 }
 
-function formatFoodDetail(food, relatedFoods = []) {
+function formatFoodDetail(food, relatedFoods = [], userId = null) {
     const categoryName = food.categories?.name || 'Món ngon';
     const categorySlug = food.categories?.slug || 'viet';
     const cookingTime = food.cooking_time || 30;
@@ -94,6 +94,7 @@ function formatFoodDetail(food, relatedFoods = []) {
         servings: servings,
         difficulty: cookingTime > 40 ? 'Trung bình' : 'Dễ làm',
         likes: (food.favorites && food.favorites.length) ? (food.favorites.length * 150 + 450) : '2.5k',
+        is_favorite: Boolean(userId && food.favorites && food.favorites.some((f) => f.id_user === userId)),
         calories: cookingTime <= 20 ? '350 kcal' : '520 kcal',
         category: categoryName,
         category_slug: categorySlug,
@@ -105,14 +106,14 @@ function formatFoodDetail(food, relatedFoods = []) {
             'Tiến hành nấu chín đều các nguyên liệu theo nhiệt độ vừa phải.',
             'Bày trí ra đĩa hoặc tô và thưởng thức ngay khi còn nóng sốt.'
         ],
-        relatedFoods: relatedFoods.map(formatFoodSummary)
+        relatedFoods: relatedFoods.map((f) => formatFoodSummary(f, userId))
     };
 }
 
 /**
  * Lấy danh sách món ăn kèm chức năng tìm kiếm và lọc theo nguyên liệu/danh mục/thời gian
  */
-async function getFoods(query = {}) {
+async function getFoods(query = {}, userId = null) {
     const {
         search = '',
         category = 'all',
@@ -223,7 +224,7 @@ async function getFoods(query = {}) {
         })
     ]);
 
-    let formattedFoods = rawFoods.map(formatFoodSummary);
+    let formattedFoods = rawFoods.map((f) => formatFoodSummary(f, userId));
 
     // Xử lý sub_category nếu có
     if (sub_category && sub_category !== 'all') {
@@ -241,7 +242,7 @@ async function getFoods(query = {}) {
 /**
  * Lấy chi tiết món ăn theo ID hoặc Slug, kèm các bước thực hiện, nguyên liệu và món liên quan
  */
-async function getFoodById(idOrSlug) {
+async function getFoodById(idOrSlug, userId = null) {
     const isNum = !Number.isNaN(Number(idOrSlug));
     const where = {
         status: 'active',
@@ -289,7 +290,7 @@ async function getFoodById(idOrSlug) {
         }
     });
 
-    return formatFoodDetail(food, relatedFoods);
+    return formatFoodDetail(food, relatedFoods, userId);
 }
 
 /**
