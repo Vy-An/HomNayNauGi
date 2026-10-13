@@ -51,7 +51,7 @@ export default function Footer() {
                         Đăng ký nhận công thức
                     </h4>
                     <p class="text-xs text-white/75">Nhận gợi ý mâm cơm ngon và bí quyết nấu ăn hàng tuần qua email:</p>
-                    <form onsubmit="event.preventDefault(); alert('Cảm ơn bạn đã đăng ký nhận công thức mới!');" class="space-y-2 pt-1">
+                    <form onsubmit="event.preventDefault(); if (window.Popup) { window.Popup.success('Cảm ơn bạn đã đăng ký nhận công thức mới!', 'Đăng ký thành công'); } else { alert('Cảm ơn bạn đã đăng ký nhận công thức mới!'); } this.reset();" class="space-y-2 pt-1">
                         <input 
                             type="email" 
                             required 

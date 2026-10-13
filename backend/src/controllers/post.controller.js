@@ -48,6 +48,7 @@ function formatPost(post, currentUserId = null) {
         content: post.content,
         image: resolveAssetUrl(post.image),
         status: post.status,
+        hidden_reason: post.hidden_reason || null,
         created_at: post.created_at,
         time: formatRelativeTime(post.created_at),
         likesCount,
@@ -268,10 +269,9 @@ async function getPostById(req, res) {
         }
 
         const currentUserId = req.user ? req.user.id_user : null;
-        const post = await prisma.posts.findFirst({
+        const post = await prisma.posts.findUnique({
             where: {
-                id_post: id,
-                status: 'active'
+                id_post: id
             },
             include: {
                 users: {
@@ -308,6 +308,17 @@ async function getPostById(req, res) {
                 success: false,
                 message: 'Bài viết không tồn tại.'
             });
+        }
+
+        if (post.status !== 'active') {
+            const isAuthor = currentUserId && post.id_user === currentUserId;
+            const isAdmin = req.user && req.user.role === 'admin';
+            if (!isAuthor && !isAdmin) {
+                return res.status(404).json({
+                    success: false,
+                    message: 'Bài viết không tồn tại hoặc đang chờ kiểm duyệt.'
+                });
+            }
         }
 
         return res.json({
@@ -396,7 +407,7 @@ async function createPost(req, res) {
                 title: finalTitle,
                 content: trimmedContent,
                 image: savedImagePath,
-                status: 'active'
+                status: 'pending'
             },
             include: {
                 users: {
@@ -430,7 +441,7 @@ async function createPost(req, res) {
 
         return res.status(201).json({
             success: true,
-            message: 'Đăng bài viết thành công.',
+            message: 'Đăng bài viết thành công! Bài viết của bạn đang chờ kiểm duyệt trước khi hiển thị công khai.',
             data: formatPost(newPost, req.user.id_user)
         });
     } catch (error) {
@@ -516,10 +527,88 @@ async function toggleLike(req, res) {
     }
 }
 
+async function reportPost(req, res) {
+    try {
+        if (!req.user) {
+            return res.status(401).json({
+                success: false,
+                message: 'Vui lòng đăng nhập để gửi báo cáo vi phạm.'
+            });
+        }
+
+        const id = Number(req.params.id);
+        if (!id || Number.isNaN(id)) {
+            return res.status(400).json({
+                success: false,
+                message: 'ID bài viết không hợp lệ.'
+            });
+        }
+
+        const { reason, description } = req.body || {};
+        const trimmedReason = typeof reason === 'string' ? reason.trim() : '';
+
+        if (!trimmedReason) {
+            return res.status(400).json({
+                success: false,
+                message: 'Vui lòng cung cấp lý do báo cáo vi phạm.'
+            });
+        }
+
+        const post = await prisma.posts.findUnique({
+            where: { id_post: id }
+        });
+
+        if (!post) {
+            return res.status(404).json({
+                success: false,
+                message: 'Bài viết không tồn tại.'
+            });
+        }
+
+        const existingPending = await prisma.reports.findFirst({
+            where: {
+                id_user: req.user.id_user,
+                target_type: 'post',
+                target_id: id,
+                status: 'pending'
+            }
+        });
+
+        if (existingPending) {
+            return res.status(400).json({
+                success: false,
+                message: 'Bạn đã gửi báo cáo cho bài viết này và đang chờ xử lý.'
+            });
+        }
+
+        await prisma.reports.create({
+            data: {
+                id_user: req.user.id_user,
+                target_type: 'post',
+                target_id: id,
+                reason: trimmedReason.slice(0, 255),
+                description: description ? String(description).trim() : null,
+                status: 'pending'
+            }
+        });
+
+        return res.status(201).json({
+            success: true,
+            message: 'Báo cáo vi phạm đã được gửi thành công. Ban quản trị sẽ sớm xem xét và xử lý.'
+        });
+    } catch (error) {
+        return res.status(500).json({
+            success: false,
+            message: 'Không thể gửi báo cáo vi phạm lúc này.'
+        });
+    }
+}
+
 module.exports = {
     featuredPosts,
     getPosts,
     getPostById,
     createPost,
-    toggleLike
+    toggleLike,
+    reportPost
 };

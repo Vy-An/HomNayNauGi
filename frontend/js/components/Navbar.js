@@ -103,7 +103,7 @@ export default function Navbar() {
                     </div>
 
                     <!-- Notification Button -->
-                    <button onclick="alert('Bạn chưa có thông báo mới.')" class="w-8.5 h-8.5 rounded-full bg-white/10 hover:bg-white/20 text-white flex items-center justify-center transition-all hover:text-amber-300 cursor-pointer hidden sm:flex" title="Thông báo">
+                    <button onclick="window.Popup ? window.Popup.info('Bạn chưa có thông báo mới.', 'Thông báo hệ thống') : alert('Bạn chưa có thông báo mới.')" class="w-8.5 h-8.5 rounded-full bg-white/10 hover:bg-white/20 text-white flex items-center justify-center transition-all hover:text-amber-300 cursor-pointer hidden sm:flex" title="Thông báo">
                         <i class="fa-solid fa-bell text-xs sm:text-sm"></i>
                     </button>
 
@@ -113,11 +113,77 @@ export default function Navbar() {
                     <!-- Auth Links -->
                     <div class="flex items-center gap-2">
                         ${isLoggedIn ? `
-                            <a href="#/ca-nhan" class="flex items-center gap-2 px-2.5 py-1 rounded-full bg-white/10 hover:bg-white/20 border border-white/10 transition-all text-white group cursor-pointer" title="Xem trang cá nhân">
-                                <img src="${authAvatar}" alt="${authName}" class="w-7 h-7 rounded-full object-cover bg-white/20">
-                                <span class="max-w-28 truncate text-xs font-bold group-hover:text-[#F4A62A] transition-colors">${authName}</span>
-                            </a>
-                            <button onclick="window.logoutAuth && window.logoutAuth()" class="px-3 sm:px-4 py-1.5 bg-[#F4A62A] hover:bg-[#E59516] text-[#0F4937] font-black rounded-full text-xs sm:text-sm shadow-sm transition-all hover:scale-105 active:scale-95 cursor-pointer">Đăng xuất</button>
+                            <div class="relative group/user py-2">
+                                <!-- User Trigger Pill -->
+                                <a href="#/ca-nhan" class="flex items-center gap-2 pl-2 pr-3 py-1 rounded-full bg-white/10 hover:bg-white/20 border border-white/15 transition-all text-white cursor-pointer select-none" title="Tài khoản">
+                                    <img src="${authAvatar}" alt="${authName}" class="w-7 h-7 rounded-full object-cover bg-white/20 ring-1 ring-white/30">
+                                    <span class="max-w-28 truncate text-xs font-bold text-white group-hover/user:text-[#F4A62A] transition-colors">${authName}</span>
+                                    <i class="fa-solid fa-chevron-down text-[10px] text-white/70 group-hover/user:text-[#F4A62A] group-hover/user:rotate-180 transition-transform duration-200"></i>
+                                </a>
+
+                                <!-- Dropdown Submenu -->
+                                <div class="absolute right-0 top-full pt-1 w-60 z-50 opacity-0 invisible pointer-events-none group-hover/user:opacity-100 group-hover/user:visible group-hover/user:pointer-events-auto transform group-hover/user:translate-y-0 translate-y-1 transition-all duration-200">
+                                    <div class="bg-white text-gray-800 rounded-2xl shadow-2xl shadow-black/20 border border-gray-100 py-2 overflow-hidden">
+                                        <!-- User Info Header -->
+                                        <div class="px-4 py-3 bg-gradient-to-r from-emerald-50/70 to-amber-50/50 border-b border-gray-100 flex items-center gap-3">
+                                            <img src="${authAvatar}" alt="${authName}" class="w-10 h-10 rounded-full object-cover border-2 border-white shadow-xs shrink-0">
+                                            <div class="min-w-0 flex-1">
+                                                <p class="text-xs font-black text-gray-900 truncate">${authName}</p>
+                                                <span class="inline-flex items-center gap-1 text-[10px] font-bold ${authUser?.role === 'admin' ? 'text-amber-600' : 'text-emerald-700'}">
+                                                    <span class="w-1.5 h-1.5 rounded-full ${authUser?.role === 'admin' ? 'bg-amber-500' : 'bg-emerald-500'}"></span>
+                                                    ${authUser?.role === 'admin' ? 'Quản trị viên' : 'Thành viên'}
+                                                </span>
+                                            </div>
+                                        </div>
+
+                                        <!-- Menu Links -->
+                                        <div class="py-1.5">
+                                            <a href="#/ca-nhan" class="flex items-center gap-3 px-4 py-2.5 text-xs font-bold text-gray-700 hover:text-[#0F4937] hover:bg-emerald-50/60 transition-colors">
+                                                <div class="w-7 h-7 rounded-lg bg-emerald-50 text-[#0F4937] flex items-center justify-center shrink-0">
+                                                    <i class="fa-regular fa-user text-xs"></i>
+                                                </div>
+                                                <span>Trang cá nhân</span>
+                                            </a>
+
+                                            <a href="#/cong-dong" class="flex items-center gap-3 px-4 py-2.5 text-xs font-bold text-gray-700 hover:text-[#0F4937] hover:bg-emerald-50/60 transition-colors">
+                                                <div class="w-7 h-7 rounded-lg bg-amber-50 text-[#F4A62A] flex items-center justify-center shrink-0">
+                                                    <i class="fa-solid fa-users text-xs"></i>
+                                                </div>
+                                                <span>Cộng đồng ẩm thực</span>
+                                            </a>
+
+                                            <button type="button" onclick="window.openFavoritesDrawer && window.openFavoritesDrawer()" class="w-full text-left flex items-center gap-3 px-4 py-2.5 text-xs font-bold text-gray-700 hover:text-[#0F4937] hover:bg-emerald-50/60 transition-colors cursor-pointer">
+                                                <div class="w-7 h-7 rounded-lg bg-rose-50 text-rose-500 flex items-center justify-center shrink-0">
+                                                    <i class="fa-regular fa-heart text-xs"></i>
+                                                </div>
+                                                <span>Món yêu thích</span>
+                                            </button>
+
+                                            ${authUser?.role === 'admin' ? `
+                                                <a href="#/admin" class="flex items-center gap-3 px-4 py-2.5 text-xs font-bold text-[#0F4937] hover:bg-emerald-50/80 transition-colors">
+                                                    <div class="w-7 h-7 rounded-lg bg-emerald-100 text-[#0F4937] flex items-center justify-center shrink-0">
+                                                        <i class="fa-solid fa-shield-halved text-xs"></i>
+                                                    </div>
+                                                    <span>Trang quản trị (Admin)</span>
+                                                </a>
+                                            ` : ''}
+                                        </div>
+
+                                        <!-- Divider -->
+                                        <div class="my-1 border-t border-gray-100"></div>
+
+                                        <!-- Logout Button at bottom -->
+                                        <div class="px-2 pt-1 pb-0.5">
+                                            <button type="button" onclick="window.logoutAuth && window.logoutAuth()" class="w-full flex items-center gap-3 px-3 py-2 text-xs font-black text-rose-600 hover:text-rose-700 hover:bg-rose-50 rounded-xl transition-colors cursor-pointer">
+                                                <div class="w-7 h-7 rounded-lg bg-rose-100/70 text-rose-600 flex items-center justify-center shrink-0">
+                                                    <i class="fa-solid fa-arrow-right-from-bracket text-xs"></i>
+                                                </div>
+                                                <span>Đăng xuất</span>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                         ` : `
                             <a href="#/login" class="text-white/85 hover:text-white font-bold text-xs sm:text-sm px-2 py-1 rounded-lg hover:bg-white/10 transition">Đăng nhập</a>
                             <a href="#/login?mode=register" class="px-3 sm:px-4 py-1.5 bg-[#F4A62A] hover:bg-[#E59516] text-[#0F4937] font-black rounded-full text-xs sm:text-sm shadow-sm transition-all hover:scale-105 active:scale-95">Đăng ký</a>
@@ -160,6 +226,18 @@ export default function Navbar() {
 
 if (typeof window !== 'undefined') {
     window.logoutAuth = async () => {
+        if (window.Popup) {
+            const confirmed = await window.Popup.confirm({
+                title: 'Đăng xuất tài khoản',
+                message: 'Bạn có chắc chắn muốn đăng xuất khỏi Hôm Nay Nấu Gì không?',
+                type: 'question',
+                confirmText: 'Đăng xuất',
+                cancelText: 'Ở lại',
+                confirmButtonColor: 'warning'
+            });
+            if (!confirmed) return;
+        }
+
         const token = localStorage.getItem('auth_token');
 
         if (token) {
@@ -176,6 +254,9 @@ if (typeof window !== 'undefined') {
         localStorage.removeItem('auth_token');
         localStorage.removeItem('auth_user');
         window.location.hash = '#/login';
+        if (window.Popup) {
+            window.Popup.toast('Đã đăng xuất tài khoản thành công.', 'info');
+        }
     };
 
     window.closeNavDrawers = () => {
@@ -269,10 +350,25 @@ if (typeof window !== 'undefined') {
         } catch (e) {}
     };
 
-    window.clearWonDishes = () => {
+    window.clearWonDishes = async () => {
+        if (window.Popup) {
+            const confirmed = await window.Popup.confirm({
+                title: 'Xóa danh sách món đã random',
+                message: 'Bạn có chắc muốn xóa toàn bộ danh sách các món ăn đã random gần đây không?',
+                type: 'warning',
+                confirmText: 'Xóa hết',
+                cancelText: 'Giữ lại',
+                confirmButtonColor: 'danger'
+            });
+            if (!confirmed) return;
+        }
+
         localStorage.removeItem('won_dishes');
         window.renderWonDishesList();
         if (window.renderRecentWonDishes) window.renderRecentWonDishes();
+        if (window.Popup) {
+            window.Popup.toast('Đã làm trống danh sách món đã random.', 'info');
+        }
     };
 
     window.addWonDish = (dish) => {

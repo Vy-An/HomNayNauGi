@@ -172,7 +172,8 @@ async function getMe(req, res) {
             });
         }
 
-        const [postsCount, favoritesCount] = await Promise.all([
+        const [postsCount, activePostsCount, favoritesCount] = await Promise.all([
+            prisma.posts.count({ where: { id_user: req.user.id_user } }),
             prisma.posts.count({ where: { id_user: req.user.id_user, status: 'active' } }),
             prisma.favorites.count({ where: { id_user: req.user.id_user } })
         ]);
@@ -183,6 +184,7 @@ async function getMe(req, res) {
                 ...formatUser(req.user),
                 stats: {
                     posts: postsCount,
+                    activePosts: activePostsCount,
                     favorites: favoritesCount
                 }
             }
@@ -229,7 +231,8 @@ async function updateProfile(req, res) {
             data: updateData
         });
 
-        const [postsCount, favoritesCount] = await Promise.all([
+        const [postsCount, activePostsCount, favoritesCount] = await Promise.all([
+            prisma.posts.count({ where: { id_user: req.user.id_user } }),
             prisma.posts.count({ where: { id_user: req.user.id_user, status: 'active' } }),
             prisma.favorites.count({ where: { id_user: req.user.id_user } })
         ]);
@@ -241,6 +244,7 @@ async function updateProfile(req, res) {
                 ...formatUser(updatedUser),
                 stats: {
                     posts: postsCount,
+                    activePosts: activePostsCount,
                     favorites: favoritesCount
                 }
             }
@@ -264,8 +268,7 @@ async function getMyPosts(req, res) {
 
         const posts = await prisma.posts.findMany({
             where: {
-                id_user: req.user.id_user,
-                status: 'active'
+                id_user: req.user.id_user
             },
             include: {
                 users: {
@@ -316,6 +319,7 @@ async function getMyPosts(req, res) {
                 content: post.content,
                 image: resolveAssetUrl(post.image),
                 status: post.status,
+                hidden_reason: post.hidden_reason || null,
                 created_at: post.created_at,
                 likesCount,
                 likes: likesCount,

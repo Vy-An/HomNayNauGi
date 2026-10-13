@@ -281,7 +281,8 @@ CREATE TABLE `posts` (
   `title` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `content` text COLLATE utf8mb4_unicode_ci NOT NULL,
   `image` varchar(500) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `status` enum('active','hidden') COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'active',
+  `status` enum('active','hidden','pending') COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'pending',
+  `hidden_reason` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `updated_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -290,11 +291,11 @@ CREATE TABLE `posts` (
 -- Dumping data for table `posts`
 --
 
-INSERT INTO `posts` (`id_post`, `id_user`, `id_food`, `title`, `content`, `image`, `status`, `created_at`, `updated_at`) VALUES
-(1, 2, 1, 'Hôm nay mình nấu thịt kho trứng', 'Lần đầu mình thử nấu thịt kho trứng với nước dừa. Thịt mềm và vị khá đậm đà.', '/images/posts/post-thit-kho-trung.jpg', 'active', '2026-10-05 14:52:03', '2026-10-05 14:52:03'),
-(2, 3, 12, 'Rau muống xào tỏi đơn giản', 'Món này làm rất nhanh, phù hợp khi không có nhiều thời gian nấu ăn.', '/images/posts/post-rau-muong.jpg', 'active', '2026-10-05 14:52:03', '2026-10-05 14:52:03'),
-(3, 4, 8, 'Bữa cơm với canh chua cá', 'Canh chua cá là món mình rất thích vì dễ ăn và phù hợp với những ngày nóng.', '/images/posts/post-canh-chua.jpg', 'active', '2026-10-05 14:52:03', '2026-10-05 14:52:03'),
-(4, 5, 17, 'Đậu hũ sốt cà cho bữa cơm tiết kiệm', 'Một món khá đơn giản, nguyên liệu rẻ nhưng vẫn rất ngon.', '/images/posts/post-dau-hu.jpg', 'active', '2026-10-05 14:52:03', '2026-10-05 14:52:03');
+INSERT INTO `posts` (`id_post`, `id_user`, `id_food`, `title`, `content`, `image`, `status`, `hidden_reason`, `created_at`, `updated_at`) VALUES
+(1, 2, 1, 'Hôm nay mình nấu thịt kho trứng', 'Lần đầu mình thử nấu thịt kho trứng với nước dừa. Thịt mềm và vị khá đậm đà.', '/images/posts/post-thit-kho-trung.jpg', 'active', NULL, '2026-10-05 14:52:03', '2026-10-05 14:52:03'),
+(2, 3, 12, 'Rau muống xào tỏi đơn giản', 'Món này làm rất nhanh, phù hợp khi không có nhiều thời gian nấu ăn.', '/images/posts/post-rau-muong.jpg', 'active', NULL, '2026-10-05 14:52:03', '2026-10-05 14:52:03'),
+(3, 4, 8, 'Bữa cơm với canh chua cá', 'Canh chua cá là món mình rất thích vì dễ ăn và phù hợp với những ngày nóng.', '/images/posts/post-canh-chua.jpg', 'active', NULL, '2026-10-05 14:52:03', '2026-10-05 14:52:03'),
+(4, 5, 17, 'Đậu hũ sốt cà cho bữa cơm tiết kiệm', 'Một món khá đơn giản, nguyên liệu rẻ nhưng vẫn rất ngon.', '/images/posts/post-dau-hu.jpg', 'active', NULL, '2026-10-05 14:52:03', '2026-10-05 14:52:03');
 
 -- --------------------------------------------------------
 

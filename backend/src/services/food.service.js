@@ -50,10 +50,10 @@ function formatFoodSummary(food) {
         is_favorite: false,
         category: categoryName,
         category_slug: categorySlug,
-        sub_category: categorySlug === 'mon-chay' ? 'chay' : (cookingTime <= 20 ? 'nhanh' : 'viet'),
+        sub_category: (food.cooking_time && food.cooking_time <= 15) ? 'nhanh' : 'viet',
         difficulty: cookingTime > 40 ? 'Trung bình' : 'Dễ làm',
         ingredients: rawIngredients,
-        tags: [categoryName, cookingTime <= 20 ? 'Món nhanh' : 'Món Việt', 'Dễ làm'].filter(Boolean),
+        tags: [categoryName, (food.cooking_time && food.cooking_time <= 15) ? 'Món nhanh' : 'Món Việt', 'Dễ làm'].filter(Boolean),
         author: {
             name: 'Hôm Nay Nấu Gì',
             avatar: 'https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=100'
@@ -148,20 +148,37 @@ async function getFoods(query = {}) {
 
     // 2. Lọc theo danh mục
     if (category && category !== 'all') {
-        const catNum = Number(category);
-        if (!Number.isNaN(catNum)) {
-            where.id_category = catNum;
-        } else {
+        const catList = normalizeList(category);
+        if (catList.length === 1) {
+            const catNum = Number(catList[0]);
+            if (!Number.isNaN(catNum)) {
+                where.id_category = catNum;
+            } else {
+                where.categories = {
+                    OR: [
+                        { slug: catList[0] },
+                        { name: { contains: catList[0] } }
+                    ]
+                };
+            }
+        } else if (catList.length > 1) {
             where.categories = {
-                OR: [
-                    { slug: category },
-                    { name: { contains: category } }
-                ]
+                OR: catList.map((c) => {
+                    const catNum = Number(c);
+                    if (!Number.isNaN(catNum)) {
+                        return { id_category: catNum };
+                    }
+                    return {
+                        OR: [
+                            { slug: c },
+                            { name: { contains: c } }
+                        ]
+                    };
+                })
             };
         }
     }
 
-    // 3. Lọc theo nguyên liệu
     const ingredientList = normalizeList(ingredients);
     if (ingredientList.length > 0) {
         where.food_ingredients = {
@@ -179,9 +196,8 @@ async function getFoods(query = {}) {
         };
     }
 
-    // 4. Lọc theo thời gian nấu
-    if (cook_time === 'under_15') {
-        where.cooking_time = { lte: 15 };
+    if (sub_category === 'nhanh' || cook_time === 'under_15') {
+        where.cooking_time = { not: null, gt: 0, lte: 15 };
     } else if (cook_time === '15_to_30') {
         where.cooking_time = { gt: 15, lte: 30 };
     } else if (cook_time === 'above_30') {
@@ -224,11 +240,6 @@ async function getFoods(query = {}) {
     ]);
 
     let formattedFoods = rawFoods.map(formatFoodSummary);
-
-    // Xử lý sub_category nếu có
-    if (sub_category && sub_category !== 'all') {
-        formattedFoods = formattedFoods.filter((f) => f.sub_category === sub_category);
-    }
 
     return {
         foods: formattedFoods,
