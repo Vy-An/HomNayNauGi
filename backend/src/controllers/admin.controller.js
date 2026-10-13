@@ -601,6 +601,7 @@ async function getDashboard(req, res) {
             postsTotal,
             postsActive,
             postsHidden,
+            postsPending,
             reportsTotal,
             reportsPending,
             latestFoods
@@ -610,6 +611,7 @@ async function getDashboard(req, res) {
             prisma.posts.count(),
             prisma.posts.count({ where: { status: 'active' } }),
             prisma.posts.count({ where: { status: 'hidden' } }),
+            prisma.posts.count({ where: { status: 'pending' } }),
             prisma.reports.count(),
             prisma.reports.count({ where: { status: 'pending' } }),
             prisma.foods.findMany({
@@ -632,7 +634,8 @@ async function getDashboard(req, res) {
                     posts: {
                         total: postsTotal,
                         active: postsActive,
-                        hidden: postsHidden
+                        hidden: postsHidden,
+                        pending: postsPending
                     },
                     reports: {
                         total: reportsTotal,
@@ -1290,7 +1293,8 @@ async function updatePostStatus(req, res) {
 
         const dataToUpdate = { status };
         if (status === 'hidden') {
-            dataToUpdate.hidden_reason = String(hidden_reason || 'Vi phạm tiêu chuẩn cộng đồng').trim();
+            const trimmedReason = typeof hidden_reason === 'string' ? hidden_reason.trim() : '';
+            dataToUpdate.hidden_reason = trimmedReason || 'Vi phạm tiêu chuẩn cộng đồng';
         } else if (status === 'active') {
             dataToUpdate.hidden_reason = null;
         }

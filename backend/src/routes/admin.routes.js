@@ -23,8 +23,10 @@ router.patch('/foods/:id/status', adminController.updateFoodStatus);
 router.get('/posts', adminController.getPosts);
 router.get('/posts/:id', adminController.getPostById);
 router.patch('/posts/:id/status', adminController.updatePostStatus);
+router.put('/posts/:id/status', adminController.updatePostStatus);
 router.delete('/posts/:id', adminController.deletePost);
 router.get('/reports', adminController.getReports);
 router.patch('/reports/:id/status', adminController.updateReportStatus);
+router.put('/reports/:id/status', adminController.updateReportStatus);
 
 module.exports = router;

@@ -257,8 +257,8 @@ async function updateComment(req, res) {
             });
         }
 
-        const canModify = existing.id_user === req.user.id_user || req.user.role === 'admin';
-        if (!canModify) {
+        const isOwner = existing.id_user === req.user.id_user;
+        if (!isOwner) {
             return res.status(403).json({
                 success: false,
                 message: 'Ban khong co quyen sua binh luan nay.'
@@ -323,8 +323,8 @@ async function deleteComment(req, res) {
             });
         }
 
-        const canModify = existing.id_user === req.user.id_user || req.user.role === 'admin';
-        if (!canModify) {
+        const isOwner = existing.id_user === req.user.id_user;
+        if (!isOwner) {
             return res.status(403).json({
                 success: false,
                 message: 'Ban khong co quyen xoa binh luan nay.'
