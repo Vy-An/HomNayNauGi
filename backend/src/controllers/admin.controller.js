@@ -1639,6 +1639,17 @@ async function updateCommentStatus(req, res) {
             });
         }
 
+        const comment = await prisma.comments.findUnique({
+            where: { id_comment: id }
+        });
+
+        if (!comment) {
+            return res.status(404).json({
+                success: false,
+                message: 'Bình luận không tồn tại.'
+            });
+        }
+
         const updated = await prisma.comments.update({
             where: { id_comment: id },
             data: {
