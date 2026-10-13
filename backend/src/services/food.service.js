@@ -415,7 +415,6 @@ async function toggleFavorite(idOrSlug, userId) {
 async function getFoodOptions() {
     const [categories, ingredients] = await Promise.all([
         prisma.categories.findMany({
-            where: { status: 'active' },
             orderBy: { id_category: 'asc' }
         }),
         prisma.ingredients.findMany({
@@ -446,7 +445,6 @@ async function getQuickSuggestions() {
         prisma.foods.count({ where: { status: 'active', cooking_time: { gt: 30 } } }),
         prisma.categories.findMany({
             where: {
-                status: 'active',
                 foods: {
                     some: { status: 'active' }
                 }

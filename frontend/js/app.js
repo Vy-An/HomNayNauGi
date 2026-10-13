@@ -48,13 +48,13 @@ const router = async () => {
         if (path === '/login') {
             if (navbarContainer) navbarContainer.innerHTML = '';
             if (footerContainer) footerContainer.style.display = 'none';
-        } else if (path === '/ca-nhan') {
-            if (navbarContainer) navbarContainer.innerHTML = '';
-            if (footerContainer) footerContainer.style.display = 'none';
         } else {
             if (navbarContainer) {
                 navbarContainer.innerHTML = Navbar();
-                if (window.updateNavbarFavBadge) window.updateNavbarFavBadge();
+                if (typeof window !== 'undefined') {
+                    if (window.syncFavBadge) window.syncFavBadge();
+                    if (window.updateNavbarFavBadge) window.updateNavbarFavBadge();
+                }
             }
             if (footerContainer) {
                 footerContainer.style.display = 'block';

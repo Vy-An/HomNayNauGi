@@ -169,38 +169,38 @@ const Home = {
                                         </span>
                                         <span class="text-xs text-[#718078] font-normal">Chọn 1 hoặc nhiều</span>
                                     </label>
-                                    <div id="ingredient-options" class="flex flex-nowrap gap-2 overflow-x-auto overflow-y-hidden pb-1 max-w-full scrollbar-none snap-x cursor-grab select-none">
-                                        <label class="cursor-pointer group shrink-0 snap-start">
+                                    <div id="ingredient-options" class="flex flex-nowrap gap-2 overflow-x-auto overflow-y-hidden pb-1 max-w-full scrollbar-none cursor-grab select-none">
+                                        <label class="cursor-pointer group shrink-0">
                                             <input type="checkbox" name="ingredients" value="Thịt heo" class="peer sr-only">
                                             <div class="py-1.5 px-3 rounded-xl border border-[#E5E1D6] bg-white peer-checked:bg-[#145A43] peer-checked:text-white peer-checked:border-[#145A43] text-xs font-bold flex items-center gap-1.5 transition whitespace-nowrap">
                                                 <i class="fa-solid fa-drumstick-bite text-amber-500 peer-checked:text-white"></i> Thịt heo
                                             </div>
                                         </label>
-                                        <label class="cursor-pointer group shrink-0 snap-start">
+                                        <label class="cursor-pointer group shrink-0">
                                             <input type="checkbox" name="ingredients" value="Thịt gà" class="peer sr-only">
                                             <div class="py-1.5 px-3 rounded-xl border border-[#E5E1D6] bg-white peer-checked:bg-[#145A43] peer-checked:text-white peer-checked:border-[#145A43] text-xs font-bold flex items-center gap-1.5 transition whitespace-nowrap">
                                                 <i class="fa-solid fa-kiwi-bird text-orange-500 peer-checked:text-white"></i> Thịt gà
                                             </div>
                                         </label>
-                                        <label class="cursor-pointer group shrink-0 snap-start">
+                                        <label class="cursor-pointer group shrink-0">
                                             <input type="checkbox" name="ingredients" value="Hải sản" class="peer sr-only">
                                             <div class="py-1.5 px-3 rounded-xl border border-[#E5E1D6] bg-white peer-checked:bg-[#145A43] peer-checked:text-white peer-checked:border-[#145A43] text-xs font-bold flex items-center gap-1.5 transition whitespace-nowrap">
                                                 <i class="fa-solid fa-shrimp text-rose-500 peer-checked:text-white"></i> Hải sản
                                             </div>
                                         </label>
-                                        <label class="cursor-pointer group shrink-0 snap-start">
+                                        <label class="cursor-pointer group shrink-0">
                                             <input type="checkbox" name="ingredients" value="Rau củ" class="peer sr-only">
                                             <div class="py-1.5 px-3 rounded-xl border border-[#E5E1D6] bg-white peer-checked:bg-[#145A43] peer-checked:text-white peer-checked:border-[#145A43] text-xs font-bold flex items-center gap-1.5 transition whitespace-nowrap">
                                                 <i class="fa-solid fa-leaf text-emerald-500 peer-checked:text-white"></i> Rau củ
                                             </div>
                                         </label>
-                                        <label class="cursor-pointer group shrink-0 snap-start">
+                                        <label class="cursor-pointer group shrink-0">
                                             <input type="checkbox" name="ingredients" value="Trứng" class="peer sr-only">
                                             <div class="py-1.5 px-3 rounded-xl border border-[#E5E1D6] bg-white peer-checked:bg-[#145A43] peer-checked:text-white peer-checked:border-[#145A43] text-xs font-bold flex items-center gap-1.5 transition whitespace-nowrap">
                                                 <i class="fa-solid fa-egg text-amber-500 peer-checked:text-white"></i> Trứng
                                             </div>
                                         </label>
-                                        <label class="cursor-pointer group shrink-0 snap-start">
+                                        <label class="cursor-pointer group shrink-0">
                                             <input type="checkbox" name="ingredients" value="Đậu hũ" class="peer sr-only">
                                             <div class="py-1.5 px-3 rounded-xl border border-[#E5E1D6] bg-white peer-checked:bg-[#145A43] peer-checked:text-white peer-checked:border-[#145A43] text-xs font-bold flex items-center gap-1.5 transition whitespace-nowrap">
                                                 <i class="fa-solid fa-cube text-yellow-600 peer-checked:text-white"></i> Đậu hũ
@@ -222,32 +222,32 @@ const Home = {
                                         </span>
                                         <span class="text-xs text-[#718078] font-normal">Kiểu chế biến</span>
                                     </label>
-                                    <div id="category-options" class="flex flex-nowrap gap-2 overflow-x-auto overflow-y-hidden pb-1 max-w-full scrollbar-none snap-x cursor-grab select-none">
-                                        <label class="cursor-pointer group shrink-0 snap-start">
+                                    <div id="category-options" class="flex flex-nowrap gap-2 overflow-x-auto overflow-y-hidden pb-1 max-w-full scrollbar-none cursor-grab select-none">
+                                        <label class="cursor-pointer group shrink-0">
                                             <input type="checkbox" name="categories" value="Món mặn" class="peer sr-only">
                                             <div class="py-1.5 px-3 rounded-xl border border-[#E5E1D6] bg-white peer-checked:bg-[#145A43] peer-checked:text-white peer-checked:border-[#145A43] text-xs font-bold flex items-center gap-1.5 transition whitespace-nowrap">
                                                 <i class="fa-solid fa-bowl-food text-orange-500 peer-checked:text-white"></i> Món mặn
                                             </div>
                                         </label>
-                                        <label class="cursor-pointer group shrink-0 snap-start">
+                                        <label class="cursor-pointer group shrink-0">
                                             <input type="checkbox" name="categories" value="Món canh" class="peer sr-only">
                                             <div class="py-1.5 px-3 rounded-xl border border-[#E5E1D6] bg-white peer-checked:bg-[#145A43] peer-checked:text-white peer-checked:border-[#145A43] text-xs font-bold flex items-center gap-1.5 transition whitespace-nowrap">
                                                 <i class="fa-solid fa-spoon text-blue-500 peer-checked:text-white"></i> Món canh
                                             </div>
                                         </label>
-                                        <label class="cursor-pointer group shrink-0 snap-start">
+                                        <label class="cursor-pointer group shrink-0">
                                             <input type="checkbox" name="categories" value="Món xào" class="peer sr-only">
                                             <div class="py-1.5 px-3 rounded-xl border border-[#E5E1D6] bg-white peer-checked:bg-[#145A43] peer-checked:text-white peer-checked:border-[#145A43] text-xs font-bold flex items-center gap-1.5 transition whitespace-nowrap">
                                                 <i class="fa-solid fa-fire-burner text-amber-500 peer-checked:text-white"></i> Món xào
                                             </div>
                                         </label>
-                                        <label class="cursor-pointer group shrink-0 snap-start">
+                                        <label class="cursor-pointer group shrink-0">
                                             <input type="checkbox" name="categories" value="Món nướng" class="peer sr-only">
                                             <div class="py-1.5 px-3 rounded-xl border border-[#E5E1D6] bg-white peer-checked:bg-[#145A43] peer-checked:text-white peer-checked:border-[#145A43] text-xs font-bold flex items-center gap-1.5 transition whitespace-nowrap">
                                                 <i class="fa-solid fa-fire text-red-500 peer-checked:text-white"></i> Món nướng
                                             </div>
                                         </label>
-                                        <label class="cursor-pointer group shrink-0 snap-start">
+                                        <label class="cursor-pointer group shrink-0">
                                             <input type="checkbox" name="categories" value="Món kho" class="peer sr-only">
                                             <div class="py-1.5 px-3 rounded-xl border border-[#E5E1D6] bg-white peer-checked:bg-[#145A43] peer-checked:text-white peer-checked:border-[#145A43] text-xs font-bold flex items-center gap-1.5 transition whitespace-nowrap">
                                                 <i class="fa-solid fa-fire-flame-simple text-amber-600 peer-checked:text-white"></i> Món kho
@@ -1053,6 +1053,104 @@ const Home = {
         bindFilterSearch('ingredient-search', 'ingredient-options');
         bindFilterSearch('category-search', 'category-options');
 
+        // Cho phép cuộn chuột để lăn ngang sang trái/phải với tốc độ chậm, thấy rõ hiệu ứng
+        const setupSmoothHorizontalScroll = (containerId) => {
+            const container = document.getElementById(containerId);
+            if (!container) return;
+
+            container.classList.remove('snap-x');
+            container.style.overscrollBehaviorX = 'contain';
+
+            let targetScroll = container.scrollLeft;
+            let isAnimating = false;
+
+            // Đồng bộ targetScroll nếu có sự thay đổi vị trí cuộn
+            container.addEventListener('scroll', () => {
+                if (!isAnimating) {
+                    targetScroll = container.scrollLeft;
+                }
+            }, { passive: true });
+
+            container.addEventListener('wheel', (e) => {
+                const maxScroll = container.scrollWidth - container.clientWidth;
+                if (maxScroll <= 0) return;
+
+                // Lấy hướng và giá trị delta của con lăn chuột
+                const rawDelta = Math.abs(e.deltaX) > Math.abs(e.deltaY) ? e.deltaX : e.deltaY;
+                if (rawDelta === 0) return;
+
+                // Chặn cuộn trang web dọc khi trỏ chuột vào vùng bộ lọc
+                e.preventDefault();
+
+                // Tốc độ lăn chậm: 45px mỗi khấc lăn chuột để thấy rõ hiệu ứng chuyển động
+                const direction = Math.sign(rawDelta);
+                const step = Math.abs(rawDelta) >= 50 ? direction * 45 : rawDelta * 0.5;
+
+                targetScroll = Math.max(0, Math.min(maxScroll, targetScroll + step));
+
+                if (!isAnimating) {
+                    isAnimating = true;
+                    const animate = () => {
+                        const diff = targetScroll - container.scrollLeft;
+                        if (Math.abs(diff) > 0.5) {
+                            // Hệ số 0.08 tạo độ trôi êm ái, chậm rãi, thấy rõ hiệu ứng
+                            container.scrollLeft += diff * 0.08;
+                            requestAnimationFrame(animate);
+                        } else {
+                            container.scrollLeft = targetScroll;
+                            isAnimating = false;
+                        }
+                    };
+                    requestAnimationFrame(animate);
+                }
+            }, { passive: false });
+
+            // Hỗ trợ kéo rê chuột (drag to scroll) mượt mà
+            let isDown = false;
+            let startX = 0;
+            let scrollStart = 0;
+            let hasDragged = false;
+
+            container.addEventListener('mousedown', (e) => {
+                isDown = true;
+                hasDragged = false;
+                container.classList.add('cursor-grabbing');
+                container.classList.remove('cursor-grab');
+                startX = e.pageX - container.offsetLeft;
+                scrollStart = container.scrollLeft;
+                targetScroll = container.scrollLeft;
+            });
+
+            window.addEventListener('mousemove', (e) => {
+                if (!isDown) return;
+                const x = e.pageX - container.offsetLeft;
+                const walk = (x - startX) * 1.2;
+                if (Math.abs(walk) > 4) {
+                    hasDragged = true;
+                }
+                container.scrollLeft = scrollStart - walk;
+                targetScroll = container.scrollLeft;
+            });
+
+            window.addEventListener('mouseup', () => {
+                if (!isDown) return;
+                isDown = false;
+                container.classList.remove('cursor-grabbing');
+                container.classList.add('cursor-grab');
+            });
+
+            container.addEventListener('click', (e) => {
+                if (hasDragged) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    hasDragged = false;
+                }
+            }, true);
+        };
+
+        setupSmoothHorizontalScroll('ingredient-options');
+        setupSmoothHorizontalScroll('category-options');
+
         const ingredientIconMap = {
             'thit ba chi': 'fa-drumstick-bite text-amber-500',
             'trung ga': 'fa-egg text-amber-500',
@@ -1109,7 +1207,7 @@ const Home = {
                             const normalized = normalizeText(ing.name);
                             const iconClass = ingredientIconMap[normalized] || 'fa-leaf text-emerald-500';
                             return `
-                                <label class="cursor-pointer group shrink-0 snap-start">
+                                <label class="cursor-pointer group shrink-0">
                                     <input type="checkbox" name="ingredients" value="${ing.name}" class="peer sr-only">
                                     <div class="py-1.5 px-3 rounded-xl border border-[#E5E1D6] bg-white peer-checked:bg-[#145A43] peer-checked:text-white peer-checked:border-[#145A43] text-xs font-bold flex items-center gap-1.5 transition whitespace-nowrap">
                                         <i class="fa-solid ${iconClass} peer-checked:text-white"></i> ${ing.name}
@@ -1126,7 +1224,7 @@ const Home = {
                         catContainer.innerHTML = categories.map(cat => {
                             const iconClass = categoryIconMap[cat.slug] || 'fa-bowl-food text-orange-500';
                             return `
-                                <label class="cursor-pointer group shrink-0 snap-start">
+                                <label class="cursor-pointer group shrink-0">
                                     <input type="checkbox" name="categories" value="${cat.name}" class="peer sr-only">
                                     <div class="py-1.5 px-3 rounded-xl border border-[#E5E1D6] bg-white peer-checked:bg-[#145A43] peer-checked:text-white peer-checked:border-[#145A43] text-xs font-bold flex items-center gap-1.5 transition whitespace-nowrap">
                                         <i class="fa-solid ${iconClass} peer-checked:text-white"></i> ${cat.name}

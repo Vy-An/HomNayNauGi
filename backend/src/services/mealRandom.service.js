@@ -212,7 +212,6 @@ async function getRandomMeals(options = {}) {
 async function getRandomOptions() {
     const [categories, ingredients, categoryCounts] = await Promise.all([
         prisma.categories.findMany({
-            where: { status: 'active' },
             orderBy: {
                 name: 'asc'
             }

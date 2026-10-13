@@ -407,6 +407,9 @@ const FoodDetail = {
             window.updateNavbarFavBadge();
 >>>>>>> c217107e829a23c28d6011ad1e764d46a2bd4f12
         }
+        if (window.syncFavBadge) {
+            window.syncFavBadge();
+        }
     }
 };
 

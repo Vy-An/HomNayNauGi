@@ -473,24 +473,16 @@ async function removeFavorite(req, res) {
     }
 }
 
-async function toggleFavorite(req, res) {
+async function addFavorite(req, res) {
     try {
         if (!req.user) {
             return res.status(401).json({
                 success: false,
-<<<<<<< HEAD
-                message: 'Vui lòng đăng nhập để lưu món yêu thích.'
+                message: 'Chưa đăng nhập.'
             });
         }
 
-        const foodId = Number(req.params.id || req.body?.id_food || req.body?.foodId);
-=======
-                message: 'Vui lòng đăng nhập để thực hiện chức năng này.'
-            });
-        }
-
-        const foodId = Number(req.params.id);
->>>>>>> c217107e829a23c28d6011ad1e764d46a2bd4f12
+        const foodId = Number(req.params.id || req.body?.id_food || req.body?.foodId || req.body?.id);
         if (!foodId || Number.isNaN(foodId)) {
             return res.status(400).json({
                 success: false,
@@ -498,15 +490,15 @@ async function toggleFavorite(req, res) {
             });
         }
 
-<<<<<<< HEAD
         const food = await prisma.foods.findUnique({
-            where: { id_food: foodId }
+            where: { id_food: foodId },
+            include: { categories: true }
         });
 
         if (!food) {
             return res.status(404).json({
                 success: false,
-                message: 'Món ăn không tồn tại.'
+                message: 'Không tìm thấy món ăn này.'
             });
         }
 
@@ -519,41 +511,59 @@ async function toggleFavorite(req, res) {
             }
         });
 
-        let isFavorite = false;
-        if (existing) {
-            await prisma.favorites.delete({
-                where: {
-                    id_favorite: existing.id_favorite
-                }
-            });
-            isFavorite = false;
-        } else {
+        if (!existing) {
             await prisma.favorites.create({
                 data: {
                     id_user: req.user.id_user,
                     id_food: foodId
                 }
             });
-            isFavorite = true;
         }
 
-        const totalFavorites = await prisma.favorites.count({
+        const totalCount = await prisma.favorites.count({
             where: { id_user: req.user.id_user }
         });
 
         return res.json({
             success: true,
-            is_favorite: isFavorite,
-            message: isFavorite ? 'Đã lưu món vào danh sách yêu thích!' : 'Đã bỏ lưu món khỏi danh sách yêu thích.',
+            message: 'Đã thêm món vào danh sách yêu thích.',
             id_food: foodId,
-            totalFavorites
+            totalCount,
+            food: {
+                id: food.id_food,
+                id_food: food.id_food,
+                name: food.name,
+                image: resolveAssetUrl(food.image || '/images/foods/thit-kho-trung.jpg'),
+                cooking_time: food.cooking_time,
+                time: food.cooking_time ? `${food.cooking_time} phút` : '30 phút',
+                category: food.categories?.name || 'Món ngon'
+            }
         });
     } catch (error) {
-        console.error('Toggle favorite error:', error);
         return res.status(500).json({
             success: false,
-            message: 'Không thể cập nhật món yêu thích lúc này.'
-=======
+            message: 'Không thể thêm món yêu thích lúc này.'
+        });
+    }
+}
+
+async function toggleFavorite(req, res) {
+    try {
+        if (!req.user) {
+            return res.status(401).json({
+                success: false,
+                message: 'Vui lòng đăng nhập để thực hiện chức năng này.'
+            });
+        }
+
+        const foodId = Number(req.params.id || req.body?.id_food || req.body?.foodId || req.body?.id);
+        if (!foodId || Number.isNaN(foodId)) {
+            return res.status(400).json({
+                success: false,
+                message: 'ID món ăn không hợp lệ.'
+            });
+        }
+
         const foodService = require('../services/food.service');
         const result = await foodService.toggleFavorite(foodId, req.user.id_user);
 
@@ -562,7 +572,6 @@ async function toggleFavorite(req, res) {
         return res.status(error.status || 500).json({
             success: false,
             message: error.message || 'Không thể tương tác yêu thích lúc này.'
->>>>>>> c217107e829a23c28d6011ad1e764d46a2bd4f12
         });
     }
 }
@@ -575,6 +584,8 @@ module.exports = {
     updateProfile,
     getMyPosts,
     getMyFavorites,
+    addFavorite,
     removeFavorite,
     toggleFavorite
 };
+

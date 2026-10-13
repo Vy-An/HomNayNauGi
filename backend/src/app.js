@@ -6,9 +6,9 @@ const randomRoutes = require('./routes/random.routes');
 const postRoutes = require('./routes/post.routes');
 const foodRoutes = require('./routes/food.routes');
 const authRoutes = require('./routes/auth.routes');
+const shoppingRoutes = require('./routes/shopping.routes');
 const commentRoutes = require('./routes/comment.routes');
 const adminRoutes = require('./routes/admin.routes');
-const shoppingRoutes = require('./routes/shopping.routes');
 
 const app = express();
 
@@ -20,8 +20,8 @@ app.use('/api/auth', authRoutes);
 app.use('/api/random', randomRoutes);
 app.use('/api/posts', postRoutes);
 app.use('/api/foods', foodRoutes);
+app.use('/api/shopping', shoppingRoutes);
 app.use('/api/comments', commentRoutes);
-app.use('/api/shopping-list', shoppingRoutes);
 app.use('/api/admin', adminRoutes);
 
 app.get('/', (req, res) => {

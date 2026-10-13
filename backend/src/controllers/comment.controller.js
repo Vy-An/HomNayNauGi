@@ -361,9 +361,95 @@ async function deleteComment(req, res) {
     }
 }
 
+async function reportComment(req, res) {
+    try {
+        if (!req.user) {
+            return res.status(401).json({
+                success: false,
+                message: 'Vui lòng đăng nhập để gửi báo cáo vi phạm.'
+            });
+        }
+
+        const id = parsePositiveInt(req.params.id);
+        if (!id) {
+            return res.status(400).json({
+                success: false,
+                message: 'ID bình luận không hợp lệ.'
+            });
+        }
+
+        const { reason, description } = req.body || {};
+        const trimmedReason = typeof reason === 'string' ? reason.trim() : '';
+
+        if (!trimmedReason) {
+            return res.status(400).json({
+                success: false,
+                message: 'Vui lòng cung cấp lý do báo cáo vi phạm.'
+            });
+        }
+
+        const comment = await prisma.comments.findUnique({
+            where: { id_comment: id }
+        });
+
+        if (!comment || comment.status !== 'active') {
+            return res.status(404).json({
+                success: false,
+                message: 'Bình luận không tồn tại hoặc đã bị ẩn.'
+            });
+        }
+
+        if (comment.id_user === req.user.id_user) {
+            return res.status(400).json({
+                success: false,
+                message: 'Bạn không thể báo cáo bình luận của chính mình.'
+            });
+        }
+
+        const existingPending = await prisma.reports.findFirst({
+            where: {
+                id_user: req.user.id_user,
+                target_type: 'comment',
+                target_id: id,
+                status: 'pending'
+            }
+        });
+
+        if (existingPending) {
+            return res.status(400).json({
+                success: false,
+                message: 'Bạn đã gửi báo cáo cho bình luận này và đang chờ xử lý.'
+            });
+        }
+
+        await prisma.reports.create({
+            data: {
+                id_user: req.user.id_user,
+                target_type: 'comment',
+                target_id: id,
+                reason: trimmedReason.slice(0, 255),
+                description: description ? String(description).trim() : null,
+                status: 'pending'
+            }
+        });
+
+        return res.status(201).json({
+            success: true,
+            message: 'Báo cáo vi phạm đã được gửi thành công. Ban quản trị sẽ sớm xem xét và xử lý.'
+        });
+    } catch (error) {
+        console.error('reportComment error:', error);
+        return res.status(500).json({
+            success: false,
+            message: 'Không thể gửi báo cáo vi phạm lúc này.'
+        });
+    }
+}
+
 module.exports = {
     getCommentsByPost,
     createComment,
     updateComment,
-    deleteComment
+    deleteComment,
+    reportComment
 };

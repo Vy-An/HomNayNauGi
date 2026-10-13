@@ -23,12 +23,13 @@ export default function FoodCard({ id, name, image, time, likes, author, descrip
                 <!-- Nút Thích / Lưu món -->
                 <button 
                     type="button"
-                    class="food-fav-btn absolute top-2.5 right-2.5 ${isFav ? 'bg-rose-500 text-white' : 'bg-white/90 text-gray-500 hover:text-rose-500'} backdrop-blur-md rounded-full w-8.5 h-8.5 flex items-center justify-center transition-all hover:scale-110 z-30 shadow-sm cursor-pointer" 
+                    class="food-fav-btn btn-favorite-dish absolute top-2.5 right-2.5 ${isFav || (typeof window !== 'undefined' && window.isDishFavorite && window.isDishFavorite(foodId)) ? 'bg-rose-500 text-white' : 'bg-white/90 text-gray-500 hover:text-rose-500'} backdrop-blur-md rounded-full w-8.5 h-8.5 flex items-center justify-center transition-all hover:scale-110 z-30 shadow-sm cursor-pointer" 
+                    data-id="${foodId}"
                     data-food-id="${foodId}"
                     title="${isFav ? 'Bỏ yêu thích' : 'Lưu món ăn yêu thích'}"
-                    onclick="event.preventDefault(); event.stopPropagation(); window.toggleFoodFavorite && window.toggleFoodFavorite(event, ${foodId});"
+                    onclick="event.preventDefault(); event.stopPropagation(); if (window.toggleFoodFavorite) { window.toggleFoodFavorite(event, ${foodId}); } else if (window.toggleFavoriteDish) { window.toggleFavoriteDish({ id: ${foodId}, name: '${(name || '').replace(/'/g, "\\'")}', image: '${(image || '').replace(/'/g, "\\'")}', time: '${time || '30 phút'}' }); }"
                 >
-                    <i class="${isFav ? 'fa-solid' : 'fa-regular'} fa-heart text-sm"></i>
+                    <i class="${isFav || (typeof window !== 'undefined' && window.isDishFavorite && window.isDishFavorite(foodId)) ? 'fa-solid' : 'fa-regular'} fa-heart text-sm"></i>
                 </button>
             </div>
 

@@ -42,7 +42,7 @@ const FoodList = {
                         
                         <!-- Top Badge -->
                         <div class="inline-flex items-center gap-2 bg-primary-subtle border border-primary-light/40 px-3.5 py-1 rounded-full text-xs font-bold text-primary shadow-2xs">
-                            <span>🍲</span>
+                            <i class="fa-solid fa-kitchen-set text-accent text-xs"></i>
                             <span>Nấu ngon mỗi ngày</span>
                         </div>
 
@@ -92,11 +92,11 @@ const FoodList = {
                         <div class="pt-1 flex flex-wrap items-center gap-2" id="quick-category-pills">
                             <span class="text-xs font-bold text-text-muted mr-1 hidden sm:inline">Danh mục:</span>
                             <button type="button" class="quick-cat-btn px-3.5 py-1.5 rounded-full text-xs font-bold transition-all flex items-center gap-1.5 cursor-pointer border border-[#E5DEC9] bg-white/80 text-text-muted hover:text-primary hover:bg-primary-subtle shadow-2xs" data-cat="viet">
-                                <span>🍲</span>
+                                <i class="fa-solid fa-bowl-food text-amber-600 text-xs"></i>
                                 <span>Món Việt</span>
                             </button>
                             <button type="button" class="quick-cat-btn px-3.5 py-1.5 rounded-full text-xs font-bold transition-all flex items-center gap-1.5 cursor-pointer border border-[#E5DEC9] bg-white/80 text-text-muted hover:text-primary hover:bg-primary-subtle shadow-2xs" data-cat="nhanh">
-                                <span>⚡</span>
+                                <i class="fa-solid fa-bolt text-amber-500 text-xs"></i>
                                 <span>Món Nhanh</span>
                             </button>
                         </div>
@@ -157,8 +157,9 @@ const FoodList = {
                                     Bộ lọc nhanh
                                 </h2>
                             </div>
-                            <button type="button" id="btn-reset-filters-sidebar" class="text-[10px] font-bold text-text-muted hover:text-red-500 transition-colors cursor-pointer" title="Đặt lại bộ lọc">
-                                Đặt lại
+                            <button type="button" id="btn-reset-filters-sidebar" class="text-[10px] font-bold text-text-muted hover:text-red-500 transition-colors cursor-pointer flex items-center gap-1" title="Đặt lại bộ lọc">
+                                <i class="fa-solid fa-rotate-left text-[9px]"></i>
+                                <span>Đặt lại</span>
                             </button>
                         </div>
 
@@ -167,27 +168,48 @@ const FoodList = {
                             <h3 class="text-[10px] font-extrabold uppercase tracking-wider text-text-muted">
                                 Loại món
                             </h3>
-                            <div class="grid grid-cols-2 gap-1" id="filter-category-group">
-                                <button type="button" class="btn-filter-cat px-2 py-1 rounded-lg text-[11px] font-semibold text-text-muted text-left transition-all border border-gray-100 hover:bg-cream-soft hover:text-primary cursor-pointer flex items-center justify-between" data-cat="Món mặn">
-                                    <span>Món mặn</span>
+                            <div class="grid grid-cols-2 gap-1.5" id="filter-category-group">
+                                <button type="button" class="btn-filter-cat px-2 py-1.5 rounded-lg text-[11px] font-semibold text-text-muted text-left transition-all border border-gray-100 hover:bg-cream-soft hover:text-primary cursor-pointer flex items-center justify-between" data-cat="Món mặn">
+                                    <span class="flex items-center gap-1.5 min-w-0">
+                                        <i class="fa-solid fa-drumstick-bite text-amber-600 text-[11px] w-3.5 text-center shrink-0"></i>
+                                        <span class="truncate">Món mặn</span>
+                                    </span>
                                 </button>
-                                <button type="button" class="btn-filter-cat px-2 py-1 rounded-lg text-[11px] font-semibold text-text-muted text-left transition-all border border-gray-100 hover:bg-cream-soft hover:text-primary cursor-pointer flex items-center justify-between" data-cat="Món canh">
-                                    <span>Món canh</span>
+                                <button type="button" class="btn-filter-cat px-2 py-1.5 rounded-lg text-[11px] font-semibold text-text-muted text-left transition-all border border-gray-100 hover:bg-cream-soft hover:text-primary cursor-pointer flex items-center justify-between" data-cat="Món canh">
+                                    <span class="flex items-center gap-1.5 min-w-0">
+                                        <i class="fa-solid fa-bowl-food text-emerald-600 text-[11px] w-3.5 text-center shrink-0"></i>
+                                        <span class="truncate">Món canh</span>
+                                    </span>
                                 </button>
-                                <button type="button" class="btn-filter-cat px-2 py-1 rounded-lg text-[11px] font-semibold text-text-muted text-left transition-all border border-gray-100 hover:bg-cream-soft hover:text-primary cursor-pointer flex items-center justify-between" data-cat="Món kho">
-                                    <span>Món kho</span>
+                                <button type="button" class="btn-filter-cat px-2 py-1.5 rounded-lg text-[11px] font-semibold text-text-muted text-left transition-all border border-gray-100 hover:bg-cream-soft hover:text-primary cursor-pointer flex items-center justify-between" data-cat="Món kho">
+                                    <span class="flex items-center gap-1.5 min-w-0">
+                                        <i class="fa-solid fa-fire-burner text-amber-700 text-[11px] w-3.5 text-center shrink-0"></i>
+                                        <span class="truncate">Món kho</span>
+                                    </span>
                                 </button>
-                                <button type="button" class="btn-filter-cat px-2 py-1 rounded-lg text-[11px] font-semibold text-text-muted text-left transition-all border border-gray-100 hover:bg-cream-soft hover:text-primary cursor-pointer flex items-center justify-between" data-cat="Món xào">
-                                    <span>Món xào</span>
+                                <button type="button" class="btn-filter-cat px-2 py-1.5 rounded-lg text-[11px] font-semibold text-text-muted text-left transition-all border border-gray-100 hover:bg-cream-soft hover:text-primary cursor-pointer flex items-center justify-between" data-cat="Món xào">
+                                    <span class="flex items-center gap-1.5 min-w-0">
+                                        <i class="fa-solid fa-fire-flame-curved text-orange-500 text-[11px] w-3.5 text-center shrink-0"></i>
+                                        <span class="truncate">Món xào</span>
+                                    </span>
                                 </button>
-                                <button type="button" class="btn-filter-cat px-2 py-1 rounded-lg text-[11px] font-semibold text-text-muted text-left transition-all border border-gray-100 hover:bg-cream-soft hover:text-primary cursor-pointer flex items-center justify-between" data-cat="Món chiên">
-                                    <span>Món chiên</span>
+                                <button type="button" class="btn-filter-cat px-2 py-1.5 rounded-lg text-[11px] font-semibold text-text-muted text-left transition-all border border-gray-100 hover:bg-cream-soft hover:text-primary cursor-pointer flex items-center justify-between" data-cat="Món chiên">
+                                    <span class="flex items-center gap-1.5 min-w-0">
+                                        <i class="fa-solid fa-bacon text-yellow-600 text-[11px] w-3.5 text-center shrink-0"></i>
+                                        <span class="truncate">Món chiên</span>
+                                    </span>
                                 </button>
-                                <button type="button" class="btn-filter-cat px-2 py-1 rounded-lg text-[11px] font-semibold text-text-muted text-left transition-all border border-gray-100 hover:bg-cream-soft hover:text-primary cursor-pointer flex items-center justify-between" data-cat="Món rau">
-                                    <span>Món rau</span>
+                                <button type="button" class="btn-filter-cat px-2 py-1.5 rounded-lg text-[11px] font-semibold text-text-muted text-left transition-all border border-gray-100 hover:bg-cream-soft hover:text-primary cursor-pointer flex items-center justify-between" data-cat="Món rau">
+                                    <span class="flex items-center gap-1.5 min-w-0">
+                                        <i class="fa-solid fa-leaf text-green-600 text-[11px] w-3.5 text-center shrink-0"></i>
+                                        <span class="truncate">Món rau</span>
+                                    </span>
                                 </button>
-                                <button type="button" class="btn-filter-cat px-2 py-1 rounded-lg text-[11px] font-semibold text-text-muted text-left transition-all border border-gray-100 hover:bg-cream-soft hover:text-primary cursor-pointer flex items-center justify-between" data-cat="Món luộc">
-                                    <span>Món luộc</span>
+                                <button type="button" class="btn-filter-cat px-2 py-1.5 rounded-lg text-[11px] font-semibold text-text-muted text-left transition-all border border-gray-100 hover:bg-cream-soft hover:text-primary cursor-pointer flex items-center justify-between" data-cat="Món luộc">
+                                    <span class="flex items-center gap-1.5 min-w-0">
+                                        <i class="fa-solid fa-droplet text-blue-500 text-[11px] w-3.5 text-center shrink-0"></i>
+                                        <span class="truncate">Món luộc</span>
+                                    </span>
                                 </button>
                             </div>
                         </div>
@@ -200,19 +222,23 @@ const FoodList = {
                             <div class="space-y-0.5" id="filter-time-group">
                                 <label class="flex items-center gap-1.5 px-1.5 py-0.5 rounded-md hover:bg-cream-soft transition-colors cursor-pointer text-[11px] font-medium text-text-main">
                                     <input type="radio" name="cook_time" value="all" checked class="accent-primary w-3 h-3">
+                                    <i class="fa-solid fa-clock-rotate-left text-primary text-[10px] w-3.5 text-center"></i>
                                     <span>Tất cả thời gian</span>
                                 </label>
                                 <label class="flex items-center gap-1.5 px-1.5 py-0.5 rounded-md hover:bg-cream-soft transition-colors cursor-pointer text-[11px] font-medium text-text-main">
                                     <input type="radio" name="cook_time" value="under_15" class="accent-primary w-3 h-3">
-                                    <span>⚡ Dưới 15 phút</span>
+                                    <i class="fa-solid fa-bolt text-amber-500 text-[10px] w-3.5 text-center"></i>
+                                    <span>Dưới 15 phút</span>
                                 </label>
                                 <label class="flex items-center gap-1.5 px-1.5 py-0.5 rounded-md hover:bg-cream-soft transition-colors cursor-pointer text-[11px] font-medium text-text-main">
                                     <input type="radio" name="cook_time" value="15_to_30" class="accent-primary w-3 h-3">
-                                    <span>⏱️ 15 – 30 phút</span>
+                                    <i class="fa-regular fa-clock text-blue-500 text-[10px] w-3.5 text-center"></i>
+                                    <span>15 – 30 phút</span>
                                 </label>
                                 <label class="flex items-center gap-1.5 px-1.5 py-0.5 rounded-md hover:bg-cream-soft transition-colors cursor-pointer text-[11px] font-medium text-text-main">
                                     <input type="radio" name="cook_time" value="above_30" class="accent-primary w-3 h-3">
-                                    <span>🍲 Trên 30 phút</span>
+                                    <i class="fa-solid fa-hourglass-half text-emerald-600 text-[10px] w-3.5 text-center"></i>
+                                    <span>Trên 30 phút</span>
                                 </label>
                             </div>
                         </div>
@@ -222,29 +248,35 @@ const FoodList = {
                             <h3 class="text-[10px] font-extrabold uppercase tracking-wider text-text-muted">
                                 Nguyên liệu chính
                             </h3>
-                            <div class="grid grid-cols-2 gap-x-1 gap-y-0.5" id="filter-ingredients-group">
-                                <label class="flex items-center gap-1 px-1 py-0.5 rounded-md hover:bg-cream-soft transition-colors cursor-pointer text-[11px] font-medium text-text-main">
-                                    <input type="checkbox" value="Thịt heo" class="ingredient-checkbox accent-primary w-3 h-3 rounded">
+                            <div class="grid grid-cols-2 gap-x-2 gap-y-1" id="filter-ingredients-group">
+                                <label class="flex items-center gap-1.5 px-1.5 py-1 rounded-lg hover:bg-cream-soft transition-colors cursor-pointer text-[11px] font-medium text-text-main">
+                                    <input type="checkbox" value="Thịt heo" class="ingredient-checkbox accent-primary w-3.5 h-3.5 rounded">
+                                    <i class="fa-solid fa-bacon text-rose-500 text-[11px] w-3.5 text-center shrink-0"></i>
                                     <span>Thịt heo</span>
                                 </label>
-                                <label class="flex items-center gap-1 px-1 py-0.5 rounded-md hover:bg-cream-soft transition-colors cursor-pointer text-[11px] font-medium text-text-main">
-                                    <input type="checkbox" value="Thịt gà" class="ingredient-checkbox accent-primary w-3 h-3 rounded">
+                                <label class="flex items-center gap-1.5 px-1.5 py-1 rounded-lg hover:bg-cream-soft transition-colors cursor-pointer text-[11px] font-medium text-text-main">
+                                    <input type="checkbox" value="Thịt gà" class="ingredient-checkbox accent-primary w-3.5 h-3.5 rounded">
+                                    <i class="fa-solid fa-drumstick-bite text-amber-600 text-[11px] w-3.5 text-center shrink-0"></i>
                                     <span>Thịt gà</span>
                                 </label>
-                                <label class="flex items-center gap-1 px-1 py-0.5 rounded-md hover:bg-cream-soft transition-colors cursor-pointer text-[11px] font-medium text-text-main">
-                                    <input type="checkbox" value="Hải sản" class="ingredient-checkbox accent-primary w-3 h-3 rounded">
+                                <label class="flex items-center gap-1.5 px-1.5 py-1 rounded-lg hover:bg-cream-soft transition-colors cursor-pointer text-[11px] font-medium text-text-main">
+                                    <input type="checkbox" value="Hải sản" class="ingredient-checkbox accent-primary w-3.5 h-3.5 rounded">
+                                    <i class="fa-solid fa-fish text-sky-500 text-[11px] w-3.5 text-center shrink-0"></i>
                                     <span>Hải sản</span>
                                 </label>
-                                <label class="flex items-center gap-1 px-1 py-0.5 rounded-md hover:bg-cream-soft transition-colors cursor-pointer text-[11px] font-medium text-text-main">
-                                    <input type="checkbox" value="Rau củ" class="ingredient-checkbox accent-primary w-3 h-3 rounded">
+                                <label class="flex items-center gap-1.5 px-1.5 py-1 rounded-lg hover:bg-cream-soft transition-colors cursor-pointer text-[11px] font-medium text-text-main">
+                                    <input type="checkbox" value="Rau củ" class="ingredient-checkbox accent-primary w-3.5 h-3.5 rounded">
+                                    <i class="fa-solid fa-carrot text-orange-500 text-[11px] w-3.5 text-center shrink-0"></i>
                                     <span>Rau củ</span>
                                 </label>
-                                <label class="flex items-center gap-1 px-1 py-0.5 rounded-md hover:bg-cream-soft transition-colors cursor-pointer text-[11px] font-medium text-text-main">
+                                <label class="flex items-center gap-1.5 px-1.5 py-1 rounded-lg hover:bg-cream-soft transition-colors cursor-pointer text-[11px] font-medium text-text-main">
                                     <input type="checkbox" value="Trứng" class="ingredient-checkbox accent-primary w-3.5 h-3.5 rounded">
+                                    <i class="fa-solid fa-egg text-amber-500 text-[11px] w-3.5 text-center shrink-0"></i>
                                     <span>Trứng</span>
                                 </label>
-                                <label class="flex items-center gap-1 px-1 py-0.5 rounded-md hover:bg-cream-soft transition-colors cursor-pointer text-[11px] font-medium text-text-main">
-                                    <input type="checkbox" value="Đậu hũ" class="ingredient-checkbox accent-primary w-3 h-3 rounded">
+                                <label class="flex items-center gap-1.5 px-1.5 py-1 rounded-lg hover:bg-cream-soft transition-colors cursor-pointer text-[11px] font-medium text-text-main">
+                                    <input type="checkbox" value="Đậu hũ" class="ingredient-checkbox accent-primary w-3.5 h-3.5 rounded">
+                                    <i class="fa-solid fa-cube text-amber-400 text-[11px] w-3.5 text-center shrink-0"></i>
                                     <span>Đậu hũ</span>
                                 </label>
                             </div>
@@ -269,7 +301,7 @@ const FoodList = {
                         <div class="absolute top-0 right-0 translate-x-3 -translate-y-3 w-16 h-16 bg-accent/20 rounded-full blur-xl pointer-events-none"></div>
                         <div class="relative z-10 space-y-1.5">
                             <div class="inline-flex items-center gap-1 bg-white/15 px-2 py-0.5 rounded-full text-[9px] font-bold text-accent-light">
-                                <span>✨</span>
+                                <i class="fa-solid fa-wand-magic-sparkles text-[9px]"></i>
                                 <span>Chưa biết ăn gì?</span>
                             </div>
                             <h3 class="text-xs sm:text-sm font-extrabold leading-tight">
@@ -283,7 +315,8 @@ const FoodList = {
                                     href="#/" 
                                     class="inline-flex items-center gap-1.5 bg-[#E9A33A] hover:bg-[#D89229] active:bg-[#C78118] text-white font-bold text-[11px] px-3.5 py-1.5 rounded-full shadow-xs hover:scale-[1.02] transition-all cursor-pointer"
                                 >
-                                    <span>🎲 Random ngay</span>
+                                    <i class="fa-solid fa-dice text-xs"></i>
+                                    <span>Random ngay</span>
                                     <i class="fa-solid fa-arrow-right text-[9px]"></i>
                                 </a>
                             </div>
@@ -478,13 +511,8 @@ const FoodList = {
                     cooking_time_minutes: parseInt(item.cooking_time_minutes || item.thoi_gian || 25, 10),
                     rating: item.rating || 4.8,
                     rating_count: item.rating_count || '1.5k',
-<<<<<<< HEAD
-                    likes: item.likes || 120,
-                    is_favorite: Boolean(item.is_favorite),
-=======
                     likes: typeof item.likes !== 'undefined' ? item.likes : 0,
                     is_favorite: Boolean(item.is_favorite ?? item.isFavorite),
->>>>>>> c217107e829a23c28d6011ad1e764d46a2bd4f12
                     category: item.category || item.loai_mon || 'Món mặn',
                     category_slug: item.category_slug || '',
                     sub_category: item.sub_category || 'viet',
@@ -568,13 +596,15 @@ const FoodList = {
         // CREATE RECIPE CARD ELEMENT
         // ====================================================================
         const createRecipeCardElement = (dish) => {
-            const isFav = !!dish.is_favorite;
+            const isFav = !!dish.is_favorite || (typeof window !== 'undefined' && window.isDishFavorite && window.isDishFavorite(dish.id));
             const link = `#/mon-an/${dish.id}`;
             const article = document.createElement('article');
 
             if (viewMode === 'list') {
-                article.className = "bg-white rounded-[20px] border border-beige-border/80 p-3.5 sm:p-4.5 shadow-sm hover:shadow-md transition-all duration-300 flex flex-col sm:flex-row gap-4 group col-span-full";
+                article.className = "bg-white rounded-[20px] border border-beige-border/80 p-3.5 sm:p-4.5 shadow-sm hover:shadow-md transition-all duration-300 flex flex-col sm:flex-row gap-4 group col-span-full cursor-pointer";
                 article.id = `dish-card-${dish.id}`;
+                article.setAttribute('data-dish-id', dish.id);
+                article.setAttribute('data-link', link);
                 article.innerHTML = `
                     <div class="relative w-full sm:w-56 aspect-[16/10] sm:aspect-square rounded-2xl overflow-hidden bg-cream-soft shrink-0">
                         <img 
@@ -642,8 +672,10 @@ const FoodList = {
             }
 
             // Grid View Card (3 cards per row on desktop, uniform height)
-            article.className = "bg-white rounded-[20px] border border-beige-border/80 shadow-sm hover:shadow-md hover:-translate-y-1 transition-all duration-300 flex flex-col h-full overflow-hidden group";
+            article.className = "bg-white rounded-[20px] border border-beige-border/80 shadow-sm hover:shadow-md hover:-translate-y-1 transition-all duration-300 flex flex-col h-full overflow-hidden group cursor-pointer";
             article.id = `dish-card-${dish.id}`;
+            article.setAttribute('data-dish-id', dish.id);
+            article.setAttribute('data-link', link);
             article.innerHTML = `
                 <div class="relative aspect-[16/10] overflow-hidden bg-cream-soft shrink-0">
                     <img 
@@ -888,7 +920,7 @@ const FoodList = {
                 recipeGrid.innerHTML = `
                     <div class="bg-white rounded-[24px] border border-beige-border/80 p-8 sm:p-12 text-center shadow-sm max-w-lg mx-auto space-y-4">
                         <div class="w-20 h-20 rounded-full bg-cream-soft flex items-center justify-center text-3xl mx-auto text-primary border border-[#E9DFC9]">
-                            🍲
+                            <i class="fa-solid fa-bowl-rice"></i>
                         </div>
                         <div class="space-y-1">
                             <h3 class="text-base sm:text-lg font-extrabold text-text-main">Chưa tìm thấy món phù hợp</h3>
@@ -1045,13 +1077,8 @@ const FoodList = {
                         cooking_time_minutes: parseInt(item.cooking_time_minutes || item.thoi_gian || 25, 10),
                         rating: item.rating || 4.8,
                         rating_count: item.rating_count || '1.5k',
-<<<<<<< HEAD
-                        likes: item.likes || 120,
-                        is_favorite: Boolean(item.is_favorite),
-=======
                         likes: typeof item.likes !== 'undefined' ? item.likes : 0,
                         is_favorite: Boolean(item.is_favorite ?? item.isFavorite),
->>>>>>> c217107e829a23c28d6011ad1e764d46a2bd4f12
                         category: item.category || item.loai_mon || 'Món mặn',
                         category_slug: item.category_slug || '',
                         sub_category: item.sub_category || 'viet',
@@ -1071,15 +1098,6 @@ const FoodList = {
             if (requestId !== latestRequestId) return;
 
             currentFilteredDishes = result;
-            // Cập nhật lại trạng thái is_favorite cho masterDishes
-            result.forEach(r => {
-                const existing = masterDishes.find(m => m.id === r.id);
-                if (existing) {
-                    existing.is_favorite = r.is_favorite;
-                } else {
-                    masterDishes.push(r);
-                }
-            });
             renderFirstBatch();
         };
 
@@ -1099,7 +1117,7 @@ const FoodList = {
             });
 
             document.querySelectorAll('.btn-filter-cat').forEach(btn => {
-                btn.className = "btn-filter-cat px-2 py-1 rounded-lg text-[11px] font-semibold text-text-muted text-left transition-all border border-gray-100 hover:bg-cream-soft hover:text-primary cursor-pointer flex items-center justify-between";
+                btn.className = "btn-filter-cat px-2 py-1.5 rounded-lg text-[11px] font-semibold text-text-muted text-left transition-all border border-gray-100 hover:bg-cream-soft hover:text-primary cursor-pointer flex items-center justify-between";
                 const checkIcon = btn.querySelector('.fa-check');
                 if (checkIcon) checkIcon.remove();
             });
@@ -1182,14 +1200,17 @@ const FoodList = {
                 const idx = currentSelectedCategories.indexOf(cat);
                 if (idx > -1) {
                     currentSelectedCategories.splice(idx, 1);
-                    btn.className = "btn-filter-cat px-2 py-1 rounded-lg text-[11px] font-semibold text-text-muted text-left transition-all border border-gray-100 hover:bg-cream-soft hover:text-primary cursor-pointer flex items-center justify-between";
+                    btn.className = "btn-filter-cat px-2 py-1.5 rounded-lg text-[11px] font-semibold text-text-muted text-left transition-all border border-gray-100 hover:bg-cream-soft hover:text-primary cursor-pointer flex items-center justify-between";
                     const ic = btn.querySelector('.fa-check');
                     if (ic) ic.remove();
                 } else {
                     currentSelectedCategories.push(cat);
-                    btn.className = "btn-filter-cat active-cat px-2 py-1 rounded-lg text-[11px] font-bold text-left transition-all border cursor-pointer flex items-center justify-between";
-                    const spanText = btn.querySelector('span')?.textContent || '';
-                    btn.innerHTML = `<span>${spanText}</span><i class="fa-solid fa-check text-[8px] text-primary"></i>`;
+                    btn.className = "btn-filter-cat active-cat px-2 py-1.5 rounded-lg text-[11px] font-bold text-left transition-all border cursor-pointer flex items-center justify-between bg-primary-subtle text-primary border-primary/40";
+                    if (!btn.querySelector('.fa-check')) {
+                        const checkIcon = document.createElement('i');
+                        checkIcon.className = "fa-solid fa-check text-[9px] text-primary shrink-0 ml-1";
+                        btn.appendChild(checkIcon);
+                    }
                 }
 
                 executeFilterAndSort();
@@ -1272,114 +1293,38 @@ const FoodList = {
                     e.preventDefault();
                     e.stopPropagation();
                     const dishId = parseInt(favBtn.getAttribute('data-id'), 10);
-                    const dish = masterDishes.find(d => d.id === dishId) || currentFilteredDishes.find(d => d.id === dishId);
+                    const dish = masterDishes.find(d => d.id === dishId);
                     if (!dish) return;
 
-                    const token = localStorage.getItem('auth_token');
-                    if (!token) {
-<<<<<<< HEAD
-                        showToast('Vui lòng đăng nhập để lưu món yêu thích! 🔒', 'info');
-                        setTimeout(() => {
-                            window.location.hash = '#/login';
-                        }, 1200);
-                        return;
-=======
-                        if (window.Popup) {
-                            const goLogin = await window.Popup.confirm({
-                                title: 'Yêu cầu đăng nhập',
-                                message: 'Bạn cần đăng nhập tài khoản để lưu các món ăn yêu thích.',
-                                type: 'info',
-                                confirmText: 'Đăng nhập ngay',
-                                cancelText: 'Để sau'
-                            });
-                            if (goLogin) window.location.hash = '#/login';
+                    if (typeof window !== 'undefined' && window.toggleFavoriteDish) {
+                        const isFav = await window.toggleFavoriteDish(dish);
+                        dish.is_favorite = isFav;
+                    } else if (typeof window !== 'undefined' && window.toggleFoodFavorite) {
+                        await window.toggleFoodFavorite(e, dishId);
+                    } else {
+                        dish.is_favorite = !dish.is_favorite;
+                        const heartIcon = favBtn.querySelector('i');
+                        if (dish.is_favorite) {
+                            favBtn.className = "btn-favorite-dish absolute top-2.5 right-2.5 w-8.5 h-8.5 rounded-full bg-rose-500 text-white backdrop-blur-sm flex items-center justify-center shadow-sm scale-125 transition-all cursor-pointer z-20";
+                            setTimeout(() => favBtn.classList.remove('scale-125'), 150);
+                            if (heartIcon) heartIcon.className = "fa-solid fa-heart text-sm";
+                            showToast(`Đã thêm "${dish.name}" vào Yêu thích! ❤️`, 'success');
                         } else {
-                            alert('Vui lòng đăng nhập để lưu món ăn yêu thích.');
-                            window.location.hash = '#/login';
+                            favBtn.className = "btn-favorite-dish absolute top-2.5 right-2.5 w-8.5 h-8.5 rounded-full bg-white/90 text-gray-500 hover:text-rose-500 backdrop-blur-sm flex items-center justify-center shadow-sm transition-all cursor-pointer z-20";
+                            if (heartIcon) heartIcon.className = "fa-regular fa-heart text-sm";
+                            showToast(`Đã bỏ lưu "${dish.name}"`, 'info');
                         }
-                        return;
                     }
+                    return;
+                }
 
-                    favBtn.disabled = true;
-                    try {
-                        const res = await fetchAPI(`/foods/${dishId}/favorite`, { method: 'POST' });
-                        if (res && res.success) {
-                            dish.is_favorite = Boolean(res.is_favorite);
-                            if (typeof res.likes !== 'undefined') dish.likes = res.likes;
-                            const heartIcon = favBtn.querySelector('i');
-
-                            if (dish.is_favorite) {
-                                favBtn.className = "btn-favorite-dish absolute top-2.5 right-2.5 w-8.5 h-8.5 rounded-full bg-rose-500 text-white backdrop-blur-sm flex items-center justify-center shadow-sm scale-125 transition-all cursor-pointer z-20";
-                                setTimeout(() => {
-                                    favBtn.classList.remove('scale-125');
-                                }, 150);
-                                if (heartIcon) heartIcon.className = "fa-solid fa-heart text-sm";
-                            } else {
-                                favBtn.className = "btn-favorite-dish absolute top-2.5 right-2.5 w-8.5 h-8.5 rounded-full bg-white/90 text-gray-500 hover:text-rose-500 backdrop-blur-sm flex items-center justify-center shadow-sm transition-all cursor-pointer z-20";
-                                if (heartIcon) heartIcon.className = "fa-regular fa-heart text-sm";
-                            }
-
-                            // Cập nhật số like trên card nếu có
-                            const card = favBtn.closest('article');
-                            const likesSpan = card?.querySelector('.card-likes-count') || card?.querySelector('span[class*="text-rose"]');
-                            if (likesSpan && typeof res.likes !== 'undefined') {
-                                likesSpan.textContent = res.likes;
-                            }
-
-                            if (window.Popup) {
-                                window.Popup.toast(res.message, dish.is_favorite ? 'success' : 'info');
-                            } else {
-                                showToast(res.message, dish.is_favorite ? 'success' : 'info');
-                            }
-
-                            // Cập nhật số lượng trên icon trái tim Navbar
-                            if (window.updateNavbarFavBadge) {
-                                window.updateNavbarFavBadge(res.userTotalFavorites ?? null);
-                            }
-
-                            // Cập nhật drawer Navbar nếu mở
-                            const favModal = document.getElementById('nav-fav-modal');
-                            if (favModal && !favModal.classList.contains('invisible') && window.loadNavbarFavorites) {
-                                window.loadNavbarFavorites();
-                            }
-                        } else {
-                            if (window.Popup) window.Popup.error(res?.message || 'Có lỗi xảy ra.');
-                        }
-                    } catch (err) {
-                        console.error('Lỗi yêu thích món:', err);
-                    } finally {
-                        favBtn.disabled = false;
->>>>>>> c217107e829a23c28d6011ad1e764d46a2bd4f12
+                // Click vào bất kỳ đâu trên card món ăn -> Mở trang chi tiết món
+                const card = e.target.closest('article[id^="dish-card-"]');
+                if (card) {
+                    const link = card.getAttribute('data-link') || `#/mon-an/${card.getAttribute('data-dish-id') || card.id.replace('dish-card-', '')}`;
+                    if (link) {
+                        window.location.hash = link;
                     }
-
-                    // Gọi API toggle favorite
-                    fetchAPI(`/auth/me/favorites/${dishId}/toggle`, { method: 'POST' })
-                        .then((res) => {
-                            if (res && res.success) {
-                                dish.is_favorite = res.is_favorite;
-                                const heartIcon = favBtn.querySelector('i');
-
-                                if (dish.is_favorite) {
-                                    favBtn.className = "btn-favorite-dish absolute top-2.5 right-2.5 w-8.5 h-8.5 rounded-full bg-rose-500 text-white backdrop-blur-sm flex items-center justify-center shadow-sm scale-125 transition-all cursor-pointer z-20";
-                                    setTimeout(() => {
-                                        favBtn.classList.remove('scale-125');
-                                    }, 150);
-                                    if (heartIcon) heartIcon.className = "fa-solid fa-heart text-sm";
-                                    showToast(`Đã thêm "${dish.name}" vào Yêu thích! ❤️`, 'success');
-                                } else {
-                                    favBtn.className = "btn-favorite-dish absolute top-2.5 right-2.5 w-8.5 h-8.5 rounded-full bg-white/90 text-gray-500 hover:text-rose-500 backdrop-blur-sm flex items-center justify-center shadow-sm transition-all cursor-pointer z-20";
-                                    if (heartIcon) heartIcon.className = "fa-regular fa-heart text-sm";
-                                    showToast(`Đã bỏ lưu "${dish.name}"`, 'info');
-                                }
-
-                                if (window.loadFavoritesInNav) window.loadFavoritesInNav();
-                            } else {
-                                showToast(res.message || 'Không thể lưu món yêu thích lúc này.', 'info');
-                            }
-                        })
-                        .catch(() => {
-                            showToast('Lỗi kết nối khi cập nhật món yêu thích.', 'info');
-                        });
                 }
             });
         }
@@ -1446,9 +1391,12 @@ const FoodList = {
                     if (!currentSelectedCategories.includes(bCat)) {
                         currentSelectedCategories.push(bCat);
                     }
-                    b.className = "btn-filter-cat active-cat px-2 py-1 rounded-lg text-[11px] font-bold text-left transition-all border cursor-pointer flex items-center justify-between";
-                    const spanText = b.querySelector('span')?.textContent || '';
-                    b.innerHTML = `<span>${spanText}</span><i class="fa-solid fa-check text-[8px] text-primary"></i>`;
+                    b.className = "btn-filter-cat active-cat px-2 py-1.5 rounded-lg text-[11px] font-bold text-left transition-all border cursor-pointer flex items-center justify-between bg-primary-subtle text-primary border-primary/40";
+                    if (!b.querySelector('.fa-check')) {
+                        const checkIcon = document.createElement('i');
+                        checkIcon.className = "fa-solid fa-check text-[9px] text-primary shrink-0 ml-1";
+                        b.appendChild(checkIcon);
+                    }
                 }
             });
         }
