@@ -245,9 +245,37 @@ const FoodDetail = {
         }
 
         if (btnFav) {
-            btnFav.addEventListener('click', () => {
-                btnFav.classList.toggle('text-red-500');
-                showToast('Đã lưu món ăn vào danh sách yêu thích!');
+            const foodId = Number(id || currentFoodDetail?.id || currentFoodDetail?.id_food);
+            const isFav = typeof window !== 'undefined' && window.isDishFavorite && window.isDishFavorite(foodId);
+
+            if (isFav) {
+                btnFav.classList.add('text-rose-500', 'bg-rose-50', 'border-rose-300');
+                const icon = btnFav.querySelector('i');
+                if (icon) icon.className = 'fa-solid fa-heart text-rose-500';
+                const span = btnFav.querySelector('span');
+                if (span) span.textContent = 'Đã lưu yêu thích';
+            }
+
+            btnFav.addEventListener('click', async () => {
+                if (typeof window !== 'undefined' && window.toggleFavoriteDish && currentFoodDetail) {
+                    const newFavState = await window.toggleFavoriteDish(currentFoodDetail);
+                    if (newFavState) {
+                        btnFav.classList.add('text-rose-500', 'bg-rose-50', 'border-rose-300');
+                        const icon = btnFav.querySelector('i');
+                        if (icon) icon.className = 'fa-solid fa-heart text-rose-500';
+                        const span = btnFav.querySelector('span');
+                        if (span) span.textContent = 'Đã lưu yêu thích';
+                    } else {
+                        btnFav.classList.remove('text-rose-500', 'bg-rose-50', 'border-rose-300');
+                        const icon = btnFav.querySelector('i');
+                        if (icon) icon.className = 'fa-regular fa-heart text-rose-500';
+                        const span = btnFav.querySelector('span');
+                        if (span) span.textContent = 'Lưu món';
+                    }
+                } else {
+                    btnFav.classList.toggle('text-rose-500');
+                    showToast('Đã lưu món ăn vào danh sách yêu thích!');
+                }
             });
         }
     }
