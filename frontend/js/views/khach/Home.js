@@ -275,7 +275,7 @@ const Home = {
                                             <div class="text-center py-2 rounded-xl border border-[#E5E1D6] bg-white peer-checked:bg-[#145A43] peer-checked:text-white peer-checked:border-[#145A43] transition text-xs font-bold hover:border-[#145A43]">&lt; 15 phút</div>
                                         </label>
                                         <label class="cursor-pointer">
-                                            <input type="radio" name="cook_time" value="medium" class="peer sr-only" checked>
+                                            <input type="radio" name="cook_time" value="medium" class="peer sr-only">
                                             <div class="text-center py-2 rounded-xl border border-[#E5E1D6] bg-white peer-checked:bg-[#145A43] peer-checked:text-white peer-checked:border-[#145A43] transition text-xs font-bold hover:border-[#145A43]">15 - 30 phút</div>
                                         </label>
                                         <label class="cursor-pointer">
@@ -471,22 +471,23 @@ const Home = {
         const fetchRandomFoods = async (quantity) => {
             try {
                 const response = await fetchAPI(buildRandomEndpoint(quantity));
-                if (response.success && Array.isArray(response.data) && response.data.length > 0) {
+                if (response && response.success && Array.isArray(response.data) && response.data.length > 0) {
                     const foods = response.data.map(normalizeFood);
                     randomFoodsPool = [...foods, ...randomFoodsPool].slice(0, 30);
-                    return foods;
+                    return { success: true, foods, message: response.message };
                 }
+                return {
+                    success: false,
+                    foods: [],
+                    message: response?.message || 'Không tìm thấy món ăn nào phù hợp với bộ lọc đã chọn.'
+                };
             } catch (e) {
-                console.warn('Fallback to foods pool for random:', e);
+                return {
+                    success: false,
+                    foods: [],
+                    message: 'Không thể kết nối đến máy chủ. Vui lòng thử lại sau.'
+                };
             }
-
-            // Fallback from pool
-            const shuffled = [...randomFoodsPool, ...dummyFoods].sort(() => 0.5 - Math.random());
-            const results = [];
-            for (let i = 0; i < quantity; i++) {
-                results.push(normalizeFood(shuffled[i % shuffled.length]));
-            }
-            return results;
         };
 
         const getRandomPoolFood = () => {
@@ -518,6 +519,18 @@ const Home = {
         window.renderRecentWonDishes = () => {
             const container = document.getElementById('gacha-results-container');
             if (!container) return;
+
+            const token = localStorage.getItem('auth_token');
+            if (!token) {
+                container.innerHTML = `
+                    <div class="w-full text-center py-2.5 bg-[#F8F5EA]/60 rounded-xl border border-dashed border-[#E5E1D6] text-xs text-[#718078] font-medium flex items-center justify-center gap-1.5">
+                        <i class="fa-solid fa-lock text-[#F4A62A]"></i>
+                        <span>Đăng nhập để tự động lưu lại các món bạn quay được!</span>
+                        <a href="#/login" class="ml-1 text-[#0F4937] font-bold underline hover:text-[#145A43]">Đăng nhập ngay</a>
+                    </div>
+                `;
+                return;
+            }
 
             let won = [];
             try {
@@ -552,6 +565,9 @@ const Home = {
         };
 
         const addWonDishes = (dishes) => {
+            const token = localStorage.getItem('auth_token');
+            if (!token) return; // Chỉ lưu món khi đã đăng nhập
+
             const items = (Array.isArray(dishes) ? dishes : [dishes]).filter(Boolean);
             if (!items.length) return;
 
@@ -765,16 +781,36 @@ const Home = {
                 heroRandomBtnText.innerHTML = '<i class="fa-solid fa-spinner fa-spin text-sm mr-1"></i> Đang tìm món phù hợp...';
             }
 
-            let resultDishes = [];
+            let result = null;
             try {
-                resultDishes = await fetchRandomFoods(numDishes);
+                result = await fetchRandomFoods(numDishes);
             } catch (error) {
-                console.error(error);
-                resultDishes = [getRandomPoolFood()];
+                result = {
+                    success: false,
+                    foods: [],
+                    message: 'Không thể kết nối đến máy chủ. Vui lòng thử lại sau.'
+                };
             }
-            resultDishes = resultDishes.filter(Boolean);
-            if (resultDishes.length === 0) {
-                resultDishes = [getRandomPoolFood()];
+
+            const resultDishes = (result && result.foods) ? result.foods.filter(Boolean) : [];
+            if (!result || !result.success || resultDishes.length === 0) {
+                isSpinning = false;
+                if (spinBtn) spinBtn.disabled = false;
+                if (heroRandomBtn) heroRandomBtn.disabled = false;
+                if (spinBtnText) {
+                    spinBtnText.innerHTML = '<i class="fa-solid fa-dice text-sm sm:text-base"></i><span>QUAY NGAY</span><i class="fa-solid fa-arrow-right text-xs"></i>';
+                }
+                if (heroRandomBtnText) heroRandomBtnText.textContent = 'RANDOM NGAY →';
+
+                const errorMsg = result?.message || 'Không tìm thấy món ăn nào phù hợp với bộ lọc đã chọn. Bạn hãy thử nới lỏng bộ lọc nhé!';
+                if (window.Popup && typeof window.Popup.warning === 'function') {
+                    window.Popup.warning(errorMsg, 'Không tìm thấy món phù hợp');
+                } else if (window.Popup && typeof window.Popup.toast === 'function') {
+                    window.Popup.toast(errorMsg, 'warning');
+                } else {
+                    alert(errorMsg);
+                }
+                return;
             }
 
             if (spinBtnText && resultDishes.length > 1) {
@@ -792,7 +828,6 @@ const Home = {
             }
             if (heroRandomBtnText) heroRandomBtnText.textContent = 'RANDOM NGAY →';
 
-            // Show result modal
             if (resultDishes.length === 1) {
                 showResultModal(resultDishes[0]);
             } else if (resultDishes.length > 1) {
@@ -901,14 +936,27 @@ const Home = {
         }
 
         // Reset filter button
+        let activeCookTimeRadio = document.querySelector('#gacha-form input[name="cook_time"]:checked');
+        const cookTimeRadios = document.querySelectorAll('#gacha-form input[name="cook_time"]');
+        cookTimeRadios.forEach(radio => {
+            radio.addEventListener('click', () => {
+                if (activeCookTimeRadio === radio) {
+                    radio.checked = false;
+                    activeCookTimeRadio = null;
+                } else {
+                    activeCookTimeRadio = radio;
+                }
+            });
+        });
+
         const resetBtn = document.getElementById('btn-reset-filters');
         if (resetBtn) {
             resetBtn.addEventListener('click', () => {
                 document.querySelectorAll('#gacha-form input[type="checkbox"]').forEach(cb => cb.checked = false);
                 const firstRadio = document.querySelector('#gacha-form input[name="quantity"][value="1"]');
                 if (firstRadio) firstRadio.checked = true;
-                const mediumRadio = document.querySelector('#gacha-form input[name="cook_time"][value="medium"]');
-                if (mediumRadio) mediumRadio.checked = true;
+                cookTimeRadios.forEach(cb => { cb.checked = false; });
+                activeCookTimeRadio = null;
                 
                 const ingSearch = document.getElementById('ingredient-search');
                 if (ingSearch) ingSearch.value = '';

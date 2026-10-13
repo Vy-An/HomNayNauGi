@@ -1,4 +1,5 @@
 import { fetchAPI } from '../../api.js';
+import Popup from '../../components/Popup.js';
 
 const adminUsersState = {
     page: 1,
@@ -21,6 +22,38 @@ const adminFoodsState = {
     editingId: null
 };
 
+const adminCategoriesState = {
+<<<<<<< HEAD
+    search: '',
+=======
+    page: 1,
+    limit: 10,
+    search: '',
+    status: '',
+>>>>>>> c217107e829a23c28d6011ad1e764d46a2bd4f12
+    categories: [],
+    editingId: null
+};
+
+<<<<<<< HEAD
+const adminCommunityState = {
+    tab: 'posts',
+    posts: {
+        page: 1,
+        limit: 10,
+        search: '',
+        status: '',
+        total: 0,
+        items: []
+    },
+    reports: {
+        status: '',
+        items: []
+    }
+};
+
+=======
+>>>>>>> c217107e829a23c28d6011ad1e764d46a2bd4f12
 function getStoredAdminUser() {
     try {
         return JSON.parse(localStorage.getItem('auth_user') || 'null');
@@ -181,7 +214,8 @@ function updateDashboardStats(stats = {}) {
     setText('admin-dashboard-users-total', formatNumber(users.total));
     setText('admin-dashboard-users-sub', `${formatNumber(users.active)} hoạt động · ${formatNumber(users.blocked)} đã khóa`);
     setText('admin-dashboard-posts-total', formatNumber(posts.total));
-    setText('admin-dashboard-posts-sub', `${formatNumber(posts.active)} đang hiển thị · ${formatNumber(posts.hidden)} đã ẩn`);
+    const pendingText = Number(posts.pending) > 0 ? ` · ${formatNumber(posts.pending)} chờ duyệt` : '';
+    setText('admin-dashboard-posts-sub', `${formatNumber(posts.active)} đang hiển thị · ${formatNumber(posts.hidden)} đã ẩn${pendingText}`);
     setText('admin-dashboard-reports-total', formatNumber(reports.total));
     setText('admin-dashboard-reports-sub', `${formatNumber(reports.pending)} đang chờ xử lý`);
 }
@@ -574,11 +608,13 @@ async function saveUserFromForm(event) {
 
     if (!res.success) {
         setUsersAlert(res.message || 'Không thể lưu người dùng.', 'error');
+        Popup.error(res.message || 'Không thể lưu người dùng.');
         return;
     }
 
     closeUserModal();
     setUsersAlert(res.message || 'Đã lưu người dùng.');
+    Popup.toast(res.message || 'Đã lưu thông tin người dùng thành công!', 'success');
     await loadAdminUsers();
 }
 
@@ -649,7 +685,17 @@ async function changeUserStatus(id, nextStatus) {
     if (!user) return;
 
     const action = nextStatus === 'blocked' ? 'khóa' : 'mở khóa';
-    if (!window.confirm(`Bạn có chắc muốn ${action} tài khoản "${user.name}"?`)) return;
+    const isBlock = nextStatus === 'blocked';
+
+    const confirmed = await Popup.confirm({
+        title: `Xác nhận ${action} tài khoản`,
+        message: `Bạn có chắc chắn muốn <strong>${action}</strong> tài khoản "<strong>${escapeHTML(user.name)}</strong>" không?`,
+        type: isBlock ? 'warning' : 'question',
+        confirmText: isBlock ? 'Khóa tài khoản' : 'Mở khóa',
+        cancelText: 'Hủy bỏ',
+        confirmButtonColor: isBlock ? 'danger' : 'primary'
+    });
+    if (!confirmed) return;
 
     const res = await fetchAPI(`/admin/users/${id}/status`, {
         method: 'PATCH',
@@ -658,10 +704,12 @@ async function changeUserStatus(id, nextStatus) {
 
     if (!res.success) {
         setUsersAlert(res.message || 'Không thể cập nhật trạng thái.', 'error');
+        Popup.error(res.message || 'Không thể cập nhật trạng thái.');
         return;
     }
 
     setUsersAlert(res.message || 'Đã cập nhật trạng thái.');
+    Popup.toast(`Đã ${action} tài khoản "${user.name}" thành công!`, 'success');
     await loadAdminUsers();
 }
 
@@ -1166,11 +1214,13 @@ async function saveFoodFromForm(event) {
 
     if (!res.success) {
         setFoodsAlert(res.message || 'Không thể lưu món ăn.', 'error');
+        Popup.error(res.message || 'Không thể lưu món ăn.');
         return;
     }
 
     closeFoodModal();
     setFoodsAlert(res.message || 'Đã lưu món ăn.');
+    Popup.toast(res.message || 'Đã lưu thông tin món ăn thành công!', 'success');
     await loadAdminFoods();
 }
 
@@ -1245,7 +1295,17 @@ async function changeFoodStatus(id, nextStatus) {
     if (!food) return;
 
     const action = nextStatus === 'inactive' ? 'ẩn' : 'hiện';
-    if (!window.confirm(`Bạn có chắc muốn ${action} món "${food.name}"?`)) return;
+    const isHide = nextStatus === 'inactive';
+
+    const confirmed = await Popup.confirm({
+        title: `Xác nhận ${action} món ăn`,
+        message: `Bạn có chắc chắn muốn <strong>${action}</strong> món "<strong>${escapeHTML(food.name)}</strong>" không?`,
+        type: isHide ? 'warning' : 'question',
+        confirmText: isHide ? 'Ẩn món này' : 'Hiện món ăn',
+        cancelText: 'Hủy bỏ',
+        confirmButtonColor: isHide ? 'warning' : 'primary'
+    });
+    if (!confirmed) return;
 
     const res = await fetchAPI(`/admin/foods/${id}/status`, {
         method: 'PATCH',
@@ -1254,10 +1314,12 @@ async function changeFoodStatus(id, nextStatus) {
 
     if (!res.success) {
         setFoodsAlert(res.message || 'Không thể cập nhật trạng thái món ăn.', 'error');
+        Popup.error(res.message || 'Không thể cập nhật trạng thái món ăn.');
         return;
     }
 
     setFoodsAlert(res.message || 'Đã cập nhật trạng thái món ăn.');
+    Popup.toast(`Đã ${action} món "${food.name}" thành công!`, 'success');
     await loadAdminFoods();
 }
 
@@ -1338,260 +1400,2477 @@ async function initAdminFoodsPage() {
     await loadAdminFoods();
 }
 
-const Admin = {
-    render: async (params) => {
-        const page = params || 'dashboard';
-        
-        let contentHTML = '';
+// ==========================================
+<<<<<<< HEAD
+// 3. QUẢN LÝ DANH MỤC (CATEGORIES)
+// ==========================================
 
-        if (page === 'users') {
-            contentHTML = `
-                <header class="flex justify-between items-center mb-8 bg-white p-4 rounded-2xl shadow-sm border border-gray-100">
-                    <h1 class="text-2xl font-bold text-text-main">Quản Lý Người Dùng</h1>
-                    <div class="flex items-center gap-4">
-                        <span class="text-text-muted">Xin chào, <strong>Admin</strong></span>
-                        <img src="https://i.pravatar.cc/150?u=admin" class="w-10 h-10 rounded-full">
+=======
+// QUẢN LÝ BÀI VIẾT CỘNG ĐỒNG & BÁO CÁO VI PHẠM
+// ==========================================
+
+const adminCommunityState = {
+    activeTab: 'moderation', // 'moderation' | 'reports'
+    page: 1,
+    limit: 10,
+    search: '',
+    status: '',
+    posts: [],
+    reports: [],
+    pendingReportsCount: 0
+};
+
+function renderCommunityPage() {
+    const currentUser = getStoredAdminUser();
+    const adminName = currentUser?.name || 'Admin';
+    const adminAvatar = currentUser?.avatar || 'http://localhost:5000/images/users/admin.jpg';
+
+    return `
+        <header class="flex flex-col lg:flex-row lg:justify-between lg:items-center gap-4 mb-6 bg-white p-4 rounded-2xl shadow-sm border border-gray-100">
+            <div>
+                <h1 class="text-2xl font-bold text-text-main">Quản lý bài viết & Kiểm duyệt cộng đồng</h1>
+                <p class="text-sm text-text-muted mt-1">Kiểm duyệt các bài chia sẻ từ người dùng và xử lý các báo cáo vi phạm tiêu chuẩn cộng đồng.</p>
+            </div>
+            <div class="flex items-center gap-4">
+                <span class="text-text-muted">Xin chào, <strong>${escapeHTML(adminName)}</strong></span>
+                <img src="${escapeHTML(adminAvatar)}" class="w-10 h-10 rounded-full object-cover" alt="Admin">
+            </div>
+        </header>
+
+        <!-- Stats Overview Cards (5 Thẻ Thống Kê Chi Tiết) -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-3.5 mb-6" id="admin-comm-stats-container">
+            <div data-comm-filter="all" class="admin-comm-stat-card bg-white rounded-2xl border border-gray-100 shadow-sm p-4.5 border-l-4 border-l-primary cursor-pointer hover:shadow-md hover:-translate-y-0.5 transition-all select-none group" title="Xem tất cả bài viết">
+                <div class="flex items-center justify-between">
+                    <p class="text-[11px] font-bold uppercase tracking-wide text-text-muted">Tổng bài viết</p>
+                    <i class="fa-solid fa-arrow-right text-[10px] text-gray-300 group-hover:text-primary group-hover:translate-x-0.5 transition-all"></i>
+                </div>
+                <strong id="admin-comm-stat-total" class="block text-2xl font-black text-text-main mt-1.5">0</strong>
+            </div>
+            <div data-comm-filter="pending" class="admin-comm-stat-card bg-white rounded-2xl border border-amber-200/80 shadow-sm p-4.5 border-l-4 border-l-[#E59F3F] bg-amber-50/20 cursor-pointer hover:shadow-md hover:-translate-y-0.5 transition-all select-none group" title="Lọc bài viết chờ duyệt">
+                <div class="flex items-center justify-between">
+                    <p class="text-[11px] font-bold uppercase tracking-wide text-[#C27E25] flex items-center gap-1">
+                        <i class="fa-solid fa-hourglass-half text-xs"></i> Chờ duyệt
+                    </p>
+                    <i class="fa-solid fa-arrow-right text-[10px] text-amber-300 group-hover:text-[#C27E25] group-hover:translate-x-0.5 transition-all"></i>
+                </div>
+                <strong id="admin-comm-stat-pending" class="block text-2xl font-black text-[#C27E25] mt-1.5">0</strong>
+            </div>
+            <div data-comm-filter="active" class="admin-comm-stat-card bg-white rounded-2xl border border-gray-100 shadow-sm p-4.5 border-l-4 border-l-green-600 cursor-pointer hover:shadow-md hover:-translate-y-0.5 transition-all select-none group" title="Lọc bài viết đã duyệt">
+                <div class="flex items-center justify-between">
+                    <p class="text-[11px] font-bold uppercase tracking-wide text-green-700 flex items-center gap-1">
+                        <i class="fa-solid fa-circle-check text-xs"></i> Đã duyệt
+                    </p>
+                    <i class="fa-solid fa-arrow-right text-[10px] text-gray-300 group-hover:text-green-600 group-hover:translate-x-0.5 transition-all"></i>
+                </div>
+                <strong id="admin-comm-stat-active" class="block text-2xl font-black text-green-700 mt-1.5">0</strong>
+            </div>
+            <div data-comm-filter="hidden" class="admin-comm-stat-card bg-white rounded-2xl border border-gray-100 shadow-sm p-4.5 border-l-4 border-l-stone-500 cursor-pointer hover:shadow-md hover:-translate-y-0.5 transition-all select-none group" title="Lọc bài viết đã ẩn">
+                <div class="flex items-center justify-between">
+                    <p class="text-[11px] font-bold uppercase tracking-wide text-stone-600">Đã ẩn / Tạm khóa</p>
+                    <i class="fa-solid fa-arrow-right text-[10px] text-gray-300 group-hover:text-stone-600 group-hover:translate-x-0.5 transition-all"></i>
+                </div>
+                <strong id="admin-comm-stat-hidden" class="block text-2xl font-black text-stone-600 mt-1.5">0</strong>
+            </div>
+            <div data-comm-filter="reports" class="admin-comm-stat-card bg-white rounded-2xl border border-rose-200/80 shadow-sm p-4.5 border-l-4 border-l-rose-500 bg-rose-50/20 cursor-pointer hover:shadow-md hover:-translate-y-0.5 transition-all select-none group" title="Xem báo cáo vi phạm">
+                <div class="flex items-center justify-between">
+                    <p class="text-[11px] font-bold uppercase tracking-wide text-rose-600 flex items-center gap-1">
+                        <i class="fa-solid fa-triangle-exclamation text-xs"></i> Báo cáo vi phạm
+                    </p>
+                    <i class="fa-solid fa-arrow-right text-[10px] text-rose-300 group-hover:text-rose-600 group-hover:translate-x-0.5 transition-all"></i>
+                </div>
+                <strong id="admin-comm-stat-reports" class="block text-2xl font-black text-rose-600 mt-1.5">0</strong>
+            </div>
+        </div>
+
+        <!-- 2 Tabs Chuyển đổi: Kiểm duyệt vs Báo cáo vi phạm -->
+        <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 mb-6 bg-white/80 backdrop-blur-md p-2 rounded-2xl border border-[#E9D8B7]/60 shadow-xs">
+            <button type="button" id="admin-tab-moderation" class="flex-1 flex items-center justify-center gap-3 px-6 py-3.5 rounded-xl font-black text-sm transition-all cursor-pointer bg-[#245B43] text-white shadow-md shadow-[#245B43]/20">
+                <i class="fa-solid fa-list-check text-base"></i>
+                <span>Kiểm duyệt bài viết</span>
+                <span id="admin-community-posts-badge" class="px-2.5 py-0.5 rounded-full text-xs font-bold bg-white/20 text-white">0</span>
+            </button>
+
+            <button type="button" id="admin-tab-reports" class="flex-1 flex items-center justify-center gap-3 px-6 py-3.5 rounded-xl font-black text-sm transition-all cursor-pointer bg-transparent text-[#66736B] hover:bg-stone-100">
+                <i class="fa-solid fa-triangle-exclamation text-base text-rose-500"></i>
+                <span>Cảnh báo vi phạm</span>
+                <span id="admin-community-reports-badge" class="px-2.5 py-0.5 rounded-full text-xs font-black bg-rose-500 text-white animate-pulse">0 vi phạm</span>
+            </button>
+        </div>
+
+        <!-- Khung nội dung bảng -->
+        <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
+            <!-- Filter toolbar -->
+            <div class="p-6 border-b border-gray-100 flex flex-col md:flex-row md:items-center justify-between gap-4">
+                <div>
+                    <h2 id="admin-community-table-title" class="text-lg font-bold text-text-main flex items-center gap-2">
+                        <i class="fa-solid fa-newspaper text-primary"></i>
+                        <span>Danh sách bài viết cộng đồng</span>
+                    </h2>
+                    <p id="admin-community-table-subtitle" class="text-xs text-text-muted mt-0.5">Kiểm tra nội dung, duyệt bài viết mới hoặc ẩn bài viết vi phạm tiêu chuẩn.</p>
+                </div>
+
+                <div class="flex flex-wrap items-center gap-2.5">
+                    <div class="relative">
+                        <i class="fa-solid fa-magnifying-glass absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-400 text-xs"></i>
+                        <input type="text" id="admin-community-search" placeholder="Tìm kiếm tiêu đề, tác giả..." class="pl-9 pr-4 py-2 border border-gray-200 rounded-xl text-xs sm:text-sm focus:outline-none focus:border-primary w-52 sm:w-64 transition">
                     </div>
-                </header>
-                <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
-                    <div class="p-6 border-b border-gray-100 flex justify-between items-center">
-                        <h2 class="text-lg font-bold text-text-main">Danh sách thành viên</h2>
-                        <div class="flex gap-2">
-                            <input type="text" placeholder="Tìm kiếm..." class="px-4 py-2 border border-gray-200 rounded-lg text-sm focus:outline-none focus:border-primary">
-                            <button class="bg-primary hover:bg-primary-hover text-white px-4 py-2 rounded-lg font-semibold transition shadow-sm text-sm"><i class="fa-solid fa-plus"></i> Thêm User</button>
+
+                    <select id="admin-community-status-filter" class="px-3 py-2 border border-gray-200 rounded-xl text-xs sm:text-sm focus:outline-none focus:border-primary text-text-main bg-white cursor-pointer font-medium">
+                        <option value="">Tất cả trạng thái</option>
+                        <option value="pending">Chờ kiểm duyệt</option>
+                        <option value="active">Đã duyệt (Hiển thị)</option>
+                        <option value="hidden">Bị từ chối / Đã ẩn</option>
+                    </select>
+
+                    <button type="button" id="admin-community-refresh" class="px-3.5 py-2 rounded-xl border border-gray-200 hover:bg-stone-50 text-text-muted hover:text-primary transition font-bold text-xs sm:text-sm cursor-pointer" title="Tải lại">
+                        <i class="fa-solid fa-arrows-rotate"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Bảng 1: Kiểm duyệt bài viết -->
+            <div id="admin-community-posts-section" class="overflow-x-auto">
+                <table class="w-full text-left border-collapse">
+                    <thead>
+                        <tr class="bg-gray-50 text-text-muted text-xs uppercase tracking-wider border-b border-gray-100">
+                            <th class="p-4 font-bold whitespace-nowrap w-48 sm:w-56">Tác giả</th>
+                            <th class="p-4 font-bold max-w-xs md:max-w-sm">Bài viết & Nội dung</th>
+                            <th class="p-4 font-bold text-center whitespace-nowrap w-24">Tương tác</th>
+                            <th class="p-4 font-bold text-center whitespace-nowrap w-28">Báo cáo</th>
+                            <th class="p-4 font-bold text-center whitespace-nowrap w-36">Trạng thái</th>
+                            <th class="p-4 font-bold text-right whitespace-nowrap w-36">Hành động</th>
+                        </tr>
+                    </thead>
+                    <tbody id="admin-community-posts-body" class="divide-y divide-gray-100 text-sm">
+                        <tr>
+                            <td colspan="6" class="p-8 text-center text-text-muted">Đang tải dữ liệu bài viết...</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Bảng 2: Cảnh báo vi phạm (mặc định ẩn) -->
+            <div id="admin-community-reports-section" class="hidden overflow-x-auto">
+                <table class="w-full text-left border-collapse">
+                    <thead>
+                        <tr class="bg-rose-50/50 text-rose-900 text-xs uppercase tracking-wider border-b border-rose-100">
+                            <th class="p-4 font-bold max-w-xs md:max-w-sm">Bài viết bị tố cáo</th>
+                            <th class="p-4 font-bold whitespace-nowrap w-44">Tác giả bài</th>
+                            <th class="p-4 font-bold whitespace-nowrap">Người báo cáo & Lý do</th>
+                            <th class="p-4 font-bold whitespace-nowrap w-28 text-center">Thời gian</th>
+                            <th class="p-4 font-bold text-center whitespace-nowrap w-32">Xử lý</th>
+                            <th class="p-4 font-bold text-right whitespace-nowrap w-32">Thao tác</th>
+                        </tr>
+                    </thead>
+                    <tbody id="admin-community-reports-body" class="divide-y divide-gray-100 text-sm">
+                        <tr>
+                            <td colspan="6" class="p-8 text-center text-text-muted">Đang tải danh sách báo cáo vi phạm...</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Pagination Toolbar -->
+            <div class="p-4 border-t border-gray-100 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs sm:text-sm text-text-muted">
+                <span id="admin-community-pagination-info">Hiển thị trang 1</span>
+                <div class="flex items-center gap-2">
+                    <button type="button" id="admin-community-prev" class="px-3 py-1.5 rounded-lg border border-gray-200 hover:bg-stone-50 font-bold transition disabled:opacity-40 disabled:cursor-not-allowed">
+                        <i class="fa-solid fa-chevron-left"></i> Trước
+                    </button>
+                    <button type="button" id="admin-community-next" class="px-3 py-1.5 rounded-lg border border-gray-200 hover:bg-stone-50 font-bold transition disabled:opacity-40 disabled:cursor-not-allowed">
+                        Sau <i class="fa-solid fa-chevron-right"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Modal xem chi tiết bài viết / báo cáo -->
+        <div id="admin-community-detail-modal" class="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm hidden items-center justify-center p-4">
+            <div class="relative bg-white rounded-3xl max-w-2xl w-full max-h-[90vh] overflow-y-auto p-6 sm:p-7 shadow-2xl border border-gray-100">
+                <button type="button" id="admin-community-detail-close" class="absolute top-5 right-5 w-8 h-8 rounded-full bg-gray-100 hover:bg-gray-200 text-gray-500 flex items-center justify-center transition cursor-pointer text-sm">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+                <div id="admin-community-detail-content">
+                    <!-- Nội dung nạp động -->
+                </div>
+            </div>
+        </div>
+    `;
+}
+
+function renderCommunityPostsTable(posts) {
+    const tbody = document.getElementById('admin-community-posts-body');
+    if (!tbody) return;
+
+    if (!posts || posts.length === 0) {
+        tbody.innerHTML = `
+            <tr>
+                <td colspan="6" class="p-10 text-center text-text-muted">
+                    <div class="w-12 h-12 rounded-2xl bg-gray-100 text-gray-400 flex items-center justify-center mx-auto mb-3 text-lg">
+                        <i class="fa-solid fa-folder-open"></i>
+                    </div>
+                    Không tìm thấy bài viết nào phù hợp.
+                </td>
+            </tr>
+        `;
+        return;
+    }
+
+    tbody.innerHTML = posts.map(p => {
+        const isPending = p.status === 'pending';
+        const isHidden = p.status === 'hidden';
+        const isActive = p.status === 'active';
+        const reportsCount = Number(p.reports_count) || (Array.isArray(p.reports) ? p.reports.length : 0);
+        const reportsList = Array.isArray(p.reports) ? p.reports : [];
+
+        // 1. Cột BÁO CÁO: Hover popover badge
+        let reportBadge = '';
+        if (reportsCount > 0) {
+            reportBadge = `
+                <div class="relative inline-block group">
+                    <button type="button" class="inline-flex items-center gap-1.5 bg-rose-100 hover:bg-rose-200 text-rose-700 px-3 py-1 rounded-full text-xs font-black transition cursor-pointer shadow-xs animate-pulse">
+                        <i class="fa-solid fa-triangle-exclamation text-rose-600"></i>
+                        <span>${reportsCount} vi phạm</span>
+                    </button>
+                    <!-- Popup Popover xuất hiện khi Hover -->
+                    <div class="absolute z-50 bottom-full left-1/2 -translate-x-1/2 mb-2 w-72 sm:w-80 p-3.5 bg-white border border-rose-200 rounded-2xl shadow-xl pointer-events-none opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 transform translate-y-1 group-hover:translate-y-0 text-left">
+                        <div class="flex items-center justify-between pb-2 mb-2 border-b border-rose-100">
+                            <span class="text-xs font-black text-rose-800 flex items-center gap-1.5">
+                                <i class="fa-solid fa-flag text-rose-600"></i> Báo cáo vi phạm (${reportsCount})
+                            </span>
+                            <span class="text-[10px] text-stone-400 font-semibold">Tóm tắt</span>
                         </div>
-                    </div>
-                    <div class="overflow-x-auto">
-                        <table class="w-full text-left border-collapse">
-                            <thead>
-                                <tr class="bg-gray-50 text-text-muted text-sm border-b border-gray-100">
-                                    <th class="p-4 font-semibold">Tên người dùng</th>
-                                    <th class="p-4 font-semibold">Email</th>
-                                    <th class="p-4 font-semibold">Vai trò</th>
-                                    <th class="p-4 font-semibold">Trạng thái</th>
-                                    <th class="p-4 font-semibold text-right">Hành động</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr class="border-b border-gray-50 hover:bg-gray-50 transition">
-                                    <td class="p-4 font-medium text-text-main flex items-center gap-3">
-                                        <img src="https://i.pravatar.cc/150?u=user1" class="w-8 h-8 rounded-full">
-                                        Nguyễn Văn A
-                                    </td>
-                                    <td class="p-4 text-text-muted">nva@gmail.com</td>
-                                    <td class="p-4 text-text-muted">User</td>
-                                    <td class="p-4"><span class="bg-green-100 text-green-700 px-3 py-1 rounded-full text-xs font-bold">Hoạt động</span></td>
-                                    <td class="p-4 text-right space-x-2">
-                                        <button class="text-blue-500 hover:bg-blue-50 p-2 rounded transition" title="Sửa"><i class="fa-solid fa-pen-to-square"></i></button>
-                                        <button class="text-red-500 hover:bg-red-50 p-2 rounded transition" title="Khóa"><i class="fa-solid fa-lock"></i></button>
-                                    </td>
-                                </tr>
-                                <tr class="border-b border-gray-50 hover:bg-gray-50 transition">
-                                    <td class="p-4 font-medium text-text-main flex items-center gap-3">
-                                        <img src="https://i.pravatar.cc/150?u=user2" class="w-8 h-8 rounded-full">
-                                        Trần Thị B
-                                    </td>
-                                    <td class="p-4 text-text-muted">ttb@gmail.com</td>
-                                    <td class="p-4 text-text-muted">Admin</td>
-                                    <td class="p-4"><span class="bg-green-100 text-green-700 px-3 py-1 rounded-full text-xs font-bold">Hoạt động</span></td>
-                                    <td class="p-4 text-right space-x-2">
-                                        <button class="text-blue-500 hover:bg-blue-50 p-2 rounded transition" title="Sửa"><i class="fa-solid fa-pen-to-square"></i></button>
-                                        <button class="text-red-500 hover:bg-red-50 p-2 rounded transition" title="Khóa"><i class="fa-solid fa-lock"></i></button>
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            `;
-            contentHTML = renderUsersPage();
-        } else if (page === 'foods') {
-            contentHTML = `
-                <header class="flex justify-between items-center mb-8 bg-white p-4 rounded-2xl shadow-sm border border-gray-100">
-                    <h1 class="text-2xl font-bold text-text-main">Quản Lý Món Ăn</h1>
-                    <div class="flex items-center gap-4">
-                        <span class="text-text-muted">Xin chào, <strong>Admin</strong></span>
-                        <img src="https://i.pravatar.cc/150?u=admin" class="w-10 h-10 rounded-full">
-                    </div>
-                </header>
-                <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
-                    <div class="p-6 border-b border-gray-100 flex justify-between items-center">
-                        <h2 class="text-lg font-bold text-text-main">Danh sách Món ăn</h2>
-                        <button class="text-sm bg-primary hover:bg-primary-hover text-white px-4 py-2 rounded-lg font-semibold transition shadow-sm border border-green-700"><i class="fa-solid fa-plus"></i> Thêm món mới</button>
-                    </div>
-                    <div class="overflow-x-auto">
-                        <table class="w-full text-left border-collapse">
-                            <thead>
-                                <tr class="bg-gray-50 text-text-muted text-sm border-b border-gray-100">
-                                    <th class="p-4 font-semibold">Hình ảnh</th>
-                                    <th class="p-4 font-semibold">Tên món</th>
-                                    <th class="p-4 font-semibold">Phân loại</th>
-                                    <th class="p-4 font-semibold">Trạng thái</th>
-                                    <th class="p-4 font-semibold text-right">Hành động</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr class="border-b border-gray-50 hover:bg-gray-50 transition">
-                                    <td class="p-4">
-                                        <img src="https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=100" class="w-16 h-12 object-cover rounded-lg">
-                                    </td>
-                                    <td class="p-4 font-medium text-text-main">Thịt Kho Trứng</td>
-                                    <td class="p-4 text-text-muted">Món Mặn</td>
-                                    <td class="p-4"><span class="bg-green-100 text-green-700 px-3 py-1 rounded-full text-xs font-bold">Đã duyệt</span></td>
-                                    <td class="p-4 text-right space-x-2">
-                                        <button class="text-blue-500 hover:bg-blue-50 p-2 rounded transition" title="Sửa"><i class="fa-solid fa-pen-to-square"></i></button>
-                                        <button class="text-red-500 hover:bg-red-50 p-2 rounded transition" title="Xóa"><i class="fa-solid fa-trash"></i></button>
-                                    </td>
-                                </tr>
-                                <tr class="border-b border-gray-50 hover:bg-gray-50 transition">
-                                    <td class="p-4">
-                                        <img src="https://images.unsplash.com/photo-1604908176997-125f25cc6f3d?w=100" class="w-16 h-12 object-cover rounded-lg">
-                                    </td>
-                                    <td class="p-4 font-medium text-text-main">Gà Xào Sả Ớt</td>
-                                    <td class="p-4 text-text-muted">Món Mặn</td>
-                                    <td class="p-4"><span class="bg-yellow-100 text-yellow-700 px-3 py-1 rounded-full text-xs font-bold">Chờ duyệt</span></td>
-                                    <td class="p-4 text-right space-x-2">
-                                        <button class="text-green-500 hover:bg-green-50 p-2 rounded transition" title="Duyệt"><i class="fa-solid fa-check"></i></button>
-                                        <button class="text-blue-500 hover:bg-blue-50 p-2 rounded transition" title="Sửa"><i class="fa-solid fa-pen-to-square"></i></button>
-                                        <button class="text-red-500 hover:bg-red-50 p-2 rounded transition" title="Xóa"><i class="fa-solid fa-trash"></i></button>
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            `;
-            contentHTML = renderFoodsPage();
-        } else if (page === 'community') {
-            contentHTML = `
-                <header class="flex justify-between items-center mb-8 bg-white p-4 rounded-2xl shadow-sm border border-gray-100">
-                    <h1 class="text-2xl font-bold text-text-main">Quản Lý Bài Viết Cộng Đồng</h1>
-                    <div class="flex items-center gap-4">
-                        <span class="text-text-muted">Xin chào, <strong>Admin</strong></span>
-                        <img src="https://i.pravatar.cc/150?u=admin" class="w-10 h-10 rounded-full">
-                    </div>
-                </header>
-                <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
-                    <div class="p-6 border-b border-gray-100 flex justify-between items-center">
-                        <h2 class="text-lg font-bold text-text-main">Quản lý nội dung (Kiểm duyệt)</h2>
-                    </div>
-                    <div class="overflow-x-auto">
-                        <table class="w-full text-left border-collapse">
-                            <thead>
-                                <tr class="bg-gray-50 text-text-muted text-sm border-b border-gray-100">
-                                    <th class="p-4 font-semibold">Tác giả</th>
-                                    <th class="p-4 font-semibold w-1/3">Nội dung</th>
-                                    <th class="p-4 font-semibold">Tương tác</th>
-                                    <th class="p-4 font-semibold">Báo cáo</th>
-                                    <th class="p-4 font-semibold text-right">Hành động</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr class="border-b border-gray-50 hover:bg-gray-50 transition">
-                                    <td class="p-4 font-medium text-text-main">Minh Anh</td>
-                                    <td class="p-4 text-text-muted text-sm line-clamp-2">Cuối tuần trổ tài làm bún đậu mắm tôm theo công thức trên Hôm Nay Nấu Gì. Nước mắm pha bao dính...</td>
-                                    <td class="p-4 text-text-muted text-sm"><i class="fa-solid fa-heart text-red-500"></i> 342 | <i class="fa-solid fa-comment text-blue-500"></i> 48</td>
-                                    <td class="p-4"><span class="bg-gray-100 text-gray-700 px-3 py-1 rounded-full text-xs font-bold">0</span></td>
-                                    <td class="p-4 text-right space-x-2">
-                                        <button class="text-blue-500 hover:bg-blue-50 p-2 rounded transition" title="Xem"><i class="fa-solid fa-eye"></i></button>
-                                        <button class="text-red-500 hover:bg-red-50 p-2 rounded transition" title="Xóa bài"><i class="fa-solid fa-trash"></i></button>
-                                    </td>
-                                </tr>
-                                <tr class="border-b border-gray-50 hover:bg-gray-50 transition bg-red-50/30">
-                                    <td class="p-4 font-medium text-text-main">Spammer123</td>
-                                    <td class="p-4 text-text-muted text-sm line-clamp-2">Click vào link này để nhận thẻ cào 500k: http://scam-link...</td>
-                                    <td class="p-4 text-text-muted text-sm"><i class="fa-solid fa-heart text-red-500"></i> 0 | <i class="fa-solid fa-comment text-blue-500"></i> 0</td>
-                                    <td class="p-4"><span class="bg-red-100 text-red-700 px-3 py-1 rounded-full text-xs font-bold">12 báo cáo</span></td>
-                                    <td class="p-4 text-right space-x-2">
-                                        <button class="text-red-500 hover:bg-red-50 p-2 rounded transition font-bold" title="Xóa & Ban"><i class="fa-solid fa-ban"></i></button>
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
+                        <div class="space-y-2 max-h-48 overflow-y-auto">
+                            ${reportsList.map(r => `
+                                <div class="p-2 rounded-xl bg-rose-50/70 border border-rose-100 text-xs">
+                                    <div class="flex items-center justify-between font-bold text-rose-900 text-[11px]">
+                                        <span>${escapeHTML(r.reason || 'Vi phạm tiêu chuẩn')}</span>
+                                        <span class="text-[10px] text-stone-400 font-normal">${formatDate(r.created_at)}</span>
+                                    </div>
+                                    ${r.description ? `<p class="text-stone-600 text-[11px] mt-0.5 line-clamp-2">${escapeHTML(r.description)}</p>` : ''}
+                                    <span class="block text-[10px] text-rose-700 font-semibold mt-1">Gửi bởi: <strong>${escapeHTML(r.reporter?.name || 'Người dùng')}</strong></span>
+                                </div>
+                            `).join('')}
+                        </div>
+                        <div class="absolute top-full left-1/2 -translate-x-1/2 -mt-1 border-4 border-transparent border-t-white"></div>
                     </div>
                 </div>
             `;
         } else {
-            // Dashboard Default
-            contentHTML = `
-                <header class="flex justify-between items-center mb-8 bg-white p-4 rounded-2xl shadow-sm border border-gray-100">
-                    <h1 class="text-2xl font-bold text-text-main">Dashboard Tổng Quan</h1>
-                    <div class="flex items-center gap-4">
-                        <span class="text-text-muted">Xin chào, <strong>Admin</strong></span>
-                        <img src="https://i.pravatar.cc/150?u=admin" class="w-10 h-10 rounded-full">
-                    </div>
-                </header>
+            reportBadge = `<span class="text-stone-400 text-xs font-bold">0</span>`;
+        }
 
-                <!-- Stats Cards -->
-                <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
-                    <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 border-l-4 border-l-primary">
-                        <p class="text-text-muted text-sm font-semibold mb-1">Tổng món ăn</p>
-                        <h3 class="text-3xl font-bold text-text-main">1,245</h3>
-                    </div>
-                    <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 border-l-4 border-l-blue-500">
-                        <p class="text-text-muted text-sm font-semibold mb-1">Người dùng</p>
-                        <h3 class="text-3xl font-bold text-text-main">8,592</h3>
-                    </div>
-                    <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 border-l-4 border-l-accent">
-                        <p class="text-text-muted text-sm font-semibold mb-1">Bài viết cộng đồng</p>
-                        <h3 class="text-3xl font-bold text-text-main">432</h3>
-                    </div>
-                    <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 border-l-4 border-l-red-500">
-                        <p class="text-text-muted text-sm font-semibold mb-1">Báo cáo vi phạm</p>
-                        <h3 class="text-3xl font-bold text-text-main">12</h3>
-                    </div>
+        // 2. Cột TRẠNG THÁI
+        let statusBadge = '';
+        if (isPending) {
+            statusBadge = `<span class="bg-amber-100 text-[#C27E25] border border-amber-300 px-3 py-1 rounded-full text-xs font-extrabold inline-flex items-center gap-1.5 animate-pulse"><i class="fa-solid fa-hourglass-half text-[10px]"></i> Chờ duyệt</span>`;
+        } else if (isHidden) {
+            statusBadge = `
+                <div class="inline-flex flex-col items-center">
+                    <span class="bg-stone-100 text-stone-600 border border-stone-300 px-3 py-1 rounded-full text-xs font-bold inline-flex items-center gap-1.5">
+                        <i class="fa-solid fa-eye-slash text-[10px]"></i> Đã ẩn
+                    </span>
+                    ${p.hidden_reason ? `<span class="text-[10px] text-rose-600 line-clamp-1 mt-0.5 max-w-28 text-center" title="${escapeHTML(p.hidden_reason)}">Lý do: ${escapeHTML(p.hidden_reason)}</span>` : ''}
                 </div>
+            `;
+        } else {
+            statusBadge = `<span class="bg-green-100 text-green-700 border border-green-300 px-3 py-1 rounded-full text-xs font-bold inline-flex items-center gap-1.5"><i class="fa-solid fa-check text-[10px]"></i> Đã duyệt</span>`;
+        }
 
-                <!-- Data Table -->
-                <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
-                    <div class="p-6 border-b border-gray-100 flex justify-between items-center">
-                        <h2 class="text-lg font-bold text-text-main">Món ăn chờ duyệt</h2>
-                        <button class="text-sm bg-primary hover:bg-primary-hover text-white px-4 py-2 rounded-lg font-semibold transition shadow-sm border border-green-700"><i class="fa-solid fa-plus"></i> Thêm món mới</button>
+        const foodTag = p.food ? `<span class="inline-block mt-1 text-[11px] bg-amber-50 text-amber-800 border border-amber-200 px-2 py-0.5 rounded-md font-bold"><i class="fa-solid fa-utensils text-[10px] mr-1 text-amber-600"></i>${escapeHTML(p.food.name)}</span>` : '';
+
+        // 3. Cột HÀNH ĐỘNG: Duyệt bài / Duyệt lại dạng icon phẳng không hộp nền (no background box)
+        let approveBtnHTML = '';
+        if (isPending) {
+            approveBtnHTML = `
+                <button type="button" class="w-8 h-8 rounded-lg text-emerald-600 hover:bg-emerald-50 flex items-center justify-center transition cursor-pointer text-xs" data-post-action="approve" data-id="${p.id_post}" title="Duyệt bài viết">
+                    <i class="fa-solid fa-check text-sm"></i>
+                </button>
+            `;
+        } else if (isHidden) {
+            approveBtnHTML = `
+                <button type="button" class="w-8 h-8 rounded-lg text-emerald-600 hover:bg-emerald-50 flex items-center justify-center transition cursor-pointer text-xs" data-post-action="approve" data-id="${p.id_post}" title="Duyệt lại bài viết">
+                    <i class="fa-solid fa-rotate-left text-sm"></i>
+                </button>
+            `;
+        }
+
+        let hideBtnHTML = '';
+        if (isPending) {
+            hideBtnHTML = `
+                <button type="button" class="w-8 h-8 rounded-lg text-rose-600 hover:bg-rose-50 flex items-center justify-center transition cursor-pointer text-xs" data-post-action="reject" data-id="${p.id_post}" title="Từ chối bài viết">
+                    <i class="fa-solid fa-xmark text-sm"></i>
+                </button>
+            `;
+        } else if (isActive) {
+            hideBtnHTML = `
+                <button type="button" class="w-8 h-8 rounded-lg text-amber-600 hover:bg-amber-50 flex items-center justify-center transition cursor-pointer text-xs" data-post-action="hide" data-id="${p.id_post}" title="Ẩn bài viết">
+                    <i class="fa-solid fa-eye-slash"></i>
+                </button>
+            `;
+        }
+
+        return `
+            <tr class="hover:bg-stone-50/70 transition border-b border-gray-100">
+                <td class="p-4 align-top whitespace-nowrap">
+                    <div class="flex items-center gap-3">
+                        <img src="${escapeHTML(p.author?.avatar || '/images/users/default.png')}" class="w-10 h-10 rounded-full object-cover border border-gray-200 shrink-0" onerror="this.src='https://i.pravatar.cc/150?u=user'">
+                        <div class="min-w-0">
+                            <strong class="block text-text-main text-xs sm:text-sm font-bold truncate max-w-[130px] sm:max-w-[160px]">${escapeHTML(p.author?.name || 'Ẩn danh')}</strong>
+                            <span class="block text-[11px] text-text-muted truncate max-w-[130px] sm:max-w-[160px]">${escapeHTML(p.author?.email || '')}</span>
+                            <span class="block text-[10px] text-stone-400 mt-0.5">${formatDate(p.created_at)}</span>
+                        </div>
                     </div>
-                    <div class="overflow-x-auto">
-                        <table class="w-full text-left border-collapse">
-                            <thead>
-                                <tr class="bg-gray-50 text-text-muted text-sm border-b border-gray-100">
-                                    <th class="p-4 font-semibold">Tên món</th>
-                                    <th class="p-4 font-semibold">Tác giả</th>
-                                    <th class="p-4 font-semibold">Ngày đăng</th>
-                                    <th class="p-4 font-semibold">Trạng thái</th>
-                                    <th class="p-4 font-semibold text-right">Hành động</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr class="border-b border-gray-50 hover:bg-gray-50 transition">
-                                    <td class="p-4 font-medium text-text-main">Bún chả Hà Nội chuẩn vị</td>
-                                    <td class="p-4 text-text-muted">Hoàng Nam</td>
-                                    <td class="p-4 text-text-muted">04/10/2026</td>
-                                    <td class="p-4"><span class="bg-yellow-100 text-yellow-700 px-3 py-1 rounded-full text-xs font-bold">Chờ duyệt</span></td>
-                                    <td class="p-4 text-right space-x-2">
-                                        <button class="text-green-500 hover:bg-green-50 p-2 rounded transition" title="Duyệt"><i class="fa-solid fa-check"></i></button>
-                                        <button class="text-red-500 hover:bg-red-50 p-2 rounded transition" title="Từ chối"><i class="fa-solid fa-xmark"></i></button>
-                                    </td>
-                                </tr>
-                                <tr class="border-b border-gray-50 hover:bg-gray-50 transition">
-                                    <td class="p-4 font-medium text-text-main">Salad Ức Gà Giảm Cân</td>
-                                    <td class="p-4 text-text-muted">Hương Giang</td>
-                                    <td class="p-4 text-text-muted">03/10/2026</td>
-                                    <td class="p-4"><span class="bg-green-100 text-green-700 px-3 py-1 rounded-full text-xs font-bold">Đã duyệt</span></td>
-                                    <td class="p-4 text-right space-x-2">
-                                        <button class="text-gray-400 hover:bg-gray-100 p-2 rounded transition" title="Sửa"><i class="fa-solid fa-pen-to-square"></i></button>
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
+                </td>
+                <td class="p-4 align-top max-w-xs md:max-w-sm">
+                    <div class="space-y-1">
+                        <h4 class="font-bold text-text-main text-sm line-clamp-1 hover:text-primary transition cursor-pointer" data-post-action="view" data-id="${p.id_post}">${escapeHTML(p.title || 'Bài viết không tiêu đề')}</h4>
+                        <p class="text-xs text-[#66736B] line-clamp-2 leading-relaxed">${escapeHTML(p.content || '')}</p>
+                        ${foodTag}
+                    </div>
+                </td>
+                <td class="p-4 align-top text-center whitespace-nowrap">
+                    <div class="flex items-center justify-center gap-3 text-xs text-text-muted">
+                        <span class="flex items-center gap-1 text-rose-500 font-bold"><i class="fa-solid fa-heart"></i> ${formatNumber(p.likes_count)}</span>
+                        <span class="flex items-center gap-1 text-blue-500 font-bold"><i class="fa-solid fa-comment"></i> ${formatNumber(p.comments_count)}</span>
+                    </div>
+                </td>
+                <td class="p-4 align-top text-center whitespace-nowrap">
+                    ${reportBadge}
+                </td>
+                <td class="p-4 align-top text-center whitespace-nowrap">
+                    ${statusBadge}
+                </td>
+                <td class="p-4 align-top text-right whitespace-nowrap">
+                    <div class="flex items-center justify-end gap-1.5">
+                        <button type="button" class="w-8 h-8 rounded-lg text-blue-600 hover:bg-blue-50 flex items-center justify-center transition cursor-pointer text-xs" data-post-action="view" data-id="${p.id_post}" title="Xem chi tiết">
+                            <i class="fa-solid fa-eye"></i>
+                        </button>
+                        ${approveBtnHTML}
+                        ${hideBtnHTML}
+                        <button type="button" class="w-8 h-8 rounded-lg text-rose-600 hover:bg-rose-50 flex items-center justify-center transition cursor-pointer text-xs" data-post-action="delete" data-id="${p.id_post}" title="Xóa bài viết">
+                            <i class="fa-solid fa-trash-can"></i>
+                        </button>
+                    </div>
+                </td>
+            </tr>
+        `;
+    }).join('');
+}
+
+function renderCommunityReportsTable(reports) {
+    const tbody = document.getElementById('admin-community-reports-body');
+    if (!tbody) return;
+
+    if (!reports || reports.length === 0) {
+        tbody.innerHTML = `
+            <tr>
+                <td colspan="6" class="p-10 text-center text-text-muted">
+                    <div class="w-12 h-12 rounded-2xl bg-green-50 text-green-600 flex items-center justify-center mx-auto mb-3 text-lg">
+                        <i class="fa-solid fa-shield-check"></i>
+                    </div>
+                    Tuyệt vời! Hiện tại không có báo cáo vi phạm nào cần xử lý.
+                </td>
+            </tr>
+        `;
+        return;
+    }
+
+    tbody.innerHTML = reports.map(r => {
+        const post = r.post || {};
+        const isPostHidden = post.status === 'hidden';
+        
+        let statusBadge = '<span class="bg-amber-100 text-amber-800 px-3 py-1 rounded-full text-xs font-bold animate-pulse">Chờ xử lý</span>';
+        if (r.status === 'resolved') {
+            statusBadge = '<span class="bg-green-100 text-green-700 px-3 py-1 rounded-full text-xs font-bold">Đã giải quyết</span>';
+        } else if (r.status === 'rejected') {
+            statusBadge = '<span class="bg-stone-100 text-stone-600 px-3 py-1 rounded-full text-xs font-bold">Đã bỏ qua</span>';
+        }
+
+        return `
+            <tr class="hover:bg-rose-50/30 transition border-b border-gray-100">
+                <td class="p-4 align-top max-w-xs md:max-w-sm">
+                    <div class="space-y-1">
+                        <div class="flex items-center gap-2">
+                            <strong class="text-text-main text-sm font-bold line-clamp-1">${escapeHTML(post.title || 'Bài viết #' + r.target_id)}</strong>
+                            ${isPostHidden ? '<span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-stone-100 text-stone-600 shrink-0">Đã ẩn</span>' : ''}
+                        </div>
+                        <p class="text-xs text-[#66736B] line-clamp-2">${escapeHTML(post.content || '(Không có nội dung)')}</p>
+                    </div>
+                </td>
+                <td class="p-4 align-top whitespace-nowrap">
+                    <div class="flex items-center gap-2">
+                        <img src="${escapeHTML(post.author?.avatar || '/images/users/default.png')}" class="w-7 h-7 rounded-full object-cover border border-gray-200">
+                        <span class="text-xs font-bold text-text-main truncate max-w-36">${escapeHTML(post.author?.name || 'Ẩn danh')}</span>
+                    </div>
+                </td>
+                <td class="p-4 align-top">
+                    <div>
+                        <span class="inline-block px-2.5 py-0.5 rounded-full text-xs font-bold bg-rose-100 text-rose-700 mb-1">
+                            ${escapeHTML(r.reason || 'Vi phạm tiêu chuẩn')}
+                        </span>
+                        <p class="text-xs text-text-muted line-clamp-1 italic">${escapeHTML(r.description || 'Không có mô tả')}</p>
+                        <span class="text-[10px] text-stone-400">Bởi: <strong>${escapeHTML(r.reporter?.name || 'Ẩn danh')}</strong></span>
+                    </div>
+                </td>
+                <td class="p-4 align-top text-xs text-text-muted whitespace-nowrap text-center">
+                    ${formatDate(r.created_at)}
+                </td>
+                <td class="p-4 align-top text-center whitespace-nowrap">
+                    ${statusBadge}
+                </td>
+                <td class="p-4 align-top text-right whitespace-nowrap">
+                    <div class="flex items-center justify-end gap-1.5">
+                        <button type="button" class="w-8 h-8 rounded-lg text-blue-600 hover:bg-blue-50 flex items-center justify-center transition cursor-pointer text-xs" data-report-action="view" data-id="${r.id_report}" title="Xem chi tiết">
+                            <i class="fa-solid fa-eye"></i>
+                        </button>
+                        ${!isPostHidden ? `
+                            <button type="button" class="w-8 h-8 rounded-lg text-amber-600 hover:bg-amber-50 flex items-center justify-center transition cursor-pointer text-xs" data-report-action="hide-post" data-id="${r.id_report}" data-post-id="${r.target_id}" title="Ẩn bài viết">
+                                <i class="fa-solid fa-eye-slash"></i>
+                            </button>
+                        ` : ''}
+                        ${r.status === 'pending' ? `
+                            <button type="button" class="w-8 h-8 rounded-lg text-stone-600 hover:bg-stone-100 flex items-center justify-center transition cursor-pointer text-xs" data-report-action="reject" data-id="${r.id_report}" title="Bỏ qua">
+                                <i class="fa-solid fa-ban"></i>
+                            </button>
+                            <button type="button" class="w-8 h-8 rounded-lg text-emerald-600 hover:bg-emerald-50 flex items-center justify-center transition cursor-pointer text-xs" data-report-action="resolve" data-id="${r.id_report}" title="Đã giải quyết">
+                                <i class="fa-solid fa-check text-sm"></i>
+                            </button>
+                        ` : ''}
+                    </div>
+                </td>
+            </tr>
+        `;
+    }).join('');
+}
+
+async function loadAdminCommunityPosts() {
+    const tbody = document.getElementById('admin-community-posts-body');
+    if (tbody) {
+        tbody.innerHTML = `<tr><td colspan="6" class="p-8 text-center text-text-muted"><i class="fa-solid fa-spinner fa-spin mr-2"></i>Đang tải dữ liệu bài viết...</td></tr>`;
+    }
+
+    const params = new URLSearchParams({
+        page: adminCommunityState.page,
+        limit: adminCommunityState.limit
+    });
+
+    if (adminCommunityState.search) params.append('search', adminCommunityState.search);
+    if (adminCommunityState.status) params.append('status', adminCommunityState.status);
+
+    const res = await fetchAPI(`/admin/posts?${params.toString()}`);
+    if (!res || !res.success) {
+        if (tbody) {
+            tbody.innerHTML = `<tr><td colspan="6" class="p-8 text-center text-rose-600 font-bold">${res?.message || 'Không thể tải danh sách bài viết.'}</td></tr>`;
+        }
+        return;
+    }
+
+    adminCommunityState.posts = res.data || [];
+    renderCommunityPostsTable(adminCommunityState.posts);
+
+    // Cập nhật thống kê đầy đủ 5 thẻ
+    const pagination = res.pagination || {};
+    const totalEl = document.getElementById('admin-comm-stat-total');
+    const badgeEl = document.getElementById('admin-community-posts-badge');
+    const pendingStatEl = document.getElementById('admin-comm-stat-pending');
+    const activeStatEl = document.getElementById('admin-comm-stat-active');
+    const hiddenStatEl = document.getElementById('admin-comm-stat-hidden');
+
+    if (totalEl) totalEl.textContent = formatNumber(pagination.allTotal ?? pagination.total ?? 0);
+    if (badgeEl) badgeEl.textContent = formatNumber(pagination.allTotal ?? pagination.total ?? 0);
+    if (pendingStatEl) pendingStatEl.textContent = formatNumber(pagination.pendingTotal || 0);
+    if (activeStatEl) activeStatEl.textContent = formatNumber(pagination.activeTotal || 0);
+    if (hiddenStatEl) hiddenStatEl.textContent = formatNumber(pagination.hiddenTotal || 0);
+
+    updateCommunityPagination(pagination);
+    updateStatCardActiveState();
+}
+
+async function loadAdminCommunityReports() {
+    const tbody = document.getElementById('admin-community-reports-body');
+    if (tbody) {
+        tbody.innerHTML = `<tr><td colspan="6" class="p-8 text-center text-text-muted"><i class="fa-solid fa-spinner fa-spin mr-2"></i>Đang tải danh sách báo cáo...</td></tr>`;
+    }
+
+    const params = new URLSearchParams({
+        page: adminCommunityState.page,
+        limit: adminCommunityState.limit
+    });
+
+    if (adminCommunityState.search) params.append('search', adminCommunityState.search);
+    if (adminCommunityState.status) params.append('status', adminCommunityState.status);
+
+    const res = await fetchAPI(`/admin/reports?${params.toString()}`);
+    if (!res || !res.success) {
+        if (tbody) {
+            tbody.innerHTML = `<tr><td colspan="6" class="p-8 text-center text-rose-600 font-bold">${res?.message || 'Không thể tải danh sách báo cáo vi phạm.'}</td></tr>`;
+        }
+        return;
+    }
+
+    adminCommunityState.reports = res.data || [];
+    renderCommunityReportsTable(adminCommunityState.reports);
+
+    const pagination = res.pagination || {};
+    const pendingTotal = pagination.pendingTotal || 0;
+    adminCommunityState.pendingReportsCount = pendingTotal;
+
+    const reportStatEl = document.getElementById('admin-comm-stat-reports');
+    const reportBadgeEl = document.getElementById('admin-community-reports-badge');
+
+    if (reportStatEl) reportStatEl.textContent = formatNumber(pendingTotal);
+    if (reportBadgeEl) {
+        reportBadgeEl.textContent = `${pendingTotal} vi phạm`;
+        if (pendingTotal > 0) {
+            reportBadgeEl.classList.add('animate-pulse');
+        } else {
+            reportBadgeEl.classList.remove('animate-pulse');
+        }
+    }
+
+    updateCommunityPagination(pagination);
+    updateStatCardActiveState();
+}
+
+function updateStatCardActiveState() {
+    const cards = document.querySelectorAll('.admin-comm-stat-card');
+    if (!cards || cards.length === 0) return;
+
+    const ringClasses = [
+        'ring-2', 'ring-[#245B43]', 'ring-[#E59F3F]', 'ring-green-600', 'ring-stone-500', 'ring-rose-500',
+        'shadow-md', 'scale-[1.01]'
+    ];
+
+    cards.forEach(card => {
+        const filter = card.dataset.commFilter;
+        let isActive = false;
+        let ringColor = 'ring-[#245B43]';
+
+        if (adminCommunityState.activeTab === 'reports') {
+            isActive = (filter === 'reports');
+            ringColor = 'ring-rose-500';
+        } else {
+            if (filter === 'all' && !adminCommunityState.status) {
+                isActive = true;
+                ringColor = 'ring-[#245B43]';
+            } else if (filter === 'pending' && adminCommunityState.status === 'pending') {
+                isActive = true;
+                ringColor = 'ring-[#E59F3F]';
+            } else if (filter === 'active' && adminCommunityState.status === 'active') {
+                isActive = true;
+                ringColor = 'ring-green-600';
+            } else if (filter === 'hidden' && adminCommunityState.status === 'hidden') {
+                isActive = true;
+                ringColor = 'ring-stone-500';
+            }
+        }
+
+        card.classList.remove(...ringClasses);
+        if (isActive) {
+            card.classList.add('ring-2', ringColor, 'shadow-md', 'scale-[1.01]');
+        }
+    });
+}
+
+function updateCommunityPagination(pagination = {}) {
+    const prev = document.getElementById('admin-community-prev');
+    const next = document.getElementById('admin-community-next');
+    const info = document.getElementById('admin-community-pagination-info');
+
+    const page = pagination.page || 1;
+    const totalPages = pagination.totalPages || 1;
+    const total = pagination.total || 0;
+
+    if (info) {
+        info.textContent = `Trang ${page} / ${totalPages} (Tổng ${total} mục)`;
+    }
+
+    if (prev) prev.disabled = page <= 1;
+    if (next) next.disabled = page >= totalPages;
+}
+
+function switchCommunityTab(tabName) {
+    adminCommunityState.activeTab = tabName;
+    adminCommunityState.page = 1;
+    adminCommunityState.search = '';
+    adminCommunityState.status = '';
+
+    const searchInput = document.getElementById('admin-community-search');
+    const statusSelect = document.getElementById('admin-community-status-filter');
+    if (searchInput) searchInput.value = '';
+    if (statusSelect) statusSelect.value = '';
+
+    const tabModBtn = document.getElementById('admin-tab-moderation');
+    const tabRepBtn = document.getElementById('admin-tab-reports');
+    const postsSection = document.getElementById('admin-community-posts-section');
+    const reportsSection = document.getElementById('admin-community-reports-section');
+    const titleEl = document.getElementById('admin-community-table-title');
+    const subtitleEl = document.getElementById('admin-community-table-subtitle');
+
+    if (tabName === 'moderation') {
+        // Active Tab 1
+        tabModBtn?.classList.remove('bg-transparent', 'text-[#66736B]', 'hover:bg-stone-100');
+        tabModBtn?.classList.add('bg-[#245B43]', 'text-white', 'shadow-md', 'shadow-[#245B43]/20');
+
+        tabRepBtn?.classList.remove('bg-rose-600', 'text-white', 'shadow-md', 'shadow-rose-600/20');
+        tabRepBtn?.classList.add('bg-transparent', 'text-[#66736B]', 'hover:bg-stone-100');
+
+        postsSection?.classList.remove('hidden');
+        reportsSection?.classList.add('hidden');
+
+        if (titleEl) titleEl.innerHTML = `<i class="fa-solid fa-newspaper text-primary"></i><span>Danh sách bài viết cộng đồng</span>`;
+        if (subtitleEl) subtitleEl.textContent = 'Kiểm tra nội dung, duyệt bài viết mới hoặc ẩn bài viết vi phạm tiêu chuẩn.';
+
+        if (statusSelect) {
+            statusSelect.innerHTML = `
+                <option value="">Tất cả trạng thái</option>
+                <option value="pending">Chờ kiểm duyệt</option>
+                <option value="active">Đã duyệt (Hiển thị)</option>
+                <option value="hidden">Bị từ chối / Đã ẩn</option>
+            `;
+        }
+
+        loadAdminCommunityPosts();
+    } else {
+        // Active Tab 2
+        tabRepBtn?.classList.remove('bg-transparent', 'text-[#66736B]', 'hover:bg-stone-100');
+        tabRepBtn?.classList.add('bg-rose-600', 'text-white', 'shadow-md', 'shadow-rose-600/20');
+
+        tabModBtn?.classList.remove('bg-[#245B43]', 'text-white', 'shadow-md', 'shadow-[#245B43]/20');
+        tabModBtn?.classList.add('bg-transparent', 'text-[#66736B]', 'hover:bg-stone-100');
+
+        postsSection?.classList.add('hidden');
+        reportsSection?.classList.remove('hidden');
+
+        if (titleEl) titleEl.innerHTML = `<i class="fa-solid fa-triangle-exclamation text-rose-500"></i><span>Cảnh báo & Báo cáo vi phạm</span>`;
+        if (subtitleEl) subtitleEl.textContent = 'Danh sách các bài viết bị người dùng báo cáo vi phạm cần xử lý ngay.';
+
+        if (statusSelect) {
+            statusSelect.innerHTML = `
+                <option value="">Tất cả trạng thái</option>
+                <option value="pending">Chờ xử lý</option>
+                <option value="resolved">Đã giải quyết</option>
+                <option value="rejected">Đã bỏ qua</option>
+            `;
+        }
+
+        loadAdminCommunityReports();
+    }
+
+    updateStatCardActiveState();
+}
+
+// Modal Prompt Hỏi Lý Do Ẩn Bài Viết Hiện Đại
+function askPostHideReason(postTitle = 'bài viết', isReject = false) {
+    return new Promise((resolve) => {
+        let modal = document.getElementById('admin-hide-reason-modal');
+        if (!modal) {
+            modal = document.createElement('div');
+            modal.id = 'admin-hide-reason-modal';
+            modal.className = 'fixed inset-0 z-[99999] bg-black/60 backdrop-blur-sm flex items-center justify-center p-4 transition-all duration-200';
+            modal.innerHTML = `
+                <div class="relative bg-[#FCFAF6] border border-[#E9D8B7] w-full max-w-lg rounded-3xl p-6 sm:p-7 shadow-2xl">
+                    <button type="button" id="admin-hide-reason-close" class="absolute top-5 right-5 w-8 h-8 rounded-full bg-stone-100 hover:bg-stone-200 text-stone-500 flex items-center justify-center transition cursor-pointer text-sm">
+                        <i class="fa-solid fa-xmark"></i>
+                    </button>
+                    <div class="flex items-center gap-3 mb-4">
+                        <div class="w-12 h-12 rounded-2xl bg-rose-50 text-rose-600 border border-rose-200 flex items-center justify-center text-xl shrink-0 shadow-xs">
+                            <i class="fa-solid fa-triangle-exclamation"></i>
+                        </div>
+                        <div>
+                            <span id="admin-hide-reason-badge" class="inline-block px-2.5 py-0.5 rounded-full text-[11px] font-black uppercase tracking-wider bg-rose-100 text-rose-700 mb-1">Kiểm duyệt bài viết</span>
+                            <h3 id="admin-hide-reason-heading" class="text-lg font-extrabold text-[#26382F]">Lý do từ chối bài viết</h3>
+                        </div>
+                    </div>
+                    <p class="text-xs text-[#66736B] leading-relaxed mb-4">
+                        Vui lòng nêu rõ lý do <span id="admin-hide-reason-action-text">từ chối</span> bài viết "<strong id="admin-hide-reason-title"></strong>" để gửi phản hồi đến tác giả:
+                    </p>
+                    <div class="space-y-3">
+                        <label class="block text-xs font-bold text-text-main">Chọn lý do phổ biến:</label>
+                        <select id="admin-hide-reason-quick" class="w-full px-3.5 py-2.5 rounded-xl border border-stone-200 text-xs sm:text-sm bg-white focus:outline-none focus:border-rose-500 cursor-pointer">
+                            <option value="Bài viết chứa nội dung không phù hợp">Bài viết chứa nội dung không phù hợp</option>
+                            <option value="Vi phạm tiêu chuẩn cộng đồng">Vi phạm tiêu chuẩn cộng đồng</option>
+                            <option value="Nội dung phản cảm, kích động hoặc từ ngữ không phù hợp">Nội dung phản cảm, kích động hoặc từ ngữ không phù hợp</option>
+                            <option value="Spam hoặc quảng cáo không được phép">Spam hoặc quảng cáo không được phép</option>
+                            <option value="Thông tin hoặc hình ảnh sai lệch, không đúng thực tế">Thông tin hoặc hình ảnh sai lệch, không đúng thực tế</option>
+                            <option value="custom">Lý do khác (tự nhập bên dưới)...</option>
+                        </select>
+                        <label class="block text-xs font-bold text-text-main mt-2">Chi tiết lý do gửi tác giả:</label>
+                        <textarea id="admin-hide-reason-text" rows="3" class="w-full px-3.5 py-2.5 rounded-xl border border-stone-200 text-xs sm:text-sm bg-white focus:outline-none focus:border-rose-500 placeholder-stone-400" placeholder="Nhập lý do cụ thể..."></textarea>
+                    </div>
+                    <div class="mt-6 pt-4 border-t border-[#E9D8B7]/60 flex items-center justify-end gap-2.5">
+                        <button type="button" id="admin-hide-reason-cancel" class="px-5 py-2.5 rounded-2xl bg-white hover:bg-stone-100 text-[#4A5550] border border-stone-200 font-bold text-xs sm:text-sm cursor-pointer transition">
+                            Hủy bỏ
+                        </button>
+                        <button type="button" id="admin-hide-reason-confirm" class="px-5.5 py-2.5 rounded-2xl bg-rose-600 hover:bg-rose-700 text-white font-extrabold text-xs sm:text-sm shadow-md shadow-rose-900/20 cursor-pointer transition">
+                            <i class="fa-solid fa-xmark mr-1.5"></i>Từ chối bài viết
+                        </button>
                     </div>
                 </div>
             `;
+            document.body.appendChild(modal);
+        }
+
+        const titleEl = document.getElementById('admin-hide-reason-title');
+        const headingEl = document.getElementById('admin-hide-reason-heading');
+        const badgeEl = document.getElementById('admin-hide-reason-badge');
+        const actionTextEl = document.getElementById('admin-hide-reason-action-text');
+        const quickSelect = document.getElementById('admin-hide-reason-quick');
+        const textarea = document.getElementById('admin-hide-reason-text');
+        const closeBtn = document.getElementById('admin-hide-reason-close');
+        const cancelBtn = document.getElementById('admin-hide-reason-cancel');
+        const confirmBtn = document.getElementById('admin-hide-reason-confirm');
+
+        if (titleEl) titleEl.textContent = postTitle;
+        if (headingEl) headingEl.textContent = isReject ? 'Lý do từ chối bài viết' : 'Lý do ẩn bài viết';
+        if (badgeEl) badgeEl.textContent = isReject ? 'Từ chối kiểm duyệt' : 'Cảnh báo vi phạm';
+        if (actionTextEl) actionTextEl.textContent = isReject ? 'từ chối' : 'ẩn';
+        if (confirmBtn) {
+            confirmBtn.innerHTML = isReject
+                ? '<i class="fa-solid fa-xmark mr-1.5"></i>Từ chối bài viết'
+                : '<i class="fa-solid fa-eye-slash mr-1.5"></i>Ẩn bài viết';
+        }
+
+        const defaultReason = isReject ? 'Bài viết chứa nội dung không phù hợp' : 'Vi phạm tiêu chuẩn cộng đồng';
+        if (quickSelect) quickSelect.value = defaultReason;
+        if (textarea) textarea.value = defaultReason;
+
+        quickSelect.onchange = () => {
+            if (quickSelect.value === 'custom') {
+                textarea.value = '';
+                textarea.focus();
+            } else {
+                textarea.value = quickSelect.value;
+            }
+        };
+
+        modal.classList.remove('hidden');
+        modal.classList.add('flex');
+
+        const cleanup = (value) => {
+            modal.classList.add('hidden');
+            modal.classList.remove('flex');
+            resolve(value);
+        };
+
+        confirmBtn.onclick = () => {
+            let reason = (textarea.value || '').trim();
+            if (!reason || reason === 'custom') {
+                reason = quickSelect.value !== 'custom' ? quickSelect.value : defaultReason;
+            }
+            cleanup(reason || defaultReason);
+        };
+
+        cancelBtn.onclick = () => cleanup(null);
+        closeBtn.onclick = () => cleanup(null);
+        modal.onclick = (e) => {
+            if (e.target === modal) cleanup(null);
+        };
+    });
+}
+
+// Hàm Duyệt bài viết
+async function approveCommunityPost(id) {
+    const post = adminCommunityState.posts.find(p => p.id_post == id);
+    const postTitle = post?.title || `Bài viết #${id}`;
+
+    const confirmed = await Popup.confirm({
+        title: 'Xác nhận duyệt bài viết',
+        message: `Bạn có chắc chắn muốn <strong>phê duyệt</strong> bài viết "<strong>${escapeHTML(postTitle)}</strong>" để hiển thị công khai trên cộng đồng không?`,
+        type: 'question',
+        confirmText: 'Duyệt bài ngay',
+        cancelText: 'Hủy bỏ',
+        confirmButtonColor: 'primary'
+    });
+    if (!confirmed) return;
+
+    const res = await fetchAPI(`/admin/posts/${id}/status`, {
+        method: 'PATCH',
+        body: JSON.stringify({ status: 'active' })
+    });
+
+    if (!res || !res.success) {
+        Popup.error(res?.message || 'Không thể phê duyệt bài viết lúc này.');
+        return;
+    }
+
+    Popup.toast('Đã duyệt bài viết thành công! Bài viết đã hiển thị trên cộng đồng.', 'success');
+    await loadAdminCommunityPosts();
+}
+
+// Hàm Ẩn hoặc Từ chối bài viết kèm Lý do
+async function hideCommunityPost(id) {
+    const post = adminCommunityState.posts.find(p => p.id_post == id);
+    const postTitle = post?.title || `Bài viết #${id}`;
+    const isPending = post?.status === 'pending';
+
+    const reason = await askPostHideReason(postTitle, isPending);
+    if (!reason) return;
+
+    const res = await fetchAPI(`/admin/posts/${id}/status`, {
+        method: 'PATCH',
+        body: JSON.stringify({ status: 'hidden', hidden_reason: reason })
+    });
+
+    if (!res || !res.success) {
+        Popup.error(res?.message || (isPending ? 'Không thể từ chối bài viết lúc này.' : 'Không thể ẩn bài viết lúc này.'));
+        return;
+    }
+
+    Popup.toast(isPending ? `Đã từ chối bài viết. Lý do: "${reason}"` : `Đã ẩn bài viết. Lý do: "${reason}"`, 'success');
+    await loadAdminCommunityPosts();
+}
+
+async function deleteCommunityPost(id) {
+    const post = adminCommunityState.posts.find(p => p.id_post == id);
+    const postTitle = post?.title || `Bài viết #${id}`;
+
+    const confirmed = await Popup.confirm({
+        title: 'Xóa vĩnh viễn bài viết',
+        message: `Hành động này sẽ <strong>xóa vĩnh viễn</strong> bài viết "<strong>${escapeHTML(postTitle)}</strong>" và tất cả bình luận liên quan. Bạn có chắc chắn không?`,
+        type: 'danger',
+        confirmText: 'Xóa vĩnh viễn',
+        cancelText: 'Hủy bỏ',
+        confirmButtonColor: 'danger'
+    });
+    if (!confirmed) return;
+
+    const res = await fetchAPI(`/admin/posts/${id}`, {
+        method: 'DELETE'
+    });
+
+    if (!res || !res.success) {
+        Popup.error(res?.message || 'Không thể xóa bài viết lúc này.');
+        return;
+    }
+
+    Popup.toast('Đã xóa bài viết vi phạm thành công!', 'success');
+    await loadAdminCommunityPosts();
+}
+
+async function handleReportAction(reportId, action, targetPostId = null) {
+    const report = adminCommunityState.reports.find(r => r.id_report == reportId);
+    if (!report) return;
+
+    if (action === 'hide-post' && targetPostId) {
+        const postTitle = report.post?.title || `Bài viết #${targetPostId}`;
+        const reason = await askPostHideReason(postTitle);
+        if (!reason) return;
+
+        // 1. Ẩn bài viết kèm lý do
+        await fetchAPI(`/admin/posts/${targetPostId}/status`, {
+            method: 'PATCH',
+            body: JSON.stringify({ status: 'hidden', hidden_reason: reason })
+        });
+
+        // 2. Cập nhật report thành resolved
+        const res = await fetchAPI(`/admin/reports/${reportId}/status`, {
+            method: 'PATCH',
+            body: JSON.stringify({ status: 'resolved' })
+        });
+
+        if (res?.success) {
+            Popup.toast(`Đã ẩn bài viết và xử lý báo cáo thành công! (Lý do: "${reason}")`, 'success');
+            await loadAdminCommunityReports();
+        } else {
+            Popup.error(res?.message || 'Không thể cập nhật báo cáo.');
+        }
+    } else if (action === 'reject') {
+        const confirmed = await Popup.confirm({
+            title: 'Bỏ qua báo cáo vi phạm',
+            message: `Bạn có chắc muốn bỏ qua báo cáo này (đánh giá nội dung không vi phạm)?`,
+            type: 'question',
+            confirmText: 'Bỏ qua báo cáo',
+            cancelText: 'Hủy bỏ'
+        });
+        if (!confirmed) return;
+
+        const res = await fetchAPI(`/admin/reports/${reportId}/status`, {
+            method: 'PATCH',
+            body: JSON.stringify({ status: 'rejected' })
+        });
+
+        if (res?.success) {
+            Popup.toast('Đã đánh dấu bỏ qua báo cáo vi phạm.', 'info');
+            await loadAdminCommunityReports();
+        } else {
+            Popup.error(res?.message || 'Không thể cập nhật báo cáo.');
+        }
+    } else if (action === 'resolve') {
+        const res = await fetchAPI(`/admin/reports/${reportId}/status`, {
+            method: 'PATCH',
+            body: JSON.stringify({ status: 'resolved' })
+        });
+
+        if (res?.success) {
+            Popup.toast('Đã đánh dấu giải quyết báo cáo.', 'success');
+            await loadAdminCommunityReports();
+        } else {
+            Popup.error(res?.message || 'Không thể cập nhật báo cáo.');
+        }
+    }
+}
+
+async function openCommunityDetailModal(id, type = 'post') {
+    const modal = document.getElementById('admin-community-detail-modal');
+    const content = document.getElementById('admin-community-detail-content');
+    if (!modal || !content) return;
+
+    content.innerHTML = `<div class="p-8 text-center text-text-muted"><i class="fa-solid fa-spinner fa-spin mr-2"></i>Đang tải chi tiết...</div>`;
+    modal.classList.remove('hidden');
+    modal.classList.add('flex');
+
+    if (type === 'post') {
+        const res = await fetchAPI(`/admin/posts/${id}`);
+        if (!res || !res.success) {
+            content.innerHTML = `<p class="text-center text-red-500 font-bold p-6">${res?.message || 'Không thể tải chi tiết bài viết.'}</p>`;
+            return;
+        }
+
+        const post = res.data;
+        const reportsHTML = post.reports && post.reports.length > 0
+            ? `
+                <div class="mt-5 pt-4 border-t border-gray-100">
+                    <h5 class="text-xs font-black uppercase text-rose-700 mb-2 flex items-center gap-1.5">
+                        <i class="fa-solid fa-triangle-exclamation"></i>
+                        <span>Các báo cáo vi phạm (${post.reports.length})</span>
+                    </h5>
+                    <div class="space-y-2 max-h-36 overflow-y-auto">
+                        ${post.reports.map(r => `
+                            <div class="p-2.5 rounded-xl bg-rose-50 border border-rose-200 text-xs">
+                                <span class="font-bold text-rose-800">${escapeHTML(r.reason)}:</span>
+                                <span class="text-rose-700">${escapeHTML(r.description || 'Không có mô tả thêm')}</span>
+                                <span class="block text-[10px] text-stone-500 mt-1">Gửi bởi: ${escapeHTML(r.users?.name || 'Ẩn danh')} - ${formatDate(r.created_at)}</span>
+                            </div>
+                        `).join('')}
+                    </div>
+                </div>
+            `
+            : '';
+
+        let detailStatusBadge = '<span class="px-3 py-1 rounded-full text-xs bg-amber-100 text-amber-800 font-bold">Chờ duyệt</span>';
+        if (post.status === 'active') {
+            detailStatusBadge = '<span class="px-3 py-1 rounded-full text-xs bg-green-100 text-green-700 font-bold">Đã duyệt (Hiển thị)</span>';
+        } else if (post.status === 'hidden') {
+            detailStatusBadge = '<span class="px-3 py-1 rounded-full text-xs bg-stone-100 text-stone-600 font-bold">Đã ẩn</span>';
+        }
+
+        content.innerHTML = `
+            <div class="space-y-4">
+                <div class="flex items-center gap-3">
+                    <img src="${escapeHTML(post.author?.avatar || '/images/users/default.png')}" class="w-12 h-12 rounded-full object-cover border border-gray-200">
+                    <div>
+                        <h4 class="font-bold text-text-main text-base">${escapeHTML(post.author?.name || 'Ẩn danh')}</h4>
+                        <span class="text-xs text-text-muted">${escapeHTML(post.author?.email || '')} • ${formatDate(post.created_at)}</span>
+                    </div>
+                </div>
+
+                <div class="pt-2">
+                    <h3 class="text-lg font-black text-text-main">${escapeHTML(post.title || '')}</h3>
+                    <p class="text-sm text-[#4A5550] leading-relaxed mt-2 whitespace-pre-line">${escapeHTML(post.content || '')}</p>
+                </div>
+
+                ${post.hidden_reason ? `
+                    <div class="p-3 rounded-2xl bg-rose-50 border border-rose-200 text-xs text-rose-800">
+                        <strong class="font-black"><i class="fa-solid fa-triangle-exclamation mr-1"></i>Lý do ẩn:</strong> ${escapeHTML(post.hidden_reason)}
+                    </div>
+                ` : ''}
+
+                ${post.image ? `
+                    <div class="rounded-2xl overflow-hidden border border-gray-100 max-h-72">
+                        <img src="${escapeHTML(post.image)}" class="w-full h-full object-cover" onerror="this.style.display='none'">
+                    </div>
+                ` : ''}
+
+                <div class="flex items-center gap-4 text-xs font-bold text-text-muted pt-2 border-t border-gray-100">
+                    <span class="flex items-center gap-1.5 text-rose-500"><i class="fa-solid fa-heart"></i> ${formatNumber(post.likes_count)} lượt thích</span>
+                    <span class="flex items-center gap-1.5 text-blue-500"><i class="fa-solid fa-comment"></i> ${formatNumber(post.comments_count)} bình luận</span>
+                    <span class="ml-auto">
+                        ${detailStatusBadge}
+                    </span>
+                </div>
+
+                ${reportsHTML}
+            </div>
+        `;
+    } else {
+        // Chi tiết báo cáo
+        const report = adminCommunityState.reports.find(r => r.id_report == id);
+        if (!report) {
+            content.innerHTML = `<p class="text-center text-red-500 p-6">Không tìm thấy thông tin báo cáo.</p>`;
+            return;
+        }
+
+        content.innerHTML = `
+            <div class="space-y-4">
+                <div class="flex items-center gap-2 text-rose-600 font-bold text-base">
+                    <i class="fa-solid fa-triangle-exclamation text-lg"></i>
+                    <span>Chi tiết Báo Cáo Vi Phạm #${report.id_report}</span>
+                </div>
+
+                <div class="p-4 rounded-2xl bg-rose-50/70 border border-rose-200 space-y-2">
+                    <div class="flex items-center justify-between text-xs">
+                        <span class="font-bold text-rose-800">Lý do: ${escapeHTML(report.reason)}</span>
+                        <span class="text-stone-500">${formatDate(report.created_at)}</span>
+                    </div>
+                    <p class="text-xs text-rose-700">${escapeHTML(report.description || 'Không có mô tả chi tiết')}</p>
+                    <span class="block text-[11px] text-stone-600 pt-1">Người báo cáo: <strong>${escapeHTML(report.reporter?.name || 'Ẩn danh')}</strong> (${escapeHTML(report.reporter?.email || '')})</span>
+                </div>
+
+                <div class="border-t border-gray-100 pt-3">
+                    <h5 class="text-xs font-black uppercase tracking-wider text-text-muted mb-2">Bài viết bị tố cáo</h5>
+                    <h4 class="font-bold text-text-main text-base">${escapeHTML(report.post?.title || 'Bài viết #' + report.target_id)}</h4>
+                    <p class="text-xs text-[#66736B] mt-1 whitespace-pre-line leading-relaxed">${escapeHTML(report.post?.content || '')}</p>
+                    ${report.post?.image ? `
+                        <img src="${escapeHTML(report.post.image)}" class="w-full max-h-56 object-cover rounded-xl mt-3 border border-gray-100" onerror="this.style.display='none'">
+                    ` : ''}
+                </div>
+            </div>
+        `;
+    }
+}
+
+function closeCommunityDetailModal() {
+    const modal = document.getElementById('admin-community-detail-modal');
+    if (modal) {
+        modal.classList.add('hidden');
+        modal.classList.remove('flex');
+    }
+}
+
+function bindAdminCommunityEvents() {
+    const tabModBtn = document.getElementById('admin-tab-moderation');
+    const tabRepBtn = document.getElementById('admin-tab-reports');
+    const search = document.getElementById('admin-community-search');
+    const status = document.getElementById('admin-community-status-filter');
+    const refresh = document.getElementById('admin-community-refresh');
+    const prev = document.getElementById('admin-community-prev');
+    const next = document.getElementById('admin-community-next');
+    const postsBody = document.getElementById('admin-community-posts-body');
+    const reportsBody = document.getElementById('admin-community-reports-body');
+    const modalClose = document.getElementById('admin-community-detail-close');
+    const modal = document.getElementById('admin-community-detail-modal');
+
+    // Chuyển 2 Tabs
+    tabModBtn?.addEventListener('click', () => switchCommunityTab('moderation'));
+    tabRepBtn?.addEventListener('click', () => switchCommunityTab('reports'));
+
+    // Tìm kiếm
+    let searchTimer = null;
+    search?.addEventListener('input', () => {
+        window.clearTimeout(searchTimer);
+        searchTimer = window.setTimeout(() => {
+            adminCommunityState.search = search.value.trim();
+            adminCommunityState.page = 1;
+            if (adminCommunityState.activeTab === 'moderation') {
+                loadAdminCommunityPosts();
+            } else {
+                loadAdminCommunityReports();
+            }
+        }, 300);
+    });
+
+    // Lọc trạng thái từ dropdown
+    status?.addEventListener('change', () => {
+        adminCommunityState.status = status.value;
+        adminCommunityState.page = 1;
+        if (adminCommunityState.activeTab === 'moderation') {
+            loadAdminCommunityPosts();
+        } else {
+            loadAdminCommunityReports();
+        }
+        updateStatCardActiveState();
+    });
+
+    // 5 Thẻ thống kê: Click để lọc dữ liệu tương ứng ngay lập tức
+    const statsContainer = document.getElementById('admin-comm-stats-container');
+    statsContainer?.addEventListener('click', (e) => {
+        const card = e.target.closest('.admin-comm-stat-card');
+        if (!card) return;
+
+        const filter = card.dataset.commFilter;
+        if (!filter) return;
+
+        if (filter === 'reports') {
+            if (adminCommunityState.activeTab !== 'reports') {
+                switchCommunityTab('reports');
+            }
+            updateStatCardActiveState();
+            return;
+        }
+
+        // Với all, pending, active, hidden:
+        // Đảm bảo đang ở tab Kiểm duyệt bài viết
+        if (adminCommunityState.activeTab !== 'moderation') {
+            switchCommunityTab('moderation');
+        }
+
+        const newStatus = (filter === 'all') ? '' : filter;
+        adminCommunityState.status = newStatus;
+        adminCommunityState.page = 1;
+
+        const statusSelect = document.getElementById('admin-community-status-filter');
+        if (statusSelect) {
+            statusSelect.value = newStatus;
+        }
+
+        loadAdminCommunityPosts();
+        updateStatCardActiveState();
+    });
+
+    // Làm mới
+    refresh?.addEventListener('click', () => {
+        if (adminCommunityState.activeTab === 'moderation') {
+            loadAdminCommunityPosts();
+        } else {
+            loadAdminCommunityReports();
+        }
+        updateStatCardActiveState();
+    });
+
+    // Phân trang
+    prev?.addEventListener('click', () => {
+        if (adminCommunityState.page <= 1) return;
+        adminCommunityState.page -= 1;
+        if (adminCommunityState.activeTab === 'moderation') {
+            loadAdminCommunityPosts();
+        } else {
+            loadAdminCommunityReports();
+        }
+    });
+
+    next?.addEventListener('click', () => {
+        adminCommunityState.page += 1;
+        if (adminCommunityState.activeTab === 'moderation') {
+            loadAdminCommunityPosts();
+        } else {
+            loadAdminCommunityReports();
+        }
+    });
+
+    // Hành động bài viết: Xem, Duyệt bài, Ẩn bài, Xóa bài
+    postsBody?.addEventListener('click', (e) => {
+        const btn = e.target.closest('[data-post-action]');
+        if (!btn) return;
+
+        const id = btn.dataset.id;
+        const action = btn.dataset.postAction;
+
+        if (action === 'view') openCommunityDetailModal(id, 'post');
+        if (action === 'approve') approveCommunityPost(id);
+        if (action === 'hide' || action === 'reject') hideCommunityPost(id);
+        if (action === 'delete') deleteCommunityPost(id);
+    });
+
+    // Hành động báo cáo
+    reportsBody?.addEventListener('click', (e) => {
+        const btn = e.target.closest('[data-report-action]');
+        if (!btn) return;
+
+        const id = btn.dataset.id;
+        const action = btn.dataset.reportAction;
+        const postId = btn.dataset.postId;
+
+        if (action === 'view') openCommunityDetailModal(id, 'report');
+        if (action === 'hide-post') handleReportAction(id, 'hide-post', postId);
+        if (action === 'reject') handleReportAction(id, 'reject');
+        if (action === 'resolve') handleReportAction(id, 'resolve');
+    });
+
+    // Đóng modal
+    modalClose?.addEventListener('click', closeCommunityDetailModal);
+    modal?.addEventListener('click', (e) => {
+        if (e.target === modal) closeCommunityDetailModal();
+    });
+}
+
+async function initAdminCommunityPage() {
+    bindAdminCommunityEvents();
+    await loadAdminCommunityPosts();
+    // Tải trước số lượng báo cáo pending để hiển thị badge
+    const repRes = await fetchAPI('/admin/reports?limit=1&status=pending');
+    if (repRes?.success) {
+        const pendingCount = repRes.pagination?.pendingTotal || 0;
+        const statEl = document.getElementById('admin-comm-stat-reports');
+        const badgeEl = document.getElementById('admin-community-reports-badge');
+        if (statEl) statEl.textContent = formatNumber(pendingCount);
+        if (badgeEl) {
+            badgeEl.textContent = `${pendingCount} vi phạm`;
+            if (pendingCount > 0) badgeEl.classList.add('animate-pulse');
+        }
+    }
+    updateStatCardActiveState();
+}
+
+function categoryStatusLabel(status) {
+    return status === 'inactive' ? 'Đã ẩn' : 'Đang hiển thị';
+}
+
+function categoryStatusBadge(status) {
+    const isInactive = status === 'inactive';
+    const classes = isInactive
+        ? 'bg-amber-100 text-amber-700'
+        : 'bg-green-100 text-green-700';
+
+    return `<span class="${classes} px-3 py-1 rounded-full text-xs font-bold inline-flex items-center gap-1.5"><span class="w-1.5 h-1.5 rounded-full ${isInactive ? 'bg-amber-500' : 'bg-green-500'}"></span>${categoryStatusLabel(status)}</span>`;
+}
+
+function createCategorySlug(value) {
+    return String(value || '')
+        .trim()
+        .toLowerCase()
+        .normalize('NFD')
+        .replace(/[\u0300-\u036f]/g, '')
+        .replace(/[\u0111\u0110]/gu, 'd')
+        .replace(/[^a-z0-9]+/g, '-')
+        .replace(/^-+|-+$/g, '');
+}
+
+function setCategoriesAlert(message = '', type = 'info') {
+    const alert = document.getElementById('admin-categories-alert');
+    if (!alert) return;
+
+    if (!message) {
+        alert.classList.add('hidden');
+        alert.textContent = '';
+        return;
+    }
+
+    const classes = type === 'error'
+        ? 'bg-red-50 border-red-200 text-red-700'
+        : 'bg-green-50 border-green-200 text-green-700';
+
+    alert.className = `mb-4 rounded-xl border px-4 py-3 text-sm font-semibold ${classes}`;
+    alert.textContent = message;
+}
+
+function setCategoriesLoading(message = 'Đang tải danh mục...') {
+    const body = document.getElementById('admin-categories-body');
+    if (!body) return;
+
+    body.innerHTML = `
+        <tr>
+            <td colspan="6" class="p-8 text-center text-text-muted">${escapeHTML(message)}</td>
+        </tr>
+    `;
+}
+
+function getCategoryFromState(id) {
+    return adminCategoriesState.categories.find((c) => Number(c.id_category) === Number(id));
+}
+
+function renderCategoriesTable(categories) {
+    const body = document.getElementById('admin-categories-body');
+    if (!body) return;
+
+    if (!categories.length) {
+        setCategoriesLoading('Không tìm thấy danh mục nào phù hợp.');
+        return;
+    }
+
+    body.innerHTML = categories.map((cat) => {
+        const isInactive = cat.status === 'inactive';
+        const nextStatus = isInactive ? 'active' : 'inactive';
+        const statusIcon = isInactive ? 'fa-eye' : 'fa-eye-slash';
+        const statusTitle = isInactive ? 'Hiện danh mục' : 'Ẩn danh mục (không xóa dữ liệu)';
+        const statusBtnClass = isInactive ? 'text-green-600 hover:bg-green-50' : 'text-amber-600 hover:bg-amber-50';
+
+        return `
+            <tr class="border-b border-gray-50 hover:bg-gray-50/80 transition">
+                <td class="p-4 text-xs font-mono text-text-muted font-bold">#${cat.id_category}</td>
+                <td class="p-4">
+                    <div class="flex items-center gap-3">
+                        <div class="w-9 h-9 rounded-xl ${isInactive ? 'bg-gray-100 text-gray-500' : 'bg-primary/10 text-primary'} flex items-center justify-center font-bold text-sm shrink-0">
+                            <i class="fa-solid fa-layer-group"></i>
+                        </div>
+                        <div>
+                            <p class="font-bold text-text-main">${escapeHTML(cat.name)}</p>
+                        </div>
+                    </div>
+                </td>
+                <td class="p-4">
+                    <span class="font-mono text-xs bg-gray-100 text-gray-600 px-2.5 py-1 rounded-md border border-gray-200">
+                        ${escapeHTML(cat.slug)}
+                    </span>
+                </td>
+                <td class="p-4">
+                    <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold ${Number(cat.foodsCount) > 0 ? 'bg-blue-50 text-blue-700 border border-blue-100' : 'bg-gray-100 text-gray-500'}">
+                        <i class="fa-solid fa-bowl-food text-xs"></i>
+                        ${formatNumber(cat.foodsCount || 0)} món
+                    </span>
+                </td>
+                <td class="p-4">${categoryStatusBadge(cat.status)}</td>
+                <td class="p-4 text-right">
+                    <div class="flex justify-end gap-1.5">
+                        <button class="text-blue-500 hover:bg-blue-50 p-2 rounded-lg transition" title="Chỉnh sửa danh mục" data-category-action="edit" data-id="${cat.id_category}">
+                            <i class="fa-solid fa-pen-to-square"></i>
+                        </button>
+                        <button class="${statusBtnClass} p-2 rounded-lg transition" title="${statusTitle}" data-category-action="status" data-id="${cat.id_category}" data-status="${nextStatus}">
+                            <i class="fa-solid ${statusIcon}"></i>
+                        </button>
+                    </div>
+                </td>
+            </tr>
+        `;
+    }).join('');
+}
+
+function updateCategoriesStats(stats = {}) {
+    const ids = {
+        total: 'admin-categories-stat-total',
+        active: 'admin-categories-stat-active',
+        inactive: 'admin-categories-stat-inactive',
+        foods: 'admin-categories-stat-foods'
+    };
+
+    const setText = (id, val) => {
+        const el = document.getElementById(id);
+        if (el) el.textContent = formatNumber(val ?? 0);
+    };
+
+    setText(ids.total, stats.total);
+    setText(ids.active, stats.active);
+    setText(ids.inactive, stats.inactive);
+    setText(ids.foods, stats.totalFoodsAssigned);
+}
+
+function updateCategoriesPagination(pagination = {}) {
+    const info = document.getElementById('admin-categories-pagination-info');
+    const prev = document.getElementById('admin-categories-prev');
+    const next = document.getElementById('admin-categories-next');
+    const indicator = document.getElementById('admin-categories-page-indicator');
+
+    if (info) {
+        info.textContent = pagination.total
+            ? `Hiển thị trang ${pagination.page || 1} / ${pagination.totalPages || 1} (Tổng cộng ${formatNumber(pagination.total)} danh mục)`
+            : '0 danh mục';
+    }
+
+    if (indicator) {
+        indicator.textContent = `Trang ${pagination.page || 1}`;
+    }
+
+    if (prev) prev.disabled = (pagination.page || 1) <= 1;
+    if (next) next.disabled = !pagination.hasMore;
+}
+
+async function loadAdminCategories() {
+    setCategoriesAlert();
+    setCategoriesLoading();
+
+    const params = new URLSearchParams({
+        page: adminCategoriesState.page,
+        limit: adminCategoriesState.limit
+    });
+
+    if (adminCategoriesState.search) params.set('search', adminCategoriesState.search);
+    if (adminCategoriesState.status) params.set('status', adminCategoriesState.status);
+
+    const res = await fetchAPI(`/admin/categories?${params.toString()}`);
+
+    if (!res.success) {
+        adminCategoriesState.categories = [];
+        renderCategoriesTable([]);
+        updateCategoriesStats();
+        updateCategoriesPagination({ page: 1, totalPages: 1, total: 0, hasMore: false });
+        setCategoriesAlert(res.message || 'Không thể tải danh sách danh mục.', 'error');
+        return;
+    }
+
+    adminCategoriesState.categories = res.data || [];
+    renderCategoriesTable(adminCategoriesState.categories);
+    updateCategoriesStats(res.stats);
+    updateCategoriesPagination(res.pagination);
+}
+
+function openCategoryModal(cat = null) {
+    adminCategoriesState.editingId = cat?.id_category || null;
+
+    const nameInput = document.getElementById('admin-category-name');
+    const slugInput = document.getElementById('admin-category-slug');
+    const statusInput = document.getElementById('admin-category-status');
+    const title = document.getElementById('admin-category-modal-title');
+
+    if (nameInput) nameInput.value = cat?.name || '';
+    if (slugInput) slugInput.value = cat?.slug || '';
+    if (statusInput) statusInput.value = cat?.status || 'active';
+    if (title) title.textContent = cat ? 'Chỉnh sửa danh mục' : 'Thêm danh mục mới';
+
+    const modal = document.getElementById('admin-category-modal');
+    if (modal) {
+        modal.classList.remove('hidden');
+        modal.classList.add('flex');
+    }
+
+    setTimeout(() => nameInput?.focus(), 50);
+}
+
+function closeCategoryModal() {
+    const modal = document.getElementById('admin-category-modal');
+    if (modal) {
+        modal.classList.add('hidden');
+        modal.classList.remove('flex');
+    }
+    adminCategoriesState.editingId = null;
+}
+
+async function saveCategoryFromForm(event) {
+    event.preventDefault();
+    setCategoriesAlert();
+
+    const nameInput = document.getElementById('admin-category-name');
+    const slugInput = document.getElementById('admin-category-slug');
+    const statusInput = document.getElementById('admin-category-status');
+    const saveBtn = document.getElementById('admin-category-save');
+
+    const name = nameInput?.value?.trim() || '';
+    let slug = slugInput?.value?.trim() || '';
+    const status = statusInput?.value || 'active';
+
+    if (!name) {
+        Popup.warning('Vui lòng nhập tên danh mục.');
+        nameInput?.focus();
+        return;
+    }
+
+    if (!slug) {
+        slug = createCategorySlug(name);
+    }
+
+    const isEditing = Boolean(adminCategoriesState.editingId);
+    const url = isEditing
+        ? `/admin/categories/${adminCategoriesState.editingId}`
+        : '/admin/categories';
+    const method = isEditing ? 'PATCH' : 'POST';
+
+    const originalBtnText = saveBtn ? saveBtn.innerHTML : 'Lưu danh mục';
+    if (saveBtn) {
+        saveBtn.disabled = true;
+        saveBtn.innerHTML = '<i class="fa-solid fa-circle-notch fa-spin mr-1"></i> Đang lưu...';
+    }
+
+    try {
+        const res = await fetchAPI(url, {
+            method,
+            body: JSON.stringify({ name, slug, status })
+        });
+
+        if (!res.success) {
+            setCategoriesAlert(res.message || 'Lưu danh mục thất bại.', 'error');
+            Popup.error(res.message || 'Lưu danh mục thất bại.');
+            return;
+        }
+
+        closeCategoryModal();
+        setCategoriesAlert(res.message || (isEditing ? 'Cập nhật danh mục thành công.' : 'Thêm danh mục mới thành công.'));
+        Popup.toast(isEditing ? 'Cập nhật danh mục thành công!' : 'Thêm danh mục mới thành công!', 'success');
+        await loadAdminCategories();
+    } catch (err) {
+        setCategoriesAlert(err.message || 'Có lỗi xảy ra khi lưu danh mục.', 'error');
+        Popup.error(err.message || 'Có lỗi xảy ra.');
+    } finally {
+        if (saveBtn) {
+            saveBtn.disabled = false;
+            saveBtn.innerHTML = originalBtnText;
+        }
+    }
+}
+
+async function changeCategoryStatus(id, nextStatus) {
+    const cat = getCategoryFromState(id);
+    if (!cat) return;
+
+    const action = nextStatus === 'inactive' ? 'ẩn' : 'hiện';
+    const isHide = nextStatus === 'inactive';
+    const hasFoods = Number(cat.foodsCount) > 0;
+
+    const note = isHide && hasFoods
+        ? `<div class="mt-2 text-xs bg-amber-50 p-2.5 rounded-lg border border-amber-200 text-amber-800 text-left">
+             <i class="fa-solid fa-triangle-exclamation mr-1"></i>
+             Danh mục này đang có <strong>${cat.foodsCount}</strong> món ăn liên kết. Khi ẩn, danh mục sẽ tạm thời không hiển thị ở bộ lọc của khách nhưng toàn bộ dữ liệu món vẫn được bảo toàn trọn vẹn.
+           </div>`
+        : '';
+
+    const confirmed = await Popup.confirm({
+        title: `Xác nhận ${action} danh mục`,
+        message: `Bạn có chắc chắn muốn <strong>${action}</strong> danh mục "<strong>${escapeHTML(cat.name)}</strong>"?${note}`,
+        type: isHide ? 'warning' : 'question',
+        confirmText: isHide ? 'Ẩn danh mục' : 'Hiện danh mục',
+        cancelText: 'Hủy bỏ',
+        confirmButtonColor: isHide ? 'warning' : 'primary'
+    });
+    if (!confirmed) return;
+
+    const res = await fetchAPI(`/admin/categories/${id}/status`, {
+        method: 'PATCH',
+        body: JSON.stringify({ status: nextStatus })
+    });
+
+    if (!res.success) {
+        setCategoriesAlert(res.message || 'Không thể cập nhật trạng thái danh mục.', 'error');
+        Popup.error(res.message || 'Không thể cập nhật trạng thái danh mục.');
+        return;
+    }
+
+    setCategoriesAlert(res.message || 'Đã cập nhật trạng thái danh mục.');
+    Popup.toast(`Đã ${action} danh mục "${cat.name}" thành công!`, 'success');
+    await loadAdminCategories();
+}
+
+function bindAdminCategoriesEvents() {
+    const search = document.getElementById('admin-categories-search');
+    const status = document.getElementById('admin-categories-status-filter');
+    const refresh = document.getElementById('admin-categories-refresh');
+    const add = document.getElementById('admin-category-add');
+    const body = document.getElementById('admin-categories-body');
+    const prev = document.getElementById('admin-categories-prev');
+    const next = document.getElementById('admin-categories-next');
+    const form = document.getElementById('admin-category-form');
+    const nameInput = document.getElementById('admin-category-name');
+    const slugInput = document.getElementById('admin-category-slug');
+
+    let searchTimer = null;
+    search?.addEventListener('input', () => {
+        window.clearTimeout(searchTimer);
+        searchTimer = window.setTimeout(() => {
+            adminCategoriesState.search = search.value.trim();
+            adminCategoriesState.page = 1;
+            loadAdminCategories();
+        }, 300);
+    });
+
+    status?.addEventListener('change', () => {
+        adminCategoriesState.status = status.value;
+        adminCategoriesState.page = 1;
+        loadAdminCategories();
+    });
+
+    refresh?.addEventListener('click', () => loadAdminCategories());
+    add?.addEventListener('click', () => openCategoryModal());
+
+    nameInput?.addEventListener('input', () => {
+        if (!adminCategoriesState.editingId && slugInput) {
+            slugInput.value = createCategorySlug(nameInput.value);
+        }
+    });
+
+    prev?.addEventListener('click', () => {
+        if (adminCategoriesState.page <= 1) return;
+        adminCategoriesState.page -= 1;
+        loadAdminCategories();
+    });
+
+    next?.addEventListener('click', () => {
+        adminCategoriesState.page += 1;
+        loadAdminCategories();
+    });
+
+    body?.addEventListener('click', (event) => {
+        const button = event.target.closest('[data-category-action]');
+        if (!button) return;
+
+        const id = button.dataset.id;
+        const action = button.dataset.categoryAction;
+
+        if (action === 'edit') openCategoryModal(getCategoryFromState(id));
+        if (action === 'status') changeCategoryStatus(id, button.dataset.status);
+    });
+
+    form?.addEventListener('submit', saveCategoryFromForm);
+    document.getElementById('admin-category-modal-close')?.addEventListener('click', closeCategoryModal);
+    document.getElementById('admin-category-cancel')?.addEventListener('click', closeCategoryModal);
+    document.getElementById('admin-category-modal')?.addEventListener('click', (event) => {
+        if (event.target.id === 'admin-category-modal') closeCategoryModal();
+    });
+}
+
+async function initAdminCategoriesPage() {
+    bindAdminCategoriesEvents();
+    await loadAdminCategories();
+}
+
+>>>>>>> c217107e829a23c28d6011ad1e764d46a2bd4f12
+function renderCategoriesPage() {
+    const currentUser = getStoredAdminUser();
+    const adminName = currentUser?.name || 'Admin';
+    const adminAvatar = currentUser?.avatar || 'http://localhost:5000/images/users/admin.jpg';
+
+    return `
+        <header class="flex flex-col lg:flex-row lg:justify-between lg:items-center gap-4 mb-8 bg-white p-4 rounded-2xl shadow-sm border border-gray-100">
+            <div>
+<<<<<<< HEAD
+                <h1 class="text-2xl font-bold text-text-main">Quản lý danh mục món ăn</h1>
+                <p class="text-sm text-text-muted mt-1">Quản lý, thêm, sửa, xóa các danh mục ẩm thực cho hệ thống.</p>
+=======
+                <h1 class="text-2xl font-bold text-text-main flex items-center gap-2">
+                    <i class="fa-solid fa-layer-group text-primary"></i> Quản lý danh mục món ăn
+                </h1>
+                <p class="text-sm text-text-muted mt-1">Quản lý danh sách danh mục, thêm mới, chỉnh sửa và ẩn/hiện danh mục trên trang khách.</p>
+>>>>>>> c217107e829a23c28d6011ad1e764d46a2bd4f12
+            </div>
+            <div class="flex items-center gap-4">
+                <span class="text-text-muted">Xin chào, <strong>${escapeHTML(adminName)}</strong></span>
+                <img src="${escapeHTML(adminAvatar)}" class="w-10 h-10 rounded-full object-cover" alt="Admin">
+            </div>
+        </header>
+
+<<<<<<< HEAD
+        <div id="admin-category-alert" class="hidden mb-4 rounded-xl border px-4 py-3 text-sm font-semibold"></div>
+
+        <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
+            <div class="p-6 border-b border-gray-100 flex flex-col sm:flex-row gap-3 sm:items-center sm:justify-between">
+                <div class="flex items-center gap-3 flex-1 max-w-md">
+                    <div class="relative w-full">
+                        <i class="fa-solid fa-magnifying-glass absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-400 text-xs"></i>
+                        <input id="admin-category-search-input" type="text" placeholder="Tìm kiếm danh mục..." class="w-full pl-9 pr-3 py-2 bg-gray-50 border border-gray-200 rounded-xl text-xs focus:outline-none focus:ring-1 focus:ring-primary focus:bg-white transition">
+                    </div>
+                </div>
+                <button id="admin-category-btn-open-create" class="px-4 py-2 bg-primary hover:bg-[#1B4633] text-white rounded-xl text-xs font-bold shadow-sm transition flex items-center gap-2 cursor-pointer shrink-0">
+                    <i class="fa-solid fa-plus"></i>
+                    <span>Thêm danh mục mới</span>
+                </button>
+=======
+        <div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4 mb-6">
+            <div class="bg-white rounded-2xl border border-gray-100 shadow-sm p-5 border-l-4 border-l-primary">
+                <p class="text-xs font-bold uppercase tracking-wide text-text-muted">Tổng danh mục</p>
+                <strong id="admin-categories-stat-total" class="block text-3xl text-text-main mt-2">0</strong>
+            </div>
+            <div class="bg-white rounded-2xl border border-gray-100 shadow-sm p-5 border-l-4 border-l-green-500">
+                <p class="text-xs font-bold uppercase tracking-wide text-text-muted">Đang hiển thị</p>
+                <strong id="admin-categories-stat-active" class="block text-3xl text-green-700 mt-2">0</strong>
+            </div>
+            <div class="bg-white rounded-2xl border border-gray-100 shadow-sm p-5 border-l-4 border-l-amber-500">
+                <p class="text-xs font-bold uppercase tracking-wide text-text-muted">Đã ẩn</p>
+                <strong id="admin-categories-stat-inactive" class="block text-3xl text-amber-700 mt-2">0</strong>
+            </div>
+            <div class="bg-white rounded-2xl border border-gray-100 shadow-sm p-5 border-l-4 border-l-blue-500">
+                <p class="text-xs font-bold uppercase tracking-wide text-text-muted">Tổng món liên kết</p>
+                <strong id="admin-categories-stat-foods" class="block text-3xl text-blue-700 mt-2">0</strong>
+            </div>
+        </div>
+
+        <div id="admin-categories-alert" class="hidden mb-4 rounded-xl border px-4 py-3 text-sm font-semibold"></div>
+
+        <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
+            <div class="p-5 border-b border-gray-100 flex flex-col xl:flex-row gap-3 xl:items-center xl:justify-between">
+                <h2 class="text-lg font-bold text-text-main">Danh sách danh mục</h2>
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-[minmax(220px,1fr)_170px_auto_auto] gap-2 w-full xl:w-auto">
+                    <input id="admin-categories-search" type="text" placeholder="Tìm theo tên danh mục, slug..." class="px-4 py-2 border border-gray-200 rounded-lg text-sm focus:outline-none focus:border-primary">
+                    <select id="admin-categories-status-filter" class="px-4 py-2 border border-gray-200 rounded-lg text-sm focus:outline-none focus:border-primary">
+                        <option value="">Tất cả trạng thái</option>
+                        <option value="active">Đang hiển thị</option>
+                        <option value="inactive">Đã ẩn</option>
+                    </select>
+                    <button id="admin-categories-refresh" class="bg-white hover:bg-gray-50 text-primary border border-primary/20 px-4 py-2 rounded-lg font-semibold transition text-sm flex items-center justify-center">
+                        <i class="fa-solid fa-rotate-right"></i>
+                    </button>
+                    <button id="admin-category-add" class="bg-primary hover:bg-primary-hover text-white px-4 py-2 rounded-lg font-semibold transition shadow-sm text-sm flex items-center justify-center gap-2">
+                        <i class="fa-solid fa-plus"></i> Thêm danh mục
+                    </button>
+                </div>
+>>>>>>> c217107e829a23c28d6011ad1e764d46a2bd4f12
+            </div>
+
+            <div class="overflow-x-auto">
+                <table class="w-full text-left border-collapse">
+                    <thead>
+<<<<<<< HEAD
+                        <tr class="bg-gray-50 text-text-muted text-xs border-b border-gray-100 uppercase tracking-wider">
+                            <th class="p-4 font-semibold">ID</th>
+                            <th class="p-4 font-semibold">Tên danh mục</th>
+                            <th class="p-4 font-semibold">Đường dẫn (Slug)</th>
+                            <th class="p-4 font-semibold">Món liên kết</th>
+                            <th class="p-4 font-semibold">Trạng thái</th>
+                            <th class="p-4 font-semibold">Ngày tạo</th>
+                            <th class="p-4 font-semibold text-right">Thao tác</th>
+                        </tr>
+                    </thead>
+                    <tbody id="admin-categories-table-body" class="divide-y divide-gray-50 text-xs text-text-main">
+                        <tr>
+                            <td colspan="7" class="p-8 text-center text-text-muted">Đang tải danh mục...</td>
+=======
+                        <tr class="bg-gray-50 text-text-muted text-sm border-b border-gray-100">
+                            <th class="p-4 font-semibold w-16">ID</th>
+                            <th class="p-4 font-semibold">Tên danh mục</th>
+                            <th class="p-4 font-semibold">Slug URL</th>
+                            <th class="p-4 font-semibold">Số món ăn</th>
+                            <th class="p-4 font-semibold">Trạng thái</th>
+                            <th class="p-4 font-semibold text-right w-28">Hành động</th>
+                        </tr>
+                    </thead>
+                    <tbody id="admin-categories-body">
+                        <tr>
+                            <td colspan="6" class="p-8 text-center text-text-muted">Đang tải danh mục...</td>
+>>>>>>> c217107e829a23c28d6011ad1e764d46a2bd4f12
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+<<<<<<< HEAD
+        </div>
+
+        <!-- MODAL THÊM / SỬA DANH MỤC -->
+        <div id="admin-category-modal" class="hidden fixed inset-0 z-50 bg-black/50 backdrop-blur-xs flex items-center justify-center p-4">
+            <div class="bg-white rounded-2xl shadow-2xl max-w-md w-full overflow-hidden border border-gray-100 animate-in fade-in zoom-in-95 duration-200">
+                <div class="p-4 bg-[#0F4937] text-white flex items-center justify-between">
+                    <h3 id="admin-category-modal-title" class="font-bold text-sm flex items-center gap-2">
+                        <i class="fa-solid fa-layer-group text-[#F4A62A]"></i>
+                        <span>Thêm danh mục mới</span>
+                    </h3>
+                    <button id="admin-category-btn-close-modal" class="text-white/80 hover:text-white transition text-lg">&times;</button>
+                </div>
+                <form id="admin-category-form" class="p-5 space-y-4">
+                    <input type="hidden" id="admin-category-form-id">
+                    <div>
+                        <label class="block text-xs font-bold text-text-main mb-1">Tên danh mục <span class="text-rose-500">*</span></label>
+                        <input type="text" id="admin-category-form-name" placeholder="Ví dụ: Món Cuốn, Món Hấp..." class="w-full px-3 py-2 border border-gray-200 rounded-xl text-xs focus:outline-none focus:ring-1 focus:ring-primary" required>
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-text-main mb-1">Đường dẫn (Slug)</label>
+                        <input type="text" id="admin-category-form-slug" placeholder="Để trống để tự động sinh (mon-cuon)" class="w-full px-3 py-2 border border-gray-200 rounded-xl text-xs focus:outline-none focus:ring-1 focus:ring-primary font-mono text-[11px]">
+                    </div>
+                    <div id="admin-category-form-error" class="hidden text-xs text-rose-600 bg-rose-50 p-2.5 rounded-lg border border-rose-100 font-semibold"></div>
+                    <div class="pt-3 border-t border-gray-100 flex justify-end gap-2">
+                        <button type="button" id="admin-category-btn-cancel-modal" class="px-4 py-2 border border-gray-200 text-text-muted hover:bg-gray-50 rounded-xl text-xs font-semibold transition">Hủy</button>
+                        <button type="submit" id="admin-category-btn-submit" class="px-5 py-2 bg-primary hover:bg-[#1B4633] text-white rounded-xl text-xs font-bold shadow-sm transition">Lưu danh mục</button>
+=======
+
+            <div class="p-4 border-t border-gray-100 flex flex-col sm:flex-row items-center justify-between gap-4">
+                <span id="admin-categories-pagination-info" class="text-sm text-text-muted">Đang tải...</span>
+                <div class="flex items-center gap-2">
+                    <button id="admin-categories-prev" class="px-3 py-1.5 border border-gray-200 rounded-lg text-sm font-semibold hover:bg-gray-50 transition disabled:opacity-50 disabled:cursor-not-allowed">
+                        <i class="fa-solid fa-chevron-left mr-1"></i> Trước
+                    </button>
+                    <span id="admin-categories-page-indicator" class="text-sm font-semibold px-2">Trang 1</span>
+                    <button id="admin-categories-next" class="px-3 py-1.5 border border-gray-200 rounded-lg text-sm font-semibold hover:bg-gray-50 transition disabled:opacity-50 disabled:cursor-not-allowed">
+                        Sau <i class="fa-solid fa-chevron-right ml-1"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Modal Thêm/Sửa Danh mục -->
+        <div id="admin-category-modal" class="fixed inset-0 bg-black/50 backdrop-blur-xs hidden items-center justify-center z-50 p-4">
+            <div class="bg-white rounded-2xl shadow-xl border border-gray-100 w-full max-w-md overflow-hidden animate-fadeIn">
+                <div class="p-5 border-b border-gray-100 flex items-center justify-between sticky top-0 bg-white z-10">
+                    <h3 id="admin-category-modal-title" class="text-lg font-bold text-text-main">Thêm danh mục mới</h3>
+                    <button type="button" id="admin-category-modal-close" class="w-9 h-9 rounded-full hover:bg-gray-100 text-text-muted flex items-center justify-center transition">
+                        <i class="fa-solid fa-xmark"></i>
+                    </button>
+                </div>
+                <form id="admin-category-form" class="p-6 space-y-4">
+                    <div>
+                        <label class="block text-sm font-semibold text-text-main mb-1">
+                            Tên danh mục <span class="text-red-500">*</span>
+                        </label>
+                        <input id="admin-category-name" type="text" placeholder="Ví dụ: Món canh, Món xào..." class="w-full px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-primary text-sm" required>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-semibold text-text-main mb-1">
+                            Slug (Đường dẫn tĩnh)
+                        </label>
+                        <input id="admin-category-slug" type="text" placeholder="Tự tạo từ tên nếu bỏ trống" class="w-full px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-primary text-sm font-mono">
+                        <p class="text-xs text-text-muted mt-1">Định dạng viết liền không dấu, ngăn cách bằng dấu gạch ngang (ví dụ: mon-canh).</p>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-semibold text-text-main mb-1">
+                            Trạng thái hiển thị
+                        </label>
+                        <select id="admin-category-status" class="w-full px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-primary text-sm">
+                            <option value="active">Đang hiển thị (Active)</option>
+                            <option value="inactive">Đã ẩn (Inactive)</option>
+                        </select>
+                    </div>
+
+                    <div class="p-3 bg-amber-50/80 border border-amber-200 rounded-xl text-xs text-amber-800 flex items-start gap-2">
+                        <i class="fa-solid fa-circle-info mt-0.5 shrink-0 text-amber-600"></i>
+                        <span>Để bảo toàn tính toàn vẹn dữ liệu của các món ăn đã tạo, hệ thống sử dụng cơ chế <strong>Ẩn/Hiện</strong> thay cho xóa vĩnh viễn. Danh mục bị ẩn sẽ không hiển thị trên giao diện của khách.</span>
+                    </div>
+
+                    <div class="pt-4 border-t border-gray-100 flex items-center justify-end gap-3">
+                        <button type="button" id="admin-category-cancel" class="px-4 py-2 rounded-lg border border-gray-200 text-sm font-semibold hover:bg-gray-50 transition text-text-muted">
+                            Hủy bỏ
+                        </button>
+                        <button type="submit" id="admin-category-save" class="px-5 py-2 rounded-lg bg-primary hover:bg-primary-hover text-white text-sm font-semibold transition shadow-sm">
+                            Lưu danh mục
+                        </button>
+>>>>>>> c217107e829a23c28d6011ad1e764d46a2bd4f12
+                    </div>
+                </form>
+            </div>
+        </div>
+    `;
+}
+
+<<<<<<< HEAD
+function setCategoryAlert(message = '', type = 'info') {
+    const alert = document.getElementById('admin-category-alert');
+    if (!alert) return;
+    if (!message) {
+        alert.classList.add('hidden');
+        alert.textContent = '';
+        return;
+    }
+    const classes = type === 'error'
+        ? 'bg-red-50 border-red-200 text-red-700'
+        : 'bg-green-50 border-green-200 text-green-700';
+    alert.className = `mb-4 rounded-xl border px-4 py-3 text-sm font-semibold ${classes}`;
+    alert.textContent = message;
+}
+
+async function loadAdminCategories() {
+    const body = document.getElementById('admin-categories-table-body');
+    if (!body) return;
+
+    try {
+        const query = adminCategoriesState.search ? `?search=${encodeURIComponent(adminCategoriesState.search)}` : '';
+        const res = await fetchAPI(`/admin/categories${query}`);
+
+        if (!res || !res.success || !Array.isArray(res.data)) {
+            body.innerHTML = '<tr><td colspan="6" class="p-8 text-center text-red-500">Không thể tải danh sách danh mục.</td></tr>';
+            return;
+        }
+
+        adminCategoriesState.categories = res.data;
+
+        if (res.data.length === 0) {
+            body.innerHTML = '<tr><td colspan="6" class="p-8 text-center text-text-muted">Không tìm thấy danh mục nào.</td></tr>';
+            return;
+        }
+
+        body.innerHTML = res.data.map((cat) => `
+            <tr class="hover:bg-gray-50 transition border-b border-gray-50">
+                <td class="p-4 font-mono font-bold text-gray-500">#${cat.id_category}</td>
+                <td class="p-4 font-bold text-text-main">${escapeHTML(cat.name)}</td>
+                <td class="p-4 font-mono text-[11px] text-gray-500 bg-gray-50/50 px-2 rounded">${escapeHTML(cat.slug)}</td>
+                <td class="p-4 font-semibold">
+                    <span class="px-2.5 py-0.5 rounded-full text-xs font-bold ${cat.foodsCount > 0 ? 'bg-emerald-50 text-emerald-700 border border-emerald-200' : 'bg-gray-100 text-gray-500'}">
+                        ${cat.foodsCount} món
+                    </span>
+                </td>
+                <td class="p-4 font-semibold">
+                    <span class="px-2.5 py-0.5 rounded-full text-xs font-bold ${cat.status === 'active' ? 'bg-emerald-50 text-emerald-700 border border-emerald-200' : 'bg-amber-50 text-amber-700 border border-amber-200'}">
+                        ${cat.status === 'active' ? 'Đang hiển thị' : 'Đã ẩn'}
+                    </span>
+                </td>
+                <td class="p-4 text-text-muted">${formatDate(cat.created_at)}</td>
+                <td class="p-4 text-right space-x-2">
+                    <button class="btn-toggle-category-status p-2 rounded-lg transition cursor-pointer ${cat.status === 'active' ? 'text-amber-600 hover:bg-amber-50' : 'text-emerald-600 hover:bg-emerald-50'}" data-id="${cat.id_category}" data-status="${cat.status}" title="${cat.status === 'active' ? 'Ẩn danh mục' : 'Hiển thị danh mục'}">
+                        <i class="fa-solid ${cat.status === 'active' ? 'fa-eye-slash' : 'fa-eye'}"></i>
+                    </button>
+                    <button class="btn-edit-category text-blue-600 hover:bg-blue-50 p-2 rounded-lg transition cursor-pointer" data-id="${cat.id_category}" title="Chỉnh sửa">
+                        <i class="fa-solid fa-pen-to-square"></i>
+                    </button>
+                </td>
+            </tr>
+        `).join('');
+    } catch (e) {
+        body.innerHTML = '<tr><td colspan="7" class="p-8 text-center text-red-500">Lỗi khi kết nối tải danh mục.</td></tr>';
+    }
+}
+
+function openCategoryModal(cat = null) {
+    const modal = document.getElementById('admin-category-modal');
+    const title = document.getElementById('admin-category-modal-title');
+    const idInput = document.getElementById('admin-category-form-id');
+    const nameInput = document.getElementById('admin-category-form-name');
+    const slugInput = document.getElementById('admin-category-form-slug');
+    const errBox = document.getElementById('admin-category-form-error');
+
+    if (!modal) return;
+    if (errBox) errBox.classList.add('hidden');
+
+    if (cat) {
+        adminCategoriesState.editingId = cat.id_category;
+        if (title) title.innerHTML = '<i class="fa-solid fa-pen text-[#F4A62A]"></i><span>Chỉnh sửa danh mục</span>';
+        if (idInput) idInput.value = cat.id_category;
+        if (nameInput) nameInput.value = cat.name;
+        if (slugInput) slugInput.value = cat.slug;
+    } else {
+        adminCategoriesState.editingId = null;
+        if (title) title.innerHTML = '<i class="fa-solid fa-layer-group text-[#F4A62A]"></i><span>Thêm danh mục mới</span>';
+        if (idInput) idInput.value = '';
+        if (nameInput) nameInput.value = '';
+        if (slugInput) slugInput.value = '';
+    }
+
+    modal.classList.remove('hidden');
+    nameInput?.focus();
+}
+
+function closeCategoryModal() {
+    const modal = document.getElementById('admin-category-modal');
+    if (modal) modal.classList.add('hidden');
+}
+
+async function handleCategoryFormSubmit(e) {
+    e.preventDefault();
+    const id = adminCategoriesState.editingId;
+    const nameInput = document.getElementById('admin-category-form-name');
+    const slugInput = document.getElementById('admin-category-form-slug');
+    const errBox = document.getElementById('admin-category-form-error');
+    const submitBtn = document.getElementById('admin-category-btn-submit');
+
+    const name = nameInput?.value.trim();
+    const slug = slugInput?.value.trim();
+
+    if (!name) {
+        if (errBox) {
+            errBox.textContent = 'Vui lòng nhập tên danh mục.';
+            errBox.classList.remove('hidden');
+        }
+        return;
+    }
+
+    if (submitBtn) submitBtn.disabled = true;
+
+    try {
+        const endpoint = id ? `/admin/categories/${id}` : '/admin/categories';
+        const method = id ? 'PATCH' : 'POST';
+        const res = await fetchAPI(endpoint, {
+            method,
+            body: JSON.stringify({ name, slug })
+        });
+
+        if (res && res.success) {
+            closeCategoryModal();
+            setCategoryAlert(res.message, 'success');
+            await loadAdminCategories();
+        } else {
+            if (errBox) {
+                errBox.textContent = res.message || 'Lỗi khi lưu danh mục.';
+                errBox.classList.remove('hidden');
+            }
+        }
+    } catch (err) {
+        if (errBox) {
+            errBox.textContent = 'Lỗi kết nối máy chủ.';
+            errBox.classList.remove('hidden');
+        }
+    } finally {
+        if (submitBtn) submitBtn.disabled = false;
+    }
+}
+
+async function handleToggleCategoryStatus(id, currentStatus) {
+    const newStatus = currentStatus === 'active' ? 'hidden' : 'active';
+    try {
+        const res = await fetchAPI(`/admin/categories/${id}/status`, {
+            method: 'PATCH',
+            body: JSON.stringify({ status: newStatus })
+        });
+        if (res && res.success) {
+            setCategoryAlert(res.message, 'success');
+            await loadAdminCategories();
+        } else {
+            setCategoryAlert(res.message || 'Không thể cập nhật trạng thái danh mục.', 'error');
+        }
+    } catch (err) {
+        setCategoryAlert('Lỗi kết nối khi cập nhật trạng thái danh mục.', 'error');
+    }
+}
+
+function bindAdminCategoriesEvents() {
+    const searchInput = document.getElementById('admin-category-search-input');
+    const btnOpenCreate = document.getElementById('admin-category-btn-open-create');
+    const btnCloseModal = document.getElementById('admin-category-btn-close-modal');
+    const btnCancelModal = document.getElementById('admin-category-btn-cancel-modal');
+    const form = document.getElementById('admin-category-form');
+    const tableBody = document.getElementById('admin-categories-table-body');
+
+    btnOpenCreate?.addEventListener('click', () => openCategoryModal());
+    btnCloseModal?.addEventListener('click', closeCategoryModal);
+    btnCancelModal?.addEventListener('click', closeCategoryModal);
+    form?.addEventListener('submit', handleCategoryFormSubmit);
+
+    let debounceTimer;
+    searchInput?.addEventListener('input', (e) => {
+        clearTimeout(debounceTimer);
+        debounceTimer = setTimeout(() => {
+            adminCategoriesState.search = e.target.value.trim();
+            loadAdminCategories();
+        }, 300);
+    });
+
+    tableBody?.addEventListener('click', (e) => {
+        const toggleBtn = e.target.closest('.btn-toggle-category-status');
+        if (toggleBtn) {
+            const id = Number(toggleBtn.getAttribute('data-id'));
+            const status = toggleBtn.getAttribute('data-status');
+            handleToggleCategoryStatus(id, status);
+            return;
+        }
+
+        const editBtn = e.target.closest('.btn-edit-category');
+        if (editBtn) {
+            const id = Number(editBtn.getAttribute('data-id'));
+            const cat = adminCategoriesState.categories.find(c => c.id_category === id);
+            if (cat) openCategoryModal(cat);
+        }
+    });
+}
+
+async function initAdminCategoriesPage() {
+    bindAdminCategoriesEvents();
+    await loadAdminCategories();
+}
+
+// ==========================================
+// 4. QUẢN LÝ BÀI VIẾT & BÁO CÁO CỘNG ĐỒNG
+// ==========================================
+
+function renderCommunityPage() {
+    const currentUser = getStoredAdminUser();
+    const adminName = currentUser?.name || 'Admin';
+    const adminAvatar = currentUser?.avatar || 'http://localhost:5000/images/users/admin.jpg';
+
+    return `
+        <header class="flex flex-col lg:flex-row lg:justify-between lg:items-center gap-4 mb-8 bg-white p-4 rounded-2xl shadow-sm border border-gray-100">
+            <div>
+                <h1 class="text-2xl font-bold text-text-main">Quản lý bài viết & cộng đồng</h1>
+                <p class="text-sm text-text-muted mt-1">Kiểm duyệt nội dung chia sẻ công thức và xử lý báo cáo vi phạm.</p>
+            </div>
+            <div class="flex items-center gap-4">
+                <span class="text-text-muted">Xin chào, <strong>${escapeHTML(adminName)}</strong></span>
+                <img src="${escapeHTML(adminAvatar)}" class="w-10 h-10 rounded-full object-cover" alt="Admin">
+            </div>
+        </header>
+
+        <div id="admin-community-alert" class="hidden mb-4 rounded-xl border px-4 py-3 text-sm font-semibold"></div>
+
+        <!-- TABS BAR -->
+        <div class="flex items-center gap-2 mb-6 border-b border-gray-200">
+            <button id="admin-community-tab-posts" class="px-5 py-3 font-bold text-xs border-b-2 border-primary text-primary transition flex items-center gap-2 cursor-pointer">
+                <i class="fa-solid fa-newspaper"></i>
+                <span>Bài viết cộng đồng</span>
+                <span id="admin-community-badge-posts-total" class="px-2 py-0.5 rounded-full bg-primary/10 text-primary text-[10px] font-bold">0</span>
+            </button>
+            <button id="admin-community-tab-reports" class="px-5 py-3 font-semibold text-xs border-b-2 border-transparent text-text-muted hover:text-text-main transition flex items-center gap-2 cursor-pointer">
+                <i class="fa-solid fa-triangle-exclamation text-amber-500"></i>
+                <span>Báo cáo vi phạm</span>
+                <span id="admin-community-badge-reports-total" class="px-2 py-0.5 rounded-full bg-amber-100 text-amber-700 text-[10px] font-bold">0</span>
+            </button>
+        </div>
+
+        <!-- PANEL 1: BÀI VIẾT CỘNG ĐỒNG -->
+        <div id="admin-community-panel-posts" class="space-y-4">
+            <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-4 flex flex-col sm:flex-row gap-3 sm:items-center sm:justify-between">
+                <div class="flex items-center gap-3 flex-1 max-w-md">
+                    <div class="relative w-full">
+                        <i class="fa-solid fa-magnifying-glass absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-400 text-xs"></i>
+                        <input id="admin-community-posts-search" type="text" placeholder="Tìm theo tiêu đề, tác giả..." class="w-full pl-9 pr-3 py-2 bg-gray-50 border border-gray-200 rounded-xl text-xs focus:outline-none focus:ring-1 focus:ring-primary focus:bg-white transition">
+                    </div>
+                </div>
+                <div class="flex items-center gap-2">
+                    <select id="admin-community-posts-status" class="px-3 py-2 bg-gray-50 border border-gray-200 rounded-xl text-xs font-semibold focus:outline-none focus:ring-1 focus:ring-primary">
+                        <option value="">Tất cả trạng thái</option>
+                        <option value="active">Đang hiển thị (Active)</option>
+                        <option value="hidden">Đã ẩn (Hidden)</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left border-collapse">
+                        <thead>
+                            <tr class="bg-gray-50 text-text-muted text-xs border-b border-gray-100 uppercase tracking-wider">
+                                <th class="p-4 font-semibold">Bài viết</th>
+                                <th class="p-4 font-semibold">Tác giả</th>
+                                <th class="p-4 font-semibold">Tương tác</th>
+                                <th class="p-4 font-semibold">Ngày đăng</th>
+                                <th class="p-4 font-semibold">Trạng thái</th>
+                                <th class="p-4 font-semibold text-right">Thao tác</th>
+                            </tr>
+                        </thead>
+                        <tbody id="admin-community-posts-table-body" class="divide-y divide-gray-50 text-xs text-text-main">
+                            <tr>
+                                <td colspan="6" class="p-8 text-center text-text-muted">Đang tải danh sách bài viết...</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- Pagination Bar -->
+                <div class="p-4 bg-gray-50/50 border-t border-gray-100 flex items-center justify-between text-xs">
+                    <span id="admin-community-posts-pagination-info" class="text-text-muted">Hiển thị bài viết</span>
+                    <div class="flex items-center gap-1.5" id="admin-community-posts-pagination-controls"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- PANEL 2: BÁO CÁO VI PHẠM -->
+        <div id="admin-community-panel-reports" class="hidden space-y-4">
+            <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-4 flex flex-col sm:flex-row gap-3 sm:items-center sm:justify-between">
+                <div class="flex items-center gap-2">
+                    <span class="text-xs font-bold text-text-muted">Lọc theo trạng thái:</span>
+                    <select id="admin-community-reports-status" class="px-3 py-2 bg-gray-50 border border-gray-200 rounded-xl text-xs font-semibold focus:outline-none focus:ring-1 focus:ring-primary">
+                        <option value="">Tất cả báo cáo</option>
+                        <option value="pending">Chờ xử lý (Pending)</option>
+                        <option value="resolved">Đã giải quyết (Resolved)</option>
+                        <option value="rejected">Đã từ chối (Rejected)</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left border-collapse">
+                        <thead>
+                            <tr class="bg-gray-50 text-text-muted text-xs border-b border-gray-100 uppercase tracking-wider">
+                                <th class="p-4 font-semibold">ID</th>
+                                <th class="p-4 font-semibold">Người báo cáo</th>
+                                <th class="p-4 font-semibold">Đối tượng</th>
+                                <th class="p-4 font-semibold">Lý do & Mô tả</th>
+                                <th class="p-4 font-semibold">Ngày tạo</th>
+                                <th class="p-4 font-semibold">Trạng thái</th>
+                                <th class="p-4 font-semibold text-right">Hành động</th>
+                            </tr>
+                        </thead>
+                        <tbody id="admin-community-reports-table-body" class="divide-y divide-gray-50 text-xs text-text-main">
+                            <tr>
+                                <td colspan="7" class="p-8 text-center text-text-muted">Đang tải danh sách báo cáo...</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    `;
+}
+
+function setCommunityAlert(message = '', type = 'info') {
+    const alert = document.getElementById('admin-community-alert');
+    if (!alert) return;
+    if (!message) {
+        alert.classList.add('hidden');
+        alert.textContent = '';
+        return;
+    }
+    const classes = type === 'error'
+        ? 'bg-red-50 border-red-200 text-red-700'
+        : 'bg-green-50 border-green-200 text-green-700';
+    alert.className = `mb-4 rounded-xl border px-4 py-3 text-sm font-semibold ${classes}`;
+    alert.textContent = message;
+}
+
+async function loadAdminPosts() {
+    const body = document.getElementById('admin-community-posts-table-body');
+    const badge = document.getElementById('admin-community-badge-posts-total');
+    const pageInfo = document.getElementById('admin-community-posts-pagination-info');
+    const controls = document.getElementById('admin-community-posts-pagination-controls');
+    if (!body) return;
+
+    try {
+        const { page, limit, search, status } = adminCommunityState.posts;
+        const params = new URLSearchParams({
+            page,
+            limit,
+            ...(search ? { search } : {}),
+            ...(status ? { status } : {})
+        });
+
+        const res = await fetchAPI(`/admin/posts?${params.toString()}`);
+        if (!res || !res.success || !Array.isArray(res.data)) {
+            body.innerHTML = '<tr><td colspan="6" class="p-8 text-center text-red-500">Không thể tải danh sách bài viết.</td></tr>';
+            return;
+        }
+
+        adminCommunityState.posts.total = res.total;
+        adminCommunityState.posts.items = res.data;
+        if (badge) badge.textContent = res.total;
+        if (pageInfo) pageInfo.textContent = `Tổng cộng ${res.total} bài viết (Trang ${res.page}/${res.totalPages || 1})`;
+
+        if (controls) {
+            controls.innerHTML = `
+                <button ${res.page <= 1 ? 'disabled' : ''} id="btn-posts-prev" class="px-3 py-1 bg-white border border-gray-200 rounded-lg text-xs font-bold disabled:opacity-40 transition cursor-pointer">Trước</button>
+                <button ${res.page >= res.totalPages ? 'disabled' : ''} id="btn-posts-next" class="px-3 py-1 bg-white border border-gray-200 rounded-lg text-xs font-bold disabled:opacity-40 transition cursor-pointer">Sau</button>
+            `;
+            document.getElementById('btn-posts-prev')?.addEventListener('click', () => {
+                if (adminCommunityState.posts.page > 1) {
+                    adminCommunityState.posts.page--;
+                    loadAdminPosts();
+                }
+            });
+            document.getElementById('btn-posts-next')?.addEventListener('click', () => {
+                if (adminCommunityState.posts.page < res.totalPages) {
+                    adminCommunityState.posts.page++;
+                    loadAdminPosts();
+                }
+            });
+        }
+
+        if (res.data.length === 0) {
+            body.innerHTML = '<tr><td colspan="6" class="p-8 text-center text-text-muted">Không có bài viết nào phù hợp.</td></tr>';
+            return;
+        }
+
+        body.innerHTML = res.data.map(post => `
+            <tr class="hover:bg-gray-50 transition border-b border-gray-50">
+                <td class="p-4 flex items-center gap-3">
+                    <img src="${post.image}" class="w-14 h-11 rounded-lg object-cover border border-gray-100 shrink-0">
+                    <div class="min-w-0">
+                        <span class="font-bold text-xs text-text-main line-clamp-1">${escapeHTML(post.title)}</span>
+                        <p class="text-[11px] text-gray-400 line-clamp-1 mt-0.5">${escapeHTML(post.content)}</p>
+                    </div>
+                </td>
+                <td class="p-4">
+                    <div class="flex items-center gap-2">
+                        <img src="${post.author.avatar}" class="w-7 h-7 rounded-full object-cover">
+                        <div>
+                            <span class="font-bold text-xs text-text-main block">${escapeHTML(post.author.name)}</span>
+                            <span class="text-[10px] text-gray-400 block">${escapeHTML(post.author.email)}</span>
+                        </div>
+                    </div>
+                </td>
+                <td class="p-4 text-xs font-semibold text-text-muted">
+                    <span class="text-rose-500 mr-2"><i class="fa-solid fa-heart"></i> ${post.likesCount}</span>
+                    <span class="text-blue-500"><i class="fa-solid fa-comment"></i> ${post.commentsCount}</span>
+                </td>
+                <td class="p-4 text-xs text-text-muted">${formatDate(post.created_at)}</td>
+                <td class="p-4">
+                    <span class="px-2.5 py-1 rounded-full text-xs font-bold ${post.status === 'active' ? 'bg-emerald-50 text-emerald-700 border border-emerald-200' : 'bg-rose-50 text-rose-700 border border-rose-200'}">
+                        ${post.status === 'active' ? 'Đang hiển thị' : 'Đã ẩn'}
+                    </span>
+                </td>
+                <td class="p-4 text-right shrink-0">
+                    <button class="btn-toggle-post-status ${post.status === 'active' ? 'text-amber-600 hover:bg-amber-50' : 'text-emerald-600 hover:bg-emerald-50'} p-2 rounded-lg transition cursor-pointer" data-id="${post.id_post}" data-status="${post.status}" title="${post.status === 'active' ? 'Ẩn bài viết' : 'Cho phép hiển thị'}">
+                        <i class="fa-solid ${post.status === 'active' ? 'fa-eye-slash' : 'fa-eye'}"></i>
+                    </button>
+                </td>
+            </tr>
+        `).join('');
+    } catch (e) {
+        body.innerHTML = '<tr><td colspan="6" class="p-8 text-center text-red-500">Lỗi khi kết nối tải bài viết.</td></tr>';
+    }
+}
+
+async function loadAdminReports() {
+    const body = document.getElementById('admin-community-reports-table-body');
+    const badge = document.getElementById('admin-community-badge-reports-total');
+    if (!body) return;
+
+    try {
+        const query = adminCommunityState.reports.status ? `?status=${adminCommunityState.reports.status}` : '';
+        const res = await fetchAPI(`/admin/reports${query}`);
+
+        if (!res || !res.success || !Array.isArray(res.data)) {
+            body.innerHTML = '<tr><td colspan="7" class="p-8 text-center text-red-500">Không thể tải danh sách báo cáo.</td></tr>';
+            return;
+        }
+
+        adminCommunityState.reports.items = res.data;
+        if (badge) badge.textContent = res.total;
+
+        if (res.data.length === 0) {
+            body.innerHTML = '<tr><td colspan="7" class="p-8 text-center text-text-muted">Không có báo cáo vi phạm nào.</td></tr>';
+            return;
+        }
+
+        body.innerHTML = res.data.map(rep => {
+            let statusBadge = '<span class="px-2.5 py-0.5 rounded-full text-xs font-bold bg-amber-50 text-amber-700 border border-amber-200">Chờ xử lý</span>';
+            if (rep.status === 'resolved') statusBadge = '<span class="px-2.5 py-0.5 rounded-full text-xs font-bold bg-emerald-50 text-emerald-700 border border-emerald-200">Đã giải quyết</span>';
+            if (rep.status === 'rejected') statusBadge = '<span class="px-2.5 py-0.5 rounded-full text-xs font-bold bg-gray-100 text-gray-500">Đã từ chối</span>';
+
+            const targetTitle = rep.target_info?.title || rep.target_info?.content || `ID: ${rep.target_id}`;
+
+            return `
+                <tr class="hover:bg-gray-50 transition border-b border-gray-50 text-xs">
+                    <td class="p-4 font-mono font-bold text-gray-500">#${rep.id_report}</td>
+                    <td class="p-4">
+                        <span class="font-bold text-text-main block">${escapeHTML(rep.reporter?.name || 'Ẩn danh')}</span>
+                        <span class="text-[10px] text-gray-400 block">${escapeHTML(rep.reporter?.email || '')}</span>
+                    </td>
+                    <td class="p-4">
+                        <span class="px-2 py-0.5 rounded-md font-bold text-[10px] uppercase ${rep.target_type === 'post' ? 'bg-blue-50 text-blue-700' : 'bg-purple-50 text-purple-700'}">${rep.target_type === 'post' ? 'Bài viết' : 'Bình luận'}</span>
+                        <p class="text-[11px] text-gray-600 line-clamp-1 mt-1 font-medium">${escapeHTML(targetTitle)}</p>
+                    </td>
+                    <td class="p-4">
+                        <span class="font-bold text-rose-600 block">${escapeHTML(rep.reason)}</span>
+                        <span class="text-[11px] text-text-muted block line-clamp-1">${escapeHTML(rep.description || 'Không có mô tả')}</span>
+                    </td>
+                    <td class="p-4 text-text-muted">${formatDate(rep.created_at)}</td>
+                    <td class="p-4">${statusBadge}</td>
+                    <td class="p-4 text-right space-x-1.5 shrink-0">
+                        ${rep.status === 'pending' ? `
+                            <button class="btn-resolve-report px-2.5 py-1 bg-rose-500 hover:bg-rose-600 text-white rounded-lg text-xs font-bold transition cursor-pointer" data-id="${rep.id_report}" title="Ẩn nội dung vi phạm">Duyệt & Ẩn</button>
+                            <button class="btn-reject-report px-2.5 py-1 bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-lg text-xs font-bold transition cursor-pointer" data-id="${rep.id_report}">Từ chối</button>
+                        ` : `<span class="text-gray-400 text-[11px]">Đã xử lý</span>`}
+                    </td>
+                </tr>
+            `;
+        }).join('');
+    } catch (e) {
+        body.innerHTML = '<tr><td colspan="7" class="p-8 text-center text-red-500">Lỗi khi kết nối tải báo cáo.</td></tr>';
+    }
+}
+
+async function handleTogglePostStatus(id, currentStatus) {
+    const newStatus = currentStatus === 'active' ? 'hidden' : 'active';
+    try {
+        const res = await fetchAPI(`/admin/posts/${id}/status`, {
+            method: 'PATCH',
+            body: JSON.stringify({ status: newStatus })
+        });
+        if (res && res.success) {
+            setCommunityAlert(res.message, 'success');
+            await loadAdminPosts();
+        } else {
+            setCommunityAlert(res.message || 'Không thể đổi trạng thái bài viết.', 'error');
+        }
+    } catch (err) {
+        setCommunityAlert('Lỗi kết nối khi đổi trạng thái bài viết.', 'error');
+    }
+}
+
+async function handleResolveReport(id) {
+    if (!confirm('Duyệt báo cáo này và tự động ẩn bài viết/bình luận vi phạm?')) return;
+
+    try {
+        const res = await fetchAPI(`/admin/reports/${id}`, {
+            method: 'PATCH',
+            body: JSON.stringify({ status: 'resolved', hideTarget: true })
+        });
+        if (res && res.success) {
+            setCommunityAlert(res.message, 'success');
+            await loadAdminReports();
+            await loadAdminPosts();
+        } else {
+            setCommunityAlert(res.message || 'Không thể xử lý báo cáo.', 'error');
+        }
+    } catch (err) {
+        setCommunityAlert('Lỗi kết nối khi xử lý báo cáo.', 'error');
+    }
+}
+
+async function handleRejectReport(id) {
+    try {
+        const res = await fetchAPI(`/admin/reports/${id}`, {
+            method: 'PATCH',
+            body: JSON.stringify({ status: 'rejected' })
+        });
+        if (res && res.success) {
+            setCommunityAlert(res.message, 'success');
+            await loadAdminReports();
+        } else {
+            setCommunityAlert(res.message || 'Không thể từ chối báo cáo.', 'error');
+        }
+    } catch (err) {
+        setCommunityAlert('Lỗi kết nối khi từ chối báo cáo.', 'error');
+    }
+}
+
+function bindAdminCommunityEvents() {
+    const tabPosts = document.getElementById('admin-community-tab-posts');
+    const tabReports = document.getElementById('admin-community-tab-reports');
+    const panelPosts = document.getElementById('admin-community-panel-posts');
+    const panelReports = document.getElementById('admin-community-panel-reports');
+
+    const searchInput = document.getElementById('admin-community-posts-search');
+    const statusSelect = document.getElementById('admin-community-posts-status');
+    const reportsStatusSelect = document.getElementById('admin-community-reports-status');
+
+    const postsTableBody = document.getElementById('admin-community-posts-table-body');
+    const reportsTableBody = document.getElementById('admin-community-reports-table-body');
+
+    tabPosts?.addEventListener('click', () => {
+        adminCommunityState.tab = 'posts';
+        tabPosts.className = 'px-5 py-3 font-bold text-xs border-b-2 border-primary text-primary transition flex items-center gap-2 cursor-pointer';
+        tabReports.className = 'px-5 py-3 font-semibold text-xs border-b-2 border-transparent text-text-muted hover:text-text-main transition flex items-center gap-2 cursor-pointer';
+        panelPosts?.classList.remove('hidden');
+        panelReports?.classList.add('hidden');
+    });
+
+    tabReports?.addEventListener('click', () => {
+        adminCommunityState.tab = 'reports';
+        tabReports.className = 'px-5 py-3 font-bold text-xs border-b-2 border-primary text-primary transition flex items-center gap-2 cursor-pointer';
+        tabPosts.className = 'px-5 py-3 font-semibold text-xs border-b-2 border-transparent text-text-muted hover:text-text-main transition flex items-center gap-2 cursor-pointer';
+        panelReports?.classList.remove('hidden');
+        panelPosts?.classList.add('hidden');
+        loadAdminReports();
+    });
+
+    let debounceTimer;
+    searchInput?.addEventListener('input', (e) => {
+        clearTimeout(debounceTimer);
+        debounceTimer = setTimeout(() => {
+            adminCommunityState.posts.search = e.target.value.trim();
+            adminCommunityState.posts.page = 1;
+            loadAdminPosts();
+        }, 300);
+    });
+
+    statusSelect?.addEventListener('change', (e) => {
+        adminCommunityState.posts.status = e.target.value;
+        adminCommunityState.posts.page = 1;
+        loadAdminPosts();
+    });
+
+    reportsStatusSelect?.addEventListener('change', (e) => {
+        adminCommunityState.reports.status = e.target.value;
+        loadAdminReports();
+    });
+
+    postsTableBody?.addEventListener('click', (e) => {
+        const toggleBtn = e.target.closest('.btn-toggle-post-status');
+        if (toggleBtn) {
+            const id = Number(toggleBtn.getAttribute('data-id'));
+            const status = toggleBtn.getAttribute('data-status');
+            handleTogglePostStatus(id, status);
+        }
+    });
+
+    reportsTableBody?.addEventListener('click', (e) => {
+        const resolveBtn = e.target.closest('.btn-resolve-report');
+        if (resolveBtn) {
+            const id = Number(resolveBtn.getAttribute('data-id'));
+            handleResolveReport(id);
+            return;
+        }
+
+        const rejectBtn = e.target.closest('.btn-reject-report');
+        if (rejectBtn) {
+            const id = Number(rejectBtn.getAttribute('data-id'));
+            handleRejectReport(id);
+        }
+    });
+}
+
+async function initAdminCommunityPage() {
+    bindAdminCommunityEvents();
+    await loadAdminPosts();
+    await loadAdminReports();
+}
+
+// ==========================================
+// ADMIN ROOT COMPONENT
+// ==========================================
+=======
+>>>>>>> c217107e829a23c28d6011ad1e764d46a2bd4f12
+
+const Admin = {
+    render: async (params) => {
+        const page = params || 'dashboard';
+        let contentHTML = '';
+
+        if (page === 'users') {
+            contentHTML = renderUsersPage();
+        } else if (page === 'foods') {
+            contentHTML = renderFoodsPage();
+        } else if (page === 'categories') {
+            contentHTML = renderCategoriesPage();
+        } else if (page === 'community') {
+            contentHTML = renderCommunityPage();
+        } else {
             contentHTML = renderDashboardPage();
         }
 
         return `
             <div class="cozy-kitchen-bg min-h-screen flex text-text-main font-sans">
                 <!-- Sidebar -->
-                <aside class="w-64 bg-white/90 backdrop-blur-md border-r border-beige-border hidden md:flex flex-col min-h-[calc(100vh-70px)]">
-                    <div class="p-6 border-b border-beige-border/80">
+                <aside class="w-64 bg-white/95 backdrop-blur-md border-r border-beige-border hidden md:flex flex-col sticky top-16 sm:top-[68px] h-[calc(100vh-4rem)] sm:h-[calc(100vh-68px)] self-start shrink-0 z-30 overflow-y-auto shadow-xs">
+                    <div class="p-6 border-b border-beige-border/80 sticky top-0 bg-white/95 backdrop-blur-md z-10">
                         <h2 class="text-xl font-bold text-primary flex items-center gap-2">
                             <i class="fa-solid fa-shield text-accent"></i> Admin Panel
                         </h2>
@@ -1606,6 +3885,9 @@ const Admin = {
                         <a href="#/admin/foods" class="flex items-center gap-3 px-4 py-3 ${page === 'foods' ? 'bg-primary text-white font-bold shadow-sm' : 'text-text-muted hover:bg-cream-soft hover:text-primary font-semibold'} rounded-xl transition cursor-pointer">
                             <i class="fa-solid fa-kitchen-set w-5 text-center"></i> Quản lý món ăn
                         </a>
+                        <a href="#/admin/categories" class="flex items-center gap-3 px-4 py-3 ${page === 'categories' ? 'bg-primary text-white font-bold shadow-sm' : 'text-text-muted hover:bg-cream-soft hover:text-primary font-semibold'} rounded-xl transition cursor-pointer">
+                            <i class="fa-solid fa-layer-group w-5 text-center"></i> Quản lý danh mục
+                        </a>
                         <a href="#/admin/community" class="flex items-center gap-3 px-4 py-3 ${page === 'community' ? 'bg-primary text-white font-bold shadow-sm' : 'text-text-muted hover:bg-cream-soft hover:text-primary font-semibold'} rounded-xl transition cursor-pointer">
                             <i class="fa-solid fa-comments w-5 text-center"></i> Quản lý cộng đồng
                         </a>
@@ -1613,16 +3895,15 @@ const Admin = {
                 </aside>
 
                 <!-- Main Content -->
-                <main class="flex-1 p-6 sm:p-8">
+                <main class="flex-1 p-6 sm:p-8 min-w-0">
                     ${contentHTML}
                 </main>
             </div>
         `;
     },
     afterRender: async (page = 'dashboard') => {
-        // Tạm ẩn Footer khi ở trang Admin để layout tràn viền
         const footer = document.getElementById('footer-container');
-        if(footer) footer.style.display = 'none';
+        if (footer) footer.style.display = 'none';
 
         if (page === 'dashboard') {
             await loadAdminDashboard();
@@ -1634,6 +3915,14 @@ const Admin = {
 
         if (page === 'foods') {
             await initAdminFoodsPage();
+        }
+
+        if (page === 'categories') {
+            await initAdminCategoriesPage();
+        }
+
+        if (page === 'community') {
+            await initAdminCommunityPage();
         }
     }
 };

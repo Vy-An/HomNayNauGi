@@ -172,7 +172,8 @@ async function getMe(req, res) {
             });
         }
 
-        const [postsCount, favoritesCount] = await Promise.all([
+        const [postsCount, activePostsCount, favoritesCount] = await Promise.all([
+            prisma.posts.count({ where: { id_user: req.user.id_user } }),
             prisma.posts.count({ where: { id_user: req.user.id_user, status: 'active' } }),
             prisma.favorites.count({ where: { id_user: req.user.id_user } })
         ]);
@@ -183,6 +184,7 @@ async function getMe(req, res) {
                 ...formatUser(req.user),
                 stats: {
                     posts: postsCount,
+                    activePosts: activePostsCount,
                     favorites: favoritesCount
                 }
             }
@@ -229,7 +231,8 @@ async function updateProfile(req, res) {
             data: updateData
         });
 
-        const [postsCount, favoritesCount] = await Promise.all([
+        const [postsCount, activePostsCount, favoritesCount] = await Promise.all([
+            prisma.posts.count({ where: { id_user: req.user.id_user } }),
             prisma.posts.count({ where: { id_user: req.user.id_user, status: 'active' } }),
             prisma.favorites.count({ where: { id_user: req.user.id_user } })
         ]);
@@ -241,6 +244,7 @@ async function updateProfile(req, res) {
                 ...formatUser(updatedUser),
                 stats: {
                     posts: postsCount,
+                    activePosts: activePostsCount,
                     favorites: favoritesCount
                 }
             }
@@ -264,8 +268,7 @@ async function getMyPosts(req, res) {
 
         const posts = await prisma.posts.findMany({
             where: {
-                id_user: req.user.id_user,
-                status: 'active'
+                id_user: req.user.id_user
             },
             include: {
                 users: {
@@ -316,6 +319,7 @@ async function getMyPosts(req, res) {
                 content: post.content,
                 image: resolveAssetUrl(post.image),
                 status: post.status,
+                hidden_reason: post.hidden_reason || null,
                 created_at: post.created_at,
                 likesCount,
                 likes: likesCount,
@@ -469,6 +473,100 @@ async function removeFavorite(req, res) {
     }
 }
 
+async function toggleFavorite(req, res) {
+    try {
+        if (!req.user) {
+            return res.status(401).json({
+                success: false,
+<<<<<<< HEAD
+                message: 'Vui lòng đăng nhập để lưu món yêu thích.'
+            });
+        }
+
+        const foodId = Number(req.params.id || req.body?.id_food || req.body?.foodId);
+=======
+                message: 'Vui lòng đăng nhập để thực hiện chức năng này.'
+            });
+        }
+
+        const foodId = Number(req.params.id);
+>>>>>>> c217107e829a23c28d6011ad1e764d46a2bd4f12
+        if (!foodId || Number.isNaN(foodId)) {
+            return res.status(400).json({
+                success: false,
+                message: 'ID món ăn không hợp lệ.'
+            });
+        }
+
+<<<<<<< HEAD
+        const food = await prisma.foods.findUnique({
+            where: { id_food: foodId }
+        });
+
+        if (!food) {
+            return res.status(404).json({
+                success: false,
+                message: 'Món ăn không tồn tại.'
+            });
+        }
+
+        const existing = await prisma.favorites.findUnique({
+            where: {
+                id_user_id_food: {
+                    id_user: req.user.id_user,
+                    id_food: foodId
+                }
+            }
+        });
+
+        let isFavorite = false;
+        if (existing) {
+            await prisma.favorites.delete({
+                where: {
+                    id_favorite: existing.id_favorite
+                }
+            });
+            isFavorite = false;
+        } else {
+            await prisma.favorites.create({
+                data: {
+                    id_user: req.user.id_user,
+                    id_food: foodId
+                }
+            });
+            isFavorite = true;
+        }
+
+        const totalFavorites = await prisma.favorites.count({
+            where: { id_user: req.user.id_user }
+        });
+
+        return res.json({
+            success: true,
+            is_favorite: isFavorite,
+            message: isFavorite ? 'Đã lưu món vào danh sách yêu thích!' : 'Đã bỏ lưu món khỏi danh sách yêu thích.',
+            id_food: foodId,
+            totalFavorites
+        });
+    } catch (error) {
+        console.error('Toggle favorite error:', error);
+        return res.status(500).json({
+            success: false,
+            message: 'Không thể cập nhật món yêu thích lúc này.'
+=======
+        const foodService = require('../services/food.service');
+        const result = await foodService.toggleFavorite(foodId, req.user.id_user);
+
+        return res.json(result);
+    } catch (error) {
+        return res.status(error.status || 500).json({
+            success: false,
+            message: error.message || 'Không thể tương tác yêu thích lúc này.'
+>>>>>>> c217107e829a23c28d6011ad1e764d46a2bd4f12
+        });
+    }
+}
+
 module.exports = {
     login,
     register,
@@ -477,5 +575,6 @@ module.exports = {
     updateProfile,
     getMyPosts,
     getMyFavorites,
-    removeFavorite
+    removeFavorite,
+    toggleFavorite
 };

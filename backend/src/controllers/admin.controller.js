@@ -601,6 +601,7 @@ async function getDashboard(req, res) {
             postsTotal,
             postsActive,
             postsHidden,
+            postsPending,
             reportsTotal,
             reportsPending,
             latestFoods
@@ -610,6 +611,7 @@ async function getDashboard(req, res) {
             prisma.posts.count(),
             prisma.posts.count({ where: { status: 'active' } }),
             prisma.posts.count({ where: { status: 'hidden' } }),
+            prisma.posts.count({ where: { status: 'pending' } }),
             prisma.reports.count(),
             prisma.reports.count({ where: { status: 'pending' } }),
             prisma.foods.findMany({
@@ -632,7 +634,8 @@ async function getDashboard(req, res) {
                     posts: {
                         total: postsTotal,
                         active: postsActive,
-                        hidden: postsHidden
+                        hidden: postsHidden,
+                        pending: postsPending
                     },
                     reports: {
                         total: reportsTotal,
@@ -1042,6 +1045,1403 @@ async function updateFoodStatus(req, res) {
     }, res);
 }
 
+// ==========================================
+<<<<<<< HEAD
+// 3. QUẢN LÝ DANH MỤC (CATEGORIES)
+// ==========================================
+
+async function getCategories(req, res) {
+    try {
+        const search = String(req.query?.search || '').trim();
+        const status = req.query?.status;
+        const where = {};
+        if (search) {
+            where.OR = [
+                { name: { contains: search } },
+                { slug: { contains: search } }
+            ];
+        }
+        if (status === 'active' || status === 'hidden') {
+            where.status = status;
+        }
+
+        const categories = await prisma.categories.findMany({
+            where,
+            include: {
+                _count: {
+                    select: { foods: true }
+                }
+            },
+            orderBy: { id_category: 'asc' }
+        });
+
+        const formatted = categories.map((cat) => ({
+            id: cat.id_category,
+            id_category: cat.id_category,
+            name: cat.name,
+            slug: cat.slug,
+            status: cat.status || 'active',
+            foodsCount: cat._count?.foods || 0,
+            created_at: cat.created_at,
+            updated_at: cat.updated_at
+        }));
+
+        return res.json({
+            success: true,
+            total: formatted.length,
+            data: formatted
+        });
+    } catch (error) {
+        console.error('Lỗi getCategories:', error);
+        return res.status(500).json({
+            success: false,
+            message: 'Không thể tải danh sách danh mục lúc này.',
+            data: []
+        });
+    }
+}
+
+async function createCategory(req, res) {
+    try {
+        const name = String(req.body?.name || '').trim();
+        let slug = String(req.body?.slug || '').trim();
+
+        if (!name) {
+            return res.status(400).json({
+                success: false,
+                message: 'Tên danh mục không được để trống.'
+            });
+        }
+
+        if (!slug) {
+            slug = createSlug(name);
+        } else {
+            slug = createSlug(slug);
+        }
+
+        const existing = await prisma.categories.findFirst({
+            where: {
+                OR: [{ name }, { slug }]
+            }
+        });
+
+        if (existing) {
+            return res.status(409).json({
+                success: false,
+                message: 'Tên hoặc đường dẫn (slug) danh mục đã tồn tại.'
+            });
+        }
+
+        const category = await prisma.categories.create({
+            data: { name, slug }
+        });
+
+        return res.json({
+            success: true,
+            message: 'Tạo danh mục thành công.',
+            data: category
+        });
+    } catch (error) {
+        console.error('Lỗi createCategory:', error);
+        return res.status(500).json({
+            success: false,
+            message: 'Không thể tạo danh mục lúc này.'
+        });
+    }
+}
+
+async function updateCategory(req, res) {
+    try {
+        const id = parsePositiveInt(req.params.id);
+        if (!id) {
+            return res.status(400).json({
+                success: false,
+                message: 'ID danh mục không hợp lệ.'
+            });
+        }
+
+        const category = await prisma.categories.findUnique({
+            where: { id_category: id }
+        });
+
+        if (!category) {
+            return res.status(404).json({
+                success: false,
+                message: 'Không tìm thấy danh mục.'
+            });
+        }
+
+        const name = req.body?.name ? String(req.body.name).trim() : category.name;
+        let slug = req.body?.slug ? createSlug(req.body.slug) : (req.body?.name ? createSlug(req.body.name) : category.slug);
+
+        const duplicate = await prisma.categories.findFirst({
+            where: {
+                id_category: { not: id },
+                OR: [{ name }, { slug }]
+            }
+        });
+
+        if (duplicate) {
+            return res.status(409).json({
+                success: false,
+                message: 'Tên hoặc slug danh mục đã bị trùng với danh mục khác.'
+            });
+        }
+
+        const updated = await prisma.categories.update({
+            where: { id_category: id },
+            data: {
+                name,
+                slug,
+                updated_at: new Date()
+            }
+        });
+
+        return res.json({
+            success: true,
+            message: 'Cập nhật danh mục thành công.',
+            data: updated
+        });
+    } catch (error) {
+        console.error('Lỗi updateCategory:', error);
+        return res.status(500).json({
+            success: false,
+            message: 'Không thể cập nhật danh mục lúc này.'
+        });
+    }
+}
+
+async function updateCategoryStatus(req, res) {
+    try {
+        const id = parsePositiveInt(req.params.id);
+        const status = req.body?.status;
+
+        if (!id) {
+            return res.status(400).json({
+                success: false,
+                message: 'ID danh mục không hợp lệ.'
+            });
+        }
+
+        if (status !== 'active' && status !== 'hidden') {
+            return res.status(400).json({
+                success: false,
+                message: 'Trạng thái danh mục không hợp lệ (phải là active hoặc hidden).'
+            });
+        }
+
+        const category = await prisma.categories.findUnique({
+            where: { id_category: id }
+        });
+
+        if (!category) {
+            return res.status(404).json({
+                success: false,
+                message: 'Không tìm thấy danh mục.'
+            });
+        }
+
+        const updated = await prisma.categories.update({
+            where: { id_category: id },
+            data: {
+                status,
+                updated_at: new Date()
+            }
+        });
+
+        return res.json({
+            success: true,
+            message: status === 'active' ? 'Đã cho phép hiển thị danh mục.' : 'Đã ẩn danh mục.',
+            data: updated
+        });
+    } catch (error) {
+        console.error('Lỗi updateCategoryStatus:', error);
+        return res.status(500).json({
+            success: false,
+            message: 'Không thể cập nhật trạng thái danh mục lúc này.'
+        });
+    }
+}
+
+async function deleteCategory(req, res) {
+    try {
+        const id = parsePositiveInt(req.params.id);
+        if (!id) {
+            return res.status(400).json({
+                success: false,
+                message: 'ID danh mục không hợp lệ.'
+            });
+        }
+
+        const foodsCount = await prisma.foods.count({
+            where: { id_category: id }
+        });
+
+        if (foodsCount > 0) {
+            return res.status(400).json({
+                success: false,
+                message: `Không thể xóa vì danh mục đang có ${foodsCount} món ăn liên kết. Vui lòng chuyển các món sang danh mục khác trước khi xóa.`
+            });
+        }
+
+        await prisma.categories.delete({
+            where: { id_category: id }
+        });
+
+        return res.json({
+            success: true,
+            message: 'Đã xóa danh mục thành công.'
+        });
+    } catch (error) {
+        console.error('Lỗi deleteCategory:', error);
+        return res.status(500).json({
+            success: false,
+            message: 'Không thể xóa danh mục lúc này.'
+        });
+    }
+}
+
+// ==========================================
+// 4. QUẢN LÝ BÀI VIẾT & BÁO CÁO CỘNG ĐỒNG
+// ==========================================
+
+async function getAdminPosts(req, res) {
+    try {
+        const page = Math.max(1, Number.parseInt(req.query?.page, 10) || 1);
+        const limit = clampLimit(req.query?.limit, 10, 100);
+        const skip = (page - 1) * limit;
+        const search = String(req.query?.search || '').trim();
+        const status = req.query?.status;
+
+        const where = {};
+=======
+// QUẢN LÝ BÀI VIẾT CỘNG ĐỒNG & KIỂM DUYỆT
+// ==========================================
+
+async function getPosts(req, res) {
+    try {
+        const page = Math.max(1, parsePositiveInt(req.query.page) || 1);
+        const limit = clampLimit(req.query.limit, 10, 50);
+        const skip = (page - 1) * limit;
+        const search = String(req.query.search || '').trim();
+        const status = String(req.query.status || '').trim().toLowerCase();
+
+        const where = {};
+        if (['active', 'hidden', 'pending'].includes(status)) {
+            where.status = status;
+        }
+
+>>>>>>> c217107e829a23c28d6011ad1e764d46a2bd4f12
+        if (search) {
+            where.OR = [
+                { title: { contains: search } },
+                { content: { contains: search } },
+                { users: { name: { contains: search } } }
+            ];
+        }
+<<<<<<< HEAD
+        if (status === 'active' || status === 'hidden') {
+            where.status = status;
+        }
+
+        const [total, posts] = await Promise.all([
+            prisma.posts.count({ where }),
+            prisma.posts.findMany({
+                where,
+=======
+
+        const [total, pendingTotal, activeTotal, hiddenTotal, posts] = await Promise.all([
+            prisma.posts.count({ where }),
+            prisma.posts.count({ where: { status: 'pending' } }),
+            prisma.posts.count({ where: { status: 'active' } }),
+            prisma.posts.count({ where: { status: 'hidden' } }),
+            prisma.posts.findMany({
+                where,
+                skip,
+                take: limit,
+                orderBy: { created_at: 'desc' },
+                include: {
+                    users: {
+                        select: {
+                            id_user: true,
+                            name: true,
+                            email: true,
+                            avatar: true,
+                            role: true,
+                            status: true
+                        }
+                    },
+                    foods: {
+                        select: {
+                            id_food: true,
+                            name: true,
+                            slug: true
+                        }
+                    },
+                    _count: {
+                        select: {
+                            post_likes: true,
+                            comments: true
+                        }
+                    }
+                }
+            })
+        ]);
+
+        // Lấy chi tiết báo cáo vi phạm cho từng bài viết để phục vụ tooltip hover nhanh
+        const postIds = posts.map(p => p.id_post);
+        const reportsMap = {};
+
+        if (postIds.length > 0) {
+            const rawReports = await prisma.reports.findMany({
+                where: {
+                    target_type: 'post',
+                    target_id: { in: postIds }
+                },
+                include: {
+                    users: {
+                        select: {
+                            id_user: true,
+                            name: true,
+                            email: true,
+                            avatar: true
+                        }
+                    }
+                },
+                orderBy: { created_at: 'desc' }
+            });
+
+            rawReports.forEach(r => {
+                if (!reportsMap[r.target_id]) reportsMap[r.target_id] = [];
+                reportsMap[r.target_id].push({
+                    id_report: r.id_report,
+                    reason: r.reason,
+                    description: r.description,
+                    status: r.status,
+                    created_at: r.created_at,
+                    reporter: r.users ? {
+                        id_user: r.users.id_user,
+                        name: r.users.name || 'Người dùng ẩn danh',
+                        email: r.users.email,
+                        avatar: resolveAssetUrl(r.users.avatar || '/images/users/default.png')
+                    } : null
+                });
+            });
+        }
+
+        const formattedPosts = posts.map(p => ({
+            id_post: p.id_post,
+            id_user: p.id_user,
+            id_food: p.id_food,
+            title: p.title,
+            content: p.content,
+            image: resolveAssetUrl(p.image),
+            status: p.status,
+            hidden_reason: p.hidden_reason || null,
+            created_at: p.created_at,
+            updated_at: p.updated_at,
+            likes_count: p._count.post_likes,
+            comments_count: p._count.comments,
+            reports_count: reportsMap[p.id_post]?.length || 0,
+            reports: reportsMap[p.id_post] || [],
+            author: {
+                id_user: p.users?.id_user,
+                name: p.users?.name || 'Ẩn danh',
+                email: p.users?.email || '',
+                avatar: resolveAssetUrl(p.users?.avatar || '/images/users/default.png'),
+                role: p.users?.role,
+                status: p.users?.status
+            },
+            food: p.foods ? {
+                id_food: p.foods.id_food,
+                name: p.foods.name,
+                slug: p.foods.slug
+            } : null
+        }));
+
+        const allTotal = pendingTotal + activeTotal + hiddenTotal;
+
+        return res.json({
+            success: true,
+            data: formattedPosts,
+            pagination: {
+                page,
+                limit,
+                total,
+                allTotal,
+                totalPages: Math.ceil(total / limit) || 1,
+                pendingTotal,
+                activeTotal,
+                hiddenTotal
+            }
+        });
+    } catch (error) {
+        console.error('getPosts error:', error);
+        return res.status(500).json({
+            success: false,
+            message: 'Không thể tải danh sách bài viết kiểm duyệt.'
+        });
+    }
+}
+
+async function getPostById(req, res) {
+    try {
+        const id = parsePositiveInt(req.params.id);
+        if (!id) {
+            return res.status(400).json({ success: false, message: 'ID bài viết không hợp lệ.' });
+        }
+
+        const post = await prisma.posts.findUnique({
+            where: { id_post: id },
+            include: {
+                users: true,
+                foods: true,
+                _count: {
+                    select: {
+                        post_likes: true,
+                        comments: true
+                    }
+                }
+            }
+        });
+
+        if (!post) {
+            return res.status(404).json({ success: false, message: 'Bài viết không tồn tại.' });
+        }
+
+        const reports = await prisma.reports.findMany({
+            where: {
+                target_type: 'post',
+                target_id: id
+            },
+            include: {
+                users: {
+                    select: {
+                        id_user: true,
+                        name: true,
+                        email: true,
+                        avatar: true
+                    }
+                }
+            },
+            orderBy: { created_at: 'desc' }
+        });
+
+        return res.json({
+            success: true,
+            data: {
+                id_post: post.id_post,
+                id_user: post.id_user,
+                title: post.title,
+                content: post.content,
+                image: resolveAssetUrl(post.image),
+                status: post.status,
+                hidden_reason: post.hidden_reason || null,
+                created_at: post.created_at,
+                likes_count: post._count.post_likes,
+                comments_count: post._count.comments,
+                reports_count: reports.length,
+                reports,
+                author: {
+                    id_user: post.users?.id_user,
+                    name: post.users?.name,
+                    email: post.users?.email,
+                    avatar: resolveAssetUrl(post.users?.avatar)
+                },
+                food: post.foods ? {
+                    id_food: post.foods.id_food,
+                    name: post.foods.name
+                } : null
+            }
+        });
+    } catch (error) {
+        return res.status(500).json({ success: false, message: 'Lỗi khi tải chi tiết bài viết.' });
+    }
+}
+
+async function updatePostStatus(req, res) {
+    try {
+        const id = parsePositiveInt(req.params.id);
+        const { status, hidden_reason } = req.body || {};
+
+        if (!id || !['active', 'hidden', 'pending'].includes(status)) {
+            return res.status(400).json({
+                success: false,
+                message: 'Dữ liệu trạng thái không hợp lệ. Chấp nhận: active, hidden, pending.'
+            });
+        }
+
+        const dataToUpdate = { status };
+        if (status === 'hidden') {
+            const trimmedReason = typeof hidden_reason === 'string' ? hidden_reason.trim() : '';
+            dataToUpdate.hidden_reason = trimmedReason || 'Vi phạm tiêu chuẩn cộng đồng';
+        } else if (status === 'active') {
+            dataToUpdate.hidden_reason = null;
+        }
+
+        const updated = await prisma.posts.update({
+            where: { id_post: id },
+            data: dataToUpdate
+        });
+
+        // Nếu admin ẩn bài viết do vi phạm, tự động đánh dấu các report liên quan thành resolved
+        if (status === 'hidden') {
+            await prisma.reports.updateMany({
+                where: {
+                    target_type: 'post',
+                    target_id: id,
+                    status: 'pending'
+                },
+                data: { status: 'resolved' }
+            });
+        }
+
+        const statusMsg = status === 'active' 
+            ? 'Đã duyệt bài viết thành công (bài viết đã hiển thị trên cộng đồng)!' 
+            : (status === 'hidden' ? `Đã ẩn bài viết. Lý do: "${dataToUpdate.hidden_reason}".` : 'Đã đưa bài viết về trạng thái chờ duyệt.');
+
+        return res.json({
+            success: true,
+            message: statusMsg,
+            data: {
+                id_post: updated.id_post,
+                status: updated.status,
+                hidden_reason: updated.hidden_reason
+            }
+        });
+    } catch (error) {
+        return res.status(500).json({ success: false, message: 'Không thể cập nhật trạng thái bài viết.' });
+    }
+}
+
+async function deletePost(req, res) {
+    try {
+        const id = parsePositiveInt(req.params.id);
+        if (!id) {
+            return res.status(400).json({ success: false, message: 'ID bài viết không hợp lệ.' });
+        }
+
+        // Xóa các báo cáo liên quan bài viết trước
+        await prisma.reports.deleteMany({
+            where: {
+                target_type: 'post',
+                target_id: id
+            }
+        });
+
+        await prisma.posts.delete({
+            where: { id_post: id }
+        });
+
+        return res.json({
+            success: true,
+            message: 'Đã xóa bài viết vi phạm thành công.'
+        });
+    } catch (error) {
+        return res.status(500).json({ success: false, message: 'Không thể xóa bài viết lúc này.' });
+    }
+}
+
+// ==========================================
+// QUẢN LÝ BÁO CÁO VI PHẠM (REPORTS)
+// ==========================================
+
+async function getReports(req, res) {
+    try {
+        const page = Math.max(1, parsePositiveInt(req.query.page) || 1);
+        const limit = clampLimit(req.query.limit, 10, 50);
+        const skip = (page - 1) * limit;
+        const search = String(req.query.search || '').trim();
+        const status = String(req.query.status || '').trim().toLowerCase();
+
+        const where = {
+            target_type: 'post'
+        };
+
+        if (['pending', 'resolved', 'rejected'].includes(status)) {
+            where.status = status;
+        }
+
+        if (search) {
+            where.OR = [
+                { reason: { contains: search } },
+                { description: { contains: search } },
+                { users: { name: { contains: search } } }
+            ];
+        }
+
+        const [total, pendingTotal, reports] = await Promise.all([
+            prisma.reports.count({ where }),
+            prisma.reports.count({ where: { target_type: 'post', status: 'pending' } }),
+            prisma.reports.findMany({
+                where,
+                skip,
+                take: limit,
+                orderBy: { created_at: 'desc' },
+                include: {
+                    users: {
+                        select: {
+                            id_user: true,
+                            name: true,
+                            email: true,
+                            avatar: true
+                        }
+                    }
+                }
+            })
+        ]);
+
+        // Lấy thông tin bài viết bị báo cáo
+        const postIds = [...new Set(reports.map(r => r.target_id))];
+        let postsMap = new Map();
+
+        if (postIds.length > 0) {
+            const targetPosts = await prisma.posts.findMany({
+                where: { id_post: { in: postIds } },
+>>>>>>> c217107e829a23c28d6011ad1e764d46a2bd4f12
+                include: {
+                    users: {
+                        select: {
+                            id_user: true,
+                            name: true,
+                            email: true,
+                            avatar: true
+                        }
+                    },
+<<<<<<< HEAD
+                    foods: {
+                        select: {
+                            id_food: true,
+                            name: true
+                        }
+                    },
+=======
+>>>>>>> c217107e829a23c28d6011ad1e764d46a2bd4f12
+                    _count: {
+                        select: {
+                            post_likes: true,
+                            comments: true
+                        }
+                    }
+<<<<<<< HEAD
+                },
+                orderBy: { id_post: 'desc' },
+                skip,
+                take: limit
+            })
+        ]);
+
+        const formatted = posts.map((post) => ({
+            id: post.id_post,
+            id_post: post.id_post,
+            title: post.title,
+            content: post.content,
+            image: resolveAssetUrl(post.image || '/images/posts/post-1.jpg'),
+            status: post.status,
+            created_at: post.created_at,
+            updated_at: post.updated_at,
+            author: {
+                id: post.users?.id_user,
+                name: post.users?.name || 'Ẩn danh',
+                email: post.users?.email || '',
+                avatar: resolveAssetUrl(post.users?.avatar || '/images/users/admin.jpg')
+            },
+            food: post.foods ? { id: post.foods.id_food, name: post.foods.name } : null,
+            likesCount: post._count?.post_likes || 0,
+            commentsCount: post._count?.comments || 0
+        }));
+
+        return res.json({
+            success: true,
+            total,
+            page,
+            limit,
+            totalPages: Math.ceil(total / limit) || 1,
+            data: formatted
+        });
+    } catch (error) {
+        console.error('Lỗi getAdminPosts:', error);
+        return res.status(500).json({
+            success: false,
+            message: 'Không thể tải danh sách bài viết cộng đồng lúc này.',
+            data: []
+=======
+                }
+            });
+
+            targetPosts.forEach(p => postsMap.set(p.id_post, p));
+        }
+
+        const formattedReports = reports.map(r => {
+            const targetPost = postsMap.get(r.target_id);
+
+            return {
+                id_report: r.id_report,
+                id_user: r.id_user,
+                target_type: r.target_type,
+                target_id: r.target_id,
+                reason: r.reason,
+                description: r.description,
+                status: r.status,
+                created_at: r.created_at,
+                updated_at: r.updated_at,
+                reporter: r.users ? {
+                    id_user: r.users.id_user,
+                    name: r.users.name || 'Người dùng ẩn danh',
+                    email: r.users.email,
+                    avatar: resolveAssetUrl(r.users.avatar || '/images/users/default.png')
+                } : null,
+                post: targetPost ? {
+                    id_post: targetPost.id_post,
+                    title: targetPost.title,
+                    content: targetPost.content,
+                    image: resolveAssetUrl(targetPost.image),
+                    status: targetPost.status,
+                    likes_count: targetPost._count?.post_likes || 0,
+                    comments_count: targetPost._count?.comments || 0,
+                    author: {
+                        id_user: targetPost.users?.id_user,
+                        name: targetPost.users?.name || 'Tác giả',
+                        email: targetPost.users?.email,
+                        avatar: resolveAssetUrl(targetPost.users?.avatar || '/images/users/default.png')
+                    }
+                } : null
+            };
+        });
+
+        return res.json({
+            success: true,
+            data: formattedReports,
+            pagination: {
+                page,
+                limit,
+                total,
+                totalPages: Math.ceil(total / limit) || 1,
+                pendingTotal
+            }
+        });
+    } catch (error) {
+        console.error('getReports error:', error);
+        return res.status(500).json({
+            success: false,
+            message: 'Không thể tải danh sách báo cáo vi phạm.'
+>>>>>>> c217107e829a23c28d6011ad1e764d46a2bd4f12
+        });
+    }
+}
+
+<<<<<<< HEAD
+async function updatePostStatus(req, res) {
+    try {
+        const id = parsePositiveInt(req.params.id);
+        const status = req.body?.status;
+
+        if (!id) {
+            return res.status(400).json({
+                success: false,
+                message: 'ID bài viết không hợp lệ.'
+            });
+        }
+
+        if (status !== 'active' && status !== 'hidden') {
+            return res.status(400).json({
+                success: false,
+                message: 'Trạng thái bài viết không hợp lệ (phải là active hoặc hidden).'
+            });
+        }
+
+        const post = await prisma.posts.findUnique({
+            where: { id_post: id }
+        });
+
+        if (!post) {
+            return res.status(404).json({
+                success: false,
+                message: 'Không tìm thấy bài viết.'
+            });
+        }
+
+        const updated = await prisma.posts.update({
+            where: { id_post: id },
+            data: {
+                status,
+                updated_at: new Date()
+            }
+        });
+
+        return res.json({
+            success: true,
+            message: status === 'active' ? 'Đã cho phép hiển thị bài viết.' : 'Đã ẩn bài viết khỏi cộng đồng.',
+            data: updated
+        });
+    } catch (error) {
+        console.error('Lỗi updatePostStatus:', error);
+        return res.status(500).json({
+            success: false,
+            message: 'Không thể cập nhật trạng thái bài viết lúc này.'
+        });
+    }
+}
+
+async function deleteAdminPost(req, res) {
+    try {
+        const id = parsePositiveInt(req.params.id);
+        if (!id) {
+            return res.status(400).json({
+                success: false,
+                message: 'ID bài viết không hợp lệ.'
+            });
+        }
+
+        const post = await prisma.posts.findUnique({
+            where: { id_post: id }
+        });
+
+        if (!post) {
+            return res.status(404).json({
+                success: false,
+                message: 'Không tìm thấy bài viết.'
+            });
+        }
+
+        await prisma.posts.delete({
+            where: { id_post: id }
+        });
+
+        return res.json({
+            success: true,
+            message: 'Đã xóa bài viết thành công.'
+        });
+    } catch (error) {
+        console.error('Lỗi deleteAdminPost:', error);
+        return res.status(500).json({
+            success: false,
+            message: 'Không thể xóa bài viết lúc này.'
+        });
+    }
+}
+
+async function getAdminReports(req, res) {
+    try {
+        const status = req.query?.status;
+        const where = {};
+        if (['pending', 'resolved', 'rejected'].includes(status)) {
+            where.status = status;
+        }
+
+        const reports = await prisma.reports.findMany({
+            where,
+            include: {
+                users: {
+                    select: {
+                        id_user: true,
+                        name: true,
+                        email: true
+                    }
+                }
+            },
+            orderBy: { created_at: 'desc' }
+        });
+
+        const enriched = await Promise.all(reports.map(async (rep) => {
+            let targetInfo = null;
+            if (rep.target_type === 'post') {
+                const targetPost = await prisma.posts.findUnique({
+                    where: { id_post: rep.target_id },
+                    select: { id_post: true, title: true, status: true }
+                });
+                targetInfo = targetPost;
+            } else if (rep.target_type === 'comment') {
+                const targetComment = await prisma.comments.findUnique({
+                    where: { id_comment: rep.target_id },
+                    select: { id_comment: true, content: true, status: true }
+                });
+                targetInfo = targetComment;
+            }
+
+            return {
+                id: rep.id_report,
+                id_report: rep.id_report,
+                reporter: rep.users ? { id: rep.users.id_user, name: rep.users.name, email: rep.users.email } : null,
+                target_type: rep.target_type,
+                target_id: rep.target_id,
+                target_info: targetInfo,
+                reason: rep.reason,
+                description: rep.description,
+                status: rep.status,
+                created_at: rep.created_at,
+                updated_at: rep.updated_at
+            };
+        }));
+
+        return res.json({
+            success: true,
+            total: enriched.length,
+            data: enriched
+        });
+    } catch (error) {
+        console.error('Lỗi getAdminReports:', error);
+        return res.status(500).json({
+            success: false,
+            message: 'Không thể tải báo cáo lúc này.',
+=======
+async function updateReportStatus(req, res) {
+    try {
+        const id = parsePositiveInt(req.params.id);
+        const { status } = req.body || {};
+
+        if (!id || !['pending', 'resolved', 'rejected'].includes(status)) {
+            return res.status(400).json({
+                success: false,
+                message: 'Trạng thái xử lý không hợp lệ. Chấp nhận: pending, resolved, rejected.'
+            });
+        }
+
+        const updated = await prisma.reports.update({
+            where: { id_report: id },
+            data: { status }
+        });
+
+        const statusLabel = status === 'resolved' ? 'Đã giải quyết' : (status === 'rejected' ? 'Bỏ qua vi phạm' : 'Đang chờ xử lý');
+
+        return res.json({
+            success: true,
+            message: `Đã cập nhật trạng thái báo cáo thành "${statusLabel}".`,
+            data: updated
+        });
+    } catch (error) {
+        return res.status(500).json({ success: false, message: 'Không thể cập nhật báo cáo vi phạm.' });
+    }
+}
+
+// ==========================================
+// QUẢN LÝ DANH MỤC MÓN ĂN (CATEGORIES)
+// ==========================================
+
+async function getCategories(req, res) {
+    try {
+        const { search = '', status = 'all', sort = 'newest' } = req.query;
+        const page = parsePositiveInt(req.query.page) || 1;
+        const limit = req.query.limit === 'all' ? null : clampLimit(req.query.limit, 10, 100);
+
+        const where = {};
+
+        if (search.trim()) {
+            const trimmed = search.trim();
+            where.OR = [
+                { name: { contains: trimmed } },
+                { slug: { contains: createSlug(trimmed) || trimmed } }
+            ];
+        }
+
+        if (status === 'active' || status === 'inactive') {
+            where.status = status;
+        }
+
+        let orderBy = { created_at: 'desc' };
+        if (sort === 'oldest') orderBy = { created_at: 'asc' };
+        else if (sort === 'name_asc') orderBy = { name: 'asc' };
+        else if (sort === 'name_desc') orderBy = { name: 'desc' };
+
+        const [totalMatching, activeCount, inactiveCount, totalAll, rawCategories] = await Promise.all([
+            prisma.categories.count({ where }),
+            prisma.categories.count({ where: { status: 'active' } }),
+            prisma.categories.count({ where: { status: 'inactive' } }),
+            prisma.categories.count(),
+            prisma.categories.findMany({
+                where,
+                include: {
+                    _count: {
+                        select: { foods: true }
+                    }
+                },
+                orderBy,
+                ...(limit ? { skip: (page - 1) * limit, take: limit } : {})
+            })
+        ]);
+
+        const formattedCategories = rawCategories.map((c) => ({
+            id: c.id_category,
+            id_category: c.id_category,
+            name: c.name,
+            slug: c.slug,
+            status: c.status,
+            created_at: c.created_at,
+            updated_at: c.updated_at,
+            foodsCount: c._count?.foods || 0
+        }));
+
+        if (sort === 'foods_desc') {
+            formattedCategories.sort((a, b) => b.foodsCount - a.foodsCount);
+        }
+
+        const totalFoodsAssigned = rawCategories.reduce((sum, c) => sum + (c._count?.foods || 0), 0);
+        const pageNum = limit ? page : 1;
+        const totalPages = limit ? Math.max(1, Math.ceil(totalMatching / limit)) : 1;
+        const skip = limit ? (page - 1) * limit : 0;
+        const hasMore = limit ? (skip + rawCategories.length < totalMatching) : false;
+
+        return res.json({
+            success: true,
+            data: formattedCategories,
+            stats: {
+                total: totalAll,
+                active: activeCount,
+                inactive: inactiveCount,
+                totalFoodsAssigned
+            },
+            pagination: {
+                total: totalMatching,
+                page: pageNum,
+                limit: limit || totalMatching,
+                totalPages,
+                hasMore
+            }
+        });
+    } catch (error) {
+        console.error('Lỗi khi lấy danh sách danh mục:', error);
+        return res.status(500).json({
+            success: false,
+            message: 'Không thể tải danh sách danh mục lúc này.',
+>>>>>>> c217107e829a23c28d6011ad1e764d46a2bd4f12
+            data: []
+        });
+    }
+}
+
+<<<<<<< HEAD
+async function handleAdminReport(req, res) {
+    try {
+        const id = parsePositiveInt(req.params.id);
+        const status = req.body?.status;
+
+        if (!id) {
+            return res.status(400).json({
+                success: false,
+                message: 'ID báo cáo không hợp lệ.'
+            });
+        }
+
+        if (!['resolved', 'rejected', 'pending'].includes(status)) {
+            return res.status(400).json({
+                success: false,
+                message: 'Trạng thái báo cáo không hợp lệ.'
+            });
+        }
+
+        const report = await prisma.reports.update({
+            where: { id_report: id },
+            data: {
+                status,
+                updated_at: new Date()
+            }
+        });
+
+        if (status === 'resolved' && req.body?.hideTarget) {
+            if (report.target_type === 'post') {
+                await prisma.posts.update({
+                    where: { id_post: report.target_id },
+                    data: { status: 'hidden' }
+                }).catch(() => {});
+            } else if (report.target_type === 'comment') {
+                await prisma.comments.update({
+                    where: { id_comment: report.target_id },
+                    data: { status: 'hidden' }
+                }).catch(() => {});
+            }
+=======
+async function getCategoryById(req, res) {
+    try {
+        const id = parsePositiveInt(req.params.id);
+        if (!id) {
+            return res.status(400).json({ success: false, message: 'ID danh mục không hợp lệ.' });
+        }
+
+        const category = await prisma.categories.findUnique({
+            where: { id_category: id },
+            include: {
+                _count: {
+                    select: { foods: true }
+                },
+                foods: {
+                    take: 5,
+                    select: {
+                        id_food: true,
+                        name: true,
+                        slug: true,
+                        image: true,
+                        cooking_time: true,
+                        status: true
+                    }
+                }
+            }
+        });
+
+        if (!category) {
+            return res.status(404).json({ success: false, message: 'Không tìm thấy thông tin danh mục.' });
+>>>>>>> c217107e829a23c28d6011ad1e764d46a2bd4f12
+        }
+
+        return res.json({
+            success: true,
+<<<<<<< HEAD
+            message: status === 'resolved' ? 'Đã xử lý xong báo cáo vi phạm.' : 'Đã từ chối báo cáo vi phạm.',
+            data: report
+        });
+    } catch (error) {
+        console.error('Lỗi handleAdminReport:', error);
+        return res.status(500).json({
+            success: false,
+            message: 'Không thể xử lý báo cáo lúc này.'
+        });
+=======
+            data: {
+                id: category.id_category,
+                id_category: category.id_category,
+                name: category.name,
+                slug: category.slug,
+                status: category.status,
+                created_at: category.created_at,
+                updated_at: category.updated_at,
+                foodsCount: category._count?.foods || 0,
+                recentFoods: (category.foods || []).map(f => ({
+                    ...f,
+                    image: resolveAssetUrl(f.image)
+                }))
+            }
+        });
+    } catch (error) {
+        console.error('Lỗi khi lấy chi tiết danh mục:', error);
+        return res.status(500).json({ success: false, message: 'Không thể lấy thông tin danh mục.' });
+    }
+}
+
+async function createCategory(req, res) {
+    try {
+        const { name, slug, status } = req.body;
+        const trimmedName = String(name || '').trim();
+
+        if (!trimmedName || trimmedName.length < 2 || trimmedName.length > 100) {
+            return res.status(400).json({
+                success: false,
+                message: 'Tên danh mục là bắt buộc và phải có từ 2 đến 100 ký tự.'
+            });
+        }
+
+        const existingName = await prisma.categories.findFirst({
+            where: { name: trimmedName }
+        });
+
+        if (existingName) {
+            return res.status(400).json({
+                success: false,
+                message: `Tên danh mục "${trimmedName}" đã tồn tại.`
+            });
+        }
+
+        let baseSlug = createSlug(slug || trimmedName);
+        if (!baseSlug) baseSlug = `danh-muc-${Date.now()}`;
+
+        let finalSlug = baseSlug;
+        let suffix = 1;
+        while (await prisma.categories.findUnique({ where: { slug: finalSlug } })) {
+            finalSlug = `${baseSlug}-${suffix++}`;
+        }
+
+        const categoryStatus = status === 'inactive' ? 'inactive' : 'active';
+
+        const newCategory = await prisma.categories.create({
+            data: {
+                name: trimmedName,
+                slug: finalSlug,
+                status: categoryStatus
+            }
+        });
+
+        return res.status(201).json({
+            success: true,
+            message: `Tạo danh mục "${newCategory.name}" thành công!`,
+            data: {
+                id: newCategory.id_category,
+                id_category: newCategory.id_category,
+                name: newCategory.name,
+                slug: newCategory.slug,
+                status: newCategory.status,
+                created_at: newCategory.created_at,
+                updated_at: newCategory.updated_at,
+                foodsCount: 0
+            }
+        });
+    } catch (error) {
+        console.error('Lỗi khi tạo danh mục:', error);
+        return res.status(500).json({ success: false, message: 'Không thể tạo danh mục lúc này.' });
+    }
+}
+
+async function updateCategory(req, res) {
+    try {
+        const id = parsePositiveInt(req.params.id);
+        if (!id) {
+            return res.status(400).json({ success: false, message: 'ID danh mục không hợp lệ.' });
+        }
+
+        const category = await prisma.categories.findUnique({
+            where: { id_category: id }
+        });
+
+        if (!category) {
+            return res.status(404).json({ success: false, message: 'Không tìm thấy danh mục yêu cầu.' });
+        }
+
+        const { name, slug, status } = req.body;
+        const data = {};
+
+        if (name !== undefined) {
+            const trimmedName = String(name || '').trim();
+            if (!trimmedName || trimmedName.length < 2 || trimmedName.length > 100) {
+                return res.status(400).json({
+                    success: false,
+                    message: 'Tên danh mục phải có từ 2 đến 100 ký tự.'
+                });
+            }
+
+            const duplicate = await prisma.categories.findFirst({
+                where: {
+                    name: trimmedName,
+                    id_category: { not: id }
+                }
+            });
+
+            if (duplicate) {
+                return res.status(400).json({
+                    success: false,
+                    message: `Tên danh mục "${trimmedName}" đã được sử dụng bởi danh mục khác.`
+                });
+            }
+
+            data.name = trimmedName;
+        }
+
+        if (slug !== undefined) {
+            const trimmedSlug = createSlug(slug);
+            if (!trimmedSlug) {
+                return res.status(400).json({
+                    success: false,
+                    message: 'Slug danh mục không hợp lệ.'
+                });
+            }
+
+            const duplicateSlug = await prisma.categories.findFirst({
+                where: {
+                    slug: trimmedSlug,
+                    id_category: { not: id }
+                }
+            });
+
+            if (duplicateSlug) {
+                return res.status(400).json({
+                    success: false,
+                    message: `Slug "${trimmedSlug}" đã được sử dụng bởi danh mục khác.`
+                });
+            }
+
+            data.slug = trimmedSlug;
+        }
+
+        if (status !== undefined) {
+            if (!['active', 'inactive'].includes(status)) {
+                return res.status(400).json({
+                    success: false,
+                    message: 'Trạng thái danh mục chỉ có thể là "active" hoặc "inactive".'
+                });
+            }
+            data.status = status;
+        }
+
+        data.updated_at = new Date();
+
+        const updated = await prisma.categories.update({
+            where: { id_category: id },
+            data,
+            include: {
+                _count: {
+                    select: { foods: true }
+                }
+            }
+        });
+
+        return res.json({
+            success: true,
+            message: `Cập nhật danh mục "${updated.name}" thành công!`,
+            data: {
+                id: updated.id_category,
+                id_category: updated.id_category,
+                name: updated.name,
+                slug: updated.slug,
+                status: updated.status,
+                created_at: updated.created_at,
+                updated_at: updated.updated_at,
+                foodsCount: updated._count?.foods || 0
+            }
+        });
+    } catch (error) {
+        console.error('Lỗi khi cập nhật danh mục:', error);
+        return res.status(500).json({ success: false, message: 'Không thể cập nhật danh mục lúc này.' });
+    }
+}
+
+async function updateCategoryStatus(req, res) {
+    try {
+        const id = parsePositiveInt(req.params.id);
+        if (!id) {
+            return res.status(400).json({ success: false, message: 'ID danh mục không hợp lệ.' });
+        }
+
+        const category = await prisma.categories.findUnique({
+            where: { id_category: id },
+            include: {
+                _count: { select: { foods: true } }
+            }
+        });
+
+        if (!category) {
+            return res.status(404).json({ success: false, message: 'Không tìm thấy danh mục yêu cầu.' });
+        }
+
+        let targetStatus = req.body.status;
+        if (!targetStatus || !['active', 'inactive'].includes(targetStatus)) {
+            targetStatus = category.status === 'active' ? 'inactive' : 'active';
+        }
+
+        const updated = await prisma.categories.update({
+            where: { id_category: id },
+            data: {
+                status: targetStatus,
+                updated_at: new Date()
+            }
+        });
+
+        const actionText = targetStatus === 'active' ? 'kích hoạt hiển thị' : 'ẩn';
+
+        return res.json({
+            success: true,
+            message: `Đã ${actionText} danh mục "${category.name}" thành công.`,
+            data: {
+                id: updated.id_category,
+                id_category: updated.id_category,
+                name: updated.name,
+                slug: updated.slug,
+                status: updated.status,
+                foodsCount: category._count?.foods || 0
+            }
+        });
+    } catch (error) {
+        console.error('Lỗi khi cập nhật trạng thái danh mục:', error);
+        return res.status(500).json({ success: false, message: 'Không thể thay đổi trạng thái danh mục.' });
+>>>>>>> c217107e829a23c28d6011ad1e764d46a2bd4f12
+    }
+}
+
 module.exports = {
     getDashboard,
     getUsers,
@@ -1053,5 +2453,30 @@ module.exports = {
     getFoodById,
     createFood,
     updateFood,
-    updateFoodStatus
+    updateFoodStatus,
+<<<<<<< HEAD
+    getCategories,
+    createCategory,
+    updateCategory,
+    updateCategoryStatus,
+    deleteCategory,
+    getAdminPosts,
+    updatePostStatus,
+    deleteAdminPost,
+    getAdminReports,
+    handleAdminReport
+=======
+    getPosts,
+    getPostById,
+    updatePostStatus,
+    deletePost,
+    getReports,
+    updateReportStatus,
+    getCategories,
+    getCategoryById,
+    createCategory,
+    updateCategory,
+    updateCategoryStatus
+>>>>>>> c217107e829a23c28d6011ad1e764d46a2bd4f12
 };
+

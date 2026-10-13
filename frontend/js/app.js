@@ -1,5 +1,7 @@
+import Popup from './components/Popup.js';
 import Navbar from './components/Navbar.js';
 import Footer from './components/Footer.js';
+import BackToTop from './components/BackToTop.js';
 import Home from './views/khach/Home.js';
 import Admin from './views/admin/Admin.js';
 import FoodList from './views/khach/FoodList.js';
@@ -19,6 +21,9 @@ const routes = {
 
 const router = async () => {
     try {
+        // Cuộn về đầu trang khi chuyển view
+        window.scrollTo({ top: 0, behavior: 'instant' });
+
         let fullHash = window.location.hash.slice(1) || '/';
         let [hashPath, queryString] = fullHash.split('?');
         let path = (hashPath || '/').toLowerCase();
@@ -47,7 +52,10 @@ const router = async () => {
             if (navbarContainer) navbarContainer.innerHTML = '';
             if (footerContainer) footerContainer.style.display = 'none';
         } else {
-            if (navbarContainer) navbarContainer.innerHTML = Navbar();
+            if (navbarContainer) {
+                navbarContainer.innerHTML = Navbar();
+                if (window.updateNavbarFavBadge) window.updateNavbarFavBadge();
+            }
             if (footerContainer) {
                 footerContainer.style.display = 'block';
                 footerContainer.innerHTML = Footer();
@@ -63,6 +71,9 @@ const router = async () => {
             document.getElementById('app-content').innerHTML = await page.render(params);
             if (page.afterRender) await page.afterRender(params);
         }
+
+        // Khởi tạo nút BackToTop cho tất cả các trang
+        BackToTop.init();
     } catch (err) {
         console.error('Lỗi khi render trang:', err);
         const appContent = document.getElementById('app-content');
@@ -81,7 +92,11 @@ const router = async () => {
 window.addEventListener('hashchange', router);
 
 if (document.readyState === 'loading') {
-    window.addEventListener('DOMContentLoaded', router);
+    window.addEventListener('DOMContentLoaded', () => {
+        router();
+        BackToTop.init();
+    });
 } else {
     router();
+    BackToTop.init();
 }

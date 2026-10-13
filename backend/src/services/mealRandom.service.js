@@ -197,57 +197,13 @@ async function getRandomMeals(options = {}) {
     const hasFilters = ingredients.length || categories.length || Boolean(cookTime);
     const matchedFoods = await findFoods(filteredWhere);
     const selectedFoods = shuffle(matchedFoods).slice(0, quantity);
-    let fallbackCount = 0;
-    let timeRelaxedCount = 0;
-
-    const appendFallbackFoods = (foods, count, pickShortest = false) => {
-        const fillFoods = pickShortest
-            ? pickShortestRandom(foods, count)
-            : shuffle(foods).slice(0, count);
-
-        fallbackCount += fillFoods.length;
-        selectedFoods.push(...fillFoods);
-
-        return fillFoods.length;
-    };
-
-    if (cookTime && selectedFoods.length < quantity) {
-        const selectedIds = new Set(selectedFoods.map((food) => food.id_food));
-        const relaxedTimeWhere = buildWhere({ ingredients, categories });
-        relaxedTimeWhere.id_food = {
-            notIn: Array.from(selectedIds)
-        };
-
-        const relaxedTimeFoods = await findFoods(relaxedTimeWhere);
-        timeRelaxedCount += appendFallbackFoods(
-            relaxedTimeFoods,
-            quantity - selectedFoods.length,
-            true
-        );
-    }
-
-    if (selectedFoods.length < quantity) {
-        const selectedIds = new Set(selectedFoods.map((food) => food.id_food));
-        const fallbackFoods = await findFoods({
-            status: 'active',
-            id_food: {
-                notIn: Array.from(selectedIds)
-            }
-        });
-
-        appendFallbackFoods(
-            fallbackFoods,
-            quantity - selectedFoods.length,
-            Boolean(cookTime)
-        );
-    }
 
     return {
         requested: quantity,
         matchedFilters: !hasFilters || matchedFoods.length > 0,
         totalCandidates: matchedFoods.length,
-        fallbackCount,
-        timeRelaxedCount,
+        fallbackCount: 0,
+        timeRelaxedCount: 0,
         cookTime,
         foods: selectedFoods.map(formatFood)
     };
@@ -256,6 +212,7 @@ async function getRandomMeals(options = {}) {
 async function getRandomOptions() {
     const [categories, ingredients, categoryCounts] = await Promise.all([
         prisma.categories.findMany({
+            where: { status: 'active' },
             orderBy: {
                 name: 'asc'
             }

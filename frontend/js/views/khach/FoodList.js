@@ -95,21 +95,9 @@ const FoodList = {
                                 <span>🍲</span>
                                 <span>Món Việt</span>
                             </button>
-                            <button type="button" class="quick-cat-btn px-3.5 py-1.5 rounded-full text-xs font-bold transition-all flex items-center gap-1.5 cursor-pointer border border-[#E5DEC9] bg-white/80 text-text-muted hover:text-primary hover:bg-primary-subtle shadow-2xs" data-cat="chay">
-                                <span>🌱</span>
-                                <span>Món Chay</span>
-                            </button>
                             <button type="button" class="quick-cat-btn px-3.5 py-1.5 rounded-full text-xs font-bold transition-all flex items-center gap-1.5 cursor-pointer border border-[#E5DEC9] bg-white/80 text-text-muted hover:text-primary hover:bg-primary-subtle shadow-2xs" data-cat="nhanh">
                                 <span>⚡</span>
                                 <span>Món Nhanh</span>
-                            </button>
-                            <button type="button" class="quick-cat-btn px-3.5 py-1.5 rounded-full text-xs font-bold transition-all flex items-center gap-1.5 cursor-pointer border border-[#E5DEC9] bg-white/80 text-text-muted hover:text-primary hover:bg-primary-subtle shadow-2xs" data-cat="ngot">
-                                <span>🍰</span>
-                                <span>Món Ngọt</span>
-                            </button>
-                            <button type="button" class="quick-cat-btn px-3.5 py-1.5 rounded-full text-xs font-bold transition-all flex items-center gap-1.5 cursor-pointer border border-[#E5DEC9] bg-white/80 text-text-muted hover:text-primary hover:bg-primary-subtle shadow-2xs" data-cat="au">
-                                <span>🌎</span>
-                                <span>Món Âu</span>
                             </button>
                         </div>
 
@@ -262,21 +250,14 @@ const FoodList = {
                             </div>
                         </div>
 
-                        <!-- Filter Apply & Reset Action Buttons -->
-                        <div class="pt-1.5 border-t border-[#F0EBE0] space-y-1">
-                            <button 
-                                type="button" 
-                                id="btn-apply-filters"
-                                class="w-full py-1.5 bg-primary hover:bg-[#1B4633] active:bg-[#143627] text-white font-bold text-xs rounded-xl shadow-sm hover:shadow-md transition-all flex items-center justify-center gap-1.5 cursor-pointer"
-                            >
-                                <i class="fa-solid fa-magnifying-glass text-[10px]"></i>
-                                <span>Áp dụng bộ lọc</span>
-                            </button>
+                        <!-- Filter Reset Action Button -->
+                        <div class="pt-2 border-t border-[#F0EBE0]">
                             <button 
                                 type="button" 
                                 id="btn-reset-all-filters"
-                                class="w-full py-1 text-text-muted hover:text-text-main font-semibold text-[11px] rounded-lg hover:bg-gray-100 transition-colors cursor-pointer"
+                                class="w-full py-1.5 text-text-muted hover:text-red-600 hover:bg-red-50 border border-gray-100 font-bold text-xs rounded-xl transition-all flex items-center justify-center gap-1.5 cursor-pointer"
                             >
+                                <i class="fa-solid fa-rotate-left text-[11px]"></i>
                                 <span>Đặt lại bộ lọc</span>
                             </button>
                         </div>
@@ -474,15 +455,16 @@ const FoodList = {
         let currentIndex = 0;
         let isLoading = false;
         let hasMore = true;
-        let viewMode = 'grid'; // 'grid' or 'list'
+        let viewMode = 'grid';
         let currentSort = 'newest';
-        let currentCategory = '';
+        let currentSelectedCategories = [];
         let currentQuickCategory = '';
         let currentCookTime = 'all';
         let currentSelectedIngredients = [];
         let currentSearchQuery = '';
         let infiniteScrollObserver = null;
         let searchDebounceTimer = null;
+        let latestRequestId = 0;
 
         // Load API Data gracefully if backend is available
         try {
@@ -496,8 +478,13 @@ const FoodList = {
                     cooking_time_minutes: parseInt(item.cooking_time_minutes || item.thoi_gian || 25, 10),
                     rating: item.rating || 4.8,
                     rating_count: item.rating_count || '1.5k',
+<<<<<<< HEAD
                     likes: item.likes || 120,
-                    is_favorite: false,
+                    is_favorite: Boolean(item.is_favorite),
+=======
+                    likes: typeof item.likes !== 'undefined' ? item.likes : 0,
+                    is_favorite: Boolean(item.is_favorite ?? item.isFavorite),
+>>>>>>> c217107e829a23c28d6011ad1e764d46a2bd4f12
                     category: item.category || item.loai_mon || 'Món mặn',
                     category_slug: item.category_slug || '',
                     sub_category: item.sub_category || 'viet',
@@ -509,8 +496,10 @@ const FoodList = {
                 }));
                 currentFilteredDishes = [...masterDishes];
             }
+            window.masterDishes = masterDishes;
         } catch (e) {
             console.log('Using rich static dataset for FoodList:', e);
+            window.masterDishes = masterDishes;
         }
 
         // DOM Elements
@@ -528,7 +517,6 @@ const FoodList = {
         const btnSortToggle = document.getElementById('btn-sort-toggle');
         const sortDropdownMenu = document.getElementById('sort-dropdown-menu');
         const currentSortLabel = document.getElementById('current-sort-label');
-        const btnApplyFilters = document.getElementById('btn-apply-filters');
         const btnResetAllFilters = document.getElementById('btn-reset-all-filters');
         const btnResetFiltersSidebar = document.getElementById('btn-reset-filters-sidebar');
         
@@ -622,7 +610,7 @@ const FoodList = {
                                 </div>
                                 <div class="flex items-center gap-1 text-xs font-bold text-rose-600 bg-rose-50 px-2 py-1 rounded-lg shrink-0" title="${dish.likes} lượt yêu thích">
                                     <i class="fa-solid fa-heart text-rose-500 text-[10px]"></i>
-                                    <span>${dish.likes >= 1000 ? (dish.likes / 1000).toFixed(1).replace('.0', '') + 'k' : dish.likes}</span>
+                                    <span class="card-likes-count" data-food-id="${dish.id}">${dish.likes >= 1000 ? (dish.likes / 1000).toFixed(1).replace('.0', '') + 'k' : dish.likes}</span>
                                 </div>
                             </div>
                             <p class="text-xs sm:text-sm text-text-muted line-clamp-2 mb-3 leading-relaxed">
@@ -690,7 +678,7 @@ const FoodList = {
                         </h3>
                         <div class="flex items-center gap-1 text-[11px] font-bold text-rose-600 bg-rose-50 px-1.5 py-0.5 rounded-md shrink-0 mt-0.5" title="${dish.likes} lượt yêu thích">
                             <i class="fa-solid fa-heart text-rose-500 text-[10px]"></i>
-                            <span>${dish.likes >= 1000 ? (dish.likes / 1000).toFixed(1).replace('.0', '') + 'k' : dish.likes}</span>
+                            <span class="card-likes-count" data-food-id="${dish.id}">${dish.likes >= 1000 ? (dish.likes / 1000).toFixed(1).replace('.0', '') + 'k' : dish.likes}</span>
                         </div>
                     </div>
 
@@ -749,7 +737,7 @@ const FoodList = {
                 mobileResultCountEl.textContent = `${total} món ăn`;
             }
 
-            const hasActiveFilters = Boolean(currentCategory) || 
+            const hasActiveFilters = currentSelectedCategories.length > 0 || 
                                      Boolean(currentQuickCategory) || 
                                      (currentCookTime && currentCookTime !== 'all') || 
                                      currentSelectedIngredients.length > 0 || 
@@ -760,7 +748,7 @@ const FoodList = {
             }
 
             let filterCount = 0;
-            if (currentCategory) filterCount++;
+            filterCount += currentSelectedCategories.length;
             if (currentQuickCategory) filterCount++;
             if (currentCookTime && currentCookTime !== 'all') filterCount++;
             filterCount += currentSelectedIngredients.length;
@@ -966,15 +954,17 @@ const FoodList = {
                 );
             }
 
-            if (currentQuickCategory && currentQuickCategory !== 'all') {
+            if (currentQuickCategory === 'nhanh') {
+                result = result.filter(d => d.cooking_time_minutes > 0 && d.cooking_time_minutes <= 15);
+            } else if (currentQuickCategory && currentQuickCategory !== 'all') {
                 result = result.filter(d => d.sub_category === currentQuickCategory);
             }
 
-            if (currentCategory && currentCategory !== 'all') {
-                const targetCat = currentCategory.toLowerCase();
+            if (currentSelectedCategories.length > 0) {
+                const targetCats = currentSelectedCategories.map(c => c.toLowerCase());
                 result = result.filter(d => 
-                    d.category.toLowerCase() === targetCat || 
-                    (d.category_slug && d.category_slug.toLowerCase() === targetCat)
+                    targetCats.includes(d.category.toLowerCase()) || 
+                    (d.category_slug && targetCats.includes(d.category_slug.toLowerCase()))
                 );
             }
 
@@ -1014,6 +1004,7 @@ const FoodList = {
         };
 
         const executeFilterAndSort = async () => {
+            const requestId = ++latestRequestId;
             let result = [];
             try {
                 const queryParams = new URLSearchParams();
@@ -1023,8 +1014,8 @@ const FoodList = {
                     queryParams.set('search', currentSearchQuery.trim());
                 }
 
-                if (currentCategory && currentCategory !== 'all') {
-                    queryParams.set('category', currentCategory);
+                if (currentSelectedCategories.length > 0) {
+                    queryParams.set('category', currentSelectedCategories.join(','));
                 }
 
                 if (currentQuickCategory && currentQuickCategory !== 'all') {
@@ -1054,8 +1045,13 @@ const FoodList = {
                         cooking_time_minutes: parseInt(item.cooking_time_minutes || item.thoi_gian || 25, 10),
                         rating: item.rating || 4.8,
                         rating_count: item.rating_count || '1.5k',
+<<<<<<< HEAD
                         likes: item.likes || 120,
-                        is_favorite: false,
+                        is_favorite: Boolean(item.is_favorite),
+=======
+                        likes: typeof item.likes !== 'undefined' ? item.likes : 0,
+                        is_favorite: Boolean(item.is_favorite ?? item.isFavorite),
+>>>>>>> c217107e829a23c28d6011ad1e764d46a2bd4f12
                         category: item.category || item.loai_mon || 'Món mặn',
                         category_slug: item.category_slug || '',
                         sub_category: item.sub_category || 'viet',
@@ -1072,12 +1068,23 @@ const FoodList = {
                 result = runClientFilter();
             }
 
+            if (requestId !== latestRequestId) return;
+
             currentFilteredDishes = result;
+            // Cập nhật lại trạng thái is_favorite cho masterDishes
+            result.forEach(r => {
+                const existing = masterDishes.find(m => m.id === r.id);
+                if (existing) {
+                    existing.is_favorite = r.is_favorite;
+                } else {
+                    masterDishes.push(r);
+                }
+            });
             renderFirstBatch();
         };
 
         const resetAllFilters = () => {
-            currentCategory = '';
+            currentSelectedCategories = [];
             currentQuickCategory = '';
             currentCookTime = 'all';
             currentSelectedIngredients = [];
@@ -1172,23 +1179,17 @@ const FoodList = {
         catButtons.forEach(btn => {
             btn.addEventListener('click', () => {
                 const cat = btn.getAttribute('data-cat');
-                if (currentCategory === cat) {
-                    currentCategory = '';
-                    catButtons.forEach(b => {
-                        b.className = "btn-filter-cat px-2 py-1 rounded-lg text-[11px] font-semibold text-text-muted text-left transition-all border border-gray-100 hover:bg-cream-soft hover:text-primary cursor-pointer flex items-center justify-between";
-                        const ic = b.querySelector('.fa-check');
-                        if (ic) ic.remove();
-                    });
+                const idx = currentSelectedCategories.indexOf(cat);
+                if (idx > -1) {
+                    currentSelectedCategories.splice(idx, 1);
+                    btn.className = "btn-filter-cat px-2 py-1 rounded-lg text-[11px] font-semibold text-text-muted text-left transition-all border border-gray-100 hover:bg-cream-soft hover:text-primary cursor-pointer flex items-center justify-between";
+                    const ic = btn.querySelector('.fa-check');
+                    if (ic) ic.remove();
                 } else {
-                    currentCategory = cat;
-                    catButtons.forEach(b => {
-                        b.className = "btn-filter-cat px-2 py-1 rounded-lg text-[11px] font-semibold text-text-muted text-left transition-all border border-gray-100 hover:bg-cream-soft hover:text-primary cursor-pointer flex items-center justify-between";
-                        const ic = b.querySelector('.fa-check');
-                        if (ic) ic.remove();
-                    });
+                    currentSelectedCategories.push(cat);
                     btn.className = "btn-filter-cat active-cat px-2 py-1 rounded-lg text-[11px] font-bold text-left transition-all border cursor-pointer flex items-center justify-between";
                     const spanText = btn.querySelector('span')?.textContent || '';
-                    btn.innerHTML = `<span>${spanText}</span><i class="fa-solid fa-check text-[8px]"></i>`;
+                    btn.innerHTML = `<span>${spanText}</span><i class="fa-solid fa-check text-[8px] text-primary"></i>`;
                 }
 
                 executeFilterAndSort();
@@ -1203,15 +1204,14 @@ const FoodList = {
             });
         });
 
-        // 5. Apply Filters Button Click
-        if (btnApplyFilters) {
-            btnApplyFilters.addEventListener('click', () => {
-                const checked = Array.from(document.querySelectorAll('.ingredient-checkbox:checked')).map(cb => cb.value);
+        const ingredientCheckboxes = document.querySelectorAll('.ingredient-checkbox');
+        ingredientCheckboxes.forEach(cb => {
+            cb.addEventListener('change', () => {
+                const checked = Array.from(document.querySelectorAll('.ingredient-checkbox:checked')).map(item => item.value);
                 currentSelectedIngredients = checked;
                 executeFilterAndSort();
-                showToast('Đã áp dụng bộ lọc', 'success');
             });
-        }
+        });
 
         // 6. Reset Filters Buttons
         if (btnResetAllFilters) btnResetAllFilters.addEventListener('click', resetAllFilters);
@@ -1266,30 +1266,120 @@ const FoodList = {
 
         // 9. Card Event Delegation: Favorite Heart Click on #recipe-grid
         if (recipeGrid) {
-            recipeGrid.addEventListener('click', (e) => {
+            recipeGrid.addEventListener('click', async (e) => {
                 const favBtn = e.target.closest('.btn-favorite-dish');
                 if (favBtn) {
                     e.preventDefault();
                     e.stopPropagation();
                     const dishId = parseInt(favBtn.getAttribute('data-id'), 10);
-                    const dish = masterDishes.find(d => d.id === dishId);
+                    const dish = masterDishes.find(d => d.id === dishId) || currentFilteredDishes.find(d => d.id === dishId);
                     if (!dish) return;
 
-                    dish.is_favorite = !dish.is_favorite;
-                    const heartIcon = favBtn.querySelector('i');
-
-                    if (dish.is_favorite) {
-                        favBtn.className = "btn-favorite-dish absolute top-2.5 right-2.5 w-8.5 h-8.5 rounded-full bg-rose-500 text-white backdrop-blur-sm flex items-center justify-center shadow-sm scale-125 transition-all cursor-pointer z-20";
+                    const token = localStorage.getItem('auth_token');
+                    if (!token) {
+<<<<<<< HEAD
+                        showToast('Vui lòng đăng nhập để lưu món yêu thích! 🔒', 'info');
                         setTimeout(() => {
-                            favBtn.classList.remove('scale-125');
-                        }, 150);
-                        if (heartIcon) heartIcon.className = "fa-solid fa-heart text-sm";
-                        showToast(`Đã thêm "${dish.name}" vào Yêu thích! ❤️`, 'success');
-                    } else {
-                        favBtn.className = "btn-favorite-dish absolute top-2.5 right-2.5 w-8.5 h-8.5 rounded-full bg-white/90 text-gray-500 hover:text-rose-500 backdrop-blur-sm flex items-center justify-center shadow-sm transition-all cursor-pointer z-20";
-                        if (heartIcon) heartIcon.className = "fa-regular fa-heart text-sm";
-                        showToast(`Đã bỏ lưu "${dish.name}"`, 'info');
+                            window.location.hash = '#/login';
+                        }, 1200);
+                        return;
+=======
+                        if (window.Popup) {
+                            const goLogin = await window.Popup.confirm({
+                                title: 'Yêu cầu đăng nhập',
+                                message: 'Bạn cần đăng nhập tài khoản để lưu các món ăn yêu thích.',
+                                type: 'info',
+                                confirmText: 'Đăng nhập ngay',
+                                cancelText: 'Để sau'
+                            });
+                            if (goLogin) window.location.hash = '#/login';
+                        } else {
+                            alert('Vui lòng đăng nhập để lưu món ăn yêu thích.');
+                            window.location.hash = '#/login';
+                        }
+                        return;
                     }
+
+                    favBtn.disabled = true;
+                    try {
+                        const res = await fetchAPI(`/foods/${dishId}/favorite`, { method: 'POST' });
+                        if (res && res.success) {
+                            dish.is_favorite = Boolean(res.is_favorite);
+                            if (typeof res.likes !== 'undefined') dish.likes = res.likes;
+                            const heartIcon = favBtn.querySelector('i');
+
+                            if (dish.is_favorite) {
+                                favBtn.className = "btn-favorite-dish absolute top-2.5 right-2.5 w-8.5 h-8.5 rounded-full bg-rose-500 text-white backdrop-blur-sm flex items-center justify-center shadow-sm scale-125 transition-all cursor-pointer z-20";
+                                setTimeout(() => {
+                                    favBtn.classList.remove('scale-125');
+                                }, 150);
+                                if (heartIcon) heartIcon.className = "fa-solid fa-heart text-sm";
+                            } else {
+                                favBtn.className = "btn-favorite-dish absolute top-2.5 right-2.5 w-8.5 h-8.5 rounded-full bg-white/90 text-gray-500 hover:text-rose-500 backdrop-blur-sm flex items-center justify-center shadow-sm transition-all cursor-pointer z-20";
+                                if (heartIcon) heartIcon.className = "fa-regular fa-heart text-sm";
+                            }
+
+                            // Cập nhật số like trên card nếu có
+                            const card = favBtn.closest('article');
+                            const likesSpan = card?.querySelector('.card-likes-count') || card?.querySelector('span[class*="text-rose"]');
+                            if (likesSpan && typeof res.likes !== 'undefined') {
+                                likesSpan.textContent = res.likes;
+                            }
+
+                            if (window.Popup) {
+                                window.Popup.toast(res.message, dish.is_favorite ? 'success' : 'info');
+                            } else {
+                                showToast(res.message, dish.is_favorite ? 'success' : 'info');
+                            }
+
+                            // Cập nhật số lượng trên icon trái tim Navbar
+                            if (window.updateNavbarFavBadge) {
+                                window.updateNavbarFavBadge(res.userTotalFavorites ?? null);
+                            }
+
+                            // Cập nhật drawer Navbar nếu mở
+                            const favModal = document.getElementById('nav-fav-modal');
+                            if (favModal && !favModal.classList.contains('invisible') && window.loadNavbarFavorites) {
+                                window.loadNavbarFavorites();
+                            }
+                        } else {
+                            if (window.Popup) window.Popup.error(res?.message || 'Có lỗi xảy ra.');
+                        }
+                    } catch (err) {
+                        console.error('Lỗi yêu thích món:', err);
+                    } finally {
+                        favBtn.disabled = false;
+>>>>>>> c217107e829a23c28d6011ad1e764d46a2bd4f12
+                    }
+
+                    // Gọi API toggle favorite
+                    fetchAPI(`/auth/me/favorites/${dishId}/toggle`, { method: 'POST' })
+                        .then((res) => {
+                            if (res && res.success) {
+                                dish.is_favorite = res.is_favorite;
+                                const heartIcon = favBtn.querySelector('i');
+
+                                if (dish.is_favorite) {
+                                    favBtn.className = "btn-favorite-dish absolute top-2.5 right-2.5 w-8.5 h-8.5 rounded-full bg-rose-500 text-white backdrop-blur-sm flex items-center justify-center shadow-sm scale-125 transition-all cursor-pointer z-20";
+                                    setTimeout(() => {
+                                        favBtn.classList.remove('scale-125');
+                                    }, 150);
+                                    if (heartIcon) heartIcon.className = "fa-solid fa-heart text-sm";
+                                    showToast(`Đã thêm "${dish.name}" vào Yêu thích! ❤️`, 'success');
+                                } else {
+                                    favBtn.className = "btn-favorite-dish absolute top-2.5 right-2.5 w-8.5 h-8.5 rounded-full bg-white/90 text-gray-500 hover:text-rose-500 backdrop-blur-sm flex items-center justify-center shadow-sm transition-all cursor-pointer z-20";
+                                    if (heartIcon) heartIcon.className = "fa-regular fa-heart text-sm";
+                                    showToast(`Đã bỏ lưu "${dish.name}"`, 'info');
+                                }
+
+                                if (window.loadFavoritesInNav) window.loadFavoritesInNav();
+                            } else {
+                                showToast(res.message || 'Không thể lưu món yêu thích lúc này.', 'info');
+                            }
+                        })
+                        .catch(() => {
+                            showToast('Lỗi kết nối khi cập nhật món yêu thích.', 'info');
+                        });
                 }
             });
         }
@@ -1314,11 +1404,7 @@ const FoodList = {
 
         if (btnMobileApply) {
             btnMobileApply.addEventListener('click', () => {
-                const checked = Array.from(document.querySelectorAll('.ingredient-checkbox:checked')).map(cb => cb.value);
-                currentSelectedIngredients = checked;
-                executeFilterAndSort();
                 closeMobileFilter();
-                showToast('Đã áp dụng bộ lọc!', 'success');
             });
         }
 
@@ -1351,20 +1437,18 @@ const FoodList = {
         }
 
         if (urlCat) {
-            currentCategory = urlCat;
+            const parsedCats = urlCat.split(',').map(s => s.trim().toLowerCase()).filter(Boolean);
             catButtons.forEach(b => {
                 const bCat = b.getAttribute('data-cat');
                 const bCatSlug = bCat ? bCat.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/\s+/g, '-') : '';
-                const isMatch = bCat && (bCat.toLowerCase() === urlCat.toLowerCase() || bCatSlug === urlCat.toLowerCase());
-                b.className = isMatch
-                    ? "btn-filter-cat active-cat px-2 py-1 rounded-lg text-[11px] font-bold text-left transition-all border cursor-pointer flex items-center justify-between"
-                    : "btn-filter-cat px-2 py-1 rounded-lg text-[11px] font-semibold text-text-muted text-left transition-all border border-gray-100 hover:bg-cream-soft hover:text-primary cursor-pointer flex items-center justify-between";
-                const ic = b.querySelector('.fa-check');
-                if (ic) ic.remove();
+                const isMatch = bCat && (parsedCats.includes(bCat.toLowerCase()) || parsedCats.includes(bCatSlug));
                 if (isMatch) {
-                    currentCategory = bCat;
+                    if (!currentSelectedCategories.includes(bCat)) {
+                        currentSelectedCategories.push(bCat);
+                    }
+                    b.className = "btn-filter-cat active-cat px-2 py-1 rounded-lg text-[11px] font-bold text-left transition-all border cursor-pointer flex items-center justify-between";
                     const spanText = b.querySelector('span')?.textContent || '';
-                    b.innerHTML = `<span>${spanText}</span><i class="fa-solid fa-check text-[8px]"></i>`;
+                    b.innerHTML = `<span>${spanText}</span><i class="fa-solid fa-check text-[8px] text-primary"></i>`;
                 }
             });
         }
@@ -1394,6 +1478,7 @@ const FoodList = {
         }
 
         executeFilterAndSort();
+        if (window.updateNavbarFavBadge) window.updateNavbarFavBadge();
     }
 };
 

@@ -5,7 +5,12 @@ const foodService = require('../services/food.service');
  */
 async function getFoods(req, res) {
     try {
-        const result = await foodService.getFoods(req.query);
+<<<<<<< HEAD
+        const userId = req.user ? req.user.id_user : null;
+=======
+        const userId = req.user?.id_user;
+>>>>>>> c217107e829a23c28d6011ad1e764d46a2bd4f12
+        const result = await foodService.getFoods(req.query, userId);
 
         return res.json({
             success: true,
@@ -32,7 +37,12 @@ async function getFoods(req, res) {
 async function getFoodById(req, res) {
     try {
         const { id } = req.params;
-        const food = await foodService.getFoodById(id);
+<<<<<<< HEAD
+        const userId = req.user ? req.user.id_user : null;
+=======
+        const userId = req.user?.id_user;
+>>>>>>> c217107e829a23c28d6011ad1e764d46a2bd4f12
+        const food = await foodService.getFoodById(id, userId);
 
         if (!food) {
             return res.status(404).json({
@@ -104,10 +114,28 @@ async function getQuickSuggestions(req, res) {
     }
 }
 
+async function toggleFavorite(req, res) {
+    try {
+        const { id } = req.params;
+        const userId = req.user?.id_user;
+        const result = await foodService.toggleFavorite(id, userId);
+
+        return res.json(result);
+    } catch (error) {
+        console.error('Lỗi khi tương tác yêu thích món ăn:', error);
+
+        return res.status(error.status || 500).json({
+            success: false,
+            message: error.message || 'Không thể tương tác yêu thích lúc này.'
+        });
+    }
+}
+
 module.exports = {
     getFoods,
     listFoods: getFoods,
     getFoodById,
     getFoodOptions,
-    getQuickSuggestions
+    getQuickSuggestions,
+    toggleFavorite
 };
