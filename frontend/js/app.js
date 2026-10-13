@@ -52,7 +52,10 @@ const router = async () => {
             if (navbarContainer) navbarContainer.innerHTML = '';
             if (footerContainer) footerContainer.style.display = 'none';
         } else {
-            if (navbarContainer) navbarContainer.innerHTML = Navbar();
+            if (navbarContainer) {
+                navbarContainer.innerHTML = Navbar();
+                if (window.updateNavbarFavBadge) window.updateNavbarFavBadge();
+            }
             if (footerContainer) {
                 footerContainer.style.display = 'block';
                 footerContainer.innerHTML = Footer();

@@ -520,6 +520,18 @@ const Home = {
             const container = document.getElementById('gacha-results-container');
             if (!container) return;
 
+            const token = localStorage.getItem('auth_token');
+            if (!token) {
+                container.innerHTML = `
+                    <div class="w-full text-center py-2.5 bg-[#F8F5EA]/60 rounded-xl border border-dashed border-[#E5E1D6] text-xs text-[#718078] font-medium flex items-center justify-center gap-1.5">
+                        <i class="fa-solid fa-lock text-[#F4A62A]"></i>
+                        <span>Đăng nhập để tự động lưu lại các món bạn quay được!</span>
+                        <a href="#/login" class="ml-1 text-[#0F4937] font-bold underline hover:text-[#145A43]">Đăng nhập ngay</a>
+                    </div>
+                `;
+                return;
+            }
+
             let won = [];
             try {
                 won = JSON.parse(localStorage.getItem('won_dishes') || '[]');
@@ -553,6 +565,9 @@ const Home = {
         };
 
         const addWonDishes = (dishes) => {
+            const token = localStorage.getItem('auth_token');
+            if (!token) return; // Chỉ lưu món khi đã đăng nhập
+
             const items = (Array.isArray(dishes) ? dishes : [dishes]).filter(Boolean);
             if (!items.length) return;
 

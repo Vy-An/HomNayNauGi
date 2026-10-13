@@ -18,7 +18,6 @@
     --color-amber-100: oklch(96.2% 0.059 95.617);
     --color-amber-200: oklch(92.4% 0.12 95.746);
     --color-amber-300: oklch(87.9% 0.169 91.605);
-    --color-amber-400: oklch(82.8% 0.189 84.429);
     --color-amber-500: oklch(76.9% 0.188 70.08);
     --color-amber-600: oklch(66.6% 0.179 58.318);
     --color-amber-700: oklch(55.5% 0.163 48.998);
@@ -42,6 +41,7 @@
     --color-emerald-500: oklch(69.6% 0.17 162.48);
     --color-emerald-600: oklch(59.6% 0.145 163.225);
     --color-emerald-700: oklch(50.8% 0.118 165.612);
+    --color-emerald-800: oklch(43.2% 0.095 166.913);
     --color-emerald-900: oklch(37.8% 0.077 168.94);
     --color-cyan-500: oklch(71.5% 0.143 215.221);
     --color-sky-50: oklch(97.7% 0.013 236.62);
@@ -1100,6 +1100,12 @@
   .max-w-\[200px\] {
     max-width: 200px;
   }
+  .max-w-\[220px\] {
+    max-width: 220px;
+  }
+  .max-w-\[240px\] {
+    max-width: 240px;
+  }
   .max-w-\[440px\] {
     max-width: 440px;
   }
@@ -1132,9 +1138,6 @@
   }
   .flex-1 {
     flex: 1;
-  }
-  .flex-\[2\] {
-    flex: 2;
   }
   .flex-shrink-0 {
     flex-shrink: 0;
@@ -1608,6 +1611,9 @@
   .border-beige-border\/90 {
     border-color: color-mix(in oklab, #E2D7C3 90%, transparent);
   }
+  .border-blue-100 {
+    border-color: var(--color-blue-100);
+  }
   .border-emerald-200 {
     border-color: var(--color-emerald-200);
   }
@@ -1725,8 +1731,14 @@
   .border-l-accent {
     border-left-color: #E59F3F;
   }
+  .border-l-amber-500 {
+    border-left-color: var(--color-amber-500);
+  }
   .border-l-blue-500 {
     border-left-color: var(--color-blue-500);
+  }
+  .border-l-green-500 {
+    border-left-color: var(--color-green-500);
   }
   .border-l-green-600 {
     border-left-color: var(--color-green-600);
@@ -1842,6 +1854,12 @@
       background-color: color-mix(in oklab, var(--color-amber-50) 20%, transparent);
     }
   }
+  .bg-amber-50\/80 {
+    background-color: color-mix(in srgb, oklch(98.7% 0.022 95.277) 80%, transparent);
+    @supports (color: color-mix(in lab, red, red)) {
+      background-color: color-mix(in oklab, var(--color-amber-50) 80%, transparent);
+    }
+  }
   .bg-amber-100 {
     background-color: var(--color-amber-100);
   }
@@ -1898,6 +1916,9 @@
     @supports (color: color-mix(in lab, red, red)) {
       background-color: color-mix(in oklab, var(--color-black) 65%, transparent);
     }
+  }
+  .bg-blue-50 {
+    background-color: var(--color-blue-50);
   }
   .bg-blue-100 {
     background-color: var(--color-blue-100);
@@ -2545,6 +2566,9 @@
   .font-handwriting {
     font-family: Itim, Caveat, cursive;
   }
+  .font-mono {
+    font-family: var(--font-mono);
+  }
   .font-sans {
     font-family: Nunito, sans-serif;
   }
@@ -2747,6 +2771,9 @@
   }
   .text-emerald-700 {
     color: var(--color-emerald-700);
+  }
+  .text-emerald-800 {
+    color: var(--color-emerald-800);
   }
   .text-gray-300 {
     color: var(--color-gray-300);
@@ -3450,6 +3477,9 @@
     .hover\:scale-\[1\.02\]:hover {
       scale: 1.02;
     }
+    .hover\:border-\[\#0F4937\]\/30:hover {
+      border-color: color-mix(in oklab, #0F4937 30%, transparent);
+    }
     .hover\:border-\[\#145A43\]:hover {
       border-color: #145A43;
     }
@@ -3530,11 +3560,22 @@
     .hover\:bg-gray-50:hover {
       background-color: var(--color-gray-50);
     }
+    .hover\:bg-gray-50\/80:hover {
+      background-color: color-mix(in srgb, oklch(98.5% 0.002 247.839) 80%, transparent);
+    }
+    @supports (color: color-mix(in lab, red, red)) {
+      .hover\:bg-gray-50\/80:hover {
+        background-color: color-mix(in oklab, var(--color-gray-50) 80%, transparent);
+      }
+    }
     .hover\:bg-gray-100:hover {
       background-color: var(--color-gray-100);
     }
     .hover\:bg-gray-200:hover {
       background-color: var(--color-gray-200);
+    }
+    .hover\:bg-green-50:hover {
+      background-color: var(--color-green-50);
     }
     .hover\:bg-primary:hover {
       background-color: #245B43;
@@ -4180,6 +4221,9 @@
     }
     .lg\:grid-cols-\[minmax\(220px\,1fr\)_170px_150px_auto_auto\] {
       grid-template-columns: minmax(220px,1fr) 170px 150px auto auto;
+    }
+    .lg\:grid-cols-\[minmax\(220px\,1fr\)_170px_auto_auto\] {
+      grid-template-columns: minmax(220px,1fr) 170px auto auto;
     }
     .lg\:flex-row {
       flex-direction: row;

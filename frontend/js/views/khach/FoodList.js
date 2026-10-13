@@ -478,8 +478,8 @@ const FoodList = {
                     cooking_time_minutes: parseInt(item.cooking_time_minutes || item.thoi_gian || 25, 10),
                     rating: item.rating || 4.8,
                     rating_count: item.rating_count || '1.5k',
-                    likes: item.likes || 120,
-                    is_favorite: false,
+                    likes: typeof item.likes !== 'undefined' ? item.likes : 0,
+                    is_favorite: Boolean(item.is_favorite ?? item.isFavorite),
                     category: item.category || item.loai_mon || 'Món mặn',
                     category_slug: item.category_slug || '',
                     sub_category: item.sub_category || 'viet',
@@ -491,8 +491,10 @@ const FoodList = {
                 }));
                 currentFilteredDishes = [...masterDishes];
             }
+            window.masterDishes = masterDishes;
         } catch (e) {
             console.log('Using rich static dataset for FoodList:', e);
+            window.masterDishes = masterDishes;
         }
 
         // DOM Elements
@@ -603,7 +605,7 @@ const FoodList = {
                                 </div>
                                 <div class="flex items-center gap-1 text-xs font-bold text-rose-600 bg-rose-50 px-2 py-1 rounded-lg shrink-0" title="${dish.likes} lượt yêu thích">
                                     <i class="fa-solid fa-heart text-rose-500 text-[10px]"></i>
-                                    <span>${dish.likes >= 1000 ? (dish.likes / 1000).toFixed(1).replace('.0', '') + 'k' : dish.likes}</span>
+                                    <span class="card-likes-count" data-food-id="${dish.id}">${dish.likes >= 1000 ? (dish.likes / 1000).toFixed(1).replace('.0', '') + 'k' : dish.likes}</span>
                                 </div>
                             </div>
                             <p class="text-xs sm:text-sm text-text-muted line-clamp-2 mb-3 leading-relaxed">
@@ -671,7 +673,7 @@ const FoodList = {
                         </h3>
                         <div class="flex items-center gap-1 text-[11px] font-bold text-rose-600 bg-rose-50 px-1.5 py-0.5 rounded-md shrink-0 mt-0.5" title="${dish.likes} lượt yêu thích">
                             <i class="fa-solid fa-heart text-rose-500 text-[10px]"></i>
-                            <span>${dish.likes >= 1000 ? (dish.likes / 1000).toFixed(1).replace('.0', '') + 'k' : dish.likes}</span>
+                            <span class="card-likes-count" data-food-id="${dish.id}">${dish.likes >= 1000 ? (dish.likes / 1000).toFixed(1).replace('.0', '') + 'k' : dish.likes}</span>
                         </div>
                     </div>
 
@@ -1038,8 +1040,8 @@ const FoodList = {
                         cooking_time_minutes: parseInt(item.cooking_time_minutes || item.thoi_gian || 25, 10),
                         rating: item.rating || 4.8,
                         rating_count: item.rating_count || '1.5k',
-                        likes: item.likes || 120,
-                        is_favorite: false,
+                        likes: typeof item.likes !== 'undefined' ? item.likes : 0,
+                        is_favorite: Boolean(item.is_favorite ?? item.isFavorite),
                         category: item.category || item.loai_mon || 'Món mặn',
                         category_slug: item.category_slug || '',
                         sub_category: item.sub_category || 'viet',
@@ -1245,7 +1247,7 @@ const FoodList = {
 
         // 9. Card Event Delegation: Favorite Heart Click on #recipe-grid
         if (recipeGrid) {
-            recipeGrid.addEventListener('click', (e) => {
+            recipeGrid.addEventListener('click', async (e) => {
                 const favBtn = e.target.closest('.btn-favorite-dish');
                 if (favBtn) {
                     e.preventDefault();
@@ -1254,20 +1256,73 @@ const FoodList = {
                     const dish = masterDishes.find(d => d.id === dishId);
                     if (!dish) return;
 
-                    dish.is_favorite = !dish.is_favorite;
-                    const heartIcon = favBtn.querySelector('i');
+                    const token = localStorage.getItem('auth_token');
+                    if (!token) {
+                        if (window.Popup) {
+                            const goLogin = await window.Popup.confirm({
+                                title: 'Yêu cầu đăng nhập',
+                                message: 'Bạn cần đăng nhập tài khoản để lưu các món ăn yêu thích.',
+                                type: 'info',
+                                confirmText: 'Đăng nhập ngay',
+                                cancelText: 'Để sau'
+                            });
+                            if (goLogin) window.location.hash = '#/login';
+                        } else {
+                            alert('Vui lòng đăng nhập để lưu món ăn yêu thích.');
+                            window.location.hash = '#/login';
+                        }
+                        return;
+                    }
 
-                    if (dish.is_favorite) {
-                        favBtn.className = "btn-favorite-dish absolute top-2.5 right-2.5 w-8.5 h-8.5 rounded-full bg-rose-500 text-white backdrop-blur-sm flex items-center justify-center shadow-sm scale-125 transition-all cursor-pointer z-20";
-                        setTimeout(() => {
-                            favBtn.classList.remove('scale-125');
-                        }, 150);
-                        if (heartIcon) heartIcon.className = "fa-solid fa-heart text-sm";
-                        showToast(`Đã thêm "${dish.name}" vào Yêu thích! ❤️`, 'success');
-                    } else {
-                        favBtn.className = "btn-favorite-dish absolute top-2.5 right-2.5 w-8.5 h-8.5 rounded-full bg-white/90 text-gray-500 hover:text-rose-500 backdrop-blur-sm flex items-center justify-center shadow-sm transition-all cursor-pointer z-20";
-                        if (heartIcon) heartIcon.className = "fa-regular fa-heart text-sm";
-                        showToast(`Đã bỏ lưu "${dish.name}"`, 'info');
+                    favBtn.disabled = true;
+                    try {
+                        const res = await fetchAPI(`/foods/${dishId}/favorite`, { method: 'POST' });
+                        if (res && res.success) {
+                            dish.is_favorite = Boolean(res.is_favorite);
+                            if (typeof res.likes !== 'undefined') dish.likes = res.likes;
+                            const heartIcon = favBtn.querySelector('i');
+
+                            if (dish.is_favorite) {
+                                favBtn.className = "btn-favorite-dish absolute top-2.5 right-2.5 w-8.5 h-8.5 rounded-full bg-rose-500 text-white backdrop-blur-sm flex items-center justify-center shadow-sm scale-125 transition-all cursor-pointer z-20";
+                                setTimeout(() => {
+                                    favBtn.classList.remove('scale-125');
+                                }, 150);
+                                if (heartIcon) heartIcon.className = "fa-solid fa-heart text-sm";
+                            } else {
+                                favBtn.className = "btn-favorite-dish absolute top-2.5 right-2.5 w-8.5 h-8.5 rounded-full bg-white/90 text-gray-500 hover:text-rose-500 backdrop-blur-sm flex items-center justify-center shadow-sm transition-all cursor-pointer z-20";
+                                if (heartIcon) heartIcon.className = "fa-regular fa-heart text-sm";
+                            }
+
+                            // Cập nhật số like trên card nếu có
+                            const card = favBtn.closest('article');
+                            const likesSpan = card?.querySelector('.card-likes-count') || card?.querySelector('span[class*="text-rose"]');
+                            if (likesSpan && typeof res.likes !== 'undefined') {
+                                likesSpan.textContent = res.likes;
+                            }
+
+                            if (window.Popup) {
+                                window.Popup.toast(res.message, dish.is_favorite ? 'success' : 'info');
+                            } else {
+                                showToast(res.message, dish.is_favorite ? 'success' : 'info');
+                            }
+
+                            // Cập nhật số lượng trên icon trái tim Navbar
+                            if (window.updateNavbarFavBadge) {
+                                window.updateNavbarFavBadge(res.userTotalFavorites ?? null);
+                            }
+
+                            // Cập nhật drawer Navbar nếu mở
+                            const favModal = document.getElementById('nav-fav-modal');
+                            if (favModal && !favModal.classList.contains('invisible') && window.loadNavbarFavorites) {
+                                window.loadNavbarFavorites();
+                            }
+                        } else {
+                            if (window.Popup) window.Popup.error(res?.message || 'Có lỗi xảy ra.');
+                        }
+                    } catch (err) {
+                        console.error('Lỗi yêu thích món:', err);
+                    } finally {
+                        favBtn.disabled = false;
                     }
                 }
             });
@@ -1367,6 +1422,7 @@ const FoodList = {
         }
 
         executeFilterAndSort();
+        if (window.updateNavbarFavBadge) window.updateNavbarFavBadge();
     }
 };
 

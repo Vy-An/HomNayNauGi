@@ -1055,6 +1055,10 @@ const Profile = {
                     if (tabBadgeFavs) tabBadgeFavs.textContent = newCount;
                     if (fullFavBadge) fullFavBadge.textContent = `${newCount} món`;
 
+                    if (window.updateNavbarFavBadge) {
+                        window.updateNavbarFavBadge(newCount);
+                    }
+
                     showToast(`Đã bỏ lưu "${foodName}" khỏi danh sách yêu thích.`, 'info');
                 } else {
                     showToast(res?.message || 'Không thể bỏ yêu thích món ăn.', 'error');

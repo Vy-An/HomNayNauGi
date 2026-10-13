@@ -22,6 +22,15 @@ const adminFoodsState = {
     editingId: null
 };
 
+const adminCategoriesState = {
+    page: 1,
+    limit: 10,
+    search: '',
+    status: '',
+    categories: [],
+    editingId: null
+};
+
 function getStoredAdminUser() {
     try {
         return JSON.parse(localStorage.getItem('auth_user') || 'null');
@@ -2566,6 +2575,538 @@ async function initAdminCommunityPage() {
     updateStatCardActiveState();
 }
 
+function categoryStatusLabel(status) {
+    return status === 'inactive' ? 'Đã ẩn' : 'Đang hiển thị';
+}
+
+function categoryStatusBadge(status) {
+    const isInactive = status === 'inactive';
+    const classes = isInactive
+        ? 'bg-amber-100 text-amber-700'
+        : 'bg-green-100 text-green-700';
+
+    return `<span class="${classes} px-3 py-1 rounded-full text-xs font-bold inline-flex items-center gap-1.5"><span class="w-1.5 h-1.5 rounded-full ${isInactive ? 'bg-amber-500' : 'bg-green-500'}"></span>${categoryStatusLabel(status)}</span>`;
+}
+
+function createCategorySlug(value) {
+    return String(value || '')
+        .trim()
+        .toLowerCase()
+        .normalize('NFD')
+        .replace(/[\u0300-\u036f]/g, '')
+        .replace(/[\u0111\u0110]/gu, 'd')
+        .replace(/[^a-z0-9]+/g, '-')
+        .replace(/^-+|-+$/g, '');
+}
+
+function setCategoriesAlert(message = '', type = 'info') {
+    const alert = document.getElementById('admin-categories-alert');
+    if (!alert) return;
+
+    if (!message) {
+        alert.classList.add('hidden');
+        alert.textContent = '';
+        return;
+    }
+
+    const classes = type === 'error'
+        ? 'bg-red-50 border-red-200 text-red-700'
+        : 'bg-green-50 border-green-200 text-green-700';
+
+    alert.className = `mb-4 rounded-xl border px-4 py-3 text-sm font-semibold ${classes}`;
+    alert.textContent = message;
+}
+
+function setCategoriesLoading(message = 'Đang tải danh mục...') {
+    const body = document.getElementById('admin-categories-body');
+    if (!body) return;
+
+    body.innerHTML = `
+        <tr>
+            <td colspan="6" class="p-8 text-center text-text-muted">${escapeHTML(message)}</td>
+        </tr>
+    `;
+}
+
+function getCategoryFromState(id) {
+    return adminCategoriesState.categories.find((c) => Number(c.id_category) === Number(id));
+}
+
+function renderCategoriesTable(categories) {
+    const body = document.getElementById('admin-categories-body');
+    if (!body) return;
+
+    if (!categories.length) {
+        setCategoriesLoading('Không tìm thấy danh mục nào phù hợp.');
+        return;
+    }
+
+    body.innerHTML = categories.map((cat) => {
+        const isInactive = cat.status === 'inactive';
+        const nextStatus = isInactive ? 'active' : 'inactive';
+        const statusIcon = isInactive ? 'fa-eye' : 'fa-eye-slash';
+        const statusTitle = isInactive ? 'Hiện danh mục' : 'Ẩn danh mục (không xóa dữ liệu)';
+        const statusBtnClass = isInactive ? 'text-green-600 hover:bg-green-50' : 'text-amber-600 hover:bg-amber-50';
+
+        return `
+            <tr class="border-b border-gray-50 hover:bg-gray-50/80 transition">
+                <td class="p-4 text-xs font-mono text-text-muted font-bold">#${cat.id_category}</td>
+                <td class="p-4">
+                    <div class="flex items-center gap-3">
+                        <div class="w-9 h-9 rounded-xl ${isInactive ? 'bg-gray-100 text-gray-500' : 'bg-primary/10 text-primary'} flex items-center justify-center font-bold text-sm shrink-0">
+                            <i class="fa-solid fa-layer-group"></i>
+                        </div>
+                        <div>
+                            <p class="font-bold text-text-main">${escapeHTML(cat.name)}</p>
+                        </div>
+                    </div>
+                </td>
+                <td class="p-4">
+                    <span class="font-mono text-xs bg-gray-100 text-gray-600 px-2.5 py-1 rounded-md border border-gray-200">
+                        ${escapeHTML(cat.slug)}
+                    </span>
+                </td>
+                <td class="p-4">
+                    <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold ${Number(cat.foodsCount) > 0 ? 'bg-blue-50 text-blue-700 border border-blue-100' : 'bg-gray-100 text-gray-500'}">
+                        <i class="fa-solid fa-bowl-food text-xs"></i>
+                        ${formatNumber(cat.foodsCount || 0)} món
+                    </span>
+                </td>
+                <td class="p-4">${categoryStatusBadge(cat.status)}</td>
+                <td class="p-4 text-right">
+                    <div class="flex justify-end gap-1.5">
+                        <button class="text-blue-500 hover:bg-blue-50 p-2 rounded-lg transition" title="Chỉnh sửa danh mục" data-category-action="edit" data-id="${cat.id_category}">
+                            <i class="fa-solid fa-pen-to-square"></i>
+                        </button>
+                        <button class="${statusBtnClass} p-2 rounded-lg transition" title="${statusTitle}" data-category-action="status" data-id="${cat.id_category}" data-status="${nextStatus}">
+                            <i class="fa-solid ${statusIcon}"></i>
+                        </button>
+                    </div>
+                </td>
+            </tr>
+        `;
+    }).join('');
+}
+
+function updateCategoriesStats(stats = {}) {
+    const ids = {
+        total: 'admin-categories-stat-total',
+        active: 'admin-categories-stat-active',
+        inactive: 'admin-categories-stat-inactive',
+        foods: 'admin-categories-stat-foods'
+    };
+
+    const setText = (id, val) => {
+        const el = document.getElementById(id);
+        if (el) el.textContent = formatNumber(val ?? 0);
+    };
+
+    setText(ids.total, stats.total);
+    setText(ids.active, stats.active);
+    setText(ids.inactive, stats.inactive);
+    setText(ids.foods, stats.totalFoodsAssigned);
+}
+
+function updateCategoriesPagination(pagination = {}) {
+    const info = document.getElementById('admin-categories-pagination-info');
+    const prev = document.getElementById('admin-categories-prev');
+    const next = document.getElementById('admin-categories-next');
+    const indicator = document.getElementById('admin-categories-page-indicator');
+
+    if (info) {
+        info.textContent = pagination.total
+            ? `Hiển thị trang ${pagination.page || 1} / ${pagination.totalPages || 1} (Tổng cộng ${formatNumber(pagination.total)} danh mục)`
+            : '0 danh mục';
+    }
+
+    if (indicator) {
+        indicator.textContent = `Trang ${pagination.page || 1}`;
+    }
+
+    if (prev) prev.disabled = (pagination.page || 1) <= 1;
+    if (next) next.disabled = !pagination.hasMore;
+}
+
+async function loadAdminCategories() {
+    setCategoriesAlert();
+    setCategoriesLoading();
+
+    const params = new URLSearchParams({
+        page: adminCategoriesState.page,
+        limit: adminCategoriesState.limit
+    });
+
+    if (adminCategoriesState.search) params.set('search', adminCategoriesState.search);
+    if (adminCategoriesState.status) params.set('status', adminCategoriesState.status);
+
+    const res = await fetchAPI(`/admin/categories?${params.toString()}`);
+
+    if (!res.success) {
+        adminCategoriesState.categories = [];
+        renderCategoriesTable([]);
+        updateCategoriesStats();
+        updateCategoriesPagination({ page: 1, totalPages: 1, total: 0, hasMore: false });
+        setCategoriesAlert(res.message || 'Không thể tải danh sách danh mục.', 'error');
+        return;
+    }
+
+    adminCategoriesState.categories = res.data || [];
+    renderCategoriesTable(adminCategoriesState.categories);
+    updateCategoriesStats(res.stats);
+    updateCategoriesPagination(res.pagination);
+}
+
+function openCategoryModal(cat = null) {
+    adminCategoriesState.editingId = cat?.id_category || null;
+
+    const nameInput = document.getElementById('admin-category-name');
+    const slugInput = document.getElementById('admin-category-slug');
+    const statusInput = document.getElementById('admin-category-status');
+    const title = document.getElementById('admin-category-modal-title');
+
+    if (nameInput) nameInput.value = cat?.name || '';
+    if (slugInput) slugInput.value = cat?.slug || '';
+    if (statusInput) statusInput.value = cat?.status || 'active';
+    if (title) title.textContent = cat ? 'Chỉnh sửa danh mục' : 'Thêm danh mục mới';
+
+    const modal = document.getElementById('admin-category-modal');
+    if (modal) {
+        modal.classList.remove('hidden');
+        modal.classList.add('flex');
+    }
+
+    setTimeout(() => nameInput?.focus(), 50);
+}
+
+function closeCategoryModal() {
+    const modal = document.getElementById('admin-category-modal');
+    if (modal) {
+        modal.classList.add('hidden');
+        modal.classList.remove('flex');
+    }
+    adminCategoriesState.editingId = null;
+}
+
+async function saveCategoryFromForm(event) {
+    event.preventDefault();
+    setCategoriesAlert();
+
+    const nameInput = document.getElementById('admin-category-name');
+    const slugInput = document.getElementById('admin-category-slug');
+    const statusInput = document.getElementById('admin-category-status');
+    const saveBtn = document.getElementById('admin-category-save');
+
+    const name = nameInput?.value?.trim() || '';
+    let slug = slugInput?.value?.trim() || '';
+    const status = statusInput?.value || 'active';
+
+    if (!name) {
+        Popup.warning('Vui lòng nhập tên danh mục.');
+        nameInput?.focus();
+        return;
+    }
+
+    if (!slug) {
+        slug = createCategorySlug(name);
+    }
+
+    const isEditing = Boolean(adminCategoriesState.editingId);
+    const url = isEditing
+        ? `/admin/categories/${adminCategoriesState.editingId}`
+        : '/admin/categories';
+    const method = isEditing ? 'PATCH' : 'POST';
+
+    const originalBtnText = saveBtn ? saveBtn.innerHTML : 'Lưu danh mục';
+    if (saveBtn) {
+        saveBtn.disabled = true;
+        saveBtn.innerHTML = '<i class="fa-solid fa-circle-notch fa-spin mr-1"></i> Đang lưu...';
+    }
+
+    try {
+        const res = await fetchAPI(url, {
+            method,
+            body: JSON.stringify({ name, slug, status })
+        });
+
+        if (!res.success) {
+            setCategoriesAlert(res.message || 'Lưu danh mục thất bại.', 'error');
+            Popup.error(res.message || 'Lưu danh mục thất bại.');
+            return;
+        }
+
+        closeCategoryModal();
+        setCategoriesAlert(res.message || (isEditing ? 'Cập nhật danh mục thành công.' : 'Thêm danh mục mới thành công.'));
+        Popup.toast(isEditing ? 'Cập nhật danh mục thành công!' : 'Thêm danh mục mới thành công!', 'success');
+        await loadAdminCategories();
+    } catch (err) {
+        setCategoriesAlert(err.message || 'Có lỗi xảy ra khi lưu danh mục.', 'error');
+        Popup.error(err.message || 'Có lỗi xảy ra.');
+    } finally {
+        if (saveBtn) {
+            saveBtn.disabled = false;
+            saveBtn.innerHTML = originalBtnText;
+        }
+    }
+}
+
+async function changeCategoryStatus(id, nextStatus) {
+    const cat = getCategoryFromState(id);
+    if (!cat) return;
+
+    const action = nextStatus === 'inactive' ? 'ẩn' : 'hiện';
+    const isHide = nextStatus === 'inactive';
+    const hasFoods = Number(cat.foodsCount) > 0;
+
+    const note = isHide && hasFoods
+        ? `<div class="mt-2 text-xs bg-amber-50 p-2.5 rounded-lg border border-amber-200 text-amber-800 text-left">
+             <i class="fa-solid fa-triangle-exclamation mr-1"></i>
+             Danh mục này đang có <strong>${cat.foodsCount}</strong> món ăn liên kết. Khi ẩn, danh mục sẽ tạm thời không hiển thị ở bộ lọc của khách nhưng toàn bộ dữ liệu món vẫn được bảo toàn trọn vẹn.
+           </div>`
+        : '';
+
+    const confirmed = await Popup.confirm({
+        title: `Xác nhận ${action} danh mục`,
+        message: `Bạn có chắc chắn muốn <strong>${action}</strong> danh mục "<strong>${escapeHTML(cat.name)}</strong>"?${note}`,
+        type: isHide ? 'warning' : 'question',
+        confirmText: isHide ? 'Ẩn danh mục' : 'Hiện danh mục',
+        cancelText: 'Hủy bỏ',
+        confirmButtonColor: isHide ? 'warning' : 'primary'
+    });
+    if (!confirmed) return;
+
+    const res = await fetchAPI(`/admin/categories/${id}/status`, {
+        method: 'PATCH',
+        body: JSON.stringify({ status: nextStatus })
+    });
+
+    if (!res.success) {
+        setCategoriesAlert(res.message || 'Không thể cập nhật trạng thái danh mục.', 'error');
+        Popup.error(res.message || 'Không thể cập nhật trạng thái danh mục.');
+        return;
+    }
+
+    setCategoriesAlert(res.message || 'Đã cập nhật trạng thái danh mục.');
+    Popup.toast(`Đã ${action} danh mục "${cat.name}" thành công!`, 'success');
+    await loadAdminCategories();
+}
+
+function bindAdminCategoriesEvents() {
+    const search = document.getElementById('admin-categories-search');
+    const status = document.getElementById('admin-categories-status-filter');
+    const refresh = document.getElementById('admin-categories-refresh');
+    const add = document.getElementById('admin-category-add');
+    const body = document.getElementById('admin-categories-body');
+    const prev = document.getElementById('admin-categories-prev');
+    const next = document.getElementById('admin-categories-next');
+    const form = document.getElementById('admin-category-form');
+    const nameInput = document.getElementById('admin-category-name');
+    const slugInput = document.getElementById('admin-category-slug');
+
+    let searchTimer = null;
+    search?.addEventListener('input', () => {
+        window.clearTimeout(searchTimer);
+        searchTimer = window.setTimeout(() => {
+            adminCategoriesState.search = search.value.trim();
+            adminCategoriesState.page = 1;
+            loadAdminCategories();
+        }, 300);
+    });
+
+    status?.addEventListener('change', () => {
+        adminCategoriesState.status = status.value;
+        adminCategoriesState.page = 1;
+        loadAdminCategories();
+    });
+
+    refresh?.addEventListener('click', () => loadAdminCategories());
+    add?.addEventListener('click', () => openCategoryModal());
+
+    nameInput?.addEventListener('input', () => {
+        if (!adminCategoriesState.editingId && slugInput) {
+            slugInput.value = createCategorySlug(nameInput.value);
+        }
+    });
+
+    prev?.addEventListener('click', () => {
+        if (adminCategoriesState.page <= 1) return;
+        adminCategoriesState.page -= 1;
+        loadAdminCategories();
+    });
+
+    next?.addEventListener('click', () => {
+        adminCategoriesState.page += 1;
+        loadAdminCategories();
+    });
+
+    body?.addEventListener('click', (event) => {
+        const button = event.target.closest('[data-category-action]');
+        if (!button) return;
+
+        const id = button.dataset.id;
+        const action = button.dataset.categoryAction;
+
+        if (action === 'edit') openCategoryModal(getCategoryFromState(id));
+        if (action === 'status') changeCategoryStatus(id, button.dataset.status);
+    });
+
+    form?.addEventListener('submit', saveCategoryFromForm);
+    document.getElementById('admin-category-modal-close')?.addEventListener('click', closeCategoryModal);
+    document.getElementById('admin-category-cancel')?.addEventListener('click', closeCategoryModal);
+    document.getElementById('admin-category-modal')?.addEventListener('click', (event) => {
+        if (event.target.id === 'admin-category-modal') closeCategoryModal();
+    });
+}
+
+async function initAdminCategoriesPage() {
+    bindAdminCategoriesEvents();
+    await loadAdminCategories();
+}
+
+function renderCategoriesPage() {
+    const currentUser = getStoredAdminUser();
+    const adminName = currentUser?.name || 'Admin';
+    const adminAvatar = currentUser?.avatar || 'http://localhost:5000/images/users/admin.jpg';
+
+    return `
+        <header class="flex flex-col lg:flex-row lg:justify-between lg:items-center gap-4 mb-8 bg-white p-4 rounded-2xl shadow-sm border border-gray-100">
+            <div>
+                <h1 class="text-2xl font-bold text-text-main flex items-center gap-2">
+                    <i class="fa-solid fa-layer-group text-primary"></i> Quản lý danh mục món ăn
+                </h1>
+                <p class="text-sm text-text-muted mt-1">Quản lý danh sách danh mục, thêm mới, chỉnh sửa và ẩn/hiện danh mục trên trang khách.</p>
+            </div>
+            <div class="flex items-center gap-4">
+                <span class="text-text-muted">Xin chào, <strong>${escapeHTML(adminName)}</strong></span>
+                <img src="${escapeHTML(adminAvatar)}" class="w-10 h-10 rounded-full object-cover" alt="Admin">
+            </div>
+        </header>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4 mb-6">
+            <div class="bg-white rounded-2xl border border-gray-100 shadow-sm p-5 border-l-4 border-l-primary">
+                <p class="text-xs font-bold uppercase tracking-wide text-text-muted">Tổng danh mục</p>
+                <strong id="admin-categories-stat-total" class="block text-3xl text-text-main mt-2">0</strong>
+            </div>
+            <div class="bg-white rounded-2xl border border-gray-100 shadow-sm p-5 border-l-4 border-l-green-500">
+                <p class="text-xs font-bold uppercase tracking-wide text-text-muted">Đang hiển thị</p>
+                <strong id="admin-categories-stat-active" class="block text-3xl text-green-700 mt-2">0</strong>
+            </div>
+            <div class="bg-white rounded-2xl border border-gray-100 shadow-sm p-5 border-l-4 border-l-amber-500">
+                <p class="text-xs font-bold uppercase tracking-wide text-text-muted">Đã ẩn</p>
+                <strong id="admin-categories-stat-inactive" class="block text-3xl text-amber-700 mt-2">0</strong>
+            </div>
+            <div class="bg-white rounded-2xl border border-gray-100 shadow-sm p-5 border-l-4 border-l-blue-500">
+                <p class="text-xs font-bold uppercase tracking-wide text-text-muted">Tổng món liên kết</p>
+                <strong id="admin-categories-stat-foods" class="block text-3xl text-blue-700 mt-2">0</strong>
+            </div>
+        </div>
+
+        <div id="admin-categories-alert" class="hidden mb-4 rounded-xl border px-4 py-3 text-sm font-semibold"></div>
+
+        <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
+            <div class="p-5 border-b border-gray-100 flex flex-col xl:flex-row gap-3 xl:items-center xl:justify-between">
+                <h2 class="text-lg font-bold text-text-main">Danh sách danh mục</h2>
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-[minmax(220px,1fr)_170px_auto_auto] gap-2 w-full xl:w-auto">
+                    <input id="admin-categories-search" type="text" placeholder="Tìm theo tên danh mục, slug..." class="px-4 py-2 border border-gray-200 rounded-lg text-sm focus:outline-none focus:border-primary">
+                    <select id="admin-categories-status-filter" class="px-4 py-2 border border-gray-200 rounded-lg text-sm focus:outline-none focus:border-primary">
+                        <option value="">Tất cả trạng thái</option>
+                        <option value="active">Đang hiển thị</option>
+                        <option value="inactive">Đã ẩn</option>
+                    </select>
+                    <button id="admin-categories-refresh" class="bg-white hover:bg-gray-50 text-primary border border-primary/20 px-4 py-2 rounded-lg font-semibold transition text-sm flex items-center justify-center">
+                        <i class="fa-solid fa-rotate-right"></i>
+                    </button>
+                    <button id="admin-category-add" class="bg-primary hover:bg-primary-hover text-white px-4 py-2 rounded-lg font-semibold transition shadow-sm text-sm flex items-center justify-center gap-2">
+                        <i class="fa-solid fa-plus"></i> Thêm danh mục
+                    </button>
+                </div>
+            </div>
+
+            <div class="overflow-x-auto">
+                <table class="w-full text-left border-collapse">
+                    <thead>
+                        <tr class="bg-gray-50 text-text-muted text-sm border-b border-gray-100">
+                            <th class="p-4 font-semibold w-16">ID</th>
+                            <th class="p-4 font-semibold">Tên danh mục</th>
+                            <th class="p-4 font-semibold">Slug URL</th>
+                            <th class="p-4 font-semibold">Số món ăn</th>
+                            <th class="p-4 font-semibold">Trạng thái</th>
+                            <th class="p-4 font-semibold text-right w-28">Hành động</th>
+                        </tr>
+                    </thead>
+                    <tbody id="admin-categories-body">
+                        <tr>
+                            <td colspan="6" class="p-8 text-center text-text-muted">Đang tải danh mục...</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="p-4 border-t border-gray-100 flex flex-col sm:flex-row items-center justify-between gap-4">
+                <span id="admin-categories-pagination-info" class="text-sm text-text-muted">Đang tải...</span>
+                <div class="flex items-center gap-2">
+                    <button id="admin-categories-prev" class="px-3 py-1.5 border border-gray-200 rounded-lg text-sm font-semibold hover:bg-gray-50 transition disabled:opacity-50 disabled:cursor-not-allowed">
+                        <i class="fa-solid fa-chevron-left mr-1"></i> Trước
+                    </button>
+                    <span id="admin-categories-page-indicator" class="text-sm font-semibold px-2">Trang 1</span>
+                    <button id="admin-categories-next" class="px-3 py-1.5 border border-gray-200 rounded-lg text-sm font-semibold hover:bg-gray-50 transition disabled:opacity-50 disabled:cursor-not-allowed">
+                        Sau <i class="fa-solid fa-chevron-right ml-1"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Modal Thêm/Sửa Danh mục -->
+        <div id="admin-category-modal" class="fixed inset-0 bg-black/50 backdrop-blur-xs hidden items-center justify-center z-50 p-4">
+            <div class="bg-white rounded-2xl shadow-xl border border-gray-100 w-full max-w-md overflow-hidden animate-fadeIn">
+                <div class="p-5 border-b border-gray-100 flex items-center justify-between sticky top-0 bg-white z-10">
+                    <h3 id="admin-category-modal-title" class="text-lg font-bold text-text-main">Thêm danh mục mới</h3>
+                    <button type="button" id="admin-category-modal-close" class="w-9 h-9 rounded-full hover:bg-gray-100 text-text-muted flex items-center justify-center transition">
+                        <i class="fa-solid fa-xmark"></i>
+                    </button>
+                </div>
+                <form id="admin-category-form" class="p-6 space-y-4">
+                    <div>
+                        <label class="block text-sm font-semibold text-text-main mb-1">
+                            Tên danh mục <span class="text-red-500">*</span>
+                        </label>
+                        <input id="admin-category-name" type="text" placeholder="Ví dụ: Món canh, Món xào..." class="w-full px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-primary text-sm" required>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-semibold text-text-main mb-1">
+                            Slug (Đường dẫn tĩnh)
+                        </label>
+                        <input id="admin-category-slug" type="text" placeholder="Tự tạo từ tên nếu bỏ trống" class="w-full px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-primary text-sm font-mono">
+                        <p class="text-xs text-text-muted mt-1">Định dạng viết liền không dấu, ngăn cách bằng dấu gạch ngang (ví dụ: mon-canh).</p>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-semibold text-text-main mb-1">
+                            Trạng thái hiển thị
+                        </label>
+                        <select id="admin-category-status" class="w-full px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-primary text-sm">
+                            <option value="active">Đang hiển thị (Active)</option>
+                            <option value="inactive">Đã ẩn (Inactive)</option>
+                        </select>
+                    </div>
+
+                    <div class="p-3 bg-amber-50/80 border border-amber-200 rounded-xl text-xs text-amber-800 flex items-start gap-2">
+                        <i class="fa-solid fa-circle-info mt-0.5 shrink-0 text-amber-600"></i>
+                        <span>Để bảo toàn tính toàn vẹn dữ liệu của các món ăn đã tạo, hệ thống sử dụng cơ chế <strong>Ẩn/Hiện</strong> thay cho xóa vĩnh viễn. Danh mục bị ẩn sẽ không hiển thị trên giao diện của khách.</span>
+                    </div>
+
+                    <div class="pt-4 border-t border-gray-100 flex items-center justify-end gap-3">
+                        <button type="button" id="admin-category-cancel" class="px-4 py-2 rounded-lg border border-gray-200 text-sm font-semibold hover:bg-gray-50 transition text-text-muted">
+                            Hủy bỏ
+                        </button>
+                        <button type="submit" id="admin-category-save" class="px-5 py-2 rounded-lg bg-primary hover:bg-primary-hover text-white text-sm font-semibold transition shadow-sm">
+                            Lưu danh mục
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    `;
+}
+
 
 const Admin = {
     render: async (params) => {
@@ -2577,6 +3118,8 @@ const Admin = {
             contentHTML = renderUsersPage();
         } else if (page === 'foods') {
             contentHTML = renderFoodsPage();
+        } else if (page === 'categories') {
+            contentHTML = renderCategoriesPage();
         } else if (page === 'community') {
             contentHTML = renderCommunityPage();
         } else {
@@ -2601,6 +3144,9 @@ const Admin = {
                         </a>
                         <a href="#/admin/foods" class="flex items-center gap-3 px-4 py-3 ${page === 'foods' ? 'bg-primary text-white font-bold shadow-sm' : 'text-text-muted hover:bg-cream-soft hover:text-primary font-semibold'} rounded-xl transition cursor-pointer">
                             <i class="fa-solid fa-kitchen-set w-5 text-center"></i> Quản lý món ăn
+                        </a>
+                        <a href="#/admin/categories" class="flex items-center gap-3 px-4 py-3 ${page === 'categories' ? 'bg-primary text-white font-bold shadow-sm' : 'text-text-muted hover:bg-cream-soft hover:text-primary font-semibold'} rounded-xl transition cursor-pointer">
+                            <i class="fa-solid fa-layer-group w-5 text-center"></i> Quản lý danh mục
                         </a>
                         <a href="#/admin/community" class="flex items-center gap-3 px-4 py-3 ${page === 'community' ? 'bg-primary text-white font-bold shadow-sm' : 'text-text-muted hover:bg-cream-soft hover:text-primary font-semibold'} rounded-xl transition cursor-pointer">
                             <i class="fa-solid fa-comments w-5 text-center"></i> Quản lý cộng đồng
@@ -2630,6 +3176,10 @@ const Admin = {
 
         if (page === 'foods') {
             await initAdminFoodsPage();
+        }
+
+        if (page === 'categories') {
+            await initAdminCategoriesPage();
         }
 
         if (page === 'community') {
