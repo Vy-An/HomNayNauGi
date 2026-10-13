@@ -19,6 +19,14 @@ router.get('/foods/:id', adminController.getFoodById);
 router.patch('/foods/:id', adminController.updateFood);
 router.patch('/foods/:id/status', adminController.updateFoodStatus);
 
+// Quản lý danh mục món ăn
+router.get('/categories', adminController.getCategories);
+router.post('/categories', adminController.createCategory);
+router.get('/categories/:id', adminController.getCategoryById);
+router.patch('/categories/:id', adminController.updateCategory);
+router.put('/categories/:id', adminController.updateCategory);
+router.patch('/categories/:id/status', adminController.updateCategoryStatus);
+
 // Quản lý bài viết cộng đồng (Kiểm duyệt & Báo cáo)
 router.get('/posts', adminController.getPosts);
 router.get('/posts/:id', adminController.getPostById);

@@ -547,6 +547,35 @@ async function addFavorite(req, res) {
     }
 }
 
+async function toggleFavorite(req, res) {
+    try {
+        if (!req.user) {
+            return res.status(401).json({
+                success: false,
+                message: 'Vui lòng đăng nhập để thực hiện chức năng này.'
+            });
+        }
+
+        const foodId = Number(req.params.id || req.body?.id_food || req.body?.foodId || req.body?.id);
+        if (!foodId || Number.isNaN(foodId)) {
+            return res.status(400).json({
+                success: false,
+                message: 'ID món ăn không hợp lệ.'
+            });
+        }
+
+        const foodService = require('../services/food.service');
+        const result = await foodService.toggleFavorite(foodId, req.user.id_user);
+
+        return res.json(result);
+    } catch (error) {
+        return res.status(error.status || 500).json({
+            success: false,
+            message: error.message || 'Không thể tương tác yêu thích lúc này.'
+        });
+    }
+}
+
 module.exports = {
     login,
     register,
@@ -556,6 +585,7 @@ module.exports = {
     getMyPosts,
     getMyFavorites,
     addFavorite,
-    removeFavorite
+    removeFavorite,
+    toggleFavorite
 };
 

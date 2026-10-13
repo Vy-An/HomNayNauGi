@@ -511,8 +511,8 @@ const FoodList = {
                     cooking_time_minutes: parseInt(item.cooking_time_minutes || item.thoi_gian || 25, 10),
                     rating: item.rating || 4.8,
                     rating_count: item.rating_count || '1.5k',
-                    likes: item.likes || 120,
-                    is_favorite: false,
+                    likes: typeof item.likes !== 'undefined' ? item.likes : 0,
+                    is_favorite: Boolean(item.is_favorite ?? item.isFavorite),
                     category: item.category || item.loai_mon || 'Món mặn',
                     category_slug: item.category_slug || '',
                     sub_category: item.sub_category || 'viet',
@@ -524,8 +524,10 @@ const FoodList = {
                 }));
                 currentFilteredDishes = [...masterDishes];
             }
+            window.masterDishes = masterDishes;
         } catch (e) {
             console.log('Using rich static dataset for FoodList:', e);
+            window.masterDishes = masterDishes;
         }
 
         // DOM Elements
@@ -638,7 +640,7 @@ const FoodList = {
                                 </div>
                                 <div class="flex items-center gap-1 text-xs font-bold text-rose-600 bg-rose-50 px-2 py-1 rounded-lg shrink-0" title="${dish.likes} lượt yêu thích">
                                     <i class="fa-solid fa-heart text-rose-500 text-[10px]"></i>
-                                    <span>${dish.likes >= 1000 ? (dish.likes / 1000).toFixed(1).replace('.0', '') + 'k' : dish.likes}</span>
+                                    <span class="card-likes-count" data-food-id="${dish.id}">${dish.likes >= 1000 ? (dish.likes / 1000).toFixed(1).replace('.0', '') + 'k' : dish.likes}</span>
                                 </div>
                             </div>
                             <p class="text-xs sm:text-sm text-text-muted line-clamp-2 mb-3 leading-relaxed">
@@ -708,7 +710,7 @@ const FoodList = {
                         </h3>
                         <div class="flex items-center gap-1 text-[11px] font-bold text-rose-600 bg-rose-50 px-1.5 py-0.5 rounded-md shrink-0 mt-0.5" title="${dish.likes} lượt yêu thích">
                             <i class="fa-solid fa-heart text-rose-500 text-[10px]"></i>
-                            <span>${dish.likes >= 1000 ? (dish.likes / 1000).toFixed(1).replace('.0', '') + 'k' : dish.likes}</span>
+                            <span class="card-likes-count" data-food-id="${dish.id}">${dish.likes >= 1000 ? (dish.likes / 1000).toFixed(1).replace('.0', '') + 'k' : dish.likes}</span>
                         </div>
                     </div>
 
@@ -1075,8 +1077,8 @@ const FoodList = {
                         cooking_time_minutes: parseInt(item.cooking_time_minutes || item.thoi_gian || 25, 10),
                         rating: item.rating || 4.8,
                         rating_count: item.rating_count || '1.5k',
-                        likes: item.likes || 120,
-                        is_favorite: false,
+                        likes: typeof item.likes !== 'undefined' ? item.likes : 0,
+                        is_favorite: Boolean(item.is_favorite ?? item.isFavorite),
                         category: item.category || item.loai_mon || 'Món mặn',
                         category_slug: item.category_slug || '',
                         sub_category: item.sub_category || 'viet',
@@ -1297,6 +1299,8 @@ const FoodList = {
                     if (typeof window !== 'undefined' && window.toggleFavoriteDish) {
                         const isFav = await window.toggleFavoriteDish(dish);
                         dish.is_favorite = isFav;
+                    } else if (typeof window !== 'undefined' && window.toggleFoodFavorite) {
+                        await window.toggleFoodFavorite(e, dishId);
                     } else {
                         dish.is_favorite = !dish.is_favorite;
                         const heartIcon = favBtn.querySelector('i');
@@ -1422,6 +1426,7 @@ const FoodList = {
         }
 
         executeFilterAndSort();
+        if (window.updateNavbarFavBadge) window.updateNavbarFavBadge();
     }
 };
 

@@ -51,8 +51,9 @@ const router = async () => {
         } else {
             if (navbarContainer) {
                 navbarContainer.innerHTML = Navbar();
-                if (typeof window !== 'undefined' && window.syncFavBadge) {
-                    window.syncFavBadge();
+                if (typeof window !== 'undefined') {
+                    if (window.syncFavBadge) window.syncFavBadge();
+                    if (window.updateNavbarFavBadge) window.updateNavbarFavBadge();
                 }
             }
             if (footerContainer) {

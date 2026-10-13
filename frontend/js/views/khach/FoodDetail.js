@@ -25,6 +25,7 @@ const FoodDetail = {
         }
 
         currentFoodDetail = food;
+        window.currentFoodDetail = food;
 
         const ingredientsCardsHTML = (food.ingredients || []).map(ing => `
             <div class="bg-gray-50/80 border border-gray-100 rounded-xl px-3.5 py-2.5 flex items-center justify-between text-xs hover:border-primary/30 transition">
@@ -111,7 +112,7 @@ const FoodDetail = {
                                     <div class="bg-white rounded-2xl p-3.5 sm:p-4 text-center border border-beige-border/80 shadow-sm">
                                         <span class="text-rose-500 text-lg mb-0.5 block"><i class="fa-solid fa-heart"></i></span>
                                         <span class="text-[11px] text-text-muted font-medium block">Yêu thích</span>
-                                        <span class="font-extrabold text-text-main text-sm md:text-base">${food.likes || '2.5k'}</span>
+                                        <span id="detail-likes-count" class="font-extrabold text-text-main text-sm md:text-base">${food.likes ?? 0}</span>
                                     </div>
                                     <div class="bg-white rounded-2xl p-3.5 sm:p-4 text-center border border-beige-border/80 shadow-sm">
                                         <span class="text-emerald-700 text-lg mb-0.5 block"><i class="fa-solid fa-users"></i></span>
@@ -121,14 +122,10 @@ const FoodDetail = {
                                 </div>
 
                                 <!-- Action Buttons Row -->
-                                <div class="flex items-center gap-3">
-                                    <button id="fav-btn" class="flex-1 py-3 px-4 rounded-2xl bg-white border border-beige-border/80 text-text-main font-semibold hover:bg-cream-soft transition flex items-center justify-center gap-2 text-xs md:text-sm shadow-sm cursor-pointer">
-                                        <i class="fa-regular fa-heart text-rose-500"></i>
-                                        <span>Lưu món</span>
-                                    </button>
-                                    <button id="add-to-cart-btn" class="flex-[2] py-3 px-5 bg-primary hover:bg-[#1B4633] active:bg-[#143627] text-white font-bold rounded-2xl transition shadow-md shadow-primary/20 flex items-center justify-center gap-2 text-xs md:text-sm cursor-pointer">
-                                        <i class="fa-solid fa-cart-shopping text-accent-light"></i>
-                                        <span>Thêm vào đi chợ</span>
+                                <div class="w-full">
+                                    <button id="fav-btn" data-food-id="${food.id}" class="w-full py-3.5 px-6 rounded-2xl ${food.is_favorite ? 'bg-rose-50 border border-rose-300 text-rose-600 font-bold shadow-xs' : 'bg-white border border-beige-border/80 text-text-main font-bold hover:bg-cream-soft hover:text-rose-600'} transition flex items-center justify-center gap-2 text-xs md:text-sm shadow-sm cursor-pointer" title="${food.is_favorite ? 'Bỏ lưu món' : 'Lưu món ăn yêu thích'}">
+                                        <i class="${food.is_favorite ? 'fa-solid' : 'fa-regular'} fa-heart text-rose-500 text-base"></i>
+                                        <span id="fav-btn-label">${food.is_favorite ? 'Đã lưu món yêu thích' : 'Lưu món yêu thích'}</span>
                                     </button>
                                 </div>
                             </div>
@@ -199,7 +196,6 @@ const FoodDetail = {
     },
 
     afterRender: async (id) => {
-        const btnAdd = document.getElementById('add-to-cart-btn');
         const btnFav = document.getElementById('fav-btn');
         const toast = document.getElementById('toast-msg');
         const toastText = document.getElementById('toast-text');
@@ -235,48 +231,100 @@ const FoodDetail = {
             }, 3000);
         }
 
-        if (btnAdd) {
-            btnAdd.addEventListener('click', () => {
-                let cart = JSON.parse(localStorage.getItem('shoppingCart') || '[]');
-                cart.push({ id, name: 'Cơm Tấm Sườn Bì Chả', addedAt: new Date().toISOString() });
-                localStorage.setItem('shoppingCart', JSON.stringify(cart));
-                showToast('Đã thêm nguyên liệu vào Danh sách đi chợ!');
+        if (btnFav) {
+            btnFav.addEventListener('click', async (e) => {
+                const targetFoodId = currentFoodDetail?.id || id;
+
+                if (window.toggleFoodFavorite) {
+                    await window.toggleFoodFavorite(e, targetFoodId);
+                    if (currentFoodDetail && window.currentFoodDetail) {
+                        currentFoodDetail.is_favorite = window.currentFoodDetail.is_favorite;
+                        currentFoodDetail.likes = window.currentFoodDetail.likes;
+                    }
+                } else {
+                    const token = localStorage.getItem('auth_token');
+                    if (!token) {
+                        if (window.Popup) {
+                            const goLogin = await window.Popup.confirm({
+                                title: 'Yêu cầu đăng nhập',
+                                message: 'Bạn cần đăng nhập tài khoản để lưu món ăn yêu thích.',
+                                type: 'info',
+                                confirmText: 'Đăng nhập ngay',
+                                cancelText: 'Để sau'
+                            });
+                            if (goLogin) window.location.hash = '#/login';
+                        } else {
+                            alert('Vui lòng đăng nhập để lưu món ăn yêu thích.');
+                            window.location.hash = '#/login';
+                        }
+                        return;
+                    }
+
+                    btnFav.disabled = true;
+                    try {
+                        const res = await fetchAPI(`/foods/${targetFoodId}/favorite`, { method: 'POST' });
+                        if (res && res.success) {
+                            const isFav = Boolean(res.is_favorite);
+                            const favLabel = document.getElementById('fav-btn-label');
+                            const likesEl = document.getElementById('detail-likes-count');
+                            const favIcon = btnFav.querySelector('i');
+
+                            if (isFav) {
+                                btnFav.className = 'w-full py-3.5 px-6 rounded-2xl bg-rose-50 border border-rose-300 text-rose-600 font-bold transition flex items-center justify-center gap-2 text-xs md:text-sm shadow-sm cursor-pointer';
+                                if (favIcon) favIcon.className = 'fa-solid fa-heart text-rose-500 text-base';
+                                if (favLabel) favLabel.textContent = 'Đã lưu món yêu thích';
+                                btnFav.title = 'Bỏ lưu món';
+                            } else {
+                                btnFav.className = 'w-full py-3.5 px-6 rounded-2xl bg-white border border-beige-border/80 text-text-main font-bold hover:bg-cream-soft hover:text-rose-600 transition flex items-center justify-center gap-2 text-xs md:text-sm shadow-sm cursor-pointer';
+                                if (favIcon) favIcon.className = 'fa-regular fa-heart text-rose-500 text-base';
+                                if (favLabel) favLabel.textContent = 'Lưu món yêu thích';
+                                btnFav.title = 'Lưu món ăn yêu thích';
+                            }
+
+                            if (likesEl && typeof res.likes !== 'undefined') {
+                                likesEl.textContent = res.likes;
+                            }
+
+                            if (currentFoodDetail) {
+                                currentFoodDetail.is_favorite = isFav;
+                                if (typeof res.likes !== 'undefined') currentFoodDetail.likes = res.likes;
+                            }
+
+                            if (window.updateNavbarFavBadge) {
+                                window.updateNavbarFavBadge(res.userTotalFavorites ?? null);
+                            }
+
+                            const favModal = document.getElementById('nav-fav-modal');
+                            if (favModal && !favModal.classList.contains('invisible') && window.loadNavbarFavorites) {
+                                window.loadNavbarFavorites();
+                            }
+
+                            if (window.Popup) {
+                                window.Popup.toast(res.message, isFav ? 'success' : 'info');
+                            } else {
+                                showToast(res.message);
+                            }
+                        } else {
+                            if (window.Popup) {
+                                window.Popup.error(res?.message || 'Có lỗi xảy ra.');
+                            } else {
+                                showToast(res?.message || 'Có lỗi xảy ra.');
+                            }
+                        }
+                    } catch (e) {
+                        console.error('Lỗi toggle favorite:', e);
+                    } finally {
+                        btnFav.disabled = false;
+                    }
+                }
             });
         }
 
-        if (btnFav) {
-            const foodId = Number(id || currentFoodDetail?.id || currentFoodDetail?.id_food);
-            const isFav = typeof window !== 'undefined' && window.isDishFavorite && window.isDishFavorite(foodId);
-
-            if (isFav) {
-                btnFav.classList.add('text-rose-500', 'bg-rose-50', 'border-rose-300');
-                const icon = btnFav.querySelector('i');
-                if (icon) icon.className = 'fa-solid fa-heart text-rose-500';
-                const span = btnFav.querySelector('span');
-                if (span) span.textContent = 'Đã lưu yêu thích';
-            }
-
-            btnFav.addEventListener('click', async () => {
-                if (typeof window !== 'undefined' && window.toggleFavoriteDish && currentFoodDetail) {
-                    const newFavState = await window.toggleFavoriteDish(currentFoodDetail);
-                    if (newFavState) {
-                        btnFav.classList.add('text-rose-500', 'bg-rose-50', 'border-rose-300');
-                        const icon = btnFav.querySelector('i');
-                        if (icon) icon.className = 'fa-solid fa-heart text-rose-500';
-                        const span = btnFav.querySelector('span');
-                        if (span) span.textContent = 'Đã lưu yêu thích';
-                    } else {
-                        btnFav.classList.remove('text-rose-500', 'bg-rose-50', 'border-rose-300');
-                        const icon = btnFav.querySelector('i');
-                        if (icon) icon.className = 'fa-regular fa-heart text-rose-500';
-                        const span = btnFav.querySelector('span');
-                        if (span) span.textContent = 'Lưu món';
-                    }
-                } else {
-                    btnFav.classList.toggle('text-rose-500');
-                    showToast('Đã lưu món ăn vào danh sách yêu thích!');
-                }
-            });
+        if (window.updateNavbarFavBadge) {
+            window.updateNavbarFavBadge();
+        }
+        if (window.syncFavBadge) {
+            window.syncFavBadge();
         }
     }
 };

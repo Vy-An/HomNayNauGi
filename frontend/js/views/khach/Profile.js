@@ -945,6 +945,9 @@ const Profile = {
                     if (typeof window !== 'undefined' && window.syncFavBadge) {
                         window.syncFavBadge();
                     }
+                    if (window.updateNavbarFavBadge) {
+                        window.updateNavbarFavBadge(newCount);
+                    }
 
                     showToast(`Đã bỏ lưu "${foodName}" khỏi danh sách yêu thích.`, 'info');
                 } else {

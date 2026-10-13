@@ -31,6 +31,7 @@ CREATE TABLE `categories` (
   `id_category` int UNSIGNED NOT NULL,
   `name` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL,
   `slug` varchar(150) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `status` enum('active','inactive') COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'active',
   `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `updated_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -39,14 +40,14 @@ CREATE TABLE `categories` (
 -- Dumping data for table `categories`
 --
 
-INSERT INTO `categories` (`id_category`, `name`, `slug`, `created_at`, `updated_at`) VALUES
-(1, 'Món mặn', 'mon-man', '2026-10-05 14:52:02', '2026-10-05 14:52:02'),
-(2, 'Món canh', 'mon-canh', '2026-10-05 14:52:02', '2026-10-05 14:52:02'),
-(3, 'Món rau', 'mon-rau', '2026-10-05 14:52:02', '2026-10-05 14:52:02'),
-(4, 'Món xào', 'mon-xao', '2026-10-05 14:52:02', '2026-10-05 14:52:02'),
-(5, 'Món chiên', 'mon-chien', '2026-10-05 14:52:02', '2026-10-05 14:52:02'),
-(6, 'Món luộc', 'mon-luoc', '2026-10-05 14:52:02', '2026-10-05 14:52:02'),
-(7, 'Món kho', 'mon-kho', '2026-10-05 14:52:02', '2026-10-05 14:52:02');
+INSERT INTO `categories` (`id_category`, `name`, `slug`, `status`, `created_at`, `updated_at`) VALUES
+(1, 'Món mặn', 'mon-man', 'active', '2026-10-05 14:52:02', '2026-10-05 14:52:02'),
+(2, 'Món canh', 'mon-canh', 'active', '2026-10-05 14:52:02', '2026-10-05 14:52:02'),
+(3, 'Món rau', 'mon-rau', 'active', '2026-10-05 14:52:02', '2026-10-05 14:52:02'),
+(4, 'Món xào', 'mon-xao', 'active', '2026-10-05 14:52:02', '2026-10-05 14:52:02'),
+(5, 'Món chiên', 'mon-chien', 'active', '2026-10-05 14:52:02', '2026-10-05 14:52:02'),
+(6, 'Món luộc', 'mon-luoc', 'active', '2026-10-05 14:52:02', '2026-10-05 14:52:02'),
+(7, 'Món kho', 'mon-kho', 'active', '2026-10-05 14:52:02', '2026-10-05 14:52:02');
 
 -- --------------------------------------------------------
 
