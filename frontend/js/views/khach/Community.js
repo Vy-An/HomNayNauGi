@@ -1,4 +1,4 @@
-import { fetchAPI } from '../../api.js';
+import { fetchAPI, BACKEND_URL } from '../../api.js';
 import Popup from '../../components/Popup.js';
 
 const INITIAL_BATCH = 6;
@@ -571,7 +571,7 @@ const Community = {
 
                     <div id="comments-section-${post.id_post}" class="hidden pt-3 mt-3 border-t border-[#F0EBE0]/80 space-y-3">
                         <div class="comments-composer flex items-start gap-2.5">
-                            <img src="${currentUser?.avatar || 'http://localhost:5000/images/users/admin.jpg'}" alt="Avatar" class="w-8 h-8 rounded-full object-cover shrink-0 ring-1 ring-beige-border" loading="lazy">
+                            <img src="${currentUser?.avatar || `${BACKEND_URL}/images/users/admin.jpg`}" alt="Avatar" class="w-8 h-8 rounded-full object-cover shrink-0 ring-1 ring-beige-border" loading="lazy">
                             <div class="flex-1 space-y-1.5">
                                 <div class="relative">
                                     <textarea 
@@ -1350,7 +1350,7 @@ const Community = {
                                             <div class="comment-item bg-[#FBF9F5] rounded-xl p-2.5 sm:p-3 border border-beige-border/60 text-xs transition-all" id="comment-item-${cId}">
                                                 <div class="flex items-start justify-between gap-2">
                                                     <div class="flex items-center gap-2">
-                                                        <img src="${cAuthor.avatar || 'http://localhost:5000/images/users/admin.jpg'}" alt="${cAuthor.name || 'Người dùng'}" class="w-6 h-6 rounded-full object-cover ring-1 ring-beige-border">
+                                                        <img src="${cAuthor.avatar || `${BACKEND_URL}/images/users/admin.jpg`}" alt="${cAuthor.name || 'Người dùng'}" class="w-6 h-6 rounded-full object-cover ring-1 ring-beige-border">
                                                         <div>
                                                             <strong class="text-text-main text-xs font-bold">${cAuthor.name || 'Thành viên'}</strong>
                                                             <span class="text-[10px] text-text-muted ml-1.5">${cTime}</span>
@@ -1439,7 +1439,7 @@ const Community = {
                                 <div class="comment-item bg-[#FBF9F5] rounded-xl p-2.5 sm:p-3 border border-beige-border/60 text-xs transition-all" id="comment-item-${cId}">
                                     <div class="flex items-start justify-between gap-2">
                                         <div class="flex items-center gap-2">
-                                            <img src="${cAuthor.avatar || currentUser?.avatar || 'http://localhost:5000/images/users/admin.jpg'}" alt="${cAuthor.name || currentUser?.name}" class="w-6 h-6 rounded-full object-cover ring-1 ring-beige-border">
+                                            <img src="${cAuthor.avatar || currentUser?.avatar || `${BACKEND_URL}/images/users/admin.jpg`}" alt="${cAuthor.name || currentUser?.name}" class="w-6 h-6 rounded-full object-cover ring-1 ring-beige-border">
                                             <div>
                                                 <strong class="text-text-main text-xs font-bold">${cAuthor.name || currentUser?.name || 'Bạn'}</strong>
                                                 <span class="text-[10px] text-text-muted ml-1.5">Vừa xong</span>

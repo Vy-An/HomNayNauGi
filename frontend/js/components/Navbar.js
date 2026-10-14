@@ -1,4 +1,4 @@
-import { fetchAPI } from '../api.js';
+import { fetchAPI, BACKEND_URL, API_URL } from '../api.js';
 
 export default function Navbar() {
     const currentHash = window.location.hash.slice(1).toLowerCase() || '/';
@@ -24,7 +24,7 @@ export default function Navbar() {
         "'": '&#39;'
     }[char]));
     const authName = escapeHTML(authUser?.name || 'Tài khoản');
-    const authAvatar = escapeHTML(authUser?.avatar || 'http://localhost:5000/images/users/admin.jpg');
+    const authAvatar = escapeHTML(authUser?.avatar || `${BACKEND_URL}/images/users/admin.jpg`);
 
     const getLinkClass = (isActive) => isActive 
         ? "text-[#F4A62A] font-extrabold relative py-1 after:content-[''] after:absolute after:w-full after:h-0.5 after:bg-[#F4A62A] after:left-0 after:bottom-0 transition-all" 
@@ -287,7 +287,7 @@ if (typeof window !== 'undefined') {
                 return window._favListCache;
             }
             try {
-                const res = await fetch('http://localhost:5000/api/auth/me/favorites', {
+                const res = await fetch(`${API_URL}/auth/me/favorites`, {
                     headers: { Authorization: `Bearer ${token}` }
                 });
                 const json = await res.json();
@@ -299,7 +299,7 @@ if (typeof window !== 'undefined') {
                             id_food: food.id_food || fav.id_food || fav.id,
                             id_favorite: fav.id_favorite,
                             name: food.name || fav.name || 'Món ngon',
-                            image: food.image || fav.image || 'http://localhost:5000/images/foods/thit-kho-trung.jpg',
+                            image: food.image || fav.image || `${BACKEND_URL}/images/foods/thit-kho-trung.jpg`,
                             time: food.time || (food.cooking_time ? `${food.cooking_time} phút` : '30 phút'),
                             cooking_time: food.cooking_time,
                             category: food.category || 'Món ngon',
@@ -438,14 +438,14 @@ if (typeof window !== 'undefined') {
         container.innerHTML = list.map(item => {
             const foodId = item.id_food || item.id;
             const foodName = escapeHTML(item.name || 'Món ngon');
-            const foodImg = item.image || 'http://localhost:5000/images/foods/thit-kho-trung.jpg';
+            const foodImg = item.image || `${BACKEND_URL}/images/foods/thit-kho-trung.jpg`;
             const foodTime = item.time || (item.cooking_time ? `${item.cooking_time} phút` : '30 phút');
             const foodCategory = escapeHTML(item.category || 'Món ngon');
 
             return `
                 <div class="flex items-center gap-3 p-2.5 bg-white rounded-2xl border border-gray-100 shadow-2xs hover:shadow-xs transition group">
                     <a href="#/mon-an/${foodId}" onclick="window.closeNavDrawers && window.closeNavDrawers()" class="shrink-0">
-                        <img src="${foodImg}" alt="${foodName}" class="w-14 h-14 rounded-xl object-cover border border-gray-100 group-hover:scale-105 transition duration-300" onerror="this.src='http://localhost:5000/images/foods/thit-kho-trung.jpg'">
+                        <img src="${foodImg}" alt="${foodName}" class="w-14 h-14 rounded-xl object-cover border border-gray-100 group-hover:scale-105 transition duration-300" onerror="this.src='${BACKEND_URL}/images/foods/thit-kho-trung.jpg'">
                     </a>
                     <div class="flex-1 min-w-0">
                         <a href="#/mon-an/${foodId}" onclick="window.closeNavDrawers && window.closeNavDrawers()" class="font-bold text-xs sm:text-sm text-text-main hover:text-[#0F4937] transition line-clamp-1">${foodName}</a>
@@ -470,7 +470,7 @@ if (typeof window !== 'undefined') {
         const token = localStorage.getItem('auth_token');
         if (token) {
             try {
-                const res = await fetch(`http://localhost:5000/api/auth/me/favorites/${numId}`, {
+                const res = await fetch(`${API_URL}/auth/me/favorites/${numId}`, {
                     method: 'DELETE',
                     headers: { Authorization: `Bearer ${token}` }
                 });
@@ -529,7 +529,7 @@ if (typeof window !== 'undefined') {
 
         const isFav = window.isDishFavorite(foodId);
         const foodName = dish.name || 'Món ăn';
-        const foodImage = dish.image || 'http://localhost:5000/images/foods/thit-kho-trung.jpg';
+        const foodImage = dish.image || `${BACKEND_URL}/images/foods/thit-kho-trung.jpg`;
         const foodTime = dish.time || (dish.cooking_time ? `${dish.cooking_time} phút` : '30 phút');
         const foodCategory = dish.category || 'Món ngon';
 
@@ -542,7 +542,7 @@ if (typeof window !== 'undefined') {
         const token = localStorage.getItem('auth_token');
         if (token) {
             try {
-                const res = await fetch(`http://localhost:5000/api/auth/me/favorites/${foodId}`, {
+                const res = await fetch(`${API_URL}/auth/me/favorites/${foodId}`, {
                     method: 'POST',
                     headers: { 
                         'Content-Type': 'application/json',
@@ -631,7 +631,7 @@ if (typeof window !== 'undefined') {
             for (const item of list) {
                 const fId = item.id_food || item.id;
                 try {
-                    await fetch(`http://localhost:5000/api/auth/me/favorites/${fId}`, {
+                    await fetch(`${API_URL}/auth/me/favorites/${fId}`, {
                         method: 'DELETE',
                         headers: { Authorization: `Bearer ${token}` }
                     });
@@ -677,7 +677,7 @@ if (typeof window !== 'undefined') {
 
         if (token) {
             try {
-                await fetch('http://localhost:5000/api/auth/logout', {
+                await fetch(`${API_URL}/auth/logout`, {
                     method: 'POST',
                     headers: {
                         Authorization: `Bearer ${token}`
@@ -953,7 +953,7 @@ if (typeof window !== 'undefined') {
                     const foodName = food.name || 'Món ngon';
                     return `
                         <div class="flex items-center gap-3 p-2.5 bg-white rounded-2xl border border-gray-100 shadow-2xs hover:border-[#0F4937]/30 transition">
-                            <img src="${food.image || 'http://localhost:5000/images/foods/thit-kho-trung.jpg'}" class="w-12 h-12 rounded-xl object-cover shrink-0 border border-gray-100" onerror="this.src='http://localhost:5000/images/foods/thit-kho-trung.jpg'">
+                            <img src="${food.image || `${BACKEND_URL}/images/foods/thit-kho-trung.jpg`}" class="w-12 h-12 rounded-xl object-cover shrink-0 border border-gray-100" onerror="this.src='${BACKEND_URL}/images/foods/thit-kho-trung.jpg'">
                             <div class="flex-1 min-w-0">
                                 <a href="#/mon-an/${foodId}" onclick="window.closeNavDrawers && window.closeNavDrawers()" class="font-bold text-xs text-text-main hover:text-[#0F4937] transition line-clamp-1">${foodName}</a>
                                 <div class="flex items-center gap-2 mt-1 text-[11px] text-gray-400">

@@ -1,4 +1,4 @@
-import { fetchAPI } from '../../api.js';
+import { fetchAPI, BACKEND_URL } from '../../api.js';
 
 function escapeHTML(value) {
     const div = document.createElement('div');
@@ -25,7 +25,7 @@ const Profile = {
         <div class="cozy-kitchen-bg text-text-main font-sans min-h-screen flex flex-col antialiased selection:bg-primary/20 selection:text-primary">
             <div class="max-w-[1360px] w-full mx-auto px-4 sm:px-6 lg:px-8 pt-5 pb-3">
                 <section class="relative rounded-2xl overflow-hidden shadow-sm border border-beige-border/80 bg-gradient-to-r from-[#145A43] via-[#0F4937] to-[#0A3628] text-white">
-                    <div class="absolute inset-0 bg-cover bg-center opacity-25 mix-blend-overlay" style="background-image: url('http://localhost:5000/images/foods/thit-kho-trung.jpg');"></div>
+                    <div class="absolute inset-0 bg-cover bg-center opacity-25 mix-blend-overlay" style="background-image: url('${BACKEND_URL}/images/foods/thit-kho-trung.jpg');"></div>
                     <div class="absolute inset-0 bg-gradient-to-r from-black/75 via-[#0F4937]/80 to-[#145A43]/70 pointer-events-none"></div>
 
                     <div class="relative z-10 p-4 sm:p-5 flex flex-col md:flex-row items-center md:items-start justify-between gap-4">
@@ -33,7 +33,7 @@ const Profile = {
                             <div class="relative shrink-0">
                                 <img 
                                     id="profile-hero-avatar" 
-                                    src="http://localhost:5000/images/users/admin.jpg" 
+                                    src="${BACKEND_URL}/images/users/admin.jpg" 
                                     alt="Avatar" 
                                     class="w-[100px] h-[100px] sm:w-[110px] sm:h-[110px] rounded-full object-cover border-3 border-white shadow-md bg-white/20"
                                 >
@@ -553,8 +553,8 @@ const Profile = {
 
             if (heroName) heroName.textContent = user.name || 'Người dùng';
             if (heroEmail) heroEmail.textContent = user.email || '';
-            if (heroAvatar) heroAvatar.src = user.avatar || 'http://localhost:5000/images/users/admin.jpg';
-            if (navAvatar) navAvatar.src = user.avatar || 'http://localhost:5000/images/users/admin.jpg';
+            if (heroAvatar) heroAvatar.src = user.avatar || `${BACKEND_URL}/images/users/admin.jpg`;
+            if (navAvatar) navAvatar.src = user.avatar || `${BACKEND_URL}/images/users/admin.jpg`;
             if (navName) navName.textContent = user.name || 'Tài khoản';
             if (heroJoined) heroJoined.textContent = formatDate(user.created_at);
             if (heroBadge) heroBadge.textContent = user.role === 'admin' ? 'Quản trị viên' : 'Thành viên Bếp';
@@ -615,7 +615,7 @@ const Profile = {
                 const likes = post.likesCount ?? post.likes ?? 0;
                 const comments = post.commentsCount ?? post.comments ?? 0;
                 const isLiked = Boolean(post.isLiked || post.liked);
-                const postImg = post.image || (post.food?.image || 'http://localhost:5000/images/foods/thit-kho-trung.jpg');
+                const postImg = post.image || (post.food?.image || `${BACKEND_URL}/images/foods/thit-kho-trung.jpg`);
                 const foodName = post.foodName || post.food?.name || '';
                 const isPending = post.status === 'pending';
                 const isHidden = post.status === 'hidden';
@@ -664,7 +664,7 @@ const Profile = {
                         <div class="space-y-2.5">
                             <div class="flex items-center justify-between">
                                 <div class="flex items-center gap-2">
-                                    <img src="${post.author?.avatar || currentUser?.avatar || 'http://localhost:5000/images/users/admin.jpg'}" class="w-7 h-7 rounded-full object-cover border border-gray-100 shadow-2xs">
+                                    <img src="${post.author?.avatar || currentUser?.avatar || `${BACKEND_URL}/images/users/admin.jpg`}" class="w-7 h-7 rounded-full object-cover border border-gray-100 shadow-2xs">
                                     <div class="leading-tight">
                                         <p class="font-bold text-xs text-text-main">${escapeHTML(post.author?.name || currentUser?.name)}</p>
                                         <span class="text-[10px] text-text-muted">${formatDate(post.created_at)}</span>
@@ -766,7 +766,7 @@ const Profile = {
                 return `
                     <div class="flex items-center justify-between gap-2.5 p-2 rounded-xl hover:bg-cream-soft transition-colors group">
                         <a href="${link}" class="flex items-center gap-2.5 min-w-0 flex-1">
-                            <img src="${food.image || 'http://localhost:5000/images/foods/thit-kho-trung.jpg'}" alt="${escapeHTML(food.name)}" class="w-11 h-11 rounded-xl object-cover shrink-0 border border-beige-border/70 shadow-2xs">
+                            <img src="${food.image || `${BACKEND_URL}/images/foods/thit-kho-trung.jpg`}" alt="${escapeHTML(food.name)}" class="w-11 h-11 rounded-xl object-cover shrink-0 border border-beige-border/70 shadow-2xs">
                             <div class="min-w-0">
                                 <h4 class="font-extrabold text-xs text-text-main group-hover:text-primary transition-colors truncate">${escapeHTML(food.name || 'Món ngon')}</h4>
                                 <span class="text-[10px] text-text-muted font-medium">${escapeHTML(food.category || 'Món ngon')}</span>
@@ -818,7 +818,7 @@ const Profile = {
                     <div class="bg-white rounded-2xl border border-beige-border/90 p-3 shadow-sm hover:shadow-md transition-all flex flex-col justify-between group cursor-pointer" data-fav-link="${link}">
                         <div>
                             <div class="relative rounded-xl overflow-hidden aspect-[4/3] mb-2.5 bg-gray-100 border border-beige-border/50">
-                                <img src="${food.image || 'http://localhost:5000/images/foods/thit-kho-trung.jpg'}" alt="${escapeHTML(food.name)}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">
+                                <img src="${food.image || `${BACKEND_URL}/images/foods/thit-kho-trung.jpg`}" alt="${escapeHTML(food.name)}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">
                                 ${food.cooking_time ? `
                                     <span class="absolute bottom-2 left-2 bg-black/60 backdrop-blur-2xs text-white text-[10px] font-bold px-2 py-0.5 rounded-md flex items-center gap-1">
                                         <i class="fa-regular fa-clock text-[9px]"></i>
