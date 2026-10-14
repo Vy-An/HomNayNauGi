@@ -1,4 +1,4 @@
-import { fetchAPI } from '../../api.js';
+import { fetchAPI, BACKEND_URL } from '../../api.js';
 import Popup from '../../components/Popup.js';
 
 const adminUsersState = {
@@ -77,7 +77,7 @@ function statusBadge(status) {
 function renderDashboardPage() {
     const currentUser = getStoredAdminUser();
     const adminName = currentUser?.name || 'Admin';
-    const adminAvatar = currentUser?.avatar || 'http://localhost:5000/images/users/admin.jpg';
+    const adminAvatar = currentUser?.avatar || `${BACKEND_URL}/images/users/admin.jpg`;
 
     return `
         <header class="flex flex-col lg:flex-row lg:justify-between lg:items-center gap-4 mb-8 bg-white p-4 rounded-2xl shadow-sm border border-gray-100">
@@ -231,7 +231,7 @@ function renderDashboardFoods(foods = []) {
         <tr class="border-b border-gray-50 hover:bg-gray-50 transition">
             <td class="p-4">
                 <div class="flex items-center gap-3">
-                    <img src="${escapeHTML(food.image || 'http://localhost:5000/images/foods/thit-kho-trung.jpg')}" class="w-12 h-10 rounded-lg object-cover bg-gray-100" alt="${escapeHTML(food.name)}">
+                    <img src="${escapeHTML(food.image || `${BACKEND_URL}/images/foods/thit-kho-trung.jpg`)}" class="w-12 h-10 rounded-lg object-cover bg-gray-100" alt="${escapeHTML(food.name)}">
                     <span class="font-medium text-text-main">${escapeHTML(food.name)}</span>
                 </div>
             </td>
@@ -265,7 +265,7 @@ async function loadAdminDashboard() {
 function renderUsersPage() {
     const currentUser = getStoredAdminUser();
     const adminName = currentUser?.name || 'Admin';
-    const adminAvatar = currentUser?.avatar || 'http://localhost:5000/images/users/admin.jpg';
+    const adminAvatar = currentUser?.avatar || `${BACKEND_URL}/images/users/admin.jpg`;
 
     return `
         <header class="flex flex-col lg:flex-row lg:justify-between lg:items-center gap-4 mb-8 bg-white p-4 rounded-2xl shadow-sm border border-gray-100">
@@ -488,7 +488,7 @@ function renderUsersTable(users) {
             <tr class="border-b border-gray-50 hover:bg-gray-50 transition">
                 <td class="p-4">
                     <div class="flex items-center gap-3">
-                        <img src="${escapeHTML(user.avatar || 'http://localhost:5000/images/users/admin.jpg')}" class="w-10 h-10 rounded-full object-cover bg-gray-100" alt="${escapeHTML(user.name)}">
+                        <img src="${escapeHTML(user.avatar || `${BACKEND_URL}/images/users/admin.jpg`)}" class="w-10 h-10 rounded-full object-cover bg-gray-100" alt="${escapeHTML(user.name)}">
                         <div>
                             <p class="font-bold text-text-main">${escapeHTML(user.name)} ${isSelf ? '<span class="text-xs text-primary">(Bạn)</span>' : ''}</p>
                             <p class="text-sm text-text-muted">${escapeHTML(user.email)}</p>
@@ -695,7 +695,7 @@ async function openUserDetail(id) {
     const user = res.data;
     body.innerHTML = `
         <div class="flex items-center gap-4 mb-5">
-            <img src="${escapeHTML(user.avatar || 'http://localhost:5000/images/users/admin.jpg')}" class="w-16 h-16 rounded-full object-cover bg-gray-100" alt="${escapeHTML(user.name)}">
+            <img src="${escapeHTML(user.avatar || `${BACKEND_URL}/images/users/admin.jpg`)}" class="w-16 h-16 rounded-full object-cover bg-gray-100" alt="${escapeHTML(user.name)}">
             <div>
                 <h4 class="text-xl font-bold text-text-main">${escapeHTML(user.name)}</h4>
                 <p>${escapeHTML(user.email)}</p>
@@ -895,7 +895,7 @@ function foodStatusBadge(status) {
 function renderFoodsPage() {
     const currentUser = getStoredAdminUser();
     const adminName = currentUser?.name || 'Admin';
-    const adminAvatar = currentUser?.avatar || 'http://localhost:5000/images/users/admin.jpg';
+    const adminAvatar = currentUser?.avatar || `${BACKEND_URL}/images/users/admin.jpg`;
 
     return `
         <header class="flex flex-col lg:flex-row lg:justify-between lg:items-center gap-4 mb-8 bg-white p-4 rounded-2xl shadow-sm border border-gray-100">
@@ -1149,7 +1149,7 @@ function renderFoodsTable(foods) {
         const nextStatus = food.status === 'inactive' ? 'active' : 'inactive';
         const statusIcon = food.status === 'inactive' ? 'fa-eye' : 'fa-eye-slash';
         const statusTitle = food.status === 'inactive' ? 'Hiện món' : 'Ẩn món';
-        const image = food.image || 'http://localhost:5000/images/foods/thit-kho-trung.jpg';
+        const image = food.image || `${BACKEND_URL}/images/foods/thit-kho-trung.jpg`;
 
         return `
             <tr class="border-b border-gray-50 hover:bg-gray-50 transition">
@@ -1471,7 +1471,7 @@ async function openFoodDetail(id) {
     const food = res.data;
     body.innerHTML = `
         <div class="flex flex-col sm:flex-row gap-5 mb-5">
-            <img src="${escapeHTML(food.image || 'http://localhost:5000/images/foods/thit-kho-trung.jpg')}" class="w-full sm:w-48 h-36 rounded-2xl object-cover bg-gray-100" alt="${escapeHTML(food.name)}">
+            <img src="${escapeHTML(food.image || `${BACKEND_URL}/images/foods/thit-kho-trung.jpg`)}" class="w-full sm:w-48 h-36 rounded-2xl object-cover bg-gray-100" alt="${escapeHTML(food.name)}">
             <div class="flex-1">
                 <h4 class="text-xl font-bold text-text-main">${escapeHTML(food.name)}</h4>
                 <p class="text-xs text-text-muted mt-1">${escapeHTML(food.slug)}</p>
@@ -1723,7 +1723,7 @@ const adminCommunityState = {
 function renderCommunityPage() {
     const currentUser = getStoredAdminUser();
     const adminName = currentUser?.name || 'Admin';
-    const adminAvatar = currentUser?.avatar || 'http://localhost:5000/images/users/admin.jpg';
+    const adminAvatar = currentUser?.avatar || `${BACKEND_URL}/images/users/admin.jpg`;
 
     return `
         <header class="flex flex-col lg:flex-row lg:justify-between lg:items-center gap-4 mb-6 bg-white p-4 rounded-2xl shadow-sm border border-gray-100">
@@ -2451,7 +2451,7 @@ const adminReportsState = {
 function renderReportsPage() {
     const currentUser = getStoredAdminUser();
     const adminName = currentUser?.name || 'Admin';
-    const adminAvatar = currentUser?.avatar || 'http://localhost:5000/images/users/admin.jpg';
+    const adminAvatar = currentUser?.avatar || `${BACKEND_URL}/images/users/admin.jpg`;
 
     return `
         <header class="flex flex-col lg:flex-row lg:justify-between lg:items-center gap-4 mb-6 bg-white p-4 rounded-2xl shadow-sm border border-gray-100">

@@ -1,4 +1,5 @@
-const API_URL = 'http://localhost:5000/api';
+import { API_URL, BACKEND_URL } from './config.js';
+export { API_URL, BACKEND_URL };
 
 export async function fetchAPI(endpoint, options = {}) {
     try {

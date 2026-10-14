@@ -1,3 +1,5 @@
+ du
+
 # Dự Án Hôm Nay Nấu Gì (HomNayNauGi)
 
 Tài liệu hướng dẫn cài đặt và khởi chạy dự án từng bước chi tiết, chuẩn xác từ A - Z.
@@ -149,98 +151,98 @@ http://localhost:3000/#/
 
 ### Auth
 
-| Method | Link API | Chức năng |
-| :----- | :------- | :-------- |
-| POST   | <nobr>`http://localhost:5000/api/auth/login`</nobr> | Đăng nhập |
-| POST   | <nobr>`http://localhost:5000/api/auth/register`</nobr> | Đăng ký |
-| POST   | <nobr>`http://localhost:5000/api/auth/logout`</nobr> | Đăng xuất, cần đăng nhập |
-| GET    | <nobr>`http://localhost:5000/api/auth/me`</nobr> | Lấy thông tin tài khoản đang đăng nhập |
-| PATCH  | <nobr>`http://localhost:5000/api/auth/me`</nobr> | Cập nhật thông tin cá nhân (tên, số điện thoại, bio, avatar), cần đăng nhập |
-| GET    | <nobr>`http://localhost:5000/api/auth/me/posts`</nobr> | Lấy danh sách bài viết của tôi (kèm trạng thái: pending, active, hidden & lý do ẩn), cần đăng nhập |
-| GET    | <nobr>`http://localhost:5000/api/auth/me/favorites`</nobr> | Lấy danh sách món ăn yêu thích của tôi, cần đăng nhập |
-| POST   | <nobr>`http://localhost:5000/api/auth/me/favorites/1`</nobr> | Thêm món ăn vào danh sách yêu thích của tôi, cần đăng nhập |
-| DELETE | <nobr>`http://localhost:5000/api/auth/me/favorites/1`</nobr> | Xóa món ăn khỏi danh sách yêu thích, cần đăng nhập |
+| Method | Link API      | Chức năng                                                                                                       |
+| :----- | :------------ | :---------------------------------------------------------------------------------------------------------------- |
+| POST   | <nobr></nobr> | Đăng nhập                                                                                                      |
+| POST   | <nobr></nobr> | Đăng ký                                                                                                        |
+| POST   | <nobr></nobr> | Đăng xuất, cần đăng nhập                                                                                   |
+| GET    | <nobr></nobr> | Lấy thông tin tài khoản đang đăng nhập                                                                    |
+| PATCH  | <nobr></nobr> | Cập nhật thông tin cá nhân (tên, số điện thoại, bio, avatar), cần đăng nhập                         |
+| GET    | <nobr></nobr> | Lấy danh sách bài viết của tôi (kèm trạng thái: pending, active, hidden & lý do ẩn), cần đăng nhập |
+| GET    | <nobr></nobr> | Lấy danh sách món ăn yêu thích của tôi, cần đăng nhập                                                 |
+| POST   | <nobr></nobr> | Thêm món ăn vào danh sách yêu thích của tôi, cần đăng nhập                                           |
+| DELETE | <nobr></nobr> | Xóa món ăn khỏi danh sách yêu thích, cần đăng nhập                                                     |
 
 ### Random món ăn
 
-| Method | Link API | Chức năng |
-| :----- | :------- | :-------- |
-| GET    | <nobr>`http://localhost:5000/api/random/options`</nobr> | Lấy danh sách nguyên liệu và danh mục cho máy random |
-| GET    | <nobr>`http://localhost:5000/api/random?quantity=3`</nobr> | Random 3 món |
-| GET    | <nobr>`http://localhost:5000/api/random?quantity=6&ingredients=Bi%20do,Ca%20basa&categories=mon-canh,mon-chien&cook_time=medium`</nobr> | Random theo nguyên liệu, danh mục, thời gian nấu |
+| Method | Link API      | Chức năng                                                 |
+| :----- | :------------ | :---------------------------------------------------------- |
+| GET    | <nobr></nobr> | Lấy danh sách nguyên liệu và danh mục cho máy random |
+| GET    | <nobr></nobr> | Random 3 món                                               |
+| GET    | <nobr></nobr> | Random theo nguyên liệu, danh mục, thời gian nấu       |
 
 `cook_time` hỗ trợ: `quick` là dưới hoặc bằng 15 phút, `medium` là 15 - 30 phút, `long` là trên 30 phút.
 
 ### Món ăn
 
-| Method | Link API | Chức năng |
-| :----- | :------- | :-------- |
-| GET    | <nobr>`http://localhost:5000/api/foods`</nobr> | Lấy danh sách món ăn |
-| GET    | <nobr>`http://localhost:5000/api/foods?search=ga&page=1&limit=12`</nobr> | Tìm kiếm món ăn |
-| GET    | <nobr>`http://localhost:5000/api/foods?category=mon-canh&cook_time=under_15&sort=time_asc`</nobr> | Lọc món ăn theo danh mục, thời gian, sắp xếp |
-| GET    | <nobr>`http://localhost:5000/api/foods/options`</nobr> | Lấy danh mục và nguyên liệu cho bộ lọc |
-| GET    | <nobr>`http://localhost:5000/api/foods/quick-suggestions`</nobr> | Lấy gợi ý nhanh |
-| GET    | <nobr>`http://localhost:5000/api/foods/1`</nobr> | Xem chi tiết món ăn theo ID hoặc slug |
+| Method | Link API      | Chức năng                                         |
+| :----- | :------------ | :-------------------------------------------------- |
+| GET    | <nobr></nobr> | Lấy danh sách món ăn                            |
+| GET    | <nobr></nobr> | Tìm kiếm món ăn                                 |
+| GET    | <nobr></nobr> | Lọc món ăn theo danh mục, thời gian, sắp xếp |
+| GET    | <nobr></nobr> | Lấy danh mục và nguyên liệu cho bộ lọc       |
+| GET    | <nobr></nobr> | Lấy gợi ý nhanh                                  |
+| GET    | <nobr></nobr> | Xem chi tiết món ăn theo ID hoặc slug           |
 
 `cook_time` của `/api/foods` hỗ trợ: `all`, `under_15`, `15_to_30`, `above_30`.
 `sort` hỗ trợ: `newest`, `time_asc`, `time_desc`, `name_asc`.
 
 ### Bài viết cộng đồng
 
-| Method | Link API | Chức năng |
-| :----- | :------- | :-------- |
-| GET    | <nobr>`http://localhost:5000/api/posts?filter=all&page=1&limit=10`</nobr> | Lấy danh sách bài viết đã duyệt hiển thị công khai |
-| GET    | <nobr>`http://localhost:5000/api/posts?filter=newest`</nobr> | Lọc bài viết mới nhất |
-| GET    | <nobr>`http://localhost:5000/api/posts?filter=liked`</nobr> | Lọc bài viết nhiều lượt thích |
-| GET    | <nobr>`http://localhost:5000/api/posts?filter=trending`</nobr> | Lọc bài viết nổi bật |
-| GET    | <nobr>`http://localhost:5000/api/posts?filter=random`</nobr> | Lấy bài viết ngẫu nhiên |
-| GET    | <nobr>`http://localhost:5000/api/posts/featured?limit=4`</nobr> | Lấy bài viết nổi bật cho trang chủ |
-| GET    | <nobr>`http://localhost:5000/api/posts/1`</nobr> | Xem chi tiết bài viết |
-| POST   | <nobr>`http://localhost:5000/api/posts`</nobr> | Đăng bài viết (trạng thái ban đầu `pending` chờ kiểm duyệt), cần đăng nhập |
-| POST   | <nobr>`http://localhost:5000/api/posts/1/like`</nobr> | Thả tim hoặc bỏ tim bài viết, cần đăng nhập |
-| POST   | <nobr>`http://localhost:5000/api/posts/1/report`</nobr> | Báo cáo vi phạm bài viết (kèm `reason`, `description`), cần đăng nhập |
+| Method | Link API      | Chức năng                                                                                |
+| :----- | :------------ | :----------------------------------------------------------------------------------------- |
+| GET    | <nobr></nobr> | Lấy danh sách bài viết đã duyệt hiển thị công khai                               |
+| GET    | <nobr></nobr> | Lọc bài viết mới nhất                                                                 |
+| GET    | <nobr></nobr> | Lọc bài viết nhiều lượt thích                                                       |
+| GET    | <nobr></nobr> | Lọc bài viết nổi bật                                                                  |
+| GET    | <nobr></nobr> | Lấy bài viết ngẫu nhiên                                                               |
+| GET    | <nobr></nobr> | Lấy bài viết nổi bật cho trang chủ                                                   |
+| GET    | <nobr></nobr> | Xem chi tiết bài viết                                                                   |
+| POST   | <nobr></nobr> | Đăng bài viết (trạng thái ban đầu`pending` chờ kiểm duyệt), cần đăng nhập |
+| POST   | <nobr></nobr> | Thả tim hoặc bỏ tim bài viết, cần đăng nhập                                       |
+| POST   | <nobr></nobr> | Báo cáo vi phạm bài viết (kèm`reason`, `description`), cần đăng nhập         |
 
 ### Bình luận
 
-| Method | Link API | Chức năng |
-| :----- | :------- | :-------- |
-| GET    | <nobr>`http://localhost:5000/api/posts/1/comments?page=1&limit=10`</nobr> | Lấy bình luận của bài viết |
-| POST   | <nobr>`http://localhost:5000/api/posts/1/comments`</nobr> | Thêm bình luận, cần đăng nhập |
-| PATCH  | <nobr>`http://localhost:5000/api/comments/1`</nobr> | Sửa bình luận, cần đăng nhập |
-| DELETE | <nobr>`http://localhost:5000/api/comments/1`</nobr> | Ẩn/xóa mềm bình luận, cần đăng nhập |
-| POST   | <nobr>`http://localhost:5000/api/comments/1/report`</nobr> | Báo cáo vi phạm bình luận (kèm `reason`, `description`), cần đăng nhập |
+| Method | Link API      | Chức năng                                                                         |
+| :----- | :------------ | :---------------------------------------------------------------------------------- |
+| GET    | <nobr></nobr> | Lấy bình luận của bài viết                                                    |
+| POST   | <nobr></nobr> | Thêm bình luận, cần đăng nhập                                                |
+| PATCH  | <nobr></nobr> | Sửa bình luận, cần đăng nhập                                                 |
+| DELETE | <nobr></nobr> | Ẩn/xóa mềm bình luận, cần đăng nhập                                        |
+| POST   | <nobr></nobr> | Báo cáo vi phạm bình luận (kèm`reason`, `description`), cần đăng nhập |
 
 ### Admin
 
 > Các API admin cần tài khoản đăng nhập có `role = admin`.
 
-| Method | Link API | Chức năng |
-| :----- | :------- | :-------- |
-| GET    | <nobr>`http://localhost:5000/api/admin/dashboard`</nobr> | Lấy số liệu tổng quan dashboard |
-| GET    | <nobr>`http://localhost:5000/api/admin/users?page=1&limit=10`</nobr> | Lấy danh sách người dùng |
-| GET    | <nobr>`http://localhost:5000/api/admin/users?search=admin&role=admin&status=active`</nobr> | Tìm/lọc người dùng |
-| POST   | <nobr>`http://localhost:5000/api/admin/users`</nobr> | Tạo người dùng |
-| GET    | <nobr>`http://localhost:5000/api/admin/users/1`</nobr> | Xem chi tiết người dùng |
-| PATCH  | <nobr>`http://localhost:5000/api/admin/users/1/status`</nobr> | Khóa/mở khóa người dùng |
-| GET    | <nobr>`http://localhost:5000/api/admin/foods/options`</nobr> | Lấy options quản lý món ăn |
-| GET    | <nobr>`http://localhost:5000/api/admin/foods?page=1&limit=10`</nobr> | Lấy danh sách món ăn trong admin |
-| GET    | <nobr>`http://localhost:5000/api/admin/foods?search=ga&status=active&sort=time_asc`</nobr> | Tìm/lọc món ăn trong admin |
-| POST   | <nobr>`http://localhost:5000/api/admin/foods`</nobr> | Tạo món ăn |
-| GET    | <nobr>`http://localhost:5000/api/admin/foods/1`</nobr> | Xem chi tiết món ăn |
-| PATCH  | <nobr>`http://localhost:5000/api/admin/foods/1`</nobr> | Cập nhật món ăn |
-| PATCH  | <nobr>`http://localhost:5000/api/admin/foods/1/status`</nobr> | Ẩn/hiện món ăn |
-| GET    | <nobr>`http://localhost:5000/api/admin/posts?status=pending&page=1&limit=10`</nobr> | Lấy danh sách bài viết kiểm duyệt (lọc `status`: `pending`, `active`, `hidden`; tìm kiếm `search`) |
-| GET    | <nobr>`http://localhost:5000/api/admin/posts/1`</nobr> | Xem chi tiết bài viết (kèm thông tin tác giả, bình luận, lượt thích) |
-| PATCH  | <nobr>`http://localhost:5000/api/admin/posts/1/status`</nobr> | Duyệt bài (`active`), ẩn bài viết (`hidden` kèm `reason`), hoặc đưa về chờ duyệt (`pending`) |
-| DELETE | <nobr>`http://localhost:5000/api/admin/posts/1`</nobr> | Xóa bài viết vĩnh viễn (xóa kèm các báo cáo, bình luận, lượt thích liên quan) |
-| GET    | <nobr>`http://localhost:5000/api/admin/reports?status=pending&page=1&limit=10`</nobr> | Lấy danh sách báo cáo vi phạm cộng đồng (lọc `status`: `pending`, `resolved`, `rejected`) |
-| PATCH  | <nobr>`http://localhost:5000/api/admin/reports/1/status`</nobr> | Cập nhật trạng thái xử lý báo cáo vi phạm (`resolved`, `rejected`, `pending`) |
-| PATCH  | <nobr>`http://localhost:5000/api/admin/comments/1/status`</nobr> | Cập nhật trạng thái bình luận (`active`, `hidden`), ẩn hoặc khôi phục bình luận vi phạm |
+| Method | Link API      | Chức năng                                                                                                          |
+| :----- | :------------ | :------------------------------------------------------------------------------------------------------------------- |
+| GET    | <nobr></nobr> | Lấy số liệu tổng quan dashboard                                                                                  |
+| GET    | <nobr></nobr> | Lấy danh sách người dùng                                                                                        |
+| GET    | <nobr></nobr> | Tìm/lọc người dùng                                                                                              |
+| POST   | <nobr></nobr> | Tạo người dùng                                                                                                   |
+| GET    | <nobr></nobr> | Xem chi tiết người dùng                                                                                          |
+| PATCH  | <nobr></nobr> | Khóa/mở khóa người dùng                                                                                        |
+| GET    | <nobr></nobr> | Lấy options quản lý món ăn                                                                                      |
+| GET    | <nobr></nobr> | Lấy danh sách món ăn trong admin                                                                                 |
+| GET    | <nobr></nobr> | Tìm/lọc món ăn trong admin                                                                                       |
+| POST   | <nobr></nobr> | Tạo món ăn                                                                                                        |
+| GET    | <nobr></nobr> | Xem chi tiết món ăn                                                                                               |
+| PATCH  | <nobr></nobr> | Cập nhật món ăn                                                                                                  |
+| PATCH  | <nobr></nobr> | Ẩn/hiện món ăn                                                                                                   |
+| GET    | <nobr></nobr> | Lấy danh sách bài viết kiểm duyệt (lọc`status`: `pending`, `active`, `hidden`; tìm kiếm `search`) |
+| GET    | <nobr></nobr> | Xem chi tiết bài viết (kèm thông tin tác giả, bình luận, lượt thích)                                     |
+| PATCH  | <nobr></nobr> | Duyệt bài (`active`), ẩn bài viết (`hidden` kèm `reason`), hoặc đưa về chờ duyệt (`pending`)     |
+| DELETE | <nobr></nobr> | Xóa bài viết vĩnh viễn (xóa kèm các báo cáo, bình luận, lượt thích liên quan)                        |
+| GET    | <nobr></nobr> | Lấy danh sách báo cáo vi phạm cộng đồng (lọc`status`: `pending`, `resolved`, `rejected`)            |
+| PATCH  | <nobr></nobr> | Cập nhật trạng thái xử lý báo cáo vi phạm (`resolved`, `rejected`, `pending`)                         |
+| PATCH  | <nobr></nobr> | Cập nhật trạng thái bình luận (`active`, `hidden`), ẩn hoặc khôi phục bình luận vi phạm             |
 
 ### Ảnh tĩnh từ backend
 
-| Link | Chức năng |
-| :--- | :-------- |
-| <nobr>`http://localhost:5000/images/foods/thit-kho-trung.jpg`</nobr> | Ảnh món ăn |
-| <nobr>`http://localhost:5000/images/posts/post-1.jpg`</nobr> | Ảnh bài viết |
-| <nobr>`http://localhost:5000/images/users/admin.jpg`</nobr> | Ảnh người dùng |
+| Link          | Chức năng        |
+| :------------ | :----------------- |
+| <nobr></nobr> | Ảnh món ăn      |
+| <nobr></nobr> | Ảnh bài viết    |
+| <nobr></nobr> | Ảnh người dùng |

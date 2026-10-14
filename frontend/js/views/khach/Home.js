@@ -1,4 +1,4 @@
-import { fetchAPI } from '../../api.js';
+import { fetchAPI, BACKEND_URL } from '../../api.js';
 import FoodCard from '../../components/FoodCard.js';
 
 const dummyFoods = [
@@ -9,12 +9,12 @@ const dummyFoods = [
 ];
 
 const categoryExplore = [
-    { title: 'Món mặn', slug: 'mon-man', icon: 'fa-bowl-rice', count: '1 món', image: 'http://localhost:5000/images/foods/thit-ba-chi-luoc.jpg' },
-    { title: 'Món canh', slug: 'mon-canh', icon: 'fa-spoon', count: '4 món', image: 'http://localhost:5000/images/foods/canh-chua-ca-loc.jpg' },
-    { title: 'Món kho', slug: 'mon-kho', icon: 'fa-fire-flame-simple', count: '3 món', image: 'http://localhost:5000/images/foods/thit-kho-trung.jpg' },
-    { title: 'Món xào', slug: 'mon-xao', icon: 'fa-fire-burner', count: '2 món', image: 'http://localhost:5000/images/foods/suon-xao-chua-ngot.jpg' },
-    { title: 'Món chiên', slug: 'mon-chien', icon: 'fa-fire', count: '3 món', image: 'http://localhost:5000/images/foods/ga-chien-nuoc-mam.jpg' },
-    { title: 'Món rau', slug: 'mon-rau', icon: 'fa-leaf', count: '3 món', image: 'http://localhost:5000/images/foods/rau-muong-xao-toi.jpg' }
+    { title: 'Món mặn', slug: 'mon-man', icon: 'fa-bowl-rice', count: '1 món', image: `${BACKEND_URL}/images/foods/thit-ba-chi-luoc.jpg` },
+    { title: 'Món canh', slug: 'mon-canh', icon: 'fa-spoon', count: '4 món', image: `${BACKEND_URL}/images/foods/canh-chua-ca-loc.jpg` },
+    { title: 'Món kho', slug: 'mon-kho', icon: 'fa-fire-flame-simple', count: '3 món', image: `${BACKEND_URL}/images/foods/thit-kho-trung.jpg` },
+    { title: 'Món xào', slug: 'mon-xao', icon: 'fa-fire-burner', count: '2 món', image: `${BACKEND_URL}/images/foods/suon-xao-chua-ngot.jpg` },
+    { title: 'Món chiên', slug: 'mon-chien', icon: 'fa-fire', count: '3 món', image: `${BACKEND_URL}/images/foods/ga-chien-nuoc-mam.jpg` },
+    { title: 'Món rau', slug: 'mon-rau', icon: 'fa-leaf', count: '3 món', image: `${BACKEND_URL}/images/foods/rau-muong-xao-toi.jpg` }
 ];
 
 const Home = {
@@ -1171,13 +1171,13 @@ const Home = {
         };
 
         const categoryExploreImages = {
-            'mon-man': 'http://localhost:5000/images/foods/thit-ba-chi-luoc.jpg',
-            'mon-canh': 'http://localhost:5000/images/foods/canh-chua-ca-loc.jpg',
-            'mon-kho': 'http://localhost:5000/images/foods/thit-kho-trung.jpg',
-            'mon-xao': 'http://localhost:5000/images/foods/suon-xao-chua-ngot.jpg',
-            'mon-chien': 'http://localhost:5000/images/foods/ga-chien-nuoc-mam.jpg',
-            'mon-rau': 'http://localhost:5000/images/foods/rau-muong-xao-toi.jpg',
-            'mon-luoc': 'http://localhost:5000/images/foods/rau-cu-luoc.jpg'
+            'mon-man': `${BACKEND_URL}/images/foods/thit-ba-chi-luoc.jpg`,
+            'mon-canh': `${BACKEND_URL}/images/foods/canh-chua-ca-loc.jpg`,
+            'mon-kho': `${BACKEND_URL}/images/foods/thit-kho-trung.jpg`,
+            'mon-xao': `${BACKEND_URL}/images/foods/suon-xao-chua-ngot.jpg`,
+            'mon-chien': `${BACKEND_URL}/images/foods/ga-chien-nuoc-mam.jpg`,
+            'mon-rau': `${BACKEND_URL}/images/foods/rau-muong-xao-toi.jpg`,
+            'mon-luoc': `${BACKEND_URL}/images/foods/rau-cu-luoc.jpg`
         };
 
         try {
