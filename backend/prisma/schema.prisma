@@ -117,20 +117,20 @@ model post_likes {
 }
 
 model posts {
-  id_post    Int          @id @default(autoincrement()) @db.UnsignedInt
-  id_user    Int          @db.UnsignedInt
-  id_food    Int?         @db.UnsignedInt
-  title      String       @db.VarChar(255)
-  content    String       @db.Text
-  image      String?      @db.VarChar(500)
+  id_post       Int          @id @default(autoincrement()) @db.UnsignedInt
+  id_user       Int          @db.UnsignedInt
+  id_food       Int?         @db.UnsignedInt
+  title         String       @db.VarChar(255)
+  content       String       @db.Text
+  image         String?      @db.VarChar(500)
   status        posts_status @default(pending)
   hidden_reason String?      @db.VarChar(255)
   created_at    DateTime     @default(now()) @db.Timestamp(0)
-  updated_at DateTime     @default(now()) @db.Timestamp(0)
-  comments   comments[]
-  post_likes post_likes[]
-  foods      foods?       @relation(fields: [id_food], references: [id_food], map: "fk_posts_food")
-  users      users        @relation(fields: [id_user], references: [id_user], onDelete: Cascade, map: "fk_posts_user")
+  updated_at    DateTime     @default(now()) @db.Timestamp(0)
+  comments      comments[]
+  post_likes    post_likes[]
+  foods         foods?       @relation(fields: [id_food], references: [id_food], map: "fk_posts_food")
+  users         users        @relation(fields: [id_user], references: [id_user], onDelete: Cascade, map: "fk_posts_user")
 
   @@index([id_food], map: "fk_posts_food")
   @@index([id_user], map: "fk_posts_user")
@@ -248,5 +248,5 @@ enum foods_status {
 
 enum categories_status {
   active
-  hidden
+  inactive
 }
