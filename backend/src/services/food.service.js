@@ -48,14 +48,9 @@ function formatFoodSummary(food, userId = null) {
         servings: food.servings || 4,
         rating: 4.8,
         rating_count: '1.5k',
-<<<<<<< HEAD
-        likes: (food.favorites && food.favorites.length) ? (food.favorites.length * 120 + 250) : 850,
-        is_favorite: Boolean(userId && food.favorites && food.favorites.some((f) => f.id_user === userId)),
-=======
         likes: totalLikes,
         is_favorite: isFavorite,
         isFavorite: isFavorite,
->>>>>>> origin/develop
         category: categoryName,
         category_slug: categorySlug,
         sub_category: (food.cooking_time && food.cooking_time <= 15) ? 'nhanh' : 'viet',
@@ -103,14 +98,9 @@ function formatFoodDetail(food, relatedFoods = [], userId = null) {
         portions: `${servings} người`,
         servings: servings,
         difficulty: cookingTime > 40 ? 'Trung bình' : 'Dễ làm',
-<<<<<<< HEAD
-        likes: (food.favorites && food.favorites.length) ? (food.favorites.length * 150 + 450) : '2.5k',
-        is_favorite: Boolean(userId && food.favorites && food.favorites.some((f) => f.id_user === userId)),
-=======
         likes: totalLikes,
         is_favorite: isFavorite,
         isFavorite: isFavorite,
->>>>>>> origin/develop
         calories: cookingTime <= 20 ? '350 kcal' : '520 kcal',
         category: categoryName,
         category_slug: categorySlug,
@@ -229,6 +219,8 @@ async function getFoods(query = {}, userId = null) {
         orderBy = { cooking_time: 'desc' };
     } else if (sort === 'name_asc') {
         orderBy = { name: 'asc' };
+    } else if (sort === 'likes' || sort === 'popular' || sort === 'rating') {
+        orderBy = { favorites: { _count: 'desc' } };
     } else if (sort === 'newest') {
         orderBy = { id_food: 'desc' };
     }
@@ -323,8 +315,6 @@ async function getFoodById(idOrSlug, userId = null) {
     });
 
     return formatFoodDetail(food, relatedFoods, userId);
-<<<<<<< HEAD
-=======
 }
 
 /**
@@ -402,7 +392,6 @@ async function toggleFavorite(idOrSlug, userId) {
         likes: totalLikes,
         userTotalFavorites
     };
->>>>>>> origin/develop
 }
 
 /**

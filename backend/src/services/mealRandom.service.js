@@ -206,145 +206,14 @@ async function getRandomMeals(options = {}) {
 
     const hasFilters = ingredients.length || categories.length || Boolean(cookTime);
     const matchedFoods = await findFoods(filteredWhere);
-<<<<<<< Updated upstream
     const selectedFoods = shuffle(matchedFoods).slice(0, quantity);
-<<<<<<< HEAD
-    let fallbackCount = 0;
-    let timeRelaxedCount = 0;
-
-    const appendFallbackFoods = (foods, count, pickShortest = false) => {
-        const fillFoods = pickShortest
-            ? pickShortestRandom(foods, count)
-            : shuffle(foods).slice(0, count);
-
-        fallbackCount += fillFoods.length;
-        selectedFoods.push(...fillFoods);
-
-        return fillFoods.length;
-    };
-
-    if (cookTime && selectedFoods.length < quantity) {
-        const selectedIds = new Set(selectedFoods.map((food) => food.id_food));
-        const relaxedTimeWhere = buildWhere({ ingredients, categories });
-        relaxedTimeWhere.id_food = {
-            notIn: Array.from(selectedIds)
-        };
-
-        const relaxedTimeFoods = await findFoods(relaxedTimeWhere);
-        timeRelaxedCount += appendFallbackFoods(
-            relaxedTimeFoods,
-            quantity - selectedFoods.length,
-            true
-        );
-    }
-
-    if (selectedFoods.length < quantity) {
-        const selectedIds = new Set(selectedFoods.map((food) => food.id_food));
-        const fallbackFoods = await findFoods({
-            status: 'active',
-            id_food: {
-                notIn: Array.from(selectedIds)
-            }
-        });
-
-        appendFallbackFoods(
-            fallbackFoods,
-            quantity - selectedFoods.length,
-            Boolean(cookTime)
-        );
-    }
-=======
-    const selectedById = new Map();
-
-    const addFoods = (foods, limit = quantity) => {
-        const availableSlots = limit - selectedById.size;
-        if (availableSlots <= 0) return 0;
-
-        const freshFoods = shuffle(foods)
-            .filter((food) => !selectedById.has(food.id_food))
-            .slice(0, availableSlots);
-
-        freshFoods.forEach((food) => {
-            selectedById.set(food.id_food, food);
-        });
-
-        return freshFoods.length;
-    };
-
-    const exactCount = addFoods(matchedFoods);
-    let timeRelaxedCount = 0;
-
-    if (hasFilters && selectedById.size < quantity) {
-        const fallbackQueries = [];
-
-        if (cookTime && (ingredients.length || categories.length)) {
-            fallbackQueries.push({
-                type: 'time',
-                where: buildWhere({ ingredients, categories, cookTime: '' })
-            });
-        }
-
-        if (ingredients.length) {
-            fallbackQueries.push({
-                type: 'ingredient',
-                where: buildWhere({ ingredients, categories: [], cookTime: '' })
-            });
-        }
-
-        if (categories.length) {
-            fallbackQueries.push({
-                type: 'category',
-                where: buildWhere({ ingredients: [], categories, cookTime: '' })
-            });
-        }
-
-        if (cookTime) {
-            fallbackQueries.push({
-                type: 'time',
-                where: buildWhere({ ingredients: [], categories: [], cookTime })
-            });
-        }
-
-        fallbackQueries.push({
-            type: 'random',
-            where: buildWhere({})
-        });
-
-        for (const query of fallbackQueries) {
-            if (selectedById.size >= quantity) break;
-
-            const beforeCount = selectedById.size;
-            const foods = await findFoods(query.where);
-            const addedCount = addFoods(foods);
-
-            if (query.type === 'time') {
-                timeRelaxedCount += Math.max(0, selectedById.size - beforeCount);
-            }
-
-            if (addedCount > 0 && selectedById.size >= quantity) break;
-        }
-    }
-
-    const selectedFoods = Array.from(selectedById.values());
->>>>>>> Stashed changes
-=======
->>>>>>> origin/develop
 
     return {
         requested: quantity,
         matchedFilters: !hasFilters || matchedFoods.length > 0,
         totalCandidates: matchedFoods.length,
-<<<<<<< HEAD
-<<<<<<< Updated upstream
-        fallbackCount,
-=======
-        fallbackCount: Math.max(0, selectedFoods.length - exactCount),
->>>>>>> Stashed changes
-        timeRelaxedCount,
-=======
         fallbackCount: 0,
         timeRelaxedCount: 0,
->>>>>>> origin/develop
         cookTime,
         foods: selectedFoods.map(formatFood)
     };

@@ -1,8 +1,4 @@
-<<<<<<< HEAD
-import { fetchAPI } from '../api.js';
-=======
 import { fetchAPI, BACKEND_URL, API_URL } from '../api.js';
->>>>>>> origin/develop
 
 export default function Navbar() {
     const currentHash = window.location.hash.slice(1).toLowerCase() || '/';
@@ -50,15 +46,15 @@ export default function Navbar() {
         <div id="nav-drawer-overlay" onclick="window.closeNavDrawers && window.closeNavDrawers()" class="fixed inset-0 bg-black/50 z-[65] hidden transition-opacity backdrop-blur-xs"></div>
 
         <header class="bg-[#0F4937] text-white sticky top-0 z-50 shadow-sm border-b border-white/10 overflow-x-clip">
-            <div class="max-w-[1360px] mx-auto px-2 sm:px-4 lg:px-8 h-16 sm:h-[68px] flex items-center justify-between gap-1 sm:gap-2 lg:gap-4">
+            <div class="max-w-[1360px] mx-auto px-3 sm:px-4 lg:px-8 h-14 sm:h-[68px] flex items-center justify-between gap-2">
                 
                 <!-- Logo -->
-                <a href="#/" class="flex items-center gap-1 sm:gap-2 group shrink-0">
-                    <div class="w-6.5 h-6.5 sm:w-10 sm:h-10 rounded-xl bg-[#F4A62A] flex items-center justify-center text-[#0F4937] shadow-sm group-hover:scale-105 transition-transform">
-                        <i class="fa-solid fa-kitchen-set text-xs sm:text-xl"></i>
+                <a href="#/" class="flex items-center gap-2 group shrink-0">
+                    <div class="w-8 h-8 sm:w-10 sm:h-10 rounded-xl bg-[#F4A62A] flex items-center justify-center text-[#0F4937] shadow-sm group-hover:scale-105 transition-transform">
+                        <i class="fa-solid fa-kitchen-set text-sm sm:text-xl"></i>
                     </div>
                     <div class="flex flex-col">
-                        <span class="text-xs sm:text-base lg:text-xl font-black tracking-tight text-white leading-tight font-sans">Hôm Nay Nấu Gì?</span>
+                        <span class="text-sm sm:text-base lg:text-xl font-black tracking-tight text-white leading-tight font-sans">Hôm Nay Nấu Gì?</span>
                         <span class="text-[8px] sm:text-[9px] uppercase tracking-[0.15em] sm:tracking-[0.2em] text-[#F4A62A] font-black leading-none hidden min-[400px]:block">MÓN NGON MỖI NGÀY</span>
                     </div>
                 </a>
@@ -78,26 +74,20 @@ export default function Navbar() {
                         <i class="fa-solid fa-magnifying-glass text-[11px] sm:text-sm"></i>
                     </button>
 
-                    <!-- Favorites Heart Button -->
-<<<<<<< HEAD
-                    <button onclick="window.openFavoritesDrawer && window.openFavoritesDrawer()" class="w-8.5 h-8.5 rounded-full bg-white/10 hover:bg-white/20 text-white flex items-center justify-center transition-all hover:text-rose-400 relative cursor-pointer" title="Món yêu thích">
-                        <i class="fa-solid fa-heart text-xs sm:text-sm"></i>
-                        <span id="nav-fav-badge" class="hidden absolute -top-1 -right-1 bg-rose-500 text-white text-[10px] font-black w-4.5 h-4.5 rounded-full flex items-center justify-center shadow-sm ring-2 ring-[#0F4937]">0</span>
-                    </button>
-
-                    <!-- Shopping List Drawer Button -->
-                    <button onclick="window.openShoppingDrawer && window.openShoppingDrawer()" class="w-8.5 h-8.5 rounded-full bg-white/10 hover:bg-white/20 text-white flex items-center justify-center transition-all hover:text-emerald-300 relative cursor-pointer" title="Danh sách đi chợ">
-                        <i class="fa-solid fa-cart-shopping text-xs sm:text-sm"></i>
-                        <span id="nav-shopping-badge" class="hidden absolute -top-1 -right-1 bg-emerald-500 text-white text-[10px] font-black w-4.5 h-4.5 rounded-full flex items-center justify-center shadow-sm ring-2 ring-[#0F4937]">0</span>
-=======
-                    <button onclick="window.openFavoritesDrawer && window.openFavoritesDrawer()" class="w-7 h-7 sm:w-8.5 sm:h-8.5 rounded-full bg-white/10 hover:bg-white/20 text-white flex items-center justify-center transition-all hover:text-rose-400 relative cursor-pointer" title="Món yêu thích">
+                    <!-- Favorites Heart Button (Desktop Only) -->
+                    <button onclick="window.openFavoritesDrawer && window.openFavoritesDrawer()" class="hidden md:flex w-7 h-7 sm:w-8.5 sm:h-8.5 rounded-full bg-white/10 hover:bg-white/20 text-white items-center justify-center transition-all hover:text-rose-400 relative cursor-pointer" title="Món yêu thích">
                         <i class="fa-solid fa-heart text-[11px] sm:text-sm"></i>
                         <span id="nav-fav-badge" class="hidden absolute -top-1 -right-1 bg-rose-500 text-white text-[9px] sm:text-[10px] font-black w-4 h-4 sm:w-4.5 sm:h-4.5 rounded-full flex items-center justify-center shadow-sm ring-2 ring-[#0F4937] animate-pulse">0</span>
->>>>>>> origin/develop
                     </button>
 
-                    <!-- Won Dishes / Random Cart Basket -->
-                    <div class="relative">
+                    <!-- Shopping List Drawer Button (Desktop Only) -->
+                    <button onclick="window.openShoppingDrawer && window.openShoppingDrawer()" class="hidden md:flex w-7 h-7 sm:w-8.5 sm:h-8.5 rounded-full bg-white/10 hover:bg-white/20 text-white items-center justify-center transition-all hover:text-emerald-300 relative cursor-pointer" title="Danh sách đi chợ">
+                        <i class="fa-solid fa-cart-shopping text-[11px] sm:text-sm"></i>
+                        <span id="nav-shopping-badge" class="hidden absolute -top-1 -right-1 bg-emerald-500 text-white text-[9px] sm:text-[10px] font-black w-4 h-4 sm:w-4.5 sm:h-4.5 rounded-full flex items-center justify-center shadow-sm ring-2 ring-[#0F4937]">0</span>
+                    </button>
+
+                    <!-- Won Dishes / Random Cart Basket (Desktop Only) -->
+                    <div class="relative hidden md:block">
                         <button onclick="window.toggleWonDishesPopover && window.toggleWonDishesPopover()" class="w-7 h-7 sm:w-8.5 sm:h-8.5 rounded-full bg-white/10 hover:bg-white/20 text-white flex items-center justify-center transition-all hover:text-[#F4A62A] relative cursor-pointer" title="Mâm cơm đã quay">
                             <i class="fa-solid fa-basket-shopping text-[11px] sm:text-sm"></i>
                             <span id="nav-won-badge" class="${wonCount > 0 ? '' : 'hidden'} absolute -top-1 -right-1 bg-[#F4A62A] text-[#0F4937] text-[9px] sm:text-[10px] font-black w-4 h-4 sm:w-4.5 sm:h-4.5 rounded-full flex items-center justify-center shadow-sm ring-2 ring-[#0F4937] animate-pulse">
@@ -132,8 +122,8 @@ export default function Navbar() {
                     <!-- Divider -->
                     <div class="h-5 w-px bg-white/20 mx-0.5 hidden lg:block"></div>
 
-                    <!-- Auth Links -->
-                    <div class="flex items-center gap-1 sm:gap-2">
+                    <!-- Auth Links (Desktop Only) -->
+                    <div class="hidden md:flex items-center gap-1 sm:gap-2">
                         ${isLoggedIn ? `
                             <div class="relative group/user py-2">
                                 <!-- User Trigger Pill -->
@@ -226,44 +216,16 @@ export default function Navbar() {
             </div>
         </header>
 
-<<<<<<< HEAD
         <!-- FAVORITES DRAWER -->
-        <div id="nav-fav-modal" class="fixed inset-y-0 right-0 w-[90vw] sm:w-[420px] bg-white shadow-2xl z-[70] transform translate-x-full invisible pointer-events-none transition-transform duration-300 ease-in-out flex flex-col border-l border-gray-200">
-            <div class="p-4 border-b border-gray-100 flex items-center justify-between bg-[#0F4937] text-white">
-                <div class="flex items-center gap-2 font-bold text-base">
-                    <i class="fa-solid fa-heart text-[#F4A62A]"></i>
-                    <span>Món yêu thích</span>
-                    <span id="nav-fav-header-count" class="text-[11px] bg-white/15 px-2 py-0.5 rounded-full font-bold text-[#F4A62A]">0 món</span>
-=======
         <div id="nav-fav-modal" class="fixed inset-y-0 right-0 w-[85vw] sm:w-96 bg-white shadow-2xl z-[70] transform translate-x-full invisible pointer-events-none hidden transition-transform duration-300 ease-in-out flex flex-col border-l border-gray-200">
             <div class="p-4 border-b border-gray-100 flex items-center justify-between bg-[#0F4937] text-white">
                 <div class="flex items-center gap-2">
                     <h3 class="text-base font-bold flex items-center gap-2"><i class="fa-solid fa-heart text-[#F4A62A]"></i> Món yêu thích</h3>
                     <span id="nav-fav-count-header" class="text-xs bg-white/15 px-2.5 py-0.5 rounded-full font-bold text-[#F4A62A]">0 món</span>
->>>>>>> origin/develop
                 </div>
                 <button onclick="window.closeNavDrawers && window.closeNavDrawers()" class="hover:bg-white/10 text-white transition text-2xl w-8 h-8 flex items-center justify-center rounded-full cursor-pointer">&times;</button>
             </div>
             
-<<<<<<< HEAD
-            <div id="nav-fav-items-list" class="flex-1 overflow-y-auto p-4 bg-gray-50 flex flex-col gap-3">
-                <p class="text-center text-xs text-gray-400 py-10">Đang tải món yêu thích...</p>
-            </div>
-
-            <div class="p-3 bg-white border-t border-gray-100 flex items-center justify-between">
-                <a href="#/danh-sach" onclick="window.closeNavDrawers && window.closeNavDrawers()" class="text-xs font-bold text-primary hover:underline">Khám phá thêm món</a>
-                <button onclick="window.closeNavDrawers && window.closeNavDrawers()" class="px-4 py-1.5 bg-[#0F4937] hover:bg-[#145A43] text-white text-xs font-bold rounded-xl shadow-xs transition">Đóng</button>
-            </div>
-        </div>
-
-        <!-- SHOPPING LIST DRAWER -->
-        <div id="nav-shopping-drawer" class="fixed inset-y-0 right-0 w-[90vw] sm:w-[420px] bg-white shadow-2xl z-[70] transform translate-x-full invisible pointer-events-none transition-transform duration-300 ease-in-out flex flex-col border-l border-gray-200">
-            <div class="p-4 border-b border-gray-100 flex items-center justify-between bg-[#0F4937] text-white">
-                <div class="flex items-center gap-2 font-bold text-base">
-                    <i class="fa-solid fa-cart-shopping text-[#F4A62A]"></i>
-                    <span>Danh sách đi chợ</span>
-                    <span id="nav-shopping-header-count" class="text-[11px] bg-white/15 px-2 py-0.5 rounded-full font-bold text-[#F4A62A]">0 món</span>
-=======
             <!-- Chế độ lưu thông báo -->
             <div class="px-4 py-2 bg-emerald-50/70 border-b border-emerald-100 text-[11px] flex items-center justify-between">
                 <span id="nav-fav-storage-hint" class="font-medium flex items-center gap-1.5 text-text-muted">
@@ -283,7 +245,33 @@ export default function Navbar() {
                     <p class="font-bold text-gray-700 text-sm">Chưa có món yêu thích</p>
                     <p class="text-xs text-gray-400 mt-1 max-w-[200px]">Hãy nhấn biểu tượng trái tim ở các món ăn để lưu lại đây.</p>
                     <a href="#/danh-sach" onclick="window.closeNavDrawers && window.closeNavDrawers()" class="mt-4 px-4 py-2 bg-[#0F4937] text-white rounded-full text-xs font-bold shadow hover:bg-[#145A43] transition-all">Khám phá món ngay</a>
->>>>>>> origin/develop
+                </div>
+            </div>
+
+            <!-- Footer Drawer Favorites -->
+            <div class="p-3 bg-white border-t border-gray-200 flex items-center gap-2 shadow-xs">
+                <a href="#/danh-sach" onclick="window.closeNavDrawers && window.closeNavDrawers()" class="flex-1 text-center py-2 bg-gray-100 hover:bg-gray-200 text-text-main text-xs font-bold rounded-xl transition">Khám phá món</a>
+                ${isLoggedIn ? `
+                    <a href="#/ca-nhan" onclick="window.closeNavDrawers && window.closeNavDrawers()" class="flex-1 text-center py-2 bg-[#0F4937] hover:bg-[#145A43] text-white text-xs font-bold rounded-xl transition shadow-xs flex items-center justify-center gap-1.5">
+                        <i class="fa-solid fa-user text-[11px] text-[#F4A62A]"></i>
+                        <span>Quản lý cá nhân</span>
+                    </a>
+                ` : `
+                    <a href="#/login" onclick="window.closeNavDrawers && window.closeNavDrawers()" class="flex-1 text-center py-2 bg-[#F4A62A] hover:bg-[#E59516] text-[#0F4937] text-xs font-black rounded-xl transition shadow-xs flex items-center justify-center gap-1.5">
+                        <i class="fa-solid fa-arrow-right-to-bracket text-[11px]"></i>
+                        <span>Đăng nhập</span>
+                    </a>
+                `}
+            </div>
+        </div>
+
+        <!-- SHOPPING LIST DRAWER -->
+        <div id="nav-shopping-drawer" class="fixed inset-y-0 right-0 w-[90vw] sm:w-[420px] bg-white shadow-2xl z-[70] transform translate-x-full invisible pointer-events-none hidden transition-transform duration-300 ease-in-out flex flex-col border-l border-gray-200">
+            <div class="p-4 border-b border-gray-100 flex items-center justify-between bg-[#0F4937] text-white">
+                <div class="flex items-center gap-2 font-bold text-base">
+                    <i class="fa-solid fa-cart-shopping text-[#F4A62A]"></i>
+                    <span>Danh sách đi chợ</span>
+                    <span id="nav-shopping-header-count" class="text-[11px] bg-white/15 px-2 py-0.5 rounded-full font-bold text-[#F4A62A]">0 món</span>
                 </div>
                 <button onclick="window.closeNavDrawers && window.closeNavDrawers()" class="hover:bg-white/10 text-white transition text-2xl w-8 h-8 flex items-center justify-center rounded-full cursor-pointer">&times;</button>
             </div>
@@ -323,6 +311,54 @@ export default function Navbar() {
                 `}
             </div>
         </div>
+
+        <!-- BOTTOM NAVIGATION BAR FOR MOBILE (< md) -->
+        <nav class="md:hidden fixed bottom-0 left-0 right-0 z-40 bg-white/95 backdrop-blur-md border-t border-[#E5E1D6] shadow-[0_-4px_20px_rgba(0,0,0,0.06)] px-2 pt-1 pb-2 flex items-center justify-around select-none" style="padding-bottom: max(0.5rem, env(safe-area-inset-bottom, 8px));">
+            <!-- 1. Trang chủ -->
+            <a href="#/" class="flex flex-col items-center justify-center py-1 px-2.5 rounded-xl transition-all ${isHome ? 'text-[#145A43] font-black' : 'text-[#718078] hover:text-[#145A43] font-semibold'}">
+                <div class="relative flex items-center justify-center w-6 h-6">
+                    <i class="fa-solid fa-house text-base ${isHome ? 'text-[#145A43] scale-110' : ''}"></i>
+                </div>
+                <span class="text-[10px] mt-0.5 leading-tight ${isHome ? 'font-bold text-[#145A43]' : ''}">Trang chủ</span>
+            </a>
+
+            <!-- 2. Thực đơn (Danh sách món) -->
+            <a href="#/danh-sach" class="flex flex-col items-center justify-center py-1 px-2.5 rounded-xl transition-all ${isList ? 'text-[#145A43] font-black' : 'text-[#718078] hover:text-[#145A43] font-semibold'}">
+                <div class="relative flex items-center justify-center w-6 h-6">
+                    <i class="fa-solid fa-utensils text-base ${isList ? 'text-[#145A43] scale-110' : ''}"></i>
+                </div>
+                <span class="text-[10px] mt-0.5 leading-tight ${isList ? 'font-bold text-[#145A43]' : ''}">Thực đơn</span>
+            </a>
+
+            <!-- 3. Cộng đồng -->
+            <a href="#/cong-dong" class="flex flex-col items-center justify-center py-1 px-2.5 rounded-xl transition-all ${isCommunity ? 'text-[#145A43] font-black' : 'text-[#718078] hover:text-[#145A43] font-semibold'}">
+                <div class="relative flex items-center justify-center w-6 h-6">
+                    <i class="fa-solid fa-users text-base ${isCommunity ? 'text-[#145A43] scale-110' : ''}"></i>
+                </div>
+                <span class="text-[10px] mt-0.5 leading-tight ${isCommunity ? 'font-bold text-[#145A43]' : ''}">Cộng đồng</span>
+            </a>
+
+            <!-- 4. Đi chợ (kèm badge số lượng) -->
+            <button type="button" onclick="window.openShoppingDrawer && window.openShoppingDrawer()" class="relative flex flex-col items-center justify-center py-1 px-2.5 rounded-xl transition-all text-[#718078] hover:text-[#145A43] font-semibold cursor-pointer">
+                <div class="relative flex items-center justify-center w-6 h-6">
+                    <i class="fa-solid fa-cart-shopping text-base"></i>
+                    <span id="nav-bottom-shopping-badge" class="hidden absolute -top-1 -right-2 bg-emerald-500 text-white text-[8px] font-black w-3.5 h-3.5 rounded-full flex items-center justify-center shadow-xs">0</span>
+                </div>
+                <span class="text-[10px] mt-0.5 leading-tight">Đi chợ</span>
+            </button>
+
+            <!-- 5. Cá nhân -->
+            <a href="#/ca-nhan" class="flex flex-col items-center justify-center py-1 px-2.5 rounded-xl transition-all ${isProfile ? 'text-[#145A43] font-black' : 'text-[#718078] hover:text-[#145A43] font-semibold'}">
+                <div class="relative flex items-center justify-center w-6 h-6">
+                    ${isLoggedIn ? `
+                        <img src="${authAvatar}" alt="${authName}" class="w-5 h-5 rounded-full object-cover ring-1 ${isProfile ? 'ring-[#145A43] ring-2' : 'ring-gray-300'}">
+                    ` : `
+                        <i class="fa-solid fa-circle-user text-base ${isProfile ? 'text-[#145A43]' : ''}"></i>
+                    `}
+                </div>
+                <span class="text-[10px] mt-0.5 leading-tight ${isProfile ? 'font-bold text-[#145A43]' : ''}">Cá nhân</span>
+            </a>
+        </nav>
     `;
 }
 
@@ -789,19 +825,13 @@ if (typeof window !== 'undefined') {
         const favModal = document.getElementById('nav-fav-modal');
         if (overlay) overlay.classList.remove('hidden');
         if (favModal) {
-<<<<<<< HEAD
-            favModal.classList.remove('invisible', 'pointer-events-none', 'translate-x-full');
-            window.loadFavoritesInNav();
-=======
             favModal.classList.remove('hidden');
             requestAnimationFrame(() => {
                 favModal.classList.remove('invisible', 'pointer-events-none', 'translate-x-full');
             });
-            window.renderFavoritesList();
-        }
-        if (window.loadNavbarFavorites) {
-            window.loadNavbarFavorites();
->>>>>>> origin/develop
+            if (window.renderFavoritesList) window.renderFavoritesList();
+            if (window.loadFavoritesInNav) window.loadFavoritesInNav();
+            if (window.loadNavbarFavorites) window.loadNavbarFavorites();
         }
     };
 
@@ -922,6 +952,8 @@ if (typeof window !== 'undefined') {
             `;
             if (headerCount) headerCount.textContent = '0 món';
             if (badge) badge.classList.add('hidden');
+            const bottomBadge = document.getElementById('nav-bottom-shopping-badge');
+            if (bottomBadge) bottomBadge.classList.add('hidden');
             return;
         }
 
@@ -934,6 +966,11 @@ if (typeof window !== 'undefined') {
                 if (badge) {
                     badge.textContent = remaining;
                     badge.classList.toggle('hidden', remaining === 0);
+                }
+                const bottomBadge = document.getElementById('nav-bottom-shopping-badge');
+                if (bottomBadge) {
+                    bottomBadge.textContent = remaining;
+                    bottomBadge.classList.toggle('hidden', remaining === 0);
                 }
 
                 if (total === 0) {
@@ -1156,20 +1193,14 @@ if (typeof window !== 'undefined') {
             if (window.renderRecentWonDishes) window.renderRecentWonDishes();
         } catch (e) {}
     };
-<<<<<<< HEAD
-
     // Auto-check badges on page load
-    setTimeout(() => {
-        if (localStorage.getItem('auth_token')) {
-            window.loadFavoritesInNav && window.loadFavoritesInNav();
-            window.loadShoppingListInNav && window.loadShoppingListInNav();
-        }
-    }, 500);
-=======
-    // Khởi tạo badge khi load
     setTimeout(() => {
         if (window.syncFavBadge) window.syncFavBadge();
         if (window.updateNavbarFavBadge) window.updateNavbarFavBadge();
+        if (localStorage.getItem('auth_token')) {
+            if (window.loadFavoritesInNav) window.loadFavoritesInNav();
+            if (window.loadShoppingListInNav) window.loadShoppingListInNav();
+        }
     }, 100);
 
     window.updateNavbarFavBadge = async (count = null) => {
@@ -1489,6 +1520,5 @@ if (typeof window !== 'undefined') {
     setTimeout(() => {
         if (window.updateNavbarFavBadge) window.updateNavbarFavBadge();
     }, 50);
->>>>>>> origin/develop
 }
 

@@ -80,8 +80,11 @@ const Profile = {
                             <p class="text-[10px] uppercase font-bold text-white/70">Bài viết</p>
                             <p id="stat-posts-count" class="text-sm sm:text-base font-black text-white">0</p>
                         </div>
-                        <div>
-                            <p class="text-[10px] uppercase font-bold text-white/70">Món yêu thích</p>
+                        <div id="stat-favs-box" class="cursor-pointer hover:bg-white/10 rounded-xl p-1 transition select-none" title="Bấm để xem danh sách món yêu thích">
+                            <p class="text-[10px] uppercase font-bold text-white/70 flex items-center justify-center gap-1">
+                                <i class="fa-solid fa-heart text-rose-400 text-[10px]"></i>
+                                <span>Món yêu thích</span>
+                            </p>
                             <p id="stat-favs-count" class="text-sm sm:text-base font-black text-accent">0</p>
                         </div>
                         <div>
@@ -97,7 +100,7 @@ const Profile = {
             </div>
 
             <div class="flex-1 max-w-[1360px] w-full mx-auto px-4 sm:px-6 lg:px-8 pb-8 flex flex-col md:flex-row items-start gap-5">
-                <aside class="w-full md:w-[240px] shrink-0 bg-white rounded-2xl border border-beige-border/90 p-2 sm:p-2.5 shadow-sm">
+                <aside class="w-full md:w-[240px] shrink-0 bg-white rounded-2xl border border-beige-border/90 p-2 sm:p-2.5 shadow-sm md:sticky md:top-[80px] md:self-start">
                     <nav class="space-y-0.5 text-xs sm:text-sm font-semibold">
                         <a href="#/" class="flex items-center gap-2.5 px-3 py-2 rounded-xl text-text-muted hover:text-primary hover:bg-cream-soft transition-colors">
                             <span class="w-4.5 text-center text-text-muted"><i class="fa-solid fa-house text-xs"></i></span>
@@ -476,9 +479,17 @@ const Profile = {
             switchTab('favorites');
         });
 
+        document.getElementById('stat-favs-box')?.addEventListener('click', () => {
+            switchTab('favorites');
+        });
+
         document.getElementById('btn-view-all-favs')?.addEventListener('click', () => {
             switchTab('favorites');
         });
+
+        if (window.location.hash.includes('tab=favorites') || window.location.hash.includes('yeu-thich')) {
+            switchTab('favorites');
+        }
 
         const modalEdit = document.getElementById('modal-edit-profile');
         const formEdit = document.getElementById('form-profile-update');
@@ -677,7 +688,7 @@ const Profile = {
 
                             ${postImg ? `
                                 <div class="rounded-xl overflow-hidden aspect-video bg-gray-100 border border-beige-border/50 relative">
-                                    <img src="${postImg}" alt="Ảnh món ăn" class="w-full h-full object-cover ${isPending ? 'filter blur-[0.5px]' : ''}">
+                                    <img src="${postImg}" alt="Ảnh món ăn" class="w-full h-full object-cover ${isPending ? 'filter blur-[0.5px]' : ''}" loading="lazy" decoding="async">
                                     ${isPending ? `
                                         <div class="absolute inset-0 bg-amber-950/20 backdrop-blur-[1px] flex items-center justify-center">
                                             <span class="bg-black/60 backdrop-blur-md text-amber-200 text-xs font-extrabold px-3 py-1.5 rounded-full border border-amber-300/40 shadow-md flex items-center gap-1.5">
@@ -766,7 +777,7 @@ const Profile = {
                 return `
                     <div class="flex items-center justify-between gap-2.5 p-2 rounded-xl hover:bg-cream-soft transition-colors group">
                         <a href="${link}" class="flex items-center gap-2.5 min-w-0 flex-1">
-                            <img src="${food.image || `${BACKEND_URL}/images/foods/thit-kho-trung.jpg`}" alt="${escapeHTML(food.name)}" class="w-11 h-11 rounded-xl object-cover shrink-0 border border-beige-border/70 shadow-2xs">
+                            <img src="${food.image || `${BACKEND_URL}/images/foods/thit-kho-trung.jpg`}" alt="${escapeHTML(food.name)}" class="w-11 h-11 rounded-xl object-cover shrink-0 border border-beige-border/70 shadow-2xs" loading="lazy" decoding="async" onerror="this.onerror=null; this.src='${BACKEND_URL}/images/foods/thit-kho-trung.jpg'">
                             <div class="min-w-0">
                                 <h4 class="font-extrabold text-xs text-text-main group-hover:text-primary transition-colors truncate">${escapeHTML(food.name || 'Món ngon')}</h4>
                                 <span class="text-[10px] text-text-muted font-medium">${escapeHTML(food.category || 'Món ngon')}</span>
@@ -818,7 +829,7 @@ const Profile = {
                     <div class="bg-white rounded-2xl border border-beige-border/90 p-3 shadow-sm hover:shadow-md transition-all flex flex-col justify-between group cursor-pointer" data-fav-link="${link}">
                         <div>
                             <div class="relative rounded-xl overflow-hidden aspect-[4/3] mb-2.5 bg-gray-100 border border-beige-border/50">
-                                <img src="${food.image || `${BACKEND_URL}/images/foods/thit-kho-trung.jpg`}" alt="${escapeHTML(food.name)}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">
+                                <img src="${food.image || `${BACKEND_URL}/images/foods/thit-kho-trung.jpg`}" alt="${escapeHTML(food.name)}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" loading="lazy" decoding="async" onerror="this.onerror=null; this.src='${BACKEND_URL}/images/foods/thit-kho-trung.jpg'">
                                 ${food.cooking_time ? `
                                     <span class="absolute bottom-2 left-2 bg-black/60 backdrop-blur-2xs text-white text-[10px] font-bold px-2 py-0.5 rounded-md flex items-center gap-1">
                                         <i class="fa-regular fa-clock text-[9px]"></i>

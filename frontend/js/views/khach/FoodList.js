@@ -1,4 +1,5 @@
 import { fetchAPI } from '../../api.js';
+import { renderFoodCardSkeleton } from '../../components/Skeleton.js';
 
 // ============================================================================
 // RICH SAMPLE DATASET: 36 Authentic Vietnamese Dishes
@@ -21,6 +22,52 @@ const sortOptions = [
     { value: 'time_desc', icon: 'fa-hourglass-end', label: 'Thời gian nấu giảm dần' },
     { value: 'name_asc', icon: 'fa-arrow-down-a-z', label: 'Tên A → Z' }
 ];
+
+const escapeHTML = (str) => {
+    if (str == null) return '';
+    return String(str).replace(/[&<>"']/g, (m) => ({
+        '&': '&amp;',
+        '<': '&lt;',
+        '>': '&gt;',
+        '"': '&quot;',
+        "'": '&#39;'
+    })[m]);
+};
+
+const getCategoryIcon = (name = '', slug = '') => {
+    const s = (slug || name || '').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+    if (s.includes('man')) return { icon: 'fa-drumstick-bite', color: 'text-amber-600' };
+    if (s.includes('canh')) return { icon: 'fa-bowl-food', color: 'text-emerald-600' };
+    if (s.includes('kho')) return { icon: 'fa-fire-burner', color: 'text-amber-700' };
+    if (s.includes('xao')) return { icon: 'fa-fire-flame-curved', color: 'text-orange-500' };
+    if (s.includes('chien')) return { icon: 'fa-bacon', color: 'text-yellow-600' };
+    if (s.includes('rau')) return { icon: 'fa-leaf', color: 'text-green-600' };
+    if (s.includes('luoc')) return { icon: 'fa-droplet', color: 'text-blue-500' };
+    return { icon: 'fa-utensils', color: 'text-primary' };
+};
+
+const getIngredientIcon = (name = '') => {
+    const n = (name || '').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+    if (n.includes('bo')) return { icon: 'fa-drumstick-bite', color: 'text-rose-600' };
+    if (n.includes('ga') || n.includes('canh ga')) return { icon: 'fa-drumstick-bite', color: 'text-amber-600' };
+    if (n.includes('heo') || n.includes('ba chi') || n.includes('thit')) return { icon: 'fa-bacon', color: 'text-rose-500' };
+    if (n.includes('suon')) return { icon: 'fa-bacon', color: 'text-red-600' };
+    if (n.includes('ca') || n.includes('basa') || n.includes('loc') || n.includes('phi')) return { icon: 'fa-fish', color: 'text-sky-500' };
+    if (n.includes('tom')) return { icon: 'fa-shrimp', color: 'text-orange-500' };
+    if (n.includes('muc')) return { icon: 'fa-fish', color: 'text-indigo-400' };
+    if (n.includes('trung')) return { icon: 'fa-egg', color: 'text-amber-500' };
+    if (n.includes('dau')) return { icon: 'fa-cube', color: 'text-amber-400' };
+    if (n.includes('ca rot')) return { icon: 'fa-carrot', color: 'text-orange-500' };
+    if (n.includes('ca chua')) return { icon: 'fa-apple-whole', color: 'text-red-500' };
+    if (n.includes('ca tim')) return { icon: 'fa-circle', color: 'text-purple-500' };
+    if (n.includes('bap')) return { icon: 'fa-leaf', color: 'text-emerald-500' };
+    if (n.includes('bi') || n.includes('bau') || n.includes('muop')) return { icon: 'fa-lemon', color: 'text-yellow-600' };
+    if (n.includes('cai') || n.includes('rau') || n.includes('xa lach') || n.includes('ngot') || n.includes('lang') || n.includes('muong') || n.includes('rong bien') || n.includes('gia')) return { icon: 'fa-leaf', color: 'text-emerald-600' };
+    if (n.includes('bun') || n.includes('nui') || n.includes('bot')) return { icon: 'fa-bowl-rice', color: 'text-amber-500' };
+    if (n.includes('nam')) return { icon: 'fa-cloud', color: 'text-amber-700' };
+    if (n.includes('hanh') || n.includes('toi') || n.includes('sa') || n.includes('gung') || n.includes('ot') || n.includes('tieu') || n.includes('mam') || n.includes('chanh')) return { icon: 'fa-mortar-pestle', color: 'text-rose-400' };
+    return { icon: 'fa-seedling', color: 'text-emerald-500' };
+};
 
 const FoodList = {
     render: async () => {
@@ -142,10 +189,10 @@ const FoodList = {
                 <!-- ---------------------------------------------------- -->
                 <!-- LEFT COLUMN: LEFT SIDEBAR (STICKY ~320px)            -->
                 <!-- ---------------------------------------------------- -->
-                <aside class="left-sidebar w-full lg:sticky lg:top-[76px] lg:self-start space-y-3" id="desktop-left-sidebar">
+                <aside class="left-sidebar w-full lg:sticky lg:top-[76px] lg:self-start lg:max-h-[calc(100vh-84px)] lg:overflow-y-auto space-y-3" id="desktop-left-sidebar">
                     
                     <!-- BLOCK 1: BỘ LỌC NHANH (FILTER CARD) -->
-                    <section class="filter-card bg-white rounded-[20px] border border-beige-border/80 p-3.5 sm:p-4 shadow-sm space-y-2.5">
+                    <section class="filter-card bg-white rounded-[20px] border border-beige-border/80 p-3.5 sm:p-4 shadow-sm space-y-3">
                         
                         <!-- Sidebar Header -->
                         <div class="flex items-center justify-between pb-2 border-b border-[#F0EBE0]">
@@ -163,122 +210,111 @@ const FoodList = {
                             </button>
                         </div>
 
-                        <!-- Group 1: LOẠI MÓN -->
-                        <div class="space-y-1">
-                            <h3 class="text-[10px] font-extrabold uppercase tracking-wider text-text-muted">
-                                Loại món
-                            </h3>
-                            <div class="grid grid-cols-2 gap-1.5" id="filter-category-group">
-                                <button type="button" class="btn-filter-cat px-2 py-1.5 rounded-lg text-[11px] font-semibold text-text-muted text-left transition-all border border-gray-100 hover:bg-cream-soft hover:text-primary cursor-pointer flex items-center justify-between" data-cat="Món mặn">
-                                    <span class="flex items-center gap-1.5 min-w-0">
-                                        <i class="fa-solid fa-drumstick-bite text-amber-600 text-[11px] w-3.5 text-center shrink-0"></i>
-                                        <span class="truncate">Món mặn</span>
-                                    </span>
-                                </button>
-                                <button type="button" class="btn-filter-cat px-2 py-1.5 rounded-lg text-[11px] font-semibold text-text-muted text-left transition-all border border-gray-100 hover:bg-cream-soft hover:text-primary cursor-pointer flex items-center justify-between" data-cat="Món canh">
-                                    <span class="flex items-center gap-1.5 min-w-0">
-                                        <i class="fa-solid fa-bowl-food text-emerald-600 text-[11px] w-3.5 text-center shrink-0"></i>
-                                        <span class="truncate">Món canh</span>
-                                    </span>
-                                </button>
-                                <button type="button" class="btn-filter-cat px-2 py-1.5 rounded-lg text-[11px] font-semibold text-text-muted text-left transition-all border border-gray-100 hover:bg-cream-soft hover:text-primary cursor-pointer flex items-center justify-between" data-cat="Món kho">
-                                    <span class="flex items-center gap-1.5 min-w-0">
-                                        <i class="fa-solid fa-fire-burner text-amber-700 text-[11px] w-3.5 text-center shrink-0"></i>
-                                        <span class="truncate">Món kho</span>
-                                    </span>
-                                </button>
-                                <button type="button" class="btn-filter-cat px-2 py-1.5 rounded-lg text-[11px] font-semibold text-text-muted text-left transition-all border border-gray-100 hover:bg-cream-soft hover:text-primary cursor-pointer flex items-center justify-between" data-cat="Món xào">
-                                    <span class="flex items-center gap-1.5 min-w-0">
-                                        <i class="fa-solid fa-fire-flame-curved text-orange-500 text-[11px] w-3.5 text-center shrink-0"></i>
-                                        <span class="truncate">Món xào</span>
-                                    </span>
-                                </button>
-                                <button type="button" class="btn-filter-cat px-2 py-1.5 rounded-lg text-[11px] font-semibold text-text-muted text-left transition-all border border-gray-100 hover:bg-cream-soft hover:text-primary cursor-pointer flex items-center justify-between" data-cat="Món chiên">
-                                    <span class="flex items-center gap-1.5 min-w-0">
-                                        <i class="fa-solid fa-bacon text-yellow-600 text-[11px] w-3.5 text-center shrink-0"></i>
-                                        <span class="truncate">Món chiên</span>
-                                    </span>
-                                </button>
-                                <button type="button" class="btn-filter-cat px-2 py-1.5 rounded-lg text-[11px] font-semibold text-text-muted text-left transition-all border border-gray-100 hover:bg-cream-soft hover:text-primary cursor-pointer flex items-center justify-between" data-cat="Món rau">
-                                    <span class="flex items-center gap-1.5 min-w-0">
-                                        <i class="fa-solid fa-leaf text-green-600 text-[11px] w-3.5 text-center shrink-0"></i>
-                                        <span class="truncate">Món rau</span>
-                                    </span>
-                                </button>
-                                <button type="button" class="btn-filter-cat px-2 py-1.5 rounded-lg text-[11px] font-semibold text-text-muted text-left transition-all border border-gray-100 hover:bg-cream-soft hover:text-primary cursor-pointer flex items-center justify-between" data-cat="Món luộc">
-                                    <span class="flex items-center gap-1.5 min-w-0">
-                                        <i class="fa-solid fa-droplet text-blue-500 text-[11px] w-3.5 text-center shrink-0"></i>
-                                        <span class="truncate">Món luộc</span>
-                                    </span>
-                                </button>
+                        <!-- Group 1: LOẠI MÓN (2 cột, tối đa 3 hàng, cuộn được, checkbox ẩn ô có tích v) -->
+                        <div class="space-y-1.5">
+                            <div class="flex items-center justify-between">
+                                <h3 class="text-[10px] font-extrabold uppercase tracking-wider text-text-muted">
+                                    Loại món
+                                </h3>
+                                <span class="text-[9.5px] font-semibold text-text-muted/80 bg-[#F4EFE6] px-1.5 py-0.2 rounded-md">
+                                    Chọn nhiều
+                                </span>
+                            </div>
+                            <div class="grid grid-cols-2 gap-1.5 max-h-[114px] overflow-y-auto pr-1 custom-filter-scroll" id="filter-category-group">
+                                <!-- Populated dynamically from Database -->
+                                <div class="col-span-2 py-4 text-center text-text-muted text-[11px] font-medium">
+                                    <i class="fa-solid fa-spinner animate-spin mr-1"></i> Đang tải danh mục...
+                                </div>
                             </div>
                         </div>
 
-                        <!-- Group 2: THỜI GIAN NẤU -->
-                        <div class="space-y-1 pt-1.5 border-t border-[#F0EBE0]">
-                            <h3 class="text-[10px] font-extrabold uppercase tracking-wider text-text-muted">
-                                Thời gian nấu
-                            </h3>
-                            <div class="space-y-0.5" id="filter-time-group">
-                                <label class="flex items-center gap-1.5 px-1.5 py-0.5 rounded-md hover:bg-cream-soft transition-colors cursor-pointer text-[11px] font-medium text-text-main">
-                                    <input type="radio" name="cook_time" value="all" checked class="accent-primary w-3 h-3">
-                                    <i class="fa-solid fa-clock-rotate-left text-primary text-[10px] w-3.5 text-center"></i>
-                                    <span>Tất cả thời gian</span>
+                        <!-- Group 2: THỜI GIAN NẤU (2 cột, tối đa 3 hàng, radio ẩn chấm có tích v) -->
+                        <div class="space-y-1.5 pt-2 border-t border-[#F0EBE0]">
+                            <div class="flex items-center justify-between">
+                                <h3 class="text-[10px] font-extrabold uppercase tracking-wider text-text-muted">
+                                    Thời gian nấu
+                                </h3>
+                                <span class="text-[9.5px] font-semibold text-text-muted/80 bg-[#F4EFE6] px-1.5 py-0.2 rounded-md">
+                                    Chọn 1
+                                </span>
+                            </div>
+                            <div class="grid grid-cols-2 gap-1.5 max-h-[114px] overflow-y-auto pr-1 custom-filter-scroll" id="filter-time-group">
+                                <label class="filter-chip-item is-checked group relative w-full h-[34px] px-2 py-1 rounded-xl border border-gray-200/90 bg-white text-text-muted text-[11px] font-semibold flex items-center justify-between hover:border-primary/40 hover:bg-cream-soft hover:text-text-main transition-all cursor-pointer select-none">
+                                    <input type="radio" name="cook_time" value="all" checked class="sr-only filter-time-radio">
+                                    <span class="flex items-center gap-1.5 min-w-0 pr-1">
+                                        <i class="fa-solid fa-clock-rotate-left text-primary text-[10px] w-3.5 text-center shrink-0"></i>
+                                        <span class="truncate text-[11px]">Tất cả</span>
+                                    </span>
+                                    <span class="check-icon w-3.5 h-3.5 rounded-full flex items-center justify-center shrink-0 text-primary">
+                                        <i class="fa-solid fa-check text-[9px]"></i>
+                                    </span>
                                 </label>
-                                <label class="flex items-center gap-1.5 px-1.5 py-0.5 rounded-md hover:bg-cream-soft transition-colors cursor-pointer text-[11px] font-medium text-text-main">
-                                    <input type="radio" name="cook_time" value="under_15" class="accent-primary w-3 h-3">
-                                    <i class="fa-solid fa-bolt text-amber-500 text-[10px] w-3.5 text-center"></i>
-                                    <span>Dưới 15 phút</span>
+                                <label class="filter-chip-item group relative w-full h-[34px] px-2 py-1 rounded-xl border border-gray-200/90 bg-white text-text-muted text-[11px] font-semibold flex items-center justify-between hover:border-primary/40 hover:bg-cream-soft hover:text-text-main transition-all cursor-pointer select-none">
+                                    <input type="radio" name="cook_time" value="under_15" class="sr-only filter-time-radio">
+                                    <span class="flex items-center gap-1.5 min-w-0 pr-1">
+                                        <i class="fa-solid fa-bolt text-amber-500 text-[10px] w-3.5 text-center shrink-0"></i>
+                                        <span class="truncate text-[11px]">Dưới 15p</span>
+                                    </span>
+                                    <span class="check-icon w-3.5 h-3.5 rounded-full flex items-center justify-center shrink-0 text-primary">
+                                        <i class="fa-solid fa-check text-[9px]"></i>
+                                    </span>
                                 </label>
-                                <label class="flex items-center gap-1.5 px-1.5 py-0.5 rounded-md hover:bg-cream-soft transition-colors cursor-pointer text-[11px] font-medium text-text-main">
-                                    <input type="radio" name="cook_time" value="15_to_30" class="accent-primary w-3 h-3">
-                                    <i class="fa-regular fa-clock text-blue-500 text-[10px] w-3.5 text-center"></i>
-                                    <span>15 – 30 phút</span>
+                                <label class="filter-chip-item group relative w-full h-[34px] px-2 py-1 rounded-xl border border-gray-200/90 bg-white text-text-muted text-[11px] font-semibold flex items-center justify-between hover:border-primary/40 hover:bg-cream-soft hover:text-text-main transition-all cursor-pointer select-none">
+                                    <input type="radio" name="cook_time" value="15_to_30" class="sr-only filter-time-radio">
+                                    <span class="flex items-center gap-1.5 min-w-0 pr-1">
+                                        <i class="fa-regular fa-clock text-blue-500 text-[10px] w-3.5 text-center shrink-0"></i>
+                                        <span class="truncate text-[11px]">15 – 30p</span>
+                                    </span>
+                                    <span class="check-icon w-3.5 h-3.5 rounded-full flex items-center justify-center shrink-0 text-primary">
+                                        <i class="fa-solid fa-check text-[9px]"></i>
+                                    </span>
                                 </label>
-                                <label class="flex items-center gap-1.5 px-1.5 py-0.5 rounded-md hover:bg-cream-soft transition-colors cursor-pointer text-[11px] font-medium text-text-main">
-                                    <input type="radio" name="cook_time" value="above_30" class="accent-primary w-3 h-3">
-                                    <i class="fa-solid fa-hourglass-half text-emerald-600 text-[10px] w-3.5 text-center"></i>
-                                    <span>Trên 30 phút</span>
+                                <label class="filter-chip-item group relative w-full h-[34px] px-2 py-1 rounded-xl border border-gray-200/90 bg-white text-text-muted text-[11px] font-semibold flex items-center justify-between hover:border-primary/40 hover:bg-cream-soft hover:text-text-main transition-all cursor-pointer select-none">
+                                    <input type="radio" name="cook_time" value="above_30" class="sr-only filter-time-radio">
+                                    <span class="flex items-center gap-1.5 min-w-0 pr-1">
+                                        <i class="fa-solid fa-hourglass-half text-emerald-600 text-[10px] w-3.5 text-center shrink-0"></i>
+                                        <span class="truncate text-[11px]">Trên 30p</span>
+                                    </span>
+                                    <span class="check-icon w-3.5 h-3.5 rounded-full flex items-center justify-center shrink-0 text-primary">
+                                        <i class="fa-solid fa-check text-[9px]"></i>
+                                    </span>
                                 </label>
                             </div>
                         </div>
 
-                        <!-- Group 3: NGUYÊN LIỆU CHÍNH -->
-                        <div class="space-y-1 pt-1.5 border-t border-[#F0EBE0]">
-                            <h3 class="text-[10px] font-extrabold uppercase tracking-wider text-text-muted">
-                                Nguyên liệu chính
-                            </h3>
-                            <div class="grid grid-cols-2 gap-x-2 gap-y-1" id="filter-ingredients-group">
-                                <label class="flex items-center gap-1.5 px-1.5 py-1 rounded-lg hover:bg-cream-soft transition-colors cursor-pointer text-[11px] font-medium text-text-main">
-                                    <input type="checkbox" value="Thịt heo" class="ingredient-checkbox accent-primary w-3.5 h-3.5 rounded">
-                                    <i class="fa-solid fa-bacon text-rose-500 text-[11px] w-3.5 text-center shrink-0"></i>
-                                    <span>Thịt heo</span>
-                                </label>
-                                <label class="flex items-center gap-1.5 px-1.5 py-1 rounded-lg hover:bg-cream-soft transition-colors cursor-pointer text-[11px] font-medium text-text-main">
-                                    <input type="checkbox" value="Thịt gà" class="ingredient-checkbox accent-primary w-3.5 h-3.5 rounded">
-                                    <i class="fa-solid fa-drumstick-bite text-amber-600 text-[11px] w-3.5 text-center shrink-0"></i>
-                                    <span>Thịt gà</span>
-                                </label>
-                                <label class="flex items-center gap-1.5 px-1.5 py-1 rounded-lg hover:bg-cream-soft transition-colors cursor-pointer text-[11px] font-medium text-text-main">
-                                    <input type="checkbox" value="Hải sản" class="ingredient-checkbox accent-primary w-3.5 h-3.5 rounded">
-                                    <i class="fa-solid fa-fish text-sky-500 text-[11px] w-3.5 text-center shrink-0"></i>
-                                    <span>Hải sản</span>
-                                </label>
-                                <label class="flex items-center gap-1.5 px-1.5 py-1 rounded-lg hover:bg-cream-soft transition-colors cursor-pointer text-[11px] font-medium text-text-main">
-                                    <input type="checkbox" value="Rau củ" class="ingredient-checkbox accent-primary w-3.5 h-3.5 rounded">
-                                    <i class="fa-solid fa-carrot text-orange-500 text-[11px] w-3.5 text-center shrink-0"></i>
-                                    <span>Rau củ</span>
-                                </label>
-                                <label class="flex items-center gap-1.5 px-1.5 py-1 rounded-lg hover:bg-cream-soft transition-colors cursor-pointer text-[11px] font-medium text-text-main">
-                                    <input type="checkbox" value="Trứng" class="ingredient-checkbox accent-primary w-3.5 h-3.5 rounded">
-                                    <i class="fa-solid fa-egg text-amber-500 text-[11px] w-3.5 text-center shrink-0"></i>
-                                    <span>Trứng</span>
-                                </label>
-                                <label class="flex items-center gap-1.5 px-1.5 py-1 rounded-lg hover:bg-cream-soft transition-colors cursor-pointer text-[11px] font-medium text-text-main">
-                                    <input type="checkbox" value="Đậu hũ" class="ingredient-checkbox accent-primary w-3.5 h-3.5 rounded">
-                                    <i class="fa-solid fa-cube text-amber-400 text-[11px] w-3.5 text-center shrink-0"></i>
-                                    <span>Đậu hũ</span>
-                                </label>
+                        <!-- Group 3: NGUYÊN LIỆU CHÍNH (2 cột, tối đa 3 hàng, cuộn được 53 nguyên liệu DB, checkbox ẩn có tích v) -->
+                        <div class="space-y-1.5 pt-2 border-t border-[#F0EBE0]">
+                            <div class="flex items-center justify-between">
+                                <div class="flex items-center gap-1.5">
+                                    <h3 class="text-[10px] font-extrabold uppercase tracking-wider text-text-muted">
+                                        Nguyên liệu
+                                    </h3>
+                                    <span id="selected-ingredients-count" class="hidden text-[9px] font-extrabold bg-primary text-white rounded-full px-1.5 py-0.2 shadow-2xs">0</span>
+                                </div>
+                                <span class="text-[9.5px] font-semibold text-text-muted/80 bg-[#F4EFE6] px-1.5 py-0.2 rounded-md">
+                                    Chọn nhiều
+                                </span>
+                            </div>
+
+                            <!-- Mini Search for 53 Ingredients -->
+                            <div class="relative">
+                                <i class="fa-solid fa-magnifying-glass absolute left-2.5 top-1/2 -translate-y-1/2 text-gray-400 text-[10px]"></i>
+                                <input 
+                                    type="text" 
+                                    id="ingredient-quick-search" 
+                                    placeholder="Tìm trong 53 nguyên liệu..." 
+                                    class="w-full pl-7 pr-6 py-1 bg-[#FBF9F4] border border-gray-200/90 rounded-lg text-[10px] font-medium text-text-main placeholder:text-gray-400 focus:bg-white focus:outline-none focus:border-primary transition-all"
+                                >
+                                <button type="button" id="btn-clear-ing-search" class="hidden absolute right-2 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 text-[10px] cursor-pointer">
+                                    <i class="fa-solid fa-xmark"></i>
+                                </button>
+                            </div>
+
+                            <div class="grid grid-cols-2 gap-1.5 max-h-[114px] overflow-y-auto pr-1 custom-filter-scroll" id="filter-ingredients-group">
+                                <!-- Populated dynamically from Database (53 items) -->
+                                <div class="col-span-2 py-4 text-center text-text-muted text-[11px] font-medium">
+                                    <i class="fa-solid fa-spinner animate-spin mr-1"></i> Đang tải nguyên liệu...
+                                </div>
                             </div>
                         </div>
 
@@ -287,7 +323,7 @@ const FoodList = {
                             <button 
                                 type="button" 
                                 id="btn-reset-all-filters"
-                                class="w-full py-1.5 text-text-muted hover:text-red-600 hover:bg-red-50 border border-gray-100 font-bold text-xs rounded-xl transition-all flex items-center justify-center gap-1.5 cursor-pointer"
+                                class="w-full py-1.5 text-text-muted hover:text-red-600 hover:bg-red-50 border border-gray-100 font-bold text-xs rounded-xl transition-all flex items-center justify-center gap-1.5 cursor-pointer shadow-2xs"
                             >
                                 <i class="fa-solid fa-rotate-left text-[11px]"></i>
                                 <span>Đặt lại bộ lọc</span>
@@ -354,8 +390,8 @@ const FoodList = {
                                 <span class="w-7 h-7 rounded-xl bg-primary-subtle text-primary flex items-center justify-center text-xs font-bold">
                                     <i class="fa-solid fa-bowl-food"></i>
                                 </span>
-                                <span id="recipe-total-count" class="font-extrabold text-sm text-text-main">
-                                    Đang tải món ăn...
+                                <span id="recipe-total-count" class="font-extrabold text-sm text-text-main inline-flex items-center">
+                                    <span class="inline-block h-4 w-28 rounded-md skeleton-shimmer"></span>
                                 </span>
                             </div>
                             <span id="active-filter-indicator" class="hidden text-[11px] font-semibold text-accent bg-accent/10 border border-accent/20 px-2 py-0.5 rounded-full">
@@ -425,7 +461,7 @@ const FoodList = {
 
                     <!-- RECIPE GRID: Strictly 3 cards/row on desktop -->
                     <div id="recipe-grid" class="recipe-grid grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-6">
-                        <!-- Only recipe cards are appended here -->
+                        ${renderFoodCardSkeleton(6)}
                     </div>
 
                     <!-- LOADING SENTINEL: Detected by IntersectionObserver -->
@@ -481,11 +517,12 @@ const FoodList = {
 
     afterRender: async (params) => {
         // ====================================================================
-        // STATE MANAGEMENT (Frontend only)
+        // STATE MANAGEMENT (True Infinite Scroll / Lazy Loading)
         // ====================================================================
         let masterDishes = [...initialDishes];
-        let currentFilteredDishes = [...masterDishes];
-        let currentIndex = 0;
+        let currentFilteredDishes = [];
+        let totalDishesCount = 0;
+        let currentPage = 1;
         let isLoading = false;
         let hasMore = true;
         let viewMode = 'grid';
@@ -499,41 +536,57 @@ const FoodList = {
         let searchDebounceTimer = null;
         let latestRequestId = 0;
 
-        // Load API Data gracefully if backend is available
-        try {
-            const apiRes = await fetchAPI('/foods');
-            if (apiRes && apiRes.success && Array.isArray(apiRes.data) && apiRes.data.length > 0) {
-                masterDishes = apiRes.data.map(item => ({
-                    id: item.id || item.id_food || item.id_monan,
-                    name: item.name || item.ten_mon || 'Món ngon',
-                    image: item.image || item.hinh_anh || 'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=700',
-                    time: item.time || (item.thoi_gian ? `${item.thoi_gian} phút` : '25 phút'),
-                    cooking_time_minutes: parseInt(item.cooking_time_minutes || item.thoi_gian || 25, 10),
-                    rating: item.rating || 4.8,
-                    rating_count: item.rating_count || '1.5k',
-<<<<<<< HEAD
-                    likes: item.likes || 120,
-                    is_favorite: Boolean(item.is_favorite),
-=======
-                    likes: typeof item.likes !== 'undefined' ? item.likes : 0,
-                    is_favorite: Boolean(item.is_favorite ?? item.isFavorite),
->>>>>>> origin/develop
-                    category: item.category || item.loai_mon || 'Món mặn',
-                    category_slug: item.category_slug || '',
-                    sub_category: item.sub_category || 'viet',
-                    difficulty: item.difficulty || 'Dễ làm',
-                    description: item.description || item.mo_ta || 'Món ăn thơm ngon đậm đà cho bữa cơm gia đình.',
-                    ingredients: item.ingredients || ['Rau củ', 'Gia vị'],
-                    tags: item.tags || ['Món ngon', 'Món Việt'],
-                    author: item.author || { name: 'Bếp Nhà', avatar: 'https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=100' }
-                }));
-                currentFilteredDishes = [...masterDishes];
+        const mapApiDish = (item) => ({
+            id: item.id || item.id_food || item.id_monan,
+            name: item.name || item.ten_mon || 'Món ngon',
+            image: item.image || item.hinh_anh || 'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=700',
+            time: item.time || (item.thoi_gian ? `${item.thoi_gian} phút` : '25 phút'),
+            cooking_time_minutes: parseInt(item.cooking_time_minutes || item.thoi_gian || 25, 10),
+            rating: item.rating || 4.8,
+            rating_count: item.rating_count || '1.5k',
+            likes: typeof item.likes !== 'undefined' ? item.likes : 0,
+            is_favorite: Boolean(item.is_favorite ?? item.isFavorite),
+            category: item.category || item.loai_mon || 'Món mặn',
+            category_slug: item.category_slug || '',
+            sub_category: item.sub_category || 'viet',
+            difficulty: item.difficulty || 'Dễ làm',
+            description: item.description || item.mo_ta || 'Món ăn thơm ngon đậm đà cho bữa cơm gia đình.',
+            ingredients: item.ingredients || ['Rau củ', 'Gia vị'],
+            tags: item.tags || ['Món ngon', 'Món Việt'],
+            author: item.author || { name: 'Bếp Nhà', avatar: 'https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=100' }
+        });
+
+        const buildQueryParams = (page = 1, limit = BATCH_SIZE) => {
+            const queryParams = new URLSearchParams();
+            queryParams.set('page', String(page));
+            queryParams.set('limit', String(limit));
+
+            if (currentSearchQuery && currentSearchQuery.trim()) {
+                queryParams.set('search', currentSearchQuery.trim());
             }
-            window.masterDishes = masterDishes;
-        } catch (e) {
-            console.log('Using rich static dataset for FoodList:', e);
-            window.masterDishes = masterDishes;
-        }
+
+            if (currentSelectedCategories.length > 0) {
+                queryParams.set('category', currentSelectedCategories.join(','));
+            }
+
+            if (currentQuickCategory && currentQuickCategory !== 'all') {
+                queryParams.set('sub_category', currentQuickCategory);
+            }
+
+            if (currentCookTime && currentCookTime !== 'all') {
+                queryParams.set('cook_time', currentCookTime);
+            }
+
+            if (currentSelectedIngredients && currentSelectedIngredients.length > 0) {
+                queryParams.set('ingredients', currentSelectedIngredients.join(','));
+            }
+
+            if (currentSort && currentSort !== 'newest') {
+                queryParams.set('sort', currentSort);
+            }
+
+            return queryParams;
+        };
 
         // DOM Elements
         const heroSearchForm = document.getElementById('hero-search-form');
@@ -766,7 +819,7 @@ const FoodList = {
 
         // Update Toolbar & Mobile Badges
         const updateToolbarCounts = () => {
-            const total = currentFilteredDishes.length;
+            const total = totalDishesCount;
             if (recipeTotalCountEl) {
                 recipeTotalCountEl.textContent = `${total} món ăn phù hợp`;
             }
@@ -801,18 +854,18 @@ const FoodList = {
         const updateLoadingStateUI = () => {
             if (!loadingState) return;
 
-            const total = currentFilteredDishes.length;
+            const total = totalDishesCount;
             if (total === 0) {
                 loadingState.innerHTML = '';
                 return;
             }
 
-            if (!hasMore || currentIndex >= total) {
+            if (!hasMore || currentFilteredDishes.length >= total) {
                 loadingState.innerHTML = `
                     <div class="text-center py-6 text-text-muted text-xs font-medium w-full">
                         <div class="inline-flex items-center gap-2 bg-white/90 backdrop-blur-sm border border-beige-border px-5 py-2.5 rounded-full shadow-sm text-text-muted">
                             <span class="text-accent">🎉</span>
-                            <span>Bạn đã xem hết các món ăn</span>
+                            <span>Bạn đã khám phá hết các món ăn (${currentFilteredDishes.length}/${total} món)</span>
                         </div>
                     </div>
                 `;
@@ -821,7 +874,7 @@ const FoodList = {
                     <div class="text-center py-4 text-text-muted text-xs font-medium">
                         <span class="inline-flex items-center gap-2 text-text-muted opacity-80">
                             <i class="fa-solid fa-angles-down animate-bounce text-xs text-primary"></i>
-                            <span>Cuộn xuống để khám phá thêm món ngon</span>
+                            <span>Cuộn xuống để tải thêm món ngon (Đã xem ${currentFilteredDishes.length}/${total})</span>
                         </span>
                     </div>
                 `;
@@ -829,18 +882,11 @@ const FoodList = {
         };
 
         // ====================================================================
-        // INFINITE SCROLL & LAZY RENDERING ENGINE
+        // INFINITE SCROLL & LAZY RENDERING ENGINE (Server-side Paginated)
         // Strictly appends to #recipe-grid without touching sidebar
         // ====================================================================
-        const loadMoreRecipes = () => {
+        const loadMoreRecipes = async () => {
             if (isLoading || !hasMore) return;
-            const total = currentFilteredDishes.length;
-            if (currentIndex >= total) {
-                hasMore = false;
-                updateLoadingStateUI();
-                return;
-            }
-
             isLoading = true;
 
             // Show skeleton cards in #loading-state
@@ -858,28 +904,40 @@ const FoodList = {
                 `;
             }
 
-            // Simulate realistic smooth lazy load delay
-            setTimeout(() => {
-                const nextBatch = currentFilteredDishes.slice(currentIndex, currentIndex + BATCH_SIZE);
+            try {
+                currentPage++;
+                const queryParams = buildQueryParams(currentPage, BATCH_SIZE);
+                const endpoint = `/foods?${queryParams.toString()}`;
+                const apiRes = await fetchAPI(endpoint);
 
-                if (recipeGrid && nextBatch.length > 0) {
-                    const fragment = document.createDocumentFragment();
-                    nextBatch.forEach(dish => {
-                        fragment.appendChild(createRecipeCardElement(dish));
-                    });
-                    recipeGrid.appendChild(fragment);
-                }
+                if (apiRes && apiRes.success && Array.isArray(apiRes.data) && apiRes.data.length > 0) {
+                    const nextBatch = apiRes.data.map(mapApiDish);
+                    currentFilteredDishes = [...currentFilteredDishes, ...nextBatch];
 
-                currentIndex += nextBatch.length;
-                if (currentIndex >= total) {
+                    if (recipeGrid && nextBatch.length > 0) {
+                        const fragment = document.createDocumentFragment();
+                        nextBatch.forEach(dish => {
+                            fragment.appendChild(createRecipeCardElement(dish));
+                        });
+                        recipeGrid.appendChild(fragment);
+                    }
+
+                    if (apiRes.data.length < BATCH_SIZE || currentFilteredDishes.length >= (apiRes.total || totalDishesCount)) {
+                        hasMore = false;
+                        if (infiniteScrollObserver) infiniteScrollObserver.disconnect();
+                    }
+                } else {
                     hasMore = false;
                     if (infiniteScrollObserver) infiniteScrollObserver.disconnect();
                 }
-
+            } catch (err) {
+                console.warn('Lỗi khi tải thêm món ăn:', err);
+                hasMore = false;
+            } finally {
                 isLoading = false;
                 updateToolbarCounts();
                 updateLoadingStateUI();
-            }, 450);
+            }
         };
 
         // Setup Intersection Observer on #loading-sentinel
@@ -899,7 +957,7 @@ const FoodList = {
                 }
             }, {
                 root: null,
-                rootMargin: '400px',
+                rootMargin: '350px 0px',
                 threshold: 0
             });
 
@@ -910,12 +968,7 @@ const FoodList = {
         const renderFirstBatch = () => {
             if (!recipeGrid) return;
 
-            currentIndex = 0;
-            hasMore = true;
-            isLoading = false;
-            updateToolbarCounts();
-
-            // Clear ONLY recipe-grid
+            // Clear recipe-grid
             recipeGrid.innerHTML = '';
 
             // Handle Empty State
@@ -948,6 +1001,7 @@ const FoodList = {
                 }
 
                 if (loadingState) loadingState.innerHTML = '';
+                updateToolbarCounts();
                 return;
             }
 
@@ -958,19 +1012,14 @@ const FoodList = {
                 recipeGrid.className = "recipe-grid flex flex-col gap-4";
             }
 
-            // Render first batch of 12 cards using DocumentFragment
-            const firstBatch = currentFilteredDishes.slice(0, BATCH_SIZE);
+            // Render first batch cards using DocumentFragment
             const fragment = document.createDocumentFragment();
-            firstBatch.forEach(dish => {
+            currentFilteredDishes.forEach(dish => {
                 fragment.appendChild(createRecipeCardElement(dish));
             });
             recipeGrid.appendChild(fragment);
 
-            currentIndex = firstBatch.length;
-            if (currentIndex >= currentFilteredDishes.length) {
-                hasMore = false;
-            }
-
+            updateToolbarCounts();
             updateLoadingStateUI();
             setupInfiniteScroll();
         };
@@ -1042,82 +1091,170 @@ const FoodList = {
 
         const executeFilterAndSort = async () => {
             const requestId = ++latestRequestId;
-            let result = [];
+            currentPage = 1;
+            hasMore = true;
+            isLoading = true;
+
+            // Hiển thị khung chờ Skeleton Facebook-style trong lúc gọi API lọc
+            if (recipeGrid) {
+                if (viewMode === 'grid') {
+                    recipeGrid.className = "recipe-grid grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-6";
+                } else {
+                    recipeGrid.className = "recipe-grid flex flex-col gap-4";
+                }
+                recipeGrid.innerHTML = renderFoodCardSkeleton(6);
+            }
+            if (recipeTotalCountEl) {
+                recipeTotalCountEl.innerHTML = '<span class="inline-block h-4 w-28 rounded-md skeleton-shimmer"></span>';
+            }
+            if (loadingState) loadingState.innerHTML = '';
+
             try {
-                const queryParams = new URLSearchParams();
-                queryParams.set('limit', '50');
-
-                if (currentSearchQuery && currentSearchQuery.trim()) {
-                    queryParams.set('search', currentSearchQuery.trim());
-                }
-
-                if (currentSelectedCategories.length > 0) {
-                    queryParams.set('category', currentSelectedCategories.join(','));
-                }
-
-                if (currentQuickCategory && currentQuickCategory !== 'all') {
-                    queryParams.set('sub_category', currentQuickCategory);
-                }
-
-                if (currentCookTime && currentCookTime !== 'all') {
-                    queryParams.set('cook_time', currentCookTime);
-                }
-
-                if (currentSelectedIngredients && currentSelectedIngredients.length > 0) {
-                    queryParams.set('ingredients', currentSelectedIngredients.join(','));
-                }
-
-                if (currentSort && currentSort !== 'newest') {
-                    queryParams.set('sort', currentSort);
-                }
-
+                const queryParams = buildQueryParams(1, BATCH_SIZE);
                 const endpoint = `/foods?${queryParams.toString()}`;
                 const apiRes = await fetchAPI(endpoint);
+
+                if (requestId !== latestRequestId) return;
+
                 if (apiRes && apiRes.success && Array.isArray(apiRes.data)) {
-                    result = apiRes.data.map(item => ({
-                        id: item.id || item.id_food || item.id_monan,
-                        name: item.name || item.ten_mon || 'Món ngon',
-                        image: item.image || item.hinh_anh || 'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=700',
-                        time: item.time || (item.thoi_gian ? `${item.thoi_gian} phút` : '25 phút'),
-                        cooking_time_minutes: parseInt(item.cooking_time_minutes || item.thoi_gian || 25, 10),
-                        rating: item.rating || 4.8,
-                        rating_count: item.rating_count || '1.5k',
-<<<<<<< HEAD
-                        likes: item.likes || 120,
-                        is_favorite: Boolean(item.is_favorite),
-=======
-                        likes: typeof item.likes !== 'undefined' ? item.likes : 0,
-                        is_favorite: Boolean(item.is_favorite ?? item.isFavorite),
->>>>>>> origin/develop
-                        category: item.category || item.loai_mon || 'Món mặn',
-                        category_slug: item.category_slug || '',
-                        sub_category: item.sub_category || 'viet',
-                        difficulty: item.difficulty || 'Dễ làm',
-                        description: item.description || item.mo_ta || 'Món ăn thơm ngon đậm đà cho bữa cơm gia đình.',
-                        ingredients: item.ingredients || ['Rau củ', 'Gia vị'],
-                        tags: item.tags || ['Món ngon', 'Món Việt'],
-                        author: item.author || { name: 'Bếp Nhà', avatar: 'https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=100' }
-                    }));
+                    totalDishesCount = typeof apiRes.total === 'number' ? apiRes.total : apiRes.data.length;
+                    currentFilteredDishes = apiRes.data.map(mapApiDish);
+
+                    if (currentFilteredDishes.length < BATCH_SIZE || currentFilteredDishes.length >= totalDishesCount) {
+                        hasMore = false;
+                    }
                 } else {
-                    result = runClientFilter();
+                    const fallback = runClientFilter();
+                    totalDishesCount = fallback.length;
+                    currentFilteredDishes = fallback.slice(0, BATCH_SIZE);
+                    if (currentFilteredDishes.length >= totalDishesCount) hasMore = false;
                 }
             } catch (e) {
-                result = runClientFilter();
+                if (requestId !== latestRequestId) return;
+                const fallback = runClientFilter();
+                totalDishesCount = fallback.length;
+                currentFilteredDishes = fallback.slice(0, BATCH_SIZE);
+                if (currentFilteredDishes.length >= totalDishesCount) hasMore = false;
+            } finally {
+                if (requestId === latestRequestId) {
+                    isLoading = false;
+                    renderFirstBatch();
+                }
+            }
+        };
+
+        let dbCategories = [];
+        let dbIngredients = [];
+
+        const renderCategoryChips = () => {
+            const container = document.getElementById('filter-category-group');
+            if (!container) return;
+            if (!dbCategories || dbCategories.length === 0) {
+                container.innerHTML = '<div class="col-span-2 py-4 text-center text-text-muted text-[11px] font-medium">Không có danh mục</div>';
+                return;
+            }
+            container.innerHTML = dbCategories.map(cat => {
+                const isChecked = currentSelectedCategories.includes(cat.name);
+                const icon = getCategoryIcon(cat.name, cat.slug);
+                return `
+                    <label class="filter-chip-item group relative w-full h-[34px] px-2 py-1 rounded-xl border border-gray-200/90 bg-white text-text-muted text-[11px] font-semibold flex items-center justify-between hover:border-primary/40 hover:bg-cream-soft hover:text-text-main transition-all cursor-pointer select-none ${isChecked ? 'is-checked' : ''}" data-cat-name="${escapeHTML(cat.name)}">
+                        <input type="checkbox" name="filter_category" value="${escapeHTML(cat.name)}" class="sr-only filter-category-checkbox" ${isChecked ? 'checked' : ''}>
+                        <span class="flex items-center gap-1.5 min-w-0 pr-1">
+                            <i class="fa-solid ${icon.icon} ${icon.color} text-[10px] w-3.5 text-center shrink-0"></i>
+                            <span class="truncate text-[11px]" title="${escapeHTML(cat.name)}">${escapeHTML(cat.name)}</span>
+                        </span>
+                        <span class="check-icon w-3.5 h-3.5 rounded-full flex items-center justify-center shrink-0 text-primary">
+                            <i class="fa-solid fa-check text-[9px]"></i>
+                        </span>
+                    </label>
+                `;
+            }).join('');
+        };
+
+        const renderIngredientChips = (keyword = '') => {
+            const container = document.getElementById('filter-ingredients-group');
+            if (!container) return;
+            const q = (keyword || '').toLowerCase().trim();
+            const filtered = q
+                ? dbIngredients.filter(ing => ing.name.toLowerCase().includes(q))
+                : dbIngredients;
+
+            if (filtered.length === 0) {
+                container.innerHTML = `<div class="col-span-2 py-4 text-center text-text-muted text-[11px] font-medium">Không tìm thấy "${escapeHTML(q)}"</div>`;
+                return;
             }
 
-            if (requestId !== latestRequestId) return;
+            container.innerHTML = filtered.map(ing => {
+                const isChecked = currentSelectedIngredients.includes(ing.name);
+                const icon = getIngredientIcon(ing.name);
+                return `
+                    <label class="filter-chip-item group relative w-full h-[34px] px-2 py-1 rounded-xl border border-gray-200/90 bg-white text-text-muted text-[11px] font-semibold flex items-center justify-between hover:border-primary/40 hover:bg-cream-soft hover:text-text-main transition-all cursor-pointer select-none ${isChecked ? 'is-checked' : ''}" data-ing-name="${escapeHTML(ing.name)}">
+                        <input type="checkbox" name="filter_ingredient" value="${escapeHTML(ing.name)}" class="sr-only filter-ingredient-checkbox" ${isChecked ? 'checked' : ''}>
+                        <span class="flex items-center gap-1.5 min-w-0 pr-1">
+                            <i class="fa-solid ${icon.icon} ${icon.color} text-[10px] w-3.5 text-center shrink-0"></i>
+                            <span class="truncate text-[11px]" title="${escapeHTML(ing.name)}">${escapeHTML(ing.name)}</span>
+                        </span>
+                        <span class="check-icon w-3.5 h-3.5 rounded-full flex items-center justify-center shrink-0 text-primary">
+                            <i class="fa-solid fa-check text-[9px]"></i>
+                        </span>
+                    </label>
+                `;
+            }).join('');
+        };
 
-            currentFilteredDishes = result;
-            // Cập nhật lại trạng thái is_favorite cho masterDishes
-            result.forEach(r => {
-                const existing = masterDishes.find(m => m.id === r.id);
-                if (existing) {
-                    existing.is_favorite = r.is_favorite;
+        const updateIngredientCountBadge = () => {
+            const countEl = document.getElementById('selected-ingredients-count');
+            if (countEl) {
+                if (currentSelectedIngredients.length > 0) {
+                    countEl.textContent = currentSelectedIngredients.length;
+                    countEl.classList.remove('hidden');
                 } else {
-                    masterDishes.push(r);
+                    countEl.classList.add('hidden');
                 }
-            });
-            renderFirstBatch();
+            }
+        };
+
+        const loadDbFilterOptions = async () => {
+            try {
+                const res = await fetchAPI('/foods/options');
+                if (res && res.success && res.data) {
+                    dbCategories = res.data.categories || [];
+                    dbIngredients = res.data.ingredients || [];
+                }
+            } catch (err) {
+                console.warn('Could not load filter options from DB:', err);
+            }
+
+            if (!dbCategories || dbCategories.length === 0) {
+                dbCategories = [
+                    { id: 1, name: 'Món mặn', slug: 'mon-man' },
+                    { id: 2, name: 'Món canh', slug: 'mon-canh' },
+                    { id: 3, name: 'Món rau', slug: 'mon-rau' },
+                    { id: 4, name: 'Món xào', slug: 'mon-xao' },
+                    { id: 5, name: 'Món chiên', slug: 'mon-chien' },
+                    { id: 6, name: 'Món luộc', slug: 'mon-luoc' },
+                    { id: 7, name: 'Món kho', slug: 'mon-kho' }
+                ];
+            }
+
+            if (!dbIngredients || dbIngredients.length === 0) {
+                dbIngredients = [
+                    { id: 1, name: 'Thịt heo' },
+                    { id: 2, name: 'Thịt gà' },
+                    { id: 3, name: 'Thịt bò' },
+                    { id: 4, name: 'Hải sản' },
+                    { id: 5, name: 'Trứng gà' },
+                    { id: 6, name: 'Đậu hũ' }
+                ];
+            }
+
+            const ingSearchInput = document.getElementById('ingredient-quick-search');
+            if (ingSearchInput) {
+                ingSearchInput.placeholder = `Tìm trong ${dbIngredients.length} nguyên liệu...`;
+            }
+
+            renderCategoryChips();
+            renderIngredientChips();
         };
 
         const resetAllFilters = () => {
@@ -1135,18 +1272,26 @@ const FoodList = {
                 btn.className = "quick-cat-btn px-3.5 py-1.5 rounded-full text-xs font-bold transition-all flex items-center gap-1.5 cursor-pointer border border-[#E5DEC9] bg-white/80 text-text-muted hover:text-primary hover:bg-primary-subtle shadow-2xs";
             });
 
-            document.querySelectorAll('.btn-filter-cat').forEach(btn => {
-                btn.className = "btn-filter-cat px-2 py-1.5 rounded-lg text-[11px] font-semibold text-text-muted text-left transition-all border border-gray-100 hover:bg-cream-soft hover:text-primary cursor-pointer flex items-center justify-between";
-                const checkIcon = btn.querySelector('.fa-check');
-                if (checkIcon) checkIcon.remove();
-            });
+            // Reset categories chips
+            renderCategoryChips();
 
+            // Reset time radios
             const allRadio = document.querySelector('input[name="cook_time"][value="all"]');
             if (allRadio) allRadio.checked = true;
-
-            document.querySelectorAll('.ingredient-checkbox').forEach(cb => {
-                cb.checked = false;
+            document.querySelectorAll('#filter-time-group .filter-chip-item').forEach(lbl => {
+                const radio = lbl.querySelector('input[name="cook_time"]');
+                lbl.classList.toggle('is-checked', radio && radio.value === 'all');
             });
+
+            // Reset ingredient search and counter badge
+            const ingSearch = document.getElementById('ingredient-quick-search');
+            if (ingSearch) ingSearch.value = '';
+            const btnClearIng = document.getElementById('btn-clear-ing-search');
+            if (btnClearIng) btnClearIng.classList.add('hidden');
+            updateIngredientCountBadge();
+
+            // Re-render ingredient chips
+            renderIngredientChips('');
 
             if (currentSortLabel) currentSortLabel.textContent = 'Mới nhất';
 
@@ -1212,46 +1357,83 @@ const FoodList = {
             });
         });
 
-        const catButtons = document.querySelectorAll('.btn-filter-cat');
-        catButtons.forEach(btn => {
-            btn.addEventListener('click', () => {
-                const cat = btn.getAttribute('data-cat');
-                const idx = currentSelectedCategories.indexOf(cat);
-                if (idx > -1) {
-                    currentSelectedCategories.splice(idx, 1);
-                    btn.className = "btn-filter-cat px-2 py-1.5 rounded-lg text-[11px] font-semibold text-text-muted text-left transition-all border border-gray-100 hover:bg-cream-soft hover:text-primary cursor-pointer flex items-center justify-between";
-                    const ic = btn.querySelector('.fa-check');
-                    if (ic) ic.remove();
-                } else {
-                    currentSelectedCategories.push(cat);
-                    btn.className = "btn-filter-cat active-cat px-2 py-1.5 rounded-lg text-[11px] font-bold text-left transition-all border cursor-pointer flex items-center justify-between bg-primary-subtle text-primary border-primary/40";
-                    if (!btn.querySelector('.fa-check')) {
-                        const checkIcon = document.createElement('i');
-                        checkIcon.className = "fa-solid fa-check text-[9px] text-primary shrink-0 ml-1";
-                        btn.appendChild(checkIcon);
+        // 2. Dynamic Categories Filter Listener (Checkbox with hidden input + checkmark ✓)
+        const filterCategoryGroup = document.getElementById('filter-category-group');
+        if (filterCategoryGroup) {
+            filterCategoryGroup.addEventListener('change', (e) => {
+                const target = e.target.closest('.filter-category-checkbox');
+                if (target) {
+                    const label = target.closest('.filter-chip-item');
+                    if (label) label.classList.toggle('is-checked', target.checked);
+                    const val = target.value;
+                    if (target.checked) {
+                        if (!currentSelectedCategories.includes(val)) currentSelectedCategories.push(val);
+                    } else {
+                        currentSelectedCategories = currentSelectedCategories.filter(c => c !== val);
                     }
+                    executeFilterAndSort();
                 }
-
-                executeFilterAndSort();
             });
-        });
+        }
 
-        const timeRadios = document.querySelectorAll('input[name="cook_time"]');
-        timeRadios.forEach(r => {
-            r.addEventListener('change', () => {
-                currentCookTime = r.value;
-                executeFilterAndSort();
+        // 3. Cook Time Filter Listener (Radio with hidden circle + checkmark ✓)
+        const filterTimeGroup = document.getElementById('filter-time-group');
+        if (filterTimeGroup) {
+            filterTimeGroup.addEventListener('change', (e) => {
+                const target = e.target.closest('input[name="cook_time"]');
+                if (target) {
+                    currentCookTime = target.value;
+                    filterTimeGroup.querySelectorAll('.filter-chip-item').forEach(lbl => {
+                        const radio = lbl.querySelector('input[name="cook_time"]');
+                        lbl.classList.toggle('is-checked', radio && radio.checked);
+                    });
+                    executeFilterAndSort();
+                }
             });
-        });
+        }
 
-        const ingredientCheckboxes = document.querySelectorAll('.ingredient-checkbox');
-        ingredientCheckboxes.forEach(cb => {
-            cb.addEventListener('change', () => {
-                const checked = Array.from(document.querySelectorAll('.ingredient-checkbox:checked')).map(item => item.value);
-                currentSelectedIngredients = checked;
-                executeFilterAndSort();
+        // 4. Dynamic Ingredients Filter Listener (53 items from DB, Checkbox with hidden input + checkmark ✓)
+        const filterIngredientsGroup = document.getElementById('filter-ingredients-group');
+        if (filterIngredientsGroup) {
+            filterIngredientsGroup.addEventListener('change', (e) => {
+                const target = e.target.closest('.filter-ingredient-checkbox');
+                if (target) {
+                    const label = target.closest('.filter-chip-item');
+                    if (label) label.classList.toggle('is-checked', target.checked);
+                    const val = target.value;
+                    if (target.checked) {
+                        if (!currentSelectedIngredients.includes(val)) currentSelectedIngredients.push(val);
+                    } else {
+                        currentSelectedIngredients = currentSelectedIngredients.filter(i => i !== val);
+                    }
+                    updateIngredientCountBadge();
+                    executeFilterAndSort();
+                }
             });
-        });
+        }
+
+        // 5. Ingredient Mini Quick Search
+        const ingSearchInput = document.getElementById('ingredient-quick-search');
+        const btnClearIngSearch = document.getElementById('btn-clear-ing-search');
+        if (ingSearchInput) {
+            ingSearchInput.addEventListener('input', (e) => {
+                const val = e.target.value;
+                if (btnClearIngSearch) {
+                    btnClearIngSearch.classList.toggle('hidden', val.length === 0);
+                }
+                renderIngredientChips(val);
+            });
+        }
+        if (btnClearIngSearch) {
+            btnClearIngSearch.addEventListener('click', () => {
+                if (ingSearchInput) {
+                    ingSearchInput.value = '';
+                    btnClearIngSearch.classList.add('hidden');
+                    renderIngredientChips('');
+                    ingSearchInput.focus();
+                }
+            });
+        }
 
         // 6. Reset Filters Buttons
         if (btnResetAllFilters) btnResetAllFilters.addEventListener('click', resetAllFilters);
@@ -1315,15 +1497,6 @@ const FoodList = {
                     const dish = masterDishes.find(d => d.id === dishId) || currentFilteredDishes.find(d => d.id === dishId);
                     if (!dish) return;
 
-<<<<<<< HEAD
-                    const token = localStorage.getItem('auth_token');
-                    if (!token) {
-                        showToast('Vui lòng đăng nhập để lưu món yêu thích! 🔒', 'info');
-                        setTimeout(() => {
-                            window.location.hash = '#/login';
-                        }, 1200);
-                        return;
-=======
                     if (typeof window !== 'undefined' && window.toggleFavoriteDish) {
                         const isFav = await window.toggleFavoriteDish(dish);
                         dish.is_favorite = isFav;
@@ -1352,37 +1525,7 @@ const FoodList = {
                     const link = card.getAttribute('data-link') || `#/mon-an/${card.getAttribute('data-dish-id') || card.id.replace('dish-card-', '')}`;
                     if (link) {
                         window.location.hash = link;
->>>>>>> origin/develop
                     }
-
-                    // Gọi API toggle favorite
-                    fetchAPI(`/auth/me/favorites/${dishId}/toggle`, { method: 'POST' })
-                        .then((res) => {
-                            if (res && res.success) {
-                                dish.is_favorite = res.is_favorite;
-                                const heartIcon = favBtn.querySelector('i');
-
-                                if (dish.is_favorite) {
-                                    favBtn.className = "btn-favorite-dish absolute top-2.5 right-2.5 w-8.5 h-8.5 rounded-full bg-rose-500 text-white backdrop-blur-sm flex items-center justify-center shadow-sm scale-125 transition-all cursor-pointer z-20";
-                                    setTimeout(() => {
-                                        favBtn.classList.remove('scale-125');
-                                    }, 150);
-                                    if (heartIcon) heartIcon.className = "fa-solid fa-heart text-sm";
-                                    showToast(`Đã thêm "${dish.name}" vào Yêu thích! ❤️`, 'success');
-                                } else {
-                                    favBtn.className = "btn-favorite-dish absolute top-2.5 right-2.5 w-8.5 h-8.5 rounded-full bg-white/90 text-gray-500 hover:text-rose-500 backdrop-blur-sm flex items-center justify-center shadow-sm transition-all cursor-pointer z-20";
-                                    if (heartIcon) heartIcon.className = "fa-regular fa-heart text-sm";
-                                    showToast(`Đã bỏ lưu "${dish.name}"`, 'info');
-                                }
-
-                                if (window.loadFavoritesInNav) window.loadFavoritesInNav();
-                            } else {
-                                showToast(res.message || 'Không thể lưu món yêu thích lúc này.', 'info');
-                            }
-                        })
-                        .catch(() => {
-                            showToast('Lỗi kết nối khi cập nhật món yêu thích.', 'info');
-                        });
                 }
             });
         }
@@ -1439,24 +1582,20 @@ const FoodList = {
             }
         }
 
+        await loadDbFilterOptions();
+
         if (urlCat) {
             const parsedCats = urlCat.split(',').map(s => s.trim().toLowerCase()).filter(Boolean);
-            catButtons.forEach(b => {
-                const bCat = b.getAttribute('data-cat');
-                const bCatSlug = bCat ? bCat.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/\s+/g, '-') : '';
-                const isMatch = bCat && (parsedCats.includes(bCat.toLowerCase()) || parsedCats.includes(bCatSlug));
-                if (isMatch) {
-                    if (!currentSelectedCategories.includes(bCat)) {
-                        currentSelectedCategories.push(bCat);
-                    }
-                    b.className = "btn-filter-cat active-cat px-2 py-1.5 rounded-lg text-[11px] font-bold text-left transition-all border cursor-pointer flex items-center justify-between bg-primary-subtle text-primary border-primary/40";
-                    if (!b.querySelector('.fa-check')) {
-                        const checkIcon = document.createElement('i');
-                        checkIcon.className = "fa-solid fa-check text-[9px] text-primary shrink-0 ml-1";
-                        b.appendChild(checkIcon);
-                    }
+            parsedCats.forEach(c => {
+                const matchCat = dbCategories.find(dbC => 
+                    dbC.name.toLowerCase() === c || 
+                    (dbC.slug && dbC.slug.toLowerCase() === c)
+                );
+                if (matchCat && !currentSelectedCategories.includes(matchCat.name)) {
+                    currentSelectedCategories.push(matchCat.name);
                 }
             });
+            renderCategoryChips();
         }
 
         if (urlTime) {
@@ -1464,6 +1603,10 @@ const FoodList = {
             const targetRadio = document.querySelector(`input[name="cook_time"][value="${urlTime}"]`);
             if (targetRadio) {
                 targetRadio.checked = true;
+                document.querySelectorAll('#filter-time-group .filter-chip-item').forEach(lbl => {
+                    const radio = lbl.querySelector('input[name="cook_time"]');
+                    lbl.classList.toggle('is-checked', radio && radio.value === urlTime);
+                });
             }
         }
 

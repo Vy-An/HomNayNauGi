@@ -9,6 +9,7 @@ import FoodDetail from './views/khach/FoodDetail.js';
 import Community from './views/khach/Community.js';
 import Login from './views/khach/Login.js';
 import Profile from './views/khach/Profile.js';
+import { renderPageSkeleton } from './components/Skeleton.js';
 
 const routes = {
     '/': Home,
@@ -62,7 +63,7 @@ const router = async () => {
             }
         }
 
-        document.getElementById('app-content').innerHTML = '<p class="text-center py-10">Đang tải...</p>';
+        document.getElementById('app-content').innerHTML = renderPageSkeleton(path);
         
         // Hỗ trợ cả page dạng function hoặc dạng object có render() và afterRender()
         if (typeof page === 'function') {
@@ -100,3 +101,11 @@ if (document.readyState === 'loading') {
     router();
     BackToTop.init();
 }
+
+// Chống lệch giao diện theo trục ngang
+window.addEventListener('scroll', () => {
+    if (window.scrollX !== 0) {
+        window.scrollTo(0, window.scrollY);
+    }
+}, { passive: true });
+

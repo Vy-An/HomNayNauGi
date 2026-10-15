@@ -121,23 +121,15 @@ const FoodDetail = {
                                     </div>
                                 </div>
 
-<<<<<<< HEAD
                                 <!-- Action Buttons Row -->
-                                <div class="flex items-center gap-3">
-                                    <button id="fav-btn" class="flex-1 py-3 px-4 rounded-2xl ${food.is_favorite ? 'bg-rose-50 border border-rose-200 text-rose-600' : 'bg-white border border-beige-border/80 text-text-main'} font-semibold hover:bg-cream-soft transition flex items-center justify-center gap-2 text-xs md:text-sm shadow-sm cursor-pointer">
-                                        <i class="${food.is_favorite ? 'fa-solid' : 'fa-regular'} fa-heart text-rose-500"></i>
-                                        <span>${food.is_favorite ? 'Đã lưu món' : 'Lưu món'}</span>
+                                <div class="flex items-center gap-3 w-full">
+                                    <button id="fav-btn" data-food-id="${food.id}" class="flex-1 py-3 sm:py-3.5 px-4 rounded-2xl ${food.is_favorite ? 'bg-rose-50 border border-rose-300 text-rose-600 font-bold shadow-xs' : 'bg-white border border-beige-border/80 text-text-main font-bold hover:bg-cream-soft hover:text-rose-600'} transition flex items-center justify-center gap-2 text-xs sm:text-sm shadow-xs cursor-pointer active:scale-[0.99]" title="${food.is_favorite ? 'Bỏ lưu món' : 'Lưu món ăn yêu thích'}">
+                                        <i class="${food.is_favorite ? 'fa-solid' : 'fa-regular'} fa-heart text-rose-500 text-base"></i>
+                                        <span id="fav-btn-label">${food.is_favorite ? 'Đã lưu món' : 'Lưu món'}</span>
                                     </button>
-                                    <button id="add-to-cart-btn" class="flex-[2] py-3 px-5 bg-primary hover:bg-[#1B4633] active:bg-[#143627] text-white font-bold rounded-2xl transition shadow-md shadow-primary/20 flex items-center justify-center gap-2 text-xs md:text-sm cursor-pointer">
+                                    <button id="add-to-cart-btn" class="flex-[1.5] py-3 sm:py-3.5 px-5 bg-primary hover:bg-[#1B4633] active:bg-[#143627] text-white font-bold rounded-2xl transition shadow-md shadow-primary/20 flex items-center justify-center gap-2 text-xs sm:text-sm cursor-pointer">
                                         <i class="fa-solid fa-cart-shopping text-accent-light"></i>
                                         <span>Thêm vào đi chợ</span>
-=======
-                                <!-- Action Button (Lưu món yêu thích chiếm toàn bộ chiều rộng) -->
-                                <div class="w-full">
-                                    <button id="fav-btn" data-food-id="${food.id}" class="w-full py-3 sm:py-3.5 px-4 sm:px-6 rounded-2xl ${food.is_favorite ? 'bg-rose-50 border border-rose-300 text-rose-600 font-bold shadow-xs' : 'bg-white border border-beige-border/80 text-text-main font-bold hover:bg-cream-soft hover:text-rose-600'} transition flex items-center justify-center gap-2 text-xs sm:text-sm shadow-xs cursor-pointer active:scale-[0.99]" title="${food.is_favorite ? 'Bỏ lưu món' : 'Lưu món ăn yêu thích'}">
-                                        <i class="${food.is_favorite ? 'fa-solid' : 'fa-regular'} fa-heart text-rose-500 text-base"></i>
-                                        <span id="fav-btn-label">${food.is_favorite ? 'Đã lưu món yêu thích' : 'Lưu món yêu thích'}</span>
->>>>>>> origin/develop
                                     </button>
                                 </div>
                             </div>
@@ -209,6 +201,7 @@ const FoodDetail = {
 
     afterRender: async (id) => {
         const btnFav = document.getElementById('fav-btn');
+        const btnAdd = document.getElementById('add-to-cart-btn');
         const toast = document.getElementById('toast-msg');
         const toastText = document.getElementById('toast-text');
 
@@ -243,7 +236,6 @@ const FoodDetail = {
             }, 3000);
         }
 
-<<<<<<< HEAD
         if (btnAdd) {
             btnAdd.addEventListener('click', async () => {
                 const token = localStorage.getItem('auth_token');
@@ -278,7 +270,10 @@ const FoodDetail = {
                 } finally {
                     btnAdd.disabled = false;
                     btnAdd.innerHTML = originalText;
-=======
+                }
+            });
+        }
+
         if (btnFav) {
             btnFav.addEventListener('click', async (e) => {
                 const targetFoodId = currentFoodDetail?.id || id;
@@ -318,14 +313,14 @@ const FoodDetail = {
                             const favIcon = btnFav.querySelector('i');
 
                             if (isFav) {
-                                btnFav.className = 'w-full py-3 sm:py-3.5 px-4 sm:px-6 rounded-2xl bg-rose-50 border border-rose-300 text-rose-600 font-bold transition flex items-center justify-center gap-2 text-xs sm:text-sm shadow-xs cursor-pointer active:scale-[0.99]';
+                                btnFav.className = 'flex-1 py-3 sm:py-3.5 px-4 rounded-2xl bg-rose-50 border border-rose-300 text-rose-600 font-bold transition flex items-center justify-center gap-2 text-xs sm:text-sm shadow-xs cursor-pointer active:scale-[0.99]';
                                 if (favIcon) favIcon.className = 'fa-solid fa-heart text-rose-500 text-base';
-                                if (favLabel) favLabel.textContent = 'Đã lưu món yêu thích';
+                                if (favLabel) favLabel.textContent = 'Đã lưu món';
                                 btnFav.title = 'Bỏ lưu món';
                             } else {
-                                btnFav.className = 'w-full py-3 sm:py-3.5 px-4 sm:px-6 rounded-2xl bg-white border border-beige-border/80 text-text-main font-bold hover:bg-cream-soft hover:text-rose-600 transition flex items-center justify-center gap-2 text-xs sm:text-sm shadow-xs cursor-pointer active:scale-[0.99]';
+                                btnFav.className = 'flex-1 py-3 sm:py-3.5 px-4 rounded-2xl bg-white border border-beige-border/80 text-text-main font-bold hover:bg-cream-soft hover:text-rose-600 transition flex items-center justify-center gap-2 text-xs sm:text-sm shadow-xs cursor-pointer active:scale-[0.99]';
                                 if (favIcon) favIcon.className = 'fa-regular fa-heart text-rose-500 text-base';
-                                if (favLabel) favLabel.textContent = 'Lưu món yêu thích';
+                                if (favLabel) favLabel.textContent = 'Lưu món';
                                 btnFav.title = 'Lưu món ăn yêu thích';
                             }
 
@@ -364,52 +359,15 @@ const FoodDetail = {
                     } finally {
                         btnFav.disabled = false;
                     }
->>>>>>> origin/develop
                 }
             });
         }
 
-<<<<<<< HEAD
-        if (btnFav) {
-            btnFav.addEventListener('click', async () => {
-                const token = localStorage.getItem('auth_token');
-                if (!token) {
-                    showToast('Vui lòng đăng nhập để lưu món yêu thích! 🔒');
-                    setTimeout(() => { window.location.hash = '#/login'; }, 1200);
-                    return;
-                }
-
-                if (!currentFoodDetail) return;
-                btnFav.disabled = true;
-
-                try {
-                    const res = await fetchAPI(`/auth/me/favorites/${currentFoodDetail.id}/toggle`, {
-                        method: 'POST'
-                    });
-
-                    if (res && res.success) {
-                        currentFoodDetail.is_favorite = res.is_favorite;
-                        const isFav = res.is_favorite;
-                        btnFav.className = `flex-1 py-3 px-4 rounded-2xl ${isFav ? 'bg-rose-50 border border-rose-200 text-rose-600' : 'bg-white border border-beige-border/80 text-text-main'} font-semibold hover:bg-cream-soft transition flex items-center justify-center gap-2 text-xs md:text-sm shadow-sm cursor-pointer`;
-                        btnFav.innerHTML = `<i class="${isFav ? 'fa-solid' : 'fa-regular'} fa-heart text-rose-500"></i><span>${isFav ? 'Đã lưu món' : 'Lưu món'}</span>`;
-                        showToast(res.message);
-                        if (window.loadFavoritesInNav) window.loadFavoritesInNav();
-                    } else {
-                        showToast(res.message || 'Không thể cập nhật yêu thích.');
-                    }
-                } catch (err) {
-                    showToast('Lỗi kết nối khi cập nhật yêu thích.');
-                } finally {
-                    btnFav.disabled = false;
-                }
-            });
-=======
         if (window.updateNavbarFavBadge) {
             window.updateNavbarFavBadge();
         }
         if (window.syncFavBadge) {
             window.syncFavBadge();
->>>>>>> origin/develop
         }
     }
 };

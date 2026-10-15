@@ -1,5 +1,6 @@
 import { fetchAPI, BACKEND_URL } from '../../api.js';
 import Popup from '../../components/Popup.js';
+import { renderCommunityPostSkeleton } from '../../components/Skeleton.js';
 
 const INITIAL_BATCH = 6;
 const LOAD_MORE_BATCH = 4;
@@ -62,7 +63,7 @@ const Community = {
 
             <main class="max-w-[1360px] mx-auto px-4 sm:px-6 lg:px-8 py-5">
                 <div class="grid grid-cols-1 lg:grid-cols-12 gap-5 lg:gap-6 items-start">
-                    <aside class="lg:col-span-3 space-y-4.5 order-2 lg:order-1 lg:sticky lg:top-[80px] lg:self-start">
+                    <aside class="lg:col-span-3 space-y-4.5 order-2 lg:order-1 lg:sticky lg:top-[80px] lg:self-start lg:max-h-[calc(100vh-92px)] lg:overflow-y-auto">
                         <div class="bg-white rounded-[20px] border border-beige-border/80 p-4.5 shadow-sm">
                             <div class="flex items-center gap-2.5 mb-3 pb-2 border-b border-[#F0EBE0]">
                                 <span class="w-6 h-6 rounded-lg bg-primary-subtle text-primary flex items-center justify-center text-xs">
@@ -242,15 +243,17 @@ const Community = {
 
                         <div id="community-feed-header" class="flex items-center justify-between text-xs text-text-muted font-semibold px-1">
                             <span id="feed-filter-title" class="inline-flex items-center"><i class="fa-solid fa-border-all mr-1.5 text-primary"></i> Tất cả bài viết</span>
-                            <span id="feed-post-count-badge" class="bg-white border border-beige-border px-2 py-0.5 rounded-full text-[11px]">Đang tải...</span>
+                            <span id="feed-post-count-badge" class="bg-white border border-beige-border px-2.5 py-0.5 rounded-full text-[11px] inline-flex items-center"><span class="inline-block w-16 h-2.5 rounded skeleton-shimmer"></span></span>
                         </div>
 
-                        <div id="community-feed" class="space-y-5"></div>
+                        <div id="community-feed" class="space-y-5">
+                            ${renderCommunityPostSkeleton(3)}
+                        </div>
 
                         <div id="community-load-more" class="py-4 flex flex-col items-center justify-center"></div>
                     </section>
 
-                    <aside class="lg:col-span-3 space-y-4.5 order-3 lg:sticky lg:top-[80px] lg:self-start">
+                    <aside class="lg:col-span-3 space-y-4.5 order-3 lg:sticky lg:top-[80px] lg:self-start lg:max-h-[calc(100vh-92px)] lg:overflow-y-auto">
                         <div class="bg-white rounded-[20px] border border-beige-border/80 p-4.5 shadow-sm">
                             <div class="flex items-center gap-2 mb-3 pb-2 border-b border-[#F0EBE0]">
                                 <span class="w-5 h-5 rounded-md bg-rose-100 text-rose-600 flex items-center justify-center text-[10px]">
@@ -614,26 +617,7 @@ const Community = {
         };
 
         const createSkeletonCardHTML = () => {
-            return `
-                <div class="bg-white rounded-[20px] border border-beige-border/80 p-4.5 sm:p-5 shadow-sm animate-pulse space-y-3.5 mb-5">
-                    <div class="flex items-center gap-3">
-                        <div class="w-10 h-10 rounded-full bg-[#ECE5D8]"></div>
-                        <div class="space-y-1.5 flex-1">
-                            <div class="w-32 h-3.5 bg-[#ECE5D8] rounded-md"></div>
-                            <div class="w-20 h-2.5 bg-[#ECE5D8] rounded-md"></div>
-                        </div>
-                    </div>
-                    <div class="space-y-2">
-                        <div class="w-full h-3 bg-[#ECE5D8] rounded-md"></div>
-                        <div class="w-4/5 h-3 bg-[#ECE5D8] rounded-md"></div>
-                    </div>
-                    <div class="w-full aspect-[16/10] bg-[#ECE5D8] rounded-xl"></div>
-                    <div class="flex justify-between items-center pt-2 border-t border-[#F0EBE0]">
-                        <div class="w-20 h-6 bg-[#ECE5D8] rounded-full"></div>
-                        <div class="w-16 h-6 bg-[#ECE5D8] rounded-full"></div>
-                    </div>
-                </div>
-            `;
+            return renderCommunityPostSkeleton(1);
         };
 
         const updateFeedBadge = () => {

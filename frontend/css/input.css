@@ -109,3 +109,41 @@
   scrollbar-color: #DFD5BE transparent;
 }
 
+/* Custom scrollbar for gacha modal */
+.custom-gacha-scroll {
+  scrollbar-width: thin !important;
+  scrollbar-color: #145A43 #F8F5EA !important;
+  -ms-overflow-style: auto !important;
+}
+.custom-gacha-scroll::-webkit-scrollbar {
+  display: block !important;
+  width: 6px !important;
+  height: 6px !important;
+}
+.custom-gacha-scroll::-webkit-scrollbar-track {
+  background: #F8F5EA !important;
+  border-radius: 9999px !important;
+}
+.custom-gacha-scroll::-webkit-scrollbar-thumb {
+  background-color: #145A43 !important;
+  border-radius: 9999px !important;
+}
+.custom-gacha-scroll::-webkit-scrollbar-thumb:hover {
+  background-color: #0F4937 !important;
+}
+
+/* Facebook-style Skeleton Shimmer Animation */
+@keyframes skeletonShimmer {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}
+.skeleton-shimmer {
+  background: linear-gradient(90deg, #ECE6DA 0%, #F8F5EE 50%, #ECE6DA 100%) !important;
+  background-size: 200% 100% !important;
+  animation: skeletonShimmer 1.5s infinite ease-in-out !important;
+}
+

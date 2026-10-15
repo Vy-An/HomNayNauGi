@@ -1,9 +1,5 @@
 function getPublicBaseUrl() {
-<<<<<<< HEAD
-    return (process.env.PUBLIC_BASE_URL || `http://localhost:${process.env.PORT || 5000}`).replace(/\/$/, '');
-=======
-    return process.env.PUBLIC_BASE_URL || process.env.RENDER_EXTERNAL_URL || `http://localhost:${process.env.PORT || 5000}`;
->>>>>>> origin/develop
+    return (process.env.PUBLIC_BASE_URL || process.env.RENDER_EXTERNAL_URL || `http://localhost:${process.env.PORT || 5000}`).replace(/\/$/, '');
 }
 
 function resolveAssetUrl(value) {
