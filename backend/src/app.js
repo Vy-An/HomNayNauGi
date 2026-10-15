@@ -15,7 +15,10 @@ const app = express();
 app.use(cors());
 app.use(express.json({ limit: '10mb' }));
 app.use(express.urlencoded({ extended: true, limit: '10mb' }));
-app.use('/images', express.static(path.join(__dirname, '..', 'public', 'images')));
+
+const publicImagesPath = path.join(__dirname, '..', 'public', 'images');
+app.use('/images', express.static(publicImagesPath));
+app.use('/api/images', express.static(publicImagesPath));
 app.use('/api/auth', authRoutes);
 app.use('/api/random', randomRoutes);
 app.use('/api/posts', postRoutes);

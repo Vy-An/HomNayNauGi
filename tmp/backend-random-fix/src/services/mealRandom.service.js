@@ -1,0 +1,338 @@
+const prisma = require('../lib/prisma');
+const { resolveAssetUrl } = require('../utils/assetUrl');
+
+const FALLBACK_IMAGE = '/images/foods/thit-kho-trung.jpg';
+
+const INGREDIENT_ALIASES = {
+    thit: ['Thit', 'Thịt', 'heo', 'gà', 'ga', 'bò', 'bo', 'cá', 'ca', 'sườn', 'suon'],
+    'thit-heo': ['Thịt ba chỉ', 'Thịt heo', 'heo', 'Sườn non'],
+    'thit-ga': ['Thịt gà', 'gà'],
+    'thit-bo': ['Thịt bò', 'bò'],
+    ca: ['Cá', 'cá', 'Cá basa', 'Cá lóc'],
+    tom: ['Tôm', 'tôm', 'Cua', 'cua'],
+    trung: ['Trung', 'Trứng', 'trung', 'trứng'],
+    'dau-hu': ['Đậu hũ', 'đậu hũ'],
+    rau: ['Rau', 'rau', 'Cải', 'cải', 'Bông cải', 'Đậu que', 'Cà rốt', 'Giá', 'Bí đỏ']
+};
+
+const CATEGORY_ALIASES = {
+    man: ['mon-man', 'mon-kho', 'mon-chien', 'mon-xao', 'mon-luoc'],
+    canh: ['mon-canh'],
+    xao: ['mon-xao'],
+    kho: ['mon-kho'],
+    nuong: ['mon-nuong'],
+    chien: ['mon-chien'],
+    lau: ['mon-lau'],
+    rau: ['mon-rau']
+};
+
+const COOK_TIME_FILTERS = {
+    quick: { lte: 15 },
+    medium: { gt: 15, lte: 30 },
+    long: { gt: 30 }
+};
+
+function clampQuantity(quantity) {
+    const parsed = Number.parseInt(quantity, 10);
+    if (Number.isNaN(parsed)) return 1;
+    return Math.min(Math.max(parsed, 1), 50);
+}
+
+function normalizeList(value) {
+    if (!value) return [];
+    if (Array.isArray(value)) return value.flatMap(normalizeList);
+
+    return String(value)
+        .split(',')
+        .map((item) => item.trim())
+        .filter(Boolean);
+}
+
+function expandAliases(values, aliases) {
+    return values.flatMap((value) => aliases[value] || [value]);
+}
+
+function normalizeCookTime(value) {
+    if (!value) return '';
+    const normalized = Array.isArray(value) ? value[0] : value;
+    const key = String(normalized).trim().toLowerCase();
+
+    return COOK_TIME_FILTERS[key] ? key : '';
+}
+
+function buildWhere({ ingredients = [], categories = [], cookTime = '' }) {
+    const where = {
+        status: 'active'
+    };
+
+    if (cookTime) {
+        where.cooking_time = COOK_TIME_FILTERS[cookTime];
+    }
+
+    const categoryValues = expandAliases(categories, CATEGORY_ALIASES);
+    if (categoryValues.length) {
+        where.categories = {
+            OR: categoryValues.map((value) => {
+                const categoryId = Number(value);
+                if (!Number.isNaN(categoryId)) {
+                    return { id_category: categoryId };
+                }
+
+                return {
+                    OR: [
+                        { slug: value },
+                        { name: { contains: value } }
+                    ]
+                };
+            })
+        };
+    }
+
+    const ingredientNames = expandAliases(ingredients, INGREDIENT_ALIASES);
+    if (ingredientNames.length) {
+        where.food_ingredients = {
+            some: {
+                ingredients: {
+                    OR: ingredientNames.map((name) => ({
+                        name: {
+                            contains: name
+                        }
+                    }))
+                }
+            }
+        };
+    }
+
+    return where;
+}
+
+function shuffle(items) {
+    const cloned = [...items];
+
+    for (let index = cloned.length - 1; index > 0; index -= 1) {
+        const randomIndex = Math.floor(Math.random() * (index + 1));
+        [cloned[index], cloned[randomIndex]] = [cloned[randomIndex], cloned[index]];
+    }
+
+    return cloned;
+}
+
+function getCookingTime(food) {
+    return food.cooking_time ?? Number.MAX_SAFE_INTEGER;
+}
+
+function pickShortestRandom(foods, count) {
+    const groupedByTime = foods.reduce((groups, food) => {
+        const cookingTime = getCookingTime(food);
+        const group = groups.get(cookingTime) || [];
+        group.push(food);
+        groups.set(cookingTime, group);
+
+        return groups;
+    }, new Map());
+
+    return Array.from(groupedByTime.keys())
+        .sort((a, b) => a - b)
+        .flatMap((cookingTime) => shuffle(groupedByTime.get(cookingTime)))
+        .slice(0, count);
+}
+
+function formatQuantity(value) {
+    if (value === null || value === undefined) return '';
+
+    const numberValue = Number(value);
+    if (Number.isNaN(numberValue)) return String(value);
+    return Number.isInteger(numberValue) ? String(numberValue) : String(numberValue).replace(/\.?0+$/, '');
+}
+
+function formatFood(food) {
+    return {
+        id: food.id_food,
+        name: food.name,
+        slug: food.slug,
+        description: food.description,
+        image: resolveAssetUrl(food.image || FALLBACK_IMAGE),
+        time: food.cooking_time ? `${food.cooking_time} phut` : '30 phut',
+        cookingTime: food.cooking_time,
+        servings: food.servings,
+        category: food.categories
+            ? {
+                id: food.categories.id_category,
+                name: food.categories.name,
+                slug: food.categories.slug
+            }
+            : null,
+        ingredients: food.food_ingredients.map((item) => {
+            const quantity = formatQuantity(item.quantity);
+            const unit = item.ingredients?.unit || '';
+            const name = item.ingredients?.name || '';
+            const note = item.note ? ` (${item.note})` : '';
+
+            return `${quantity} ${unit} ${name}${note}`.replace(/\s+/g, ' ').trim();
+        }),
+        steps: food.recipe_steps.map((step) => step.instruction),
+        likes: '0',
+        author: {
+            name: 'Hom Nay Nau Gi'
+        }
+    };
+}
+
+async function findFoods(where) {
+    return prisma.foods.findMany({
+        where,
+        include: {
+            categories: true,
+            food_ingredients: {
+                include: {
+                    ingredients: true
+                }
+            },
+            recipe_steps: {
+                orderBy: {
+                    step_number: 'asc'
+                }
+            }
+        }
+    });
+}
+
+async function getRandomMeals(options = {}) {
+    const quantity = clampQuantity(options.quantity);
+    const ingredients = normalizeList(options.ingredients);
+    const categories = normalizeList(options.categories);
+    const cookTime = normalizeCookTime(options.cookTime || options.cook_time);
+    const filteredWhere = buildWhere({ ingredients, categories, cookTime });
+
+    const hasFilters = ingredients.length || categories.length || Boolean(cookTime);
+    const matchedFoods = await findFoods(filteredWhere);
+    const selectedById = new Map();
+
+    const addFoods = (foods, limit = quantity) => {
+        const availableSlots = limit - selectedById.size;
+        if (availableSlots <= 0) return 0;
+
+        const freshFoods = shuffle(foods)
+            .filter((food) => !selectedById.has(food.id_food))
+            .slice(0, availableSlots);
+
+        freshFoods.forEach((food) => {
+            selectedById.set(food.id_food, food);
+        });
+
+        return freshFoods.length;
+    };
+
+    const exactCount = addFoods(matchedFoods);
+    let timeRelaxedCount = 0;
+
+    if (hasFilters && selectedById.size < quantity) {
+        const fallbackQueries = [];
+
+        if (cookTime && (ingredients.length || categories.length)) {
+            fallbackQueries.push({
+                type: 'time',
+                where: buildWhere({ ingredients, categories, cookTime: '' })
+            });
+        }
+
+        if (ingredients.length) {
+            fallbackQueries.push({
+                type: 'ingredient',
+                where: buildWhere({ ingredients, categories: [], cookTime: '' })
+            });
+        }
+
+        if (categories.length) {
+            fallbackQueries.push({
+                type: 'category',
+                where: buildWhere({ ingredients: [], categories, cookTime: '' })
+            });
+        }
+
+        if (cookTime) {
+            fallbackQueries.push({
+                type: 'time',
+                where: buildWhere({ ingredients: [], categories: [], cookTime })
+            });
+        }
+
+        fallbackQueries.push({
+            type: 'random',
+            where: buildWhere({})
+        });
+
+        for (const query of fallbackQueries) {
+            if (selectedById.size >= quantity) break;
+
+            const beforeCount = selectedById.size;
+            const foods = await findFoods(query.where);
+            const addedCount = addFoods(foods);
+
+            if (query.type === 'time') {
+                timeRelaxedCount += Math.max(0, selectedById.size - beforeCount);
+            }
+
+            if (addedCount > 0 && selectedById.size >= quantity) break;
+        }
+    }
+
+    const selectedFoods = Array.from(selectedById.values());
+
+    return {
+        requested: quantity,
+        matchedFilters: !hasFilters || matchedFoods.length > 0,
+        totalCandidates: matchedFoods.length,
+        fallbackCount: Math.max(0, selectedFoods.length - exactCount),
+        timeRelaxedCount,
+        cookTime,
+        foods: selectedFoods.map(formatFood)
+    };
+}
+
+async function getRandomOptions() {
+    const [categories, ingredients, categoryCounts] = await Promise.all([
+        prisma.categories.findMany({
+            orderBy: {
+                name: 'asc'
+            }
+        }),
+        prisma.ingredients.findMany({
+            orderBy: {
+                name: 'asc'
+            }
+        }),
+        prisma.foods.groupBy({
+            by: ['id_category'],
+            where: {
+                status: 'active'
+            },
+            _count: {
+                id_food: true
+            }
+        })
+    ]);
+
+    const categoryCountById = new Map(
+        categoryCounts.map((item) => [item.id_category, item._count.id_food])
+    );
+
+    return {
+        categories: categories.map((category) => ({
+            id: category.id_category,
+            name: category.name,
+            slug: category.slug,
+            foodCount: categoryCountById.get(category.id_category) || 0
+        })),
+        ingredients: ingredients.map((ingredient) => ({
+            id: ingredient.id_ingredient,
+            name: ingredient.name,
+            unit: ingredient.unit
+        }))
+    };
+}
+
+module.exports = {
+    getRandomMeals,
+    getRandomOptions
+};

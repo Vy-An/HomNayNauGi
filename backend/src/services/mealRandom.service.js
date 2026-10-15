@@ -69,12 +69,22 @@ function buildWhere({ ingredients = [], categories = [], cookTime = '' }) {
         where.cooking_time = COOK_TIME_FILTERS[cookTime];
     }
 
-    const categorySlugs = expandAliases(categories, CATEGORY_ALIASES);
-    if (categorySlugs.length) {
+    const categoryValues = expandAliases(categories, CATEGORY_ALIASES);
+    if (categoryValues.length) {
         where.categories = {
-            slug: {
-                in: categorySlugs
-            }
+            OR: categoryValues.map((value) => {
+                const categoryId = Number(value);
+                if (!Number.isNaN(categoryId)) {
+                    return { id_category: categoryId };
+                }
+
+                return {
+                    OR: [
+                        { slug: value },
+                        { name: { contains: value } }
+                    ]
+                };
+            })
         };
     }
 
@@ -196,6 +206,7 @@ async function getRandomMeals(options = {}) {
 
     const hasFilters = ingredients.length || categories.length || Boolean(cookTime);
     const matchedFoods = await findFoods(filteredWhere);
+<<<<<<< Updated upstream
     const selectedFoods = shuffle(matchedFoods).slice(0, quantity);
     let fallbackCount = 0;
     let timeRelaxedCount = 0;
@@ -241,12 +252,90 @@ async function getRandomMeals(options = {}) {
             Boolean(cookTime)
         );
     }
+=======
+    const selectedById = new Map();
+
+    const addFoods = (foods, limit = quantity) => {
+        const availableSlots = limit - selectedById.size;
+        if (availableSlots <= 0) return 0;
+
+        const freshFoods = shuffle(foods)
+            .filter((food) => !selectedById.has(food.id_food))
+            .slice(0, availableSlots);
+
+        freshFoods.forEach((food) => {
+            selectedById.set(food.id_food, food);
+        });
+
+        return freshFoods.length;
+    };
+
+    const exactCount = addFoods(matchedFoods);
+    let timeRelaxedCount = 0;
+
+    if (hasFilters && selectedById.size < quantity) {
+        const fallbackQueries = [];
+
+        if (cookTime && (ingredients.length || categories.length)) {
+            fallbackQueries.push({
+                type: 'time',
+                where: buildWhere({ ingredients, categories, cookTime: '' })
+            });
+        }
+
+        if (ingredients.length) {
+            fallbackQueries.push({
+                type: 'ingredient',
+                where: buildWhere({ ingredients, categories: [], cookTime: '' })
+            });
+        }
+
+        if (categories.length) {
+            fallbackQueries.push({
+                type: 'category',
+                where: buildWhere({ ingredients: [], categories, cookTime: '' })
+            });
+        }
+
+        if (cookTime) {
+            fallbackQueries.push({
+                type: 'time',
+                where: buildWhere({ ingredients: [], categories: [], cookTime })
+            });
+        }
+
+        fallbackQueries.push({
+            type: 'random',
+            where: buildWhere({})
+        });
+
+        for (const query of fallbackQueries) {
+            if (selectedById.size >= quantity) break;
+
+            const beforeCount = selectedById.size;
+            const foods = await findFoods(query.where);
+            const addedCount = addFoods(foods);
+
+            if (query.type === 'time') {
+                timeRelaxedCount += Math.max(0, selectedById.size - beforeCount);
+            }
+
+            if (addedCount > 0 && selectedById.size >= quantity) break;
+        }
+    }
+
+    const selectedFoods = Array.from(selectedById.values());
+>>>>>>> Stashed changes
 
     return {
         requested: quantity,
         matchedFilters: !hasFilters || matchedFoods.length > 0,
         totalCandidates: matchedFoods.length,
+<<<<<<< Updated upstream
         fallbackCount,
+=======
+        fallbackCount: Math.max(0, selectedFoods.length - exactCount),
+>>>>>>> Stashed changes
         timeRelaxedCount,
         cookTime,
         foods: selectedFoods.map(formatFood)

@@ -1043,7 +1043,592 @@ async function updateFoodStatus(req, res) {
 }
 
 // ==========================================
+<<<<<<< Updated upstream
 // 3. QUẢN LÝ DANH MỤC (CATEGORIES)
+=======
+// QUẢN LÝ BÀI VIẾT CỘNG ĐỒNG & KIỂM DUYỆT
+// ==========================================
+
+async function getPosts(req, res) {
+    try {
+        const page = Math.max(1, parsePositiveInt(req.query.page) || 1);
+        const limit = clampLimit(req.query.limit, 10, 50);
+        const skip = (page - 1) * limit;
+        const search = String(req.query.search || '').trim();
+        const status = String(req.query.status || '').trim().toLowerCase();
+
+        const where = {};
+        if (['active', 'hidden', 'pending'].includes(status)) {
+            where.status = status;
+        }
+
+        if (search) {
+            where.OR = [
+                { title: { contains: search } },
+                { content: { contains: search } },
+                { users: { name: { contains: search } } }
+            ];
+        }
+
+        const [total, pendingTotal, activeTotal, hiddenTotal, posts] = await Promise.all([
+            prisma.posts.count({ where }),
+            prisma.posts.count({ where: { status: 'pending' } }),
+            prisma.posts.count({ where: { status: 'active' } }),
+            prisma.posts.count({ where: { status: 'hidden' } }),
+            prisma.posts.findMany({
+                where,
+                skip,
+                take: limit,
+                orderBy: { created_at: 'desc' },
+                include: {
+                    users: {
+                        select: {
+                            id_user: true,
+                            name: true,
+                            email: true,
+                            avatar: true,
+                            role: true,
+                            status: true
+                        }
+                    },
+                    foods: {
+                        select: {
+                            id_food: true,
+                            name: true,
+                            slug: true
+                        }
+                    },
+                    _count: {
+                        select: {
+                            post_likes: true,
+                            comments: true
+                        }
+                    }
+                }
+            })
+        ]);
+
+        // Lấy chi tiết báo cáo vi phạm cho từng bài viết để phục vụ tooltip hover nhanh
+        const postIds = posts.map(p => p.id_post);
+        const reportsMap = {};
+
+        if (postIds.length > 0) {
+            const rawReports = await prisma.reports.findMany({
+                where: {
+                    target_type: 'post',
+                    target_id: { in: postIds }
+                },
+                include: {
+                    users: {
+                        select: {
+                            id_user: true,
+                            name: true,
+                            email: true,
+                            avatar: true
+                        }
+                    }
+                },
+                orderBy: { created_at: 'desc' }
+            });
+
+            rawReports.forEach(r => {
+                if (!reportsMap[r.target_id]) reportsMap[r.target_id] = [];
+                reportsMap[r.target_id].push({
+                    id_report: r.id_report,
+                    reason: r.reason,
+                    description: r.description,
+                    status: r.status,
+                    created_at: r.created_at,
+                    reporter: r.users ? {
+                        id_user: r.users.id_user,
+                        name: r.users.name || 'Người dùng ẩn danh',
+                        email: r.users.email,
+                        avatar: resolveAssetUrl(r.users.avatar || '/images/users/admin.jpg')
+                    } : null
+                });
+            });
+        }
+
+        const formattedPosts = posts.map(p => ({
+            id_post: p.id_post,
+            id_user: p.id_user,
+            id_food: p.id_food,
+            title: p.title,
+            content: p.content,
+            image: resolveAssetUrl(p.image),
+            status: p.status,
+            hidden_reason: p.hidden_reason || null,
+            created_at: p.created_at,
+            updated_at: p.updated_at,
+            likes_count: p._count.post_likes,
+            comments_count: p._count.comments,
+            reports_count: reportsMap[p.id_post]?.length || 0,
+            reports: reportsMap[p.id_post] || [],
+            author: {
+                id_user: p.users?.id_user,
+                name: p.users?.name || 'Ẩn danh',
+                email: p.users?.email || '',
+                avatar: resolveAssetUrl(p.users?.avatar || '/images/users/admin.jpg'),
+                role: p.users?.role,
+                status: p.users?.status
+            },
+            food: p.foods ? {
+                id_food: p.foods.id_food,
+                name: p.foods.name,
+                slug: p.foods.slug
+            } : null
+        }));
+
+        const allTotal = pendingTotal + activeTotal + hiddenTotal;
+
+        return res.json({
+            success: true,
+            data: formattedPosts,
+            pagination: {
+                page,
+                limit,
+                total,
+                allTotal,
+                totalPages: Math.ceil(total / limit) || 1,
+                pendingTotal,
+                activeTotal,
+                hiddenTotal
+            }
+        });
+    } catch (error) {
+        console.error('getPosts error:', error);
+        return res.status(500).json({
+            success: false,
+            message: 'Không thể tải danh sách bài viết kiểm duyệt.'
+        });
+    }
+}
+
+async function getPostById(req, res) {
+    try {
+        const id = parsePositiveInt(req.params.id);
+        if (!id) {
+            return res.status(400).json({ success: false, message: 'ID bài viết không hợp lệ.' });
+        }
+
+        const post = await prisma.posts.findUnique({
+            where: { id_post: id },
+            include: {
+                users: true,
+                foods: true,
+                _count: {
+                    select: {
+                        post_likes: true,
+                        comments: true
+                    }
+                }
+            }
+        });
+
+        if (!post) {
+            return res.status(404).json({ success: false, message: 'Bài viết không tồn tại.' });
+        }
+
+        const reports = await prisma.reports.findMany({
+            where: {
+                target_type: 'post',
+                target_id: id
+            },
+            include: {
+                users: {
+                    select: {
+                        id_user: true,
+                        name: true,
+                        email: true,
+                        avatar: true
+                    }
+                }
+            },
+            orderBy: { created_at: 'desc' }
+        });
+
+        return res.json({
+            success: true,
+            data: {
+                id_post: post.id_post,
+                id_user: post.id_user,
+                title: post.title,
+                content: post.content,
+                image: resolveAssetUrl(post.image),
+                status: post.status,
+                hidden_reason: post.hidden_reason || null,
+                created_at: post.created_at,
+                likes_count: post._count.post_likes,
+                comments_count: post._count.comments,
+                reports_count: reports.length,
+                reports,
+                author: {
+                    id_user: post.users?.id_user,
+                    name: post.users?.name,
+                    email: post.users?.email,
+                    avatar: resolveAssetUrl(post.users?.avatar)
+                },
+                food: post.foods ? {
+                    id_food: post.foods.id_food,
+                    name: post.foods.name
+                } : null
+            }
+        });
+    } catch (error) {
+        return res.status(500).json({ success: false, message: 'Lỗi khi tải chi tiết bài viết.' });
+    }
+}
+
+async function updatePostStatus(req, res) {
+    try {
+        const id = parsePositiveInt(req.params.id);
+        const { status, hidden_reason } = req.body || {};
+
+        if (!id || !['active', 'hidden', 'pending'].includes(status)) {
+            return res.status(400).json({
+                success: false,
+                message: 'Dữ liệu trạng thái không hợp lệ. Chấp nhận: active, hidden, pending.'
+            });
+        }
+
+        const dataToUpdate = { status };
+        if (status === 'hidden') {
+            const trimmedReason = typeof hidden_reason === 'string' ? hidden_reason.trim() : '';
+            dataToUpdate.hidden_reason = trimmedReason || 'Vi phạm tiêu chuẩn cộng đồng';
+        } else if (status === 'active') {
+            dataToUpdate.hidden_reason = null;
+        }
+
+        const updated = await prisma.posts.update({
+            where: { id_post: id },
+            data: dataToUpdate
+        });
+
+        // Nếu admin ẩn bài viết do vi phạm, tự động đánh dấu các report liên quan thành resolved
+        if (status === 'hidden') {
+            await prisma.reports.updateMany({
+                where: {
+                    target_type: 'post',
+                    target_id: id,
+                    status: 'pending'
+                },
+                data: { status: 'resolved' }
+            });
+        }
+
+        const statusMsg = status === 'active' 
+            ? 'Đã duyệt bài viết thành công (bài viết đã hiển thị trên cộng đồng)!' 
+            : (status === 'hidden' ? `Đã ẩn bài viết. Lý do: "${dataToUpdate.hidden_reason}".` : 'Đã đưa bài viết về trạng thái chờ duyệt.');
+
+        return res.json({
+            success: true,
+            message: statusMsg,
+            data: {
+                id_post: updated.id_post,
+                status: updated.status,
+                hidden_reason: updated.hidden_reason
+            }
+        });
+    } catch (error) {
+        return res.status(500).json({ success: false, message: 'Không thể cập nhật trạng thái bài viết.' });
+    }
+}
+
+async function deletePost(req, res) {
+    try {
+        const id = parsePositiveInt(req.params.id);
+        if (!id) {
+            return res.status(400).json({ success: false, message: 'ID bài viết không hợp lệ.' });
+        }
+
+        // Xóa các báo cáo liên quan bài viết trước
+        await prisma.reports.deleteMany({
+            where: {
+                target_type: 'post',
+                target_id: id
+            }
+        });
+
+        await prisma.posts.delete({
+            where: { id_post: id }
+        });
+
+        return res.json({
+            success: true,
+            message: 'Đã xóa bài viết vi phạm thành công.'
+        });
+    } catch (error) {
+        return res.status(500).json({ success: false, message: 'Không thể xóa bài viết lúc này.' });
+    }
+}
+
+// ==========================================
+// QUẢN LÝ BÁO CÁO VI PHẠM (REPORTS)
+// ==========================================
+
+async function getReports(req, res) {
+    try {
+        const page = Math.max(1, parsePositiveInt(req.query.page) || 1);
+        const limit = clampLimit(req.query.limit, 10, 50);
+        const skip = (page - 1) * limit;
+        const search = String(req.query.search || '').trim();
+        const status = String(req.query.status || '').trim().toLowerCase();
+        const targetType = String(req.query.target_type || '').trim().toLowerCase();
+
+        const where = {};
+
+        if (['post', 'comment'].includes(targetType)) {
+            where.target_type = targetType;
+        }
+
+        if (['pending', 'resolved', 'rejected'].includes(status)) {
+            where.status = status;
+        } else if (status === 'handled') {
+            where.status = { in: ['resolved', 'rejected'] };
+        }
+
+        if (search) {
+            where.OR = [
+                { reason: { contains: search } },
+                { description: { contains: search } },
+                { users: { name: { contains: search } } }
+            ];
+        }
+
+        const [total, pendingTotal, resolvedTotal, rejectedTotal, allTotal, reports] = await Promise.all([
+            prisma.reports.count({ where }),
+            prisma.reports.count({ where: { status: 'pending' } }),
+            prisma.reports.count({ where: { status: 'resolved' } }),
+            prisma.reports.count({ where: { status: 'rejected' } }),
+            prisma.reports.count(),
+            prisma.reports.findMany({
+                where,
+                skip,
+                take: limit,
+                orderBy: { created_at: 'desc' },
+                include: {
+                    users: {
+                        select: {
+                            id_user: true,
+                            name: true,
+                            email: true,
+                            avatar: true
+                        }
+                    }
+                }
+            })
+        ]);
+
+        // Lấy thông tin bài viết và bình luận bị báo cáo
+        const postIds = [...new Set(reports.filter(r => r.target_type === 'post').map(r => r.target_id))];
+        const commentIds = [...new Set(reports.filter(r => r.target_type === 'comment').map(r => r.target_id))];
+
+        let postsMap = new Map();
+        let commentsMap = new Map();
+
+        if (postIds.length > 0) {
+            const targetPosts = await prisma.posts.findMany({
+                where: { id_post: { in: postIds } },
+                include: {
+                    users: {
+                        select: {
+                            id_user: true,
+                            name: true,
+                            email: true,
+                            avatar: true
+                        }
+                    },
+                    _count: {
+                        select: {
+                            post_likes: true,
+                            comments: true
+                        }
+                    }
+                }
+            });
+
+            targetPosts.forEach(p => postsMap.set(p.id_post, p));
+        }
+
+        if (commentIds.length > 0) {
+            const targetComments = await prisma.comments.findMany({
+                where: { id_comment: { in: commentIds } },
+                include: {
+                    users: {
+                        select: {
+                            id_user: true,
+                            name: true,
+                            email: true,
+                            avatar: true
+                        }
+                    },
+                    posts: {
+                        select: {
+                            id_post: true,
+                            title: true
+                        }
+                    }
+                }
+            });
+
+            targetComments.forEach(c => commentsMap.set(c.id_comment, c));
+        }
+
+        const formattedReports = reports.map(r => {
+            const targetPost = r.target_type === 'post' ? postsMap.get(r.target_id) : null;
+            const targetComment = r.target_type === 'comment' ? commentsMap.get(r.target_id) : null;
+
+            return {
+                id_report: r.id_report,
+                id_user: r.id_user,
+                target_type: r.target_type,
+                target_id: r.target_id,
+                reason: r.reason,
+                description: r.description,
+                status: r.status,
+                created_at: r.created_at,
+                updated_at: r.updated_at,
+                reporter: r.users ? {
+                    id_user: r.users.id_user,
+                    name: r.users.name || 'Người dùng ẩn danh',
+                    email: r.users.email,
+                    avatar: resolveAssetUrl(r.users.avatar || '/images/users/admin.jpg')
+                } : null,
+                post: targetPost ? {
+                    id_post: targetPost.id_post,
+                    title: targetPost.title,
+                    content: targetPost.content,
+                    image: resolveAssetUrl(targetPost.image),
+                    status: targetPost.status,
+                    hidden_reason: targetPost.hidden_reason,
+                    likes_count: targetPost._count?.post_likes || 0,
+                    comments_count: targetPost._count?.comments || 0,
+                    author: {
+                        id_user: targetPost.users?.id_user,
+                        name: targetPost.users?.name || 'Tác giả',
+                        email: targetPost.users?.email,
+                        avatar: resolveAssetUrl(targetPost.users?.avatar || '/images/users/admin.jpg')
+                    }
+                } : null,
+                comment: targetComment ? {
+                    id_comment: targetComment.id_comment,
+                    id_post: targetComment.id_post,
+                    post_title: targetComment.posts?.title || `Bài viết #${targetComment.id_post}`,
+                    content: targetComment.content,
+                    status: targetComment.status,
+                    created_at: targetComment.created_at,
+                    author: {
+                        id_user: targetComment.users?.id_user,
+                        name: targetComment.users?.name || 'Tác giả bình luận',
+                        email: targetComment.users?.email,
+                        avatar: resolveAssetUrl(targetComment.users?.avatar || '/images/users/admin.jpg')
+                    }
+                } : null
+            };
+        });
+
+        return res.json({
+            success: true,
+            data: formattedReports,
+            pagination: {
+                page,
+                limit,
+                total,
+                totalPages: Math.ceil(total / limit) || 1,
+                pendingTotal,
+                resolvedTotal,
+                rejectedTotal,
+                allTotal
+            }
+        });
+    } catch (error) {
+        console.error('getReports error:', error);
+        return res.status(500).json({
+            success: false,
+            message: 'Không thể tải danh sách báo cáo vi phạm.'
+        });
+    }
+}
+
+async function updateReportStatus(req, res) {
+    try {
+        const id = parsePositiveInt(req.params.id);
+        const { status, action, reason } = req.body || {};
+
+        if (!id || !['pending', 'resolved', 'rejected'].includes(status)) {
+            return res.status(400).json({
+                success: false,
+                message: 'Trạng thái xử lý không hợp lệ. Chấp nhận: pending, resolved, rejected.'
+            });
+        }
+
+        const report = await prisma.reports.findUnique({
+            where: { id_report: id }
+        });
+
+        if (!report) {
+            return res.status(404).json({
+                success: false,
+                message: 'Không tìm thấy báo cáo vi phạm.'
+            });
+        }
+
+        // Tùy chọn ẩn hoặc khôi phục nội dung bị báo cáo
+        if (action === 'hide') {
+            if (report.target_type === 'post') {
+                await prisma.posts.update({
+                    where: { id_post: report.target_id },
+                    data: {
+                        status: 'hidden',
+                        hidden_reason: reason || `Bị ẩn do vi phạm báo cáo #${id} (${report.reason})`
+                    }
+                });
+            } else if (report.target_type === 'comment') {
+                await prisma.comments.update({
+                    where: { id_comment: report.target_id },
+                    data: { status: 'hidden' }
+                });
+            }
+        } else if (action === 'restore') {
+            if (report.target_type === 'post') {
+                await prisma.posts.update({
+                    where: { id_post: report.target_id },
+                    data: {
+                        status: 'active',
+                        hidden_reason: null
+                    }
+                });
+            } else if (report.target_type === 'comment') {
+                await prisma.comments.update({
+                    where: { id_comment: report.target_id },
+                    data: { status: 'active' }
+                });
+            }
+        }
+
+        const updated = await prisma.reports.update({
+            where: { id_report: id },
+            data: {
+                status,
+                updated_at: new Date()
+            }
+        });
+
+        const statusLabel = status === 'resolved' ? 'Đã giải quyết' : (status === 'rejected' ? 'Bỏ qua vi phạm' : 'Đang chờ xử lý');
+
+        return res.json({
+            success: true,
+            message: `Đã cập nhật trạng thái báo cáo thành "${statusLabel}".`,
+            data: updated
+        });
+    } catch (error) {
+        console.error('updateReportStatus error:', error);
+        return res.status(500).json({ success: false, message: 'Không thể cập nhật báo cáo vi phạm.' });
+    }
+}
+// ==========================================
+// QUẢN LÝ DANH MỤC MÓN ĂN (CATEGORIES)
+>>>>>>> Stashed changes
 // ==========================================
 
 async function getCategories(req, res) {
