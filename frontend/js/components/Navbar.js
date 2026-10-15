@@ -743,7 +743,7 @@ if (typeof window !== 'undefined') {
             const icon = detailFavBtn.querySelector('i');
             if (icon) icon.className = "fa-solid fa-heart text-rose-500";
             const span = detailFavBtn.querySelector('span');
-            if (span) span.textContent = 'Đã lưu yêu thích';
+            if (span) span.textContent = 'Lưu món';
         }
 
         return true;
@@ -1496,9 +1496,9 @@ if (typeof window !== 'undefined') {
                     const detailFavLabel = document.getElementById('fav-btn-label');
                     const detailLikesEl = document.getElementById('detail-likes-count');
                     const favIcon = detailFavBtn.querySelector('i');
-                    detailFavBtn.className = "w-full py-3.5 px-6 rounded-2xl bg-white border border-beige-border/80 text-text-main font-bold hover:bg-cream-soft hover:text-rose-600 transition flex items-center justify-center gap-2 text-xs md:text-sm shadow-sm cursor-pointer";
+                    detailFavBtn.className = "flex-1 py-3 sm:py-3.5 px-4 rounded-2xl bg-white border border-beige-border/80 text-text-main font-bold hover:bg-cream-soft hover:text-rose-600 transition flex items-center justify-center gap-2 text-xs sm:text-sm shadow-xs cursor-pointer active:scale-[0.99]";
                     if (favIcon) favIcon.className = "fa-regular fa-heart text-rose-500 text-base";
-                    if (detailFavLabel) detailFavLabel.textContent = "Lưu món yêu thích";
+                    if (detailFavLabel) detailFavLabel.textContent = "Lưu món";
                     detailFavBtn.title = "Lưu món ăn yêu thích";
                     if (detailLikesEl) {
                         const cur = parseInt(detailLikesEl.textContent) || 0;
@@ -1607,14 +1607,14 @@ if (typeof window !== 'undefined') {
                     const favIcon = detailFavBtn.querySelector('i');
 
                     if (isFav) {
-                        detailFavBtn.className = "w-full py-3.5 px-6 rounded-2xl bg-rose-50 border border-rose-300 text-rose-600 font-bold transition flex items-center justify-center gap-2 text-xs md:text-sm shadow-sm cursor-pointer";
+                        detailFavBtn.className = "flex-1 py-3 sm:py-3.5 px-4 rounded-2xl bg-rose-50 border border-rose-300 text-rose-600 font-bold transition flex items-center justify-center gap-2 text-xs sm:text-sm shadow-xs cursor-pointer active:scale-[0.99]";
                         if (favIcon) favIcon.className = "fa-solid fa-heart text-rose-500 text-base";
-                        if (detailFavLabel) detailFavLabel.textContent = "Đã lưu món yêu thích";
+                        if (detailFavLabel) detailFavLabel.textContent = "Lưu món";
                         detailFavBtn.title = "Bỏ lưu món";
                     } else {
-                        detailFavBtn.className = "w-full py-3.5 px-6 rounded-2xl bg-white border border-beige-border/80 text-text-main font-bold hover:bg-cream-soft hover:text-rose-600 transition flex items-center justify-center gap-2 text-xs md:text-sm shadow-sm cursor-pointer";
+                        detailFavBtn.className = "flex-1 py-3 sm:py-3.5 px-4 rounded-2xl bg-white border border-beige-border/80 text-text-main font-bold hover:bg-cream-soft hover:text-rose-600 transition flex items-center justify-center gap-2 text-xs sm:text-sm shadow-xs cursor-pointer active:scale-[0.99]";
                         if (favIcon) favIcon.className = "fa-regular fa-heart text-rose-500 text-base";
-                        if (detailFavLabel) detailFavLabel.textContent = "Lưu món yêu thích";
+                        if (detailFavLabel) detailFavLabel.textContent = "Lưu món";
                         detailFavBtn.title = "Lưu món ăn yêu thích";
                     }
 

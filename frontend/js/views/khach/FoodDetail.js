@@ -125,7 +125,7 @@ const FoodDetail = {
                                 <div class="flex items-center gap-3 w-full">
                                     <button id="fav-btn" data-food-id="${food.id}" class="flex-1 py-3 sm:py-3.5 px-4 rounded-2xl ${food.is_favorite ? 'bg-rose-50 border border-rose-300 text-rose-600 font-bold shadow-xs' : 'bg-white border border-beige-border/80 text-text-main font-bold hover:bg-cream-soft hover:text-rose-600'} transition flex items-center justify-center gap-2 text-xs sm:text-sm shadow-xs cursor-pointer active:scale-[0.99]" title="${food.is_favorite ? 'Bỏ lưu món' : 'Lưu món ăn yêu thích'}">
                                         <i class="${food.is_favorite ? 'fa-solid' : 'fa-regular'} fa-heart text-rose-500 text-base"></i>
-                                        <span id="fav-btn-label">${food.is_favorite ? 'Đã lưu món' : 'Lưu món'}</span>
+                                        <span id="fav-btn-label">Lưu món</span>
                                     </button>
                                     <button id="add-to-cart-btn" class="flex-[1.5] py-3 sm:py-3.5 px-5 bg-primary hover:bg-[#1B4633] active:bg-[#143627] text-white font-bold rounded-2xl transition shadow-md shadow-primary/20 flex items-center justify-center gap-2 text-xs sm:text-sm cursor-pointer">
                                         <i class="fa-solid fa-cart-shopping text-accent-light"></i>
@@ -315,7 +315,7 @@ const FoodDetail = {
                             if (isFav) {
                                 btnFav.className = 'flex-1 py-3 sm:py-3.5 px-4 rounded-2xl bg-rose-50 border border-rose-300 text-rose-600 font-bold transition flex items-center justify-center gap-2 text-xs sm:text-sm shadow-xs cursor-pointer active:scale-[0.99]';
                                 if (favIcon) favIcon.className = 'fa-solid fa-heart text-rose-500 text-base';
-                                if (favLabel) favLabel.textContent = 'Đã lưu món';
+                                if (favLabel) favLabel.textContent = 'Lưu món';
                                 btnFav.title = 'Bỏ lưu món';
                             } else {
                                 btnFav.className = 'flex-1 py-3 sm:py-3.5 px-4 rounded-2xl bg-white border border-beige-border/80 text-text-main font-bold hover:bg-cream-soft hover:text-rose-600 transition flex items-center justify-center gap-2 text-xs sm:text-sm shadow-xs cursor-pointer active:scale-[0.99]';
