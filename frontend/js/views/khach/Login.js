@@ -26,10 +26,10 @@ const Login = {
                 </a>
 
                 <div class="flex items-center gap-3">
-                    <a href="#/" class="inline-flex items-center gap-2 px-3.5 py-1.5 sm:py-2 rounded-full bg-white/80 hover:bg-white text-xs sm:text-sm font-bold text-text-main hover:text-primary border border-beige-border shadow-sm hover:shadow transition-all">
+                    <button type="button" onclick="if (window.history.length > 1) { window.history.back(); } else { window.location.hash = '#/'; }" class="inline-flex items-center gap-2 px-3.5 py-1.5 sm:py-2 rounded-full bg-white/80 hover:bg-white text-xs sm:text-sm font-bold text-text-main hover:text-primary border border-beige-border shadow-sm hover:shadow transition-all cursor-pointer">
                         <i class="fa-solid fa-arrow-left text-xs"></i>
-                        <span>Về trang chủ</span>
-                    </a>
+                        <span>Quay lại</span>
+                    </button>
                 </div>
             </header>
 

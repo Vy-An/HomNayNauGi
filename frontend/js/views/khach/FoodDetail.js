@@ -77,10 +77,10 @@ const FoodDetail = {
                                 
                                 <!-- Top Back Button -->
                                 <div class="absolute top-3 left-3 sm:top-4 sm:left-4 z-10">
-                                    <a href="#/danh-sach" class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-black/40 backdrop-blur-md text-white text-xs font-semibold hover:bg-black/60 transition shadow-xs active:scale-95">
-                                        <i class="fa-solid fa-arrow-left text-[10px]"></i>
+                                    <button type="button" onclick="if (window.history.length > 1) { window.history.back(); } else { window.location.hash = '#/danh-sach'; }" class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-black/50 backdrop-blur-md text-white text-xs font-semibold hover:bg-black/70 transition shadow-xs active:scale-95 cursor-pointer border border-white/20">
+                                        <i class="fa-solid fa-arrow-left text-[11px] text-[#F4A62A]"></i>
                                         <span>Quay lại</span>
-                                    </a>
+                                    </button>
                                 </div>
 
                                 <!-- Overlaid Title & Tags -->

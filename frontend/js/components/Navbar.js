@@ -48,16 +48,31 @@ export default function Navbar() {
         <header class="bg-[#0F4937] text-white sticky top-0 z-50 shadow-sm border-b border-white/10 overflow-x-clip">
             <div class="max-w-[1360px] mx-auto px-3 sm:px-4 lg:px-8 h-14 sm:h-[68px] flex items-center justify-between gap-2">
                 
-                <!-- Logo -->
-                <a href="#/" class="flex items-center gap-2 group shrink-0">
-                    <div class="w-8 h-8 sm:w-10 sm:h-10 rounded-xl bg-[#F4A62A] flex items-center justify-center text-[#0F4937] shadow-sm group-hover:scale-105 transition-transform">
-                        <i class="fa-solid fa-kitchen-set text-sm sm:text-xl"></i>
-                    </div>
-                    <div class="flex flex-col">
-                        <span class="text-sm sm:text-base lg:text-xl font-black tracking-tight text-white leading-tight font-sans">Hôm Nay Nấu Gì?</span>
-                        <span class="text-[8px] sm:text-[9px] uppercase tracking-[0.15em] sm:tracking-[0.2em] text-[#F4A62A] font-black leading-none hidden min-[400px]:block">MÓN NGON MỖI NGÀY</span>
-                    </div>
-                </a>
+                <!-- Left Area: Mobile Back Button + Logo -->
+                <div class="flex items-center gap-1.5 sm:gap-2 min-w-0">
+                    ${!isHome ? `
+                        <button 
+                            type="button" 
+                            onclick="if (window.history.length > 1) { window.history.back(); } else { window.location.hash = '#/'; }" 
+                            class="md:hidden w-8 h-8 rounded-xl bg-white/10 hover:bg-white/20 active:scale-90 text-white flex items-center justify-center transition-all cursor-pointer shrink-0 border border-white/10" 
+                            title="Quay lại trang trước" 
+                            aria-label="Quay lại"
+                        >
+                            <i class="fa-solid fa-arrow-left text-sm text-[#F4A62A]"></i>
+                        </button>
+                    ` : ''}
+
+                    <!-- Logo -->
+                    <a href="#/" class="flex items-center gap-2 group shrink-0 min-w-0">
+                        <div class="w-8 h-8 sm:w-10 sm:h-10 rounded-xl bg-[#F4A62A] flex items-center justify-center text-[#0F4937] shadow-sm group-hover:scale-105 transition-transform shrink-0">
+                            <i class="fa-solid fa-kitchen-set text-sm sm:text-xl"></i>
+                        </div>
+                        <div class="flex flex-col min-w-0">
+                            <span class="text-sm sm:text-base lg:text-xl font-black tracking-tight text-white leading-tight font-sans truncate">Hôm Nay Nấu Gì?</span>
+                            <span class="text-[8px] sm:text-[9px] uppercase tracking-[0.15em] sm:tracking-[0.2em] text-[#F4A62A] font-black leading-none hidden min-[400px]:block">MÓN NGON MỖI NGÀY</span>
+                        </div>
+                    </a>
+                </div>
                 
                 <!-- Center Navigation -->
                 <nav class="hidden md:flex items-center gap-3 lg:gap-8 text-xs lg:text-sm">
