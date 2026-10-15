@@ -58,7 +58,13 @@ const router = async () => {
                 }
             }
             if (footerContainer) {
-                footerContainer.style.display = 'block';
+                if (path === '/ca-nhan') {
+                    footerContainer.style.display = '';
+                    footerContainer.className = 'hidden md:block';
+                } else {
+                    footerContainer.style.display = 'block';
+                    footerContainer.className = '';
+                }
                 footerContainer.innerHTML = Footer();
             }
         }

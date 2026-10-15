@@ -63,44 +63,53 @@ const Profile = {
                             </div>
                         </div>
 
-                        <div class="shrink-0 pt-1">
+                        <div class="shrink-0 pt-1 flex flex-wrap items-center justify-center sm:justify-start gap-2">
                             <button 
                                 id="btn-hero-edit-profile" 
                                 type="button" 
-                                class="inline-flex items-center gap-1.5 px-3.5 py-1.5 sm:px-4 sm:py-2 rounded-xl bg-accent hover:bg-accent-hover active:bg-amber-600 text-primary-deep font-black text-xs shadow-md transition-all hover:scale-105 active:scale-95 cursor-pointer"
+                                class="inline-flex items-center gap-1.5 px-3 py-1.5 sm:px-4 sm:py-2 rounded-xl bg-accent hover:bg-accent-hover active:bg-amber-600 text-primary-deep font-black text-xs shadow-md transition-all hover:scale-105 active:scale-95 cursor-pointer"
                             >
                                 <i class="fa-solid fa-pen text-[11px]"></i>
                                 <span>Chỉnh sửa thông tin</span>
                             </button>
+                            <button 
+                                id="btn-hero-logout" 
+                                type="button" 
+                                class="inline-flex items-center gap-1.5 px-3 py-1.5 sm:px-3.5 sm:py-2 rounded-xl bg-white/15 hover:bg-rose-500/90 active:bg-rose-600 text-white font-bold text-xs border border-white/20 backdrop-blur-xs shadow-sm transition-all hover:scale-105 active:scale-95 cursor-pointer"
+                                title="Đăng xuất tài khoản"
+                            >
+                                <i class="fa-solid fa-arrow-right-from-bracket text-[11px]"></i>
+                                <span>Đăng xuất</span>
+                            </button>
                         </div>
                     </div>
 
-                    <div class="relative z-10 bg-black/35 backdrop-blur-2xs border-t border-white/10 px-4 sm:px-6 py-2.5 grid grid-cols-2 sm:grid-cols-4 gap-2 text-center">
+                    <div class="relative z-10 bg-black/35 backdrop-blur-2xs border-t border-white/10 px-2 sm:px-6 py-2 sm:py-2.5 grid grid-cols-4 gap-1 sm:gap-2 text-center">
                         <div>
-                            <p class="text-[10px] uppercase font-bold text-white/70">Bài viết</p>
-                            <p id="stat-posts-count" class="text-sm sm:text-base font-black text-white">0</p>
+                            <p class="text-[9px] sm:text-[10px] uppercase font-bold text-white/70 truncate">Bài viết</p>
+                            <p id="stat-posts-count" class="text-xs sm:text-base font-black text-white">0</p>
                         </div>
-                        <div id="stat-favs-box" class="cursor-pointer hover:bg-white/10 rounded-xl p-1 transition select-none" title="Bấm để xem danh sách món yêu thích">
-                            <p class="text-[10px] uppercase font-bold text-white/70 flex items-center justify-center gap-1">
-                                <i class="fa-solid fa-heart text-rose-400 text-[10px]"></i>
-                                <span>Món yêu thích</span>
+                        <div id="stat-favs-box" class="cursor-pointer hover:bg-white/10 rounded-lg sm:rounded-xl p-0.5 sm:p-1 transition select-none" title="Bấm để xem danh sách món yêu thích">
+                            <p class="text-[9px] sm:text-[10px] uppercase font-bold text-white/70 flex items-center justify-center gap-1 truncate">
+                                <i class="fa-solid fa-heart text-rose-400 text-[9px] sm:text-[10px]"></i>
+                                <span>Yêu thích</span>
                             </p>
-                            <p id="stat-favs-count" class="text-sm sm:text-base font-black text-accent">0</p>
+                            <p id="stat-favs-count" class="text-xs sm:text-base font-black text-accent">0</p>
                         </div>
                         <div>
-                            <p class="text-[10px] uppercase font-bold text-white/70">Đang theo dõi</p>
-                            <p id="stat-following-count" class="text-sm sm:text-base font-black text-white">0</p>
+                            <p class="text-[9px] sm:text-[10px] uppercase font-bold text-white/70 truncate">Đang theo dõi</p>
+                            <p id="stat-following-count" class="text-xs sm:text-base font-black text-white">0</p>
                         </div>
                         <div>
-                            <p class="text-[10px] uppercase font-bold text-white/70">Người theo dõi</p>
-                            <p id="stat-followers-count" class="text-sm sm:text-base font-black text-white">0</p>
+                            <p class="text-[9px] sm:text-[10px] uppercase font-bold text-white/70 truncate">Người theo dõi</p>
+                            <p id="stat-followers-count" class="text-xs sm:text-base font-black text-white">0</p>
                         </div>
                     </div>
                 </section>
             </div>
 
             <div class="flex-1 max-w-[1360px] w-full mx-auto px-4 sm:px-6 lg:px-8 pb-8 flex flex-col md:flex-row items-start gap-5">
-                <aside class="w-full md:w-[240px] shrink-0 bg-white rounded-2xl border border-beige-border/90 p-2 sm:p-2.5 shadow-sm md:sticky md:top-[80px] md:self-start">
+                <aside class="hidden md:block w-full md:w-[240px] shrink-0 bg-white rounded-2xl border border-beige-border/90 p-2 sm:p-2.5 shadow-sm md:sticky md:top-[80px] md:self-start">
                     <nav class="space-y-0.5 text-xs sm:text-sm font-semibold">
                         <a href="#/" class="flex items-center gap-2.5 px-3 py-2 rounded-xl text-text-muted hover:text-primary hover:bg-cream-soft transition-colors">
                             <span class="w-4.5 text-center text-text-muted"><i class="fa-solid fa-house text-xs"></i></span>
@@ -147,34 +156,37 @@ const Profile = {
                 </aside>
 
                 <main class="flex-1 w-full min-w-0 space-y-4">
-                    <div class="h-[52px] bg-white rounded-2xl border border-beige-border/90 px-3 sm:px-4 flex items-center gap-2 sm:gap-4 shadow-sm overflow-x-auto">
+                    <div class="bg-white rounded-2xl border border-beige-border/90 p-1 sm:p-0 sm:px-4 grid grid-cols-3 sm:flex sm:items-center sm:gap-4 sm:h-[52px] shadow-sm">
                         <button 
                             type="button" 
-                            class="profile-subtab-btn active h-full inline-flex items-center gap-2 text-xs sm:text-sm font-extrabold text-primary border-b-2 border-primary cursor-pointer transition-colors"
+                            class="profile-subtab-btn active py-2.5 sm:py-0 sm:h-full flex items-center justify-center gap-1 sm:gap-2 rounded-xl sm:rounded-none bg-primary sm:bg-transparent text-white sm:text-primary font-bold sm:font-extrabold shadow-sm sm:shadow-none sm:border-b-2 sm:border-primary cursor-pointer transition-all text-xs sm:text-sm"
                             data-tab="posts"
                         >
                             <i class="fa-solid fa-newspaper text-xs"></i>
-                            <span>Bài viết của tôi</span>
-                            <span id="tab-badge-posts" class="text-[11px] px-2 py-0.5 rounded-full bg-primary-subtle text-primary font-bold">0</span>
+                            <span class="sm:hidden">Bài viết</span>
+                            <span class="hidden sm:inline">Bài viết của tôi</span>
+                            <span id="tab-badge-posts" class="text-[10px] sm:text-[11px] px-1.5 sm:px-2 py-0.5 rounded-full bg-white/25 sm:bg-primary-subtle text-white sm:text-primary font-bold">0</span>
                         </button>
 
                         <button 
                             type="button" 
-                            class="profile-subtab-btn h-full inline-flex items-center gap-2 text-xs sm:text-sm font-semibold text-text-muted hover:text-primary border-b-2 border-transparent cursor-pointer transition-colors"
+                            class="profile-subtab-btn py-2.5 sm:py-0 sm:h-full flex items-center justify-center gap-1 sm:gap-2 rounded-xl sm:rounded-none text-text-muted hover:text-primary font-semibold sm:border-b-2 sm:border-transparent cursor-pointer transition-all text-xs sm:text-sm hover:bg-cream-soft sm:hover:bg-transparent"
                             data-tab="favorites"
                         >
                             <i class="fa-solid fa-heart text-xs text-rose-500"></i>
-                            <span>Món yêu thích</span>
-                            <span id="tab-badge-favs" class="text-[11px] px-2 py-0.5 rounded-full bg-cream-soft text-text-muted font-bold">0</span>
+                            <span class="sm:hidden">Yêu thích</span>
+                            <span class="hidden sm:inline">Món yêu thích</span>
+                            <span id="tab-badge-favs" class="text-[10px] sm:text-[11px] px-1.5 sm:px-2 py-0.5 rounded-full bg-cream-soft text-text-muted font-bold">0</span>
                         </button>
 
                         <button 
                             type="button" 
-                            class="profile-subtab-btn h-full inline-flex items-center gap-2 text-xs sm:text-sm font-semibold text-text-muted hover:text-primary border-b-2 border-transparent cursor-pointer transition-colors"
+                            class="profile-subtab-btn py-2.5 sm:py-0 sm:h-full flex items-center justify-center gap-1 sm:gap-2 rounded-xl sm:rounded-none text-text-muted hover:text-primary font-semibold sm:border-b-2 sm:border-transparent cursor-pointer transition-all text-xs sm:text-sm hover:bg-cream-soft sm:hover:bg-transparent"
                             data-tab="info"
                         >
                             <i class="fa-solid fa-circle-user text-xs"></i>
-                            <span>Thông tin cá nhân</span>
+                            <span class="sm:hidden">Hồ sơ</span>
+                            <span class="hidden sm:inline">Thông tin cá nhân</span>
                         </button>
                     </div>
 
@@ -201,7 +213,7 @@ const Profile = {
                                 </div>
                             </div>
 
-                            <div class="w-full lg:w-[33%] space-y-4">
+                            <div class="hidden lg:block w-full lg:w-[33%] space-y-4">
                                 <div class="bg-white rounded-2xl border border-beige-border/90 p-4 shadow-sm">
                                     <div class="flex items-center justify-between pb-3 mb-3 border-b border-beige-border/60">
                                         <div class="flex items-center gap-2">
@@ -290,7 +302,15 @@ const Profile = {
                                 </div>
                             </div>
 
-                            <div class="pt-2 flex justify-end">
+                            <div class="pt-2 flex items-center justify-end gap-2.5 sm:gap-3">
+                                <button 
+                                    id="btn-info-logout" 
+                                    type="button" 
+                                    class="inline-flex items-center gap-1.5 px-4 py-2.5 rounded-xl border border-rose-200 text-rose-600 hover:bg-rose-50 font-bold text-xs sm:text-sm transition-colors cursor-pointer"
+                                >
+                                    <i class="fa-solid fa-arrow-right-from-bracket text-xs"></i>
+                                    <span>Đăng xuất</span>
+                                </button>
                                 <button 
                                     id="btn-tab-open-edit" 
                                     type="button" 
@@ -436,6 +456,8 @@ const Profile = {
         };
 
         document.getElementById('sidebar-btn-logout')?.addEventListener('click', handleLogout);
+        document.getElementById('btn-hero-logout')?.addEventListener('click', handleLogout);
+        document.getElementById('btn-info-logout')?.addEventListener('click', handleLogout);
 
         document.getElementById('sidebar-btn-notifs')?.addEventListener('click', () => {
             showToast('Chức năng thông báo chi tiết đang được phát triển.', 'info');
@@ -460,10 +482,17 @@ const Profile = {
 
             document.querySelectorAll('.profile-subtab-btn').forEach(btn => {
                 const target = btn.getAttribute('data-tab');
+                const badge = btn.querySelector('span[id^="tab-badge-"]');
                 if (target === tabName) {
-                    btn.className = "profile-subtab-btn active h-full inline-flex items-center gap-2 text-xs sm:text-sm font-extrabold text-primary border-b-2 border-primary cursor-pointer transition-colors";
+                    btn.className = "profile-subtab-btn active py-2.5 sm:py-0 sm:h-full flex items-center justify-center gap-1 sm:gap-2 rounded-xl sm:rounded-none bg-primary sm:bg-transparent text-white sm:text-primary font-bold sm:font-extrabold shadow-sm sm:shadow-none sm:border-b-2 sm:border-primary cursor-pointer transition-all text-xs sm:text-sm";
+                    if (badge) {
+                        badge.className = "text-[10px] sm:text-[11px] px-1.5 sm:px-2 py-0.5 rounded-full bg-white/25 sm:bg-primary-subtle text-white sm:text-primary font-bold";
+                    }
                 } else {
-                    btn.className = "profile-subtab-btn h-full inline-flex items-center gap-2 text-xs sm:text-sm font-semibold text-text-muted hover:text-primary border-b-2 border-transparent cursor-pointer transition-colors";
+                    btn.className = "profile-subtab-btn py-2.5 sm:py-0 sm:h-full flex items-center justify-center gap-1 sm:gap-2 rounded-xl sm:rounded-none text-text-muted hover:text-primary font-semibold sm:border-b-2 sm:border-transparent cursor-pointer transition-all text-xs sm:text-sm hover:bg-cream-soft sm:hover:bg-transparent";
+                    if (badge) {
+                        badge.className = "text-[10px] sm:text-[11px] px-1.5 sm:px-2 py-0.5 rounded-full bg-cream-soft text-text-muted font-bold";
+                    }
                 }
             });
         };
