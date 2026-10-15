@@ -189,7 +189,7 @@ const FoodList = {
                 <!-- ---------------------------------------------------- -->
                 <!-- LEFT COLUMN: LEFT SIDEBAR (STICKY ~320px)            -->
                 <!-- ---------------------------------------------------- -->
-                <aside class="left-sidebar w-full lg:sticky lg:top-[76px] lg:self-start lg:max-h-[calc(100vh-84px)] lg:overflow-y-auto space-y-3" id="desktop-left-sidebar">
+                <aside class="hidden lg:block left-sidebar w-full lg:sticky lg:top-[76px] lg:self-start lg:max-h-[calc(100vh-84px)] lg:overflow-y-auto space-y-3" id="desktop-left-sidebar">
                     
                     <!-- BLOCK 1: BỘ LỌC NHANH (FILTER CARD) -->
                     <section class="filter-card bg-white rounded-[20px] border border-beige-border/80 p-3.5 sm:p-4 shadow-sm space-y-3">
@@ -367,18 +367,43 @@ const FoodList = {
                 <!-- ---------------------------------------------------- -->
                 <section class="recipe-content min-w-0 flex-1 space-y-5" id="recipe-list-section">
                     
-                    <!-- Mobile Filter Toggle Bar -->
-                    <div class="lg:hidden flex items-center justify-between gap-3 bg-white p-3 rounded-2xl border border-beige-border shadow-2xs">
-                        <button 
-                            type="button" 
-                            id="btn-open-mobile-filter" 
-                            class="inline-flex items-center gap-2 bg-primary text-white text-xs font-bold px-4 py-2 rounded-xl shadow-sm cursor-pointer"
-                        >
-                            <i class="fa-solid fa-sliders"></i>
-                            <span>Bộ lọc nhanh</span>
-                            <span id="mobile-filter-badge" class="bg-accent text-white w-4 h-4 rounded-full text-[10px] flex items-center justify-center ml-0.5">0</span>
-                        </button>
-                        <span id="mobile-result-count" class="text-xs font-bold text-text-muted">Đang tải...</span>
+                    <!-- STICKY HORIZONTAL FILTER BAR FOR MOBILE (< lg) - SHOPEEFOOD STYLE -->
+                    <div id="mobile-sticky-filter-bar" class="lg:hidden sticky top-14 sm:top-[68px] z-30 bg-white/95 backdrop-blur-md border border-[#E5DEC9] rounded-2xl shadow-xs p-2 mb-2">
+                        <div class="flex items-center gap-1.5 overflow-x-auto whitespace-nowrap scrollbar-none snap-x py-0.5" id="mobile-filter-pills-row">
+                            <!-- Reset Pill (hiển thị khi có bộ lọc hoạt động) -->
+                            <button type="button" id="mobile-pill-reset" class="hidden shrink-0 inline-flex items-center gap-1 px-3 py-1.5 rounded-full text-xs font-bold bg-rose-50 hover:bg-rose-100 text-rose-600 border border-rose-200 shadow-2xs active:scale-95 transition-all cursor-pointer">
+                                <i class="fa-solid fa-rotate-left text-[10px]"></i>
+                                <span>Đặt lại</span>
+                            </button>
+
+                            <!-- Pill 1: Loại món -->
+                            <button type="button" id="mobile-pill-category" class="mobile-filter-trigger shrink-0 inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-bold border border-[#E5DEC9] bg-white text-text-main shadow-2xs active:scale-95 transition-all cursor-pointer" data-target="category">
+                                <i class="fa-solid fa-bowl-food text-emerald-600 text-[11px]"></i>
+                                <span id="mobile-pill-category-label">Loại món</span>
+                                <i class="fa-solid fa-chevron-down text-[9px] text-gray-400"></i>
+                            </button>
+
+                            <!-- Pill 2: Thời gian nấu -->
+                            <button type="button" id="mobile-pill-time" class="mobile-filter-trigger shrink-0 inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-bold border border-[#E5DEC9] bg-white text-text-main shadow-2xs active:scale-95 transition-all cursor-pointer" data-target="time">
+                                <i class="fa-regular fa-clock text-amber-500 text-[11px]"></i>
+                                <span id="mobile-pill-time-label">Thời gian</span>
+                                <i class="fa-solid fa-chevron-down text-[9px] text-gray-400"></i>
+                            </button>
+
+                            <!-- Pill 3: Nguyên liệu -->
+                            <button type="button" id="mobile-pill-ingredient" class="mobile-filter-trigger shrink-0 inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-bold border border-[#E5DEC9] bg-white text-text-main shadow-2xs active:scale-95 transition-all cursor-pointer" data-target="ingredient">
+                                <i class="fa-solid fa-carrot text-orange-500 text-[11px]"></i>
+                                <span id="mobile-pill-ingredient-label">Nguyên liệu</span>
+                                <i class="fa-solid fa-chevron-down text-[9px] text-gray-400"></i>
+                            </button>
+
+                            <!-- Pill 4: Sắp xếp -->
+                            <button type="button" id="mobile-pill-sort" class="mobile-filter-trigger shrink-0 inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-bold border border-[#E5DEC9] bg-white text-text-main shadow-2xs active:scale-95 transition-all cursor-pointer" data-target="sort">
+                                <i class="fa-solid fa-arrow-down-wide-short text-primary text-[11px]"></i>
+                                <span id="mobile-pill-sort-label">Sắp xếp</span>
+                                <i class="fa-solid fa-chevron-down text-[9px] text-gray-400"></i>
+                            </button>
+                        </div>
                     </div>
 
                     <!-- RECIPE TOOLBAR: Count + Sort Dropdown + View Toggle -->
@@ -478,32 +503,49 @@ const FoodList = {
 
 
             <!-- ======================================================== -->
-            <!-- 3. MOBILE FILTER SLIDE-OVER MODAL                        -->
+            <!-- 3. MOBILE BOTTOM SHEET FILTER MODAL (ShopeeFood Style)   -->
             <!-- ======================================================== -->
-            <div id="mobile-filter-modal" class="fixed inset-0 z-50 hidden">
-                <div id="mobile-filter-backdrop" class="fixed inset-0 bg-black/50 backdrop-blur-xs transition-opacity"></div>
-                <div class="fixed inset-y-0 right-0 max-w-full flex">
-                    <div class="w-screen max-w-sm bg-white p-5 shadow-2xl overflow-y-auto flex flex-col justify-between">
-                        <div class="space-y-5">
-                            <div class="flex items-center justify-between pb-3 border-b border-gray-100">
-                                <h3 class="text-sm font-extrabold uppercase tracking-wider text-text-main flex items-center gap-2">
-                                    <i class="fa-solid fa-sliders text-primary"></i>
-                                    <span>Bộ lọc tìm kiếm</span>
-                                </h3>
-                                <button type="button" id="btn-close-mobile-filter" class="w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center text-gray-500 hover:text-black">
-                                    <i class="fa-solid fa-xmark"></i>
-                                </button>
+            <div id="mobile-bottom-sheet-modal" class="fixed inset-0 z-[70] hidden select-none">
+                <!-- Backdrop -->
+                <div id="mobile-bottom-sheet-backdrop" class="fixed inset-0 bg-black/60 backdrop-blur-xs transition-opacity duration-300"></div>
+
+                <!-- Bottom Sheet Container -->
+                <div id="mobile-bottom-sheet-panel" class="fixed inset-x-0 bottom-0 z-10 bg-white rounded-t-[26px] shadow-2xl border-t border-beige-border transform translate-y-full transition-transform duration-300 ease-out max-h-[82vh] flex flex-col overflow-hidden">
+                    <!-- Top Handlebar & Header -->
+                    <div class="pt-3 pb-2.5 px-4 border-b border-gray-100 flex flex-col items-center relative shrink-0 bg-white">
+                        <div class="w-10 h-1 rounded-full bg-gray-300 mb-2"></div>
+                        <div class="w-full flex items-center justify-between">
+                            <div class="flex items-center gap-2">
+                                <span id="bottom-sheet-icon" class="w-6 h-6 rounded-lg bg-primary-subtle text-primary flex items-center justify-center text-xs font-bold">
+                                    <i class="fa-solid fa-sliders"></i>
+                                </span>
+                                <div>
+                                    <h3 id="bottom-sheet-title" class="text-xs sm:text-sm font-extrabold uppercase tracking-wider text-text-main">
+                                        Bộ lọc
+                                    </h3>
+                                    <p id="bottom-sheet-subtitle" class="text-[10px] text-text-muted font-medium">Chọn tiêu chí phù hợp</p>
+                                </div>
                             </div>
-                            <p class="text-xs text-text-muted">Chọn các tiêu chí để lọc món ăn nhanh chóng.</p>
-                        </div>
-                        <div class="pt-4 border-t border-gray-100 space-y-2">
-                            <button type="button" id="btn-mobile-apply" class="w-full py-3 bg-primary text-white font-bold text-sm rounded-xl shadow-md cursor-pointer">
-                                Xem kết quả
-                            </button>
-                            <button type="button" id="btn-mobile-reset" class="w-full py-2 bg-gray-100 text-text-muted font-bold text-xs rounded-xl cursor-pointer">
-                                Đặt lại tất cả
+                            <button type="button" id="btn-close-bottom-sheet" class="w-7 h-7 rounded-full bg-gray-100 hover:bg-gray-200 text-gray-500 hover:text-black flex items-center justify-center text-xs cursor-pointer transition">
+                                <i class="fa-solid fa-xmark"></i>
                             </button>
                         </div>
+                    </div>
+
+                    <!-- Dynamic Body Content -->
+                    <div id="bottom-sheet-body" class="p-4 overflow-y-auto max-h-[50vh] space-y-3 custom-filter-scroll">
+                        <!-- Populated dynamically when user clicks a pill -->
+                    </div>
+
+                    <!-- Bottom Action Buttons -->
+                    <div class="p-3 border-t border-gray-100 bg-gray-50 flex items-center gap-2.5 shrink-0" style="padding-bottom: max(0.75rem, env(safe-area-inset-bottom, 12px));">
+                        <button type="button" id="btn-bottom-sheet-reset" class="w-1/3 py-2.5 bg-white border border-[#E5DEC9] text-text-muted hover:text-rose-600 font-bold text-xs rounded-xl shadow-2xs active:scale-95 transition cursor-pointer">
+                            Đặt lại
+                        </button>
+                        <button type="button" id="btn-bottom-sheet-apply" class="flex-1 py-2.5 bg-[#145A43] hover:bg-[#0F4937] active:bg-[#0A3326] text-white font-bold text-xs rounded-xl shadow-sm active:scale-95 transition flex items-center justify-center gap-1.5 cursor-pointer">
+                            <i class="fa-solid fa-check text-xs"></i>
+                            <span id="btn-bottom-sheet-apply-text">Áp dụng</span>
+                        </button>
                     </div>
                 </div>
             </div>
@@ -606,14 +648,29 @@ const FoodList = {
         const btnResetAllFilters = document.getElementById('btn-reset-all-filters');
         const btnResetFiltersSidebar = document.getElementById('btn-reset-filters-sidebar');
         
-        // Mobile Modal Elements
-        const btnOpenMobileFilter = document.getElementById('btn-open-mobile-filter');
-        const btnCloseMobileFilter = document.getElementById('btn-close-mobile-filter');
-        const mobileFilterModal = document.getElementById('mobile-filter-modal');
-        const mobileFilterBackdrop = document.getElementById('mobile-filter-backdrop');
-        const btnMobileApply = document.getElementById('btn-mobile-apply');
-        const btnMobileReset = document.getElementById('btn-mobile-reset');
-        const mobileFilterBadge = document.getElementById('mobile-filter-badge');
+        // Mobile Sticky Filter & Bottom Sheet Elements
+        const mobileStickyFilterBar = document.getElementById('mobile-sticky-filter-bar');
+        const mobilePillReset = document.getElementById('mobile-pill-reset');
+        const mobilePillCategory = document.getElementById('mobile-pill-category');
+        const mobilePillCategoryLabel = document.getElementById('mobile-pill-category-label');
+        const mobilePillTime = document.getElementById('mobile-pill-time');
+        const mobilePillTimeLabel = document.getElementById('mobile-pill-time-label');
+        const mobilePillIngredient = document.getElementById('mobile-pill-ingredient');
+        const mobilePillIngredientLabel = document.getElementById('mobile-pill-ingredient-label');
+        const mobilePillSort = document.getElementById('mobile-pill-sort');
+        const mobilePillSortLabel = document.getElementById('mobile-pill-sort-label');
+
+        const mobileBottomSheetModal = document.getElementById('mobile-bottom-sheet-modal');
+        const mobileBottomSheetBackdrop = document.getElementById('mobile-bottom-sheet-backdrop');
+        const mobileBottomSheetPanel = document.getElementById('mobile-bottom-sheet-panel');
+        const bottomSheetIcon = document.getElementById('bottom-sheet-icon');
+        const bottomSheetTitle = document.getElementById('bottom-sheet-title');
+        const bottomSheetSubtitle = document.getElementById('bottom-sheet-subtitle');
+        const bottomSheetBody = document.getElementById('bottom-sheet-body');
+        const btnCloseBottomSheet = document.getElementById('btn-close-bottom-sheet');
+        const btnBottomSheetReset = document.getElementById('btn-bottom-sheet-reset');
+        const btnBottomSheetApply = document.getElementById('btn-bottom-sheet-apply');
+        const btnBottomSheetApplyText = document.getElementById('btn-bottom-sheet-apply-text');
 
         // Toast Notification Helper
         const showToast = (message, type = 'success') => {
@@ -842,11 +899,71 @@ const FoodList = {
             if (currentQuickCategory) filterCount++;
             if (currentCookTime && currentCookTime !== 'all') filterCount++;
             filterCount += currentSelectedIngredients.length;
-            if (currentSearchQuery.trim() !== '') filterCount++;
+            updateMobileFilterPills();
+        };
 
-            if (mobileFilterBadge) {
-                mobileFilterBadge.textContent = filterCount;
-                mobileFilterBadge.classList.toggle('hidden', filterCount === 0);
+        // Update Mobile Sticky Filter Pills & Badges
+        const updateMobileFilterPills = () => {
+            const hasCat = currentSelectedCategories.length > 0;
+            const hasTime = currentCookTime && currentCookTime !== 'all';
+            const hasIng = currentSelectedIngredients.length > 0;
+            const hasSort = currentSort && currentSort !== 'newest';
+            const hasSearch = currentSearchQuery.trim() !== '';
+
+            // Pill Reset
+            const hasAnyActive = hasCat || hasTime || hasIng || hasSort || hasSearch || Boolean(currentQuickCategory);
+            if (mobilePillReset) {
+                mobilePillReset.classList.toggle('hidden', !hasAnyActive);
+            }
+
+            // Pill Category
+            if (mobilePillCategory && mobilePillCategoryLabel) {
+                if (hasCat) {
+                    mobilePillCategoryLabel.textContent = `Loại món (${currentSelectedCategories.length})`;
+                    mobilePillCategory.className = "mobile-filter-trigger shrink-0 inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-bold border border-primary bg-primary-subtle text-primary shadow-2xs active:scale-95 transition-all cursor-pointer";
+                } else {
+                    mobilePillCategoryLabel.textContent = "Loại món";
+                    mobilePillCategory.className = "mobile-filter-trigger shrink-0 inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-bold border border-[#E5DEC9] bg-white text-text-main shadow-2xs active:scale-95 transition-all cursor-pointer";
+                }
+            }
+
+            // Pill Time
+            if (mobilePillTime && mobilePillTimeLabel) {
+                if (hasTime) {
+                    const timeLabels = {
+                        under_15: '< 15p',
+                        '15_to_30': '15 - 30p',
+                        above_30: '> 30p'
+                    };
+                    mobilePillTimeLabel.textContent = timeLabels[currentCookTime] || 'Thời gian';
+                    mobilePillTime.className = "mobile-filter-trigger shrink-0 inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-bold border border-primary bg-primary-subtle text-primary shadow-2xs active:scale-95 transition-all cursor-pointer";
+                } else {
+                    mobilePillTimeLabel.textContent = "Thời gian";
+                    mobilePillTime.className = "mobile-filter-trigger shrink-0 inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-bold border border-[#E5DEC9] bg-white text-text-main shadow-2xs active:scale-95 transition-all cursor-pointer";
+                }
+            }
+
+            // Pill Ingredient
+            if (mobilePillIngredient && mobilePillIngredientLabel) {
+                if (hasIng) {
+                    mobilePillIngredientLabel.textContent = `Nguyên liệu (${currentSelectedIngredients.length})`;
+                    mobilePillIngredient.className = "mobile-filter-trigger shrink-0 inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-bold border border-primary bg-primary-subtle text-primary shadow-2xs active:scale-95 transition-all cursor-pointer";
+                } else {
+                    mobilePillIngredientLabel.textContent = "Nguyên liệu";
+                    mobilePillIngredient.className = "mobile-filter-trigger shrink-0 inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-bold border border-[#E5DEC9] bg-white text-text-main shadow-2xs active:scale-95 transition-all cursor-pointer";
+                }
+            }
+
+            // Pill Sort
+            if (mobilePillSort && mobilePillSortLabel) {
+                if (hasSort) {
+                    const match = sortOptions.find(o => o.value === currentSort);
+                    mobilePillSortLabel.textContent = match ? match.label : 'Sắp xếp';
+                    mobilePillSort.className = "mobile-filter-trigger shrink-0 inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-bold border border-primary bg-primary-subtle text-primary shadow-2xs active:scale-95 transition-all cursor-pointer";
+                } else {
+                    mobilePillSortLabel.textContent = "Sắp xếp";
+                    mobilePillSort.className = "mobile-filter-trigger shrink-0 inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-bold border border-[#E5DEC9] bg-white text-text-main shadow-2xs active:scale-95 transition-all cursor-pointer";
+                }
             }
         };
 
@@ -1296,6 +1413,7 @@ const FoodList = {
             if (currentSortLabel) currentSortLabel.textContent = 'Mới nhất';
 
             executeFilterAndSort();
+            updateMobileFilterPills();
             showToast('Đã đặt lại toàn bộ bộ lọc', 'info');
         };
 
@@ -1530,34 +1648,331 @@ const FoodList = {
             });
         }
 
-        // 10. Mobile Filter Modal Toggle
-        if (btnOpenMobileFilter && mobileFilterModal) {
-            btnOpenMobileFilter.addEventListener('click', () => {
-                mobileFilterModal.classList.remove('hidden');
-                document.body.style.overflow = 'hidden';
-            });
-        }
+        // 10. Mobile Sticky Filter Pills & Bottom Sheet Logic (ShopeeFood Style)
+        let activeBottomSheetType = null;
+        let tempSheetSelectedCategories = [];
+        let tempSheetCookTime = 'all';
+        let tempSheetSelectedIngredients = [];
 
-        const closeMobileFilter = () => {
-            if (mobileFilterModal) {
-                mobileFilterModal.classList.add('hidden');
-                document.body.style.overflow = '';
+        const openBottomSheet = (type) => {
+            activeBottomSheetType = type;
+            if (!mobileBottomSheetModal || !mobileBottomSheetPanel || !bottomSheetBody) return;
+
+            if (type === 'category') {
+                tempSheetSelectedCategories = [...currentSelectedCategories];
+                if (bottomSheetIcon) bottomSheetIcon.innerHTML = '<i class="fa-solid fa-bowl-food text-emerald-600"></i>';
+                if (bottomSheetTitle) bottomSheetTitle.textContent = 'LOẠI MÓN';
+                if (bottomSheetSubtitle) bottomSheetSubtitle.textContent = 'Chọn một hoặc nhiều loại món bạn thích';
+                if (btnBottomSheetApplyText) {
+                    btnBottomSheetApplyText.textContent = tempSheetSelectedCategories.length > 0 ? `Áp dụng (${tempSheetSelectedCategories.length})` : 'Áp dụng';
+                }
+
+                bottomSheetBody.innerHTML = `
+                    <div class="grid grid-cols-2 gap-2" id="sheet-category-grid">
+                        ${dbCategories.map(cat => {
+                            const isChecked = tempSheetSelectedCategories.includes(cat.name);
+                            const icon = getCategoryIcon(cat.name, cat.slug);
+                            return `
+                                <button type="button" class="sheet-cat-item ${isChecked ? 'is-checked bg-primary-subtle border-primary text-primary font-bold' : 'bg-white border-gray-200 text-text-muted font-medium'} flex items-center justify-between p-2.5 rounded-xl border text-xs cursor-pointer transition select-none" data-cat="${escapeHTML(cat.name)}">
+                                    <span class="flex items-center gap-2 truncate pr-1">
+                                        <i class="fa-solid ${icon.icon} ${icon.color} text-xs w-4 text-center shrink-0"></i>
+                                        <span class="truncate">${escapeHTML(cat.name)}</span>
+                                    </span>
+                                    <span class="sheet-check w-4 h-4 rounded-full flex items-center justify-center shrink-0 text-primary ${isChecked ? '' : 'opacity-0'}">
+                                        <i class="fa-solid fa-check text-[10px]"></i>
+                                    </span>
+                                </button>
+                            `;
+                        }).join('')}
+                    </div>
+                `;
+
+                bottomSheetBody.querySelectorAll('.sheet-cat-item').forEach(item => {
+                    item.addEventListener('click', () => {
+                        const cat = item.getAttribute('data-cat');
+                        if (tempSheetSelectedCategories.includes(cat)) {
+                            tempSheetSelectedCategories = tempSheetSelectedCategories.filter(c => c !== cat);
+                            item.className = "sheet-cat-item bg-white border-gray-200 text-text-muted font-medium flex items-center justify-between p-2.5 rounded-xl border text-xs cursor-pointer transition select-none";
+                            item.querySelector('.sheet-check').classList.add('opacity-0');
+                        } else {
+                            tempSheetSelectedCategories.push(cat);
+                            item.className = "sheet-cat-item is-checked bg-primary-subtle border-primary text-primary font-bold flex items-center justify-between p-2.5 rounded-xl border text-xs cursor-pointer transition select-none";
+                            item.querySelector('.sheet-check').classList.remove('opacity-0');
+                        }
+                        if (btnBottomSheetApplyText) {
+                            btnBottomSheetApplyText.textContent = tempSheetSelectedCategories.length > 0 ? `Áp dụng (${tempSheetSelectedCategories.length})` : 'Áp dụng';
+                        }
+                    });
+                });
+            } else if (type === 'time') {
+                tempSheetCookTime = currentCookTime;
+                if (bottomSheetIcon) bottomSheetIcon.innerHTML = '<i class="fa-regular fa-clock text-amber-500"></i>';
+                if (bottomSheetTitle) bottomSheetTitle.textContent = 'THỜI GIAN NẤU';
+                if (bottomSheetSubtitle) bottomSheetSubtitle.textContent = 'Chọn thời gian chế biến món ăn';
+                if (btnBottomSheetApplyText) btnBottomSheetApplyText.textContent = 'Áp dụng';
+
+                const times = [
+                    { value: 'all', label: 'Tất cả thời gian', icon: 'fa-clock-rotate-left', color: 'text-primary' },
+                    { value: 'under_15', label: 'Dưới 15 phút (Món nhanh)', icon: 'fa-bolt', color: 'text-amber-500' },
+                    { value: '15_to_30', label: '15 - 30 phút (Vừa vặn)', icon: 'fa-clock', color: 'text-sky-500' },
+                    { value: 'above_30', label: 'Trên 30 phút (Hầm, kho kỹ)', icon: 'fa-hourglass-half', color: 'text-emerald-600' }
+                ];
+
+                bottomSheetBody.innerHTML = `
+                    <div class="space-y-2" id="sheet-time-list">
+                        ${times.map(t => {
+                            const isChecked = tempSheetCookTime === t.value;
+                            return `
+                                <button type="button" class="sheet-time-item ${isChecked ? 'is-checked bg-primary-subtle border-primary text-primary font-bold' : 'bg-white border-gray-200 text-text-muted font-medium'} w-full flex items-center justify-between p-3 rounded-xl border text-xs cursor-pointer transition select-none" data-time="${t.value}">
+                                    <span class="flex items-center gap-2.5">
+                                        <i class="fa-solid ${t.icon} ${t.color} text-sm w-4 text-center shrink-0"></i>
+                                        <span>${t.label}</span>
+                                    </span>
+                                    <span class="sheet-check w-4 h-4 rounded-full flex items-center justify-center shrink-0 text-primary ${isChecked ? '' : 'opacity-0'}">
+                                        <i class="fa-solid fa-check text-[10px]"></i>
+                                    </span>
+                                </button>
+                            `;
+                        }).join('')}
+                    </div>
+                `;
+
+                const timeItems = bottomSheetBody.querySelectorAll('.sheet-time-item');
+                timeItems.forEach(item => {
+                    item.addEventListener('click', () => {
+                        tempSheetCookTime = item.getAttribute('data-time');
+                        timeItems.forEach(i => {
+                            const isCur = i.getAttribute('data-time') === tempSheetCookTime;
+                            i.className = isCur 
+                                ? "sheet-time-item is-checked bg-primary-subtle border-primary text-primary font-bold w-full flex items-center justify-between p-3 rounded-xl border text-xs cursor-pointer transition select-none"
+                                : "sheet-time-item bg-white border-gray-200 text-text-muted font-medium w-full flex items-center justify-between p-3 rounded-xl border text-xs cursor-pointer transition select-none";
+                            i.querySelector('.sheet-check').classList.toggle('opacity-0', !isCur);
+                        });
+                    });
+                });
+            } else if (type === 'ingredient') {
+                tempSheetSelectedIngredients = [...currentSelectedIngredients];
+                if (bottomSheetIcon) bottomSheetIcon.innerHTML = '<i class="fa-solid fa-carrot text-orange-500"></i>';
+                if (bottomSheetTitle) bottomSheetTitle.textContent = 'NGUYÊN LIỆU';
+                if (bottomSheetSubtitle) bottomSheetSubtitle.textContent = `Chọn trong ${dbIngredients.length} nguyên liệu tươi ngon`;
+                if (btnBottomSheetApplyText) {
+                    btnBottomSheetApplyText.textContent = tempSheetSelectedIngredients.length > 0 ? `Áp dụng (${tempSheetSelectedIngredients.length})` : 'Áp dụng';
+                }
+
+                bottomSheetBody.innerHTML = `
+                    <div class="relative mb-3">
+                        <i class="fa-solid fa-magnifying-glass absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 text-xs"></i>
+                        <input 
+                            type="text" 
+                            id="sheet-ing-search-input" 
+                            placeholder="Tìm kiếm trong ${dbIngredients.length} nguyên liệu..." 
+                            class="w-full pl-8 pr-8 py-2 bg-gray-50 border border-gray-200 rounded-xl text-xs font-medium text-text-main focus:bg-white focus:outline-none focus:border-primary transition"
+                        >
+                        <button type="button" id="btn-sheet-clear-ing" class="hidden absolute right-2.5 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 text-xs cursor-pointer">
+                            <i class="fa-solid fa-circle-xmark"></i>
+                        </button>
+                    </div>
+                    <div class="grid grid-cols-2 gap-2" id="sheet-ingredients-grid">
+                        <!-- Populated dynamically -->
+                    </div>
+                `;
+
+                const renderSheetIngredients = (q = '') => {
+                    const grid = document.getElementById('sheet-ingredients-grid');
+                    if (!grid) return;
+                    const query = q.toLowerCase().trim();
+                    const filtered = query ? dbIngredients.filter(i => i.name.toLowerCase().includes(query)) : dbIngredients;
+
+                    if (filtered.length === 0) {
+                        grid.innerHTML = `<div class="col-span-2 py-6 text-center text-text-muted text-xs font-medium">Không tìm thấy nguyên liệu phù hợp</div>`;
+                        return;
+                    }
+
+                    grid.innerHTML = filtered.map(ing => {
+                        const isChecked = tempSheetSelectedIngredients.includes(ing.name);
+                        const icon = getIngredientIcon(ing.name);
+                        return `
+                            <button type="button" class="sheet-ing-item ${isChecked ? 'is-checked bg-primary-subtle border-primary text-primary font-bold' : 'bg-white border-gray-200 text-text-muted font-medium'} flex items-center justify-between p-2.5 rounded-xl border text-xs cursor-pointer transition select-none" data-ing="${escapeHTML(ing.name)}">
+                                <span class="flex items-center gap-1.5 truncate pr-1">
+                                    <i class="fa-solid ${icon.icon} ${icon.color} text-[11px] w-3.5 text-center shrink-0"></i>
+                                    <span class="truncate">${escapeHTML(ing.name)}</span>
+                                </span>
+                                <span class="sheet-check w-4 h-4 rounded-full flex items-center justify-center shrink-0 text-primary ${isChecked ? '' : 'opacity-0'}">
+                                    <i class="fa-solid fa-check text-[10px]"></i>
+                                </span>
+                            </button>
+                        `;
+                    }).join('');
+
+                    grid.querySelectorAll('.sheet-ing-item').forEach(item => {
+                        item.addEventListener('click', () => {
+                            const ingName = item.getAttribute('data-ing');
+                            if (tempSheetSelectedIngredients.includes(ingName)) {
+                                tempSheetSelectedIngredients = tempSheetSelectedIngredients.filter(i => i !== ingName);
+                                item.className = "sheet-ing-item bg-white border-gray-200 text-text-muted font-medium flex items-center justify-between p-2.5 rounded-xl border text-xs cursor-pointer transition select-none";
+                                item.querySelector('.sheet-check').classList.add('opacity-0');
+                            } else {
+                                tempSheetSelectedIngredients.push(ingName);
+                                item.className = "sheet-ing-item is-checked bg-primary-subtle border-primary text-primary font-bold flex items-center justify-between p-2.5 rounded-xl border text-xs cursor-pointer transition select-none";
+                                item.querySelector('.sheet-check').classList.remove('opacity-0');
+                            }
+                            if (btnBottomSheetApplyText) {
+                                btnBottomSheetApplyText.textContent = tempSheetSelectedIngredients.length > 0 ? `Áp dụng (${tempSheetSelectedIngredients.length})` : 'Áp dụng';
+                            }
+                        });
+                    });
+                };
+
+                renderSheetIngredients();
+
+                const sheetSearchInput = document.getElementById('sheet-ing-search-input');
+                const btnSheetClear = document.getElementById('btn-sheet-clear-ing');
+                if (sheetSearchInput) {
+                    sheetSearchInput.addEventListener('input', (e) => {
+                        const v = e.target.value;
+                        if (btnSheetClear) btnSheetClear.classList.toggle('hidden', v.length === 0);
+                        renderSheetIngredients(v);
+                    });
+                }
+                if (btnSheetClear) {
+                    btnSheetClear.addEventListener('click', () => {
+                        if (sheetSearchInput) {
+                            sheetSearchInput.value = '';
+                            btnSheetClear.classList.add('hidden');
+                            renderSheetIngredients('');
+                            sheetSearchInput.focus();
+                        }
+                    });
+                }
+            } else if (type === 'sort') {
+                if (bottomSheetIcon) bottomSheetIcon.innerHTML = '<i class="fa-solid fa-arrow-down-wide-short text-primary"></i>';
+                if (bottomSheetTitle) bottomSheetTitle.textContent = 'SẮP XẾP';
+                if (bottomSheetSubtitle) bottomSheetSubtitle.textContent = 'Chọn thứ tự hiển thị món ăn';
+                if (btnBottomSheetApplyText) btnBottomSheetApplyText.textContent = 'Đóng';
+
+                bottomSheetBody.innerHTML = `
+                    <div class="space-y-1.5" id="sheet-sort-list">
+                        ${sortOptions.map(opt => {
+                            const isCur = currentSort === opt.value;
+                            return `
+                                <button type="button" class="sheet-sort-item ${isCur ? 'bg-primary-subtle border-primary text-primary font-bold' : 'bg-white border-gray-100 hover:bg-gray-50 text-text-main font-semibold'} w-full flex items-center justify-between p-3 rounded-xl border text-xs cursor-pointer transition select-none" data-sort="${opt.value}" data-label="${opt.label}">
+                                    <span class="flex items-center gap-2.5">
+                                        <i class="fa-solid ${opt.icon} text-primary text-sm w-4 text-center shrink-0"></i>
+                                        <span>${opt.label}</span>
+                                    </span>
+                                    <span class="w-4 h-4 rounded-full flex items-center justify-center shrink-0 text-primary ${isCur ? '' : 'opacity-0'}">
+                                        <i class="fa-solid fa-check text-[11px]"></i>
+                                    </span>
+                                </button>
+                            `;
+                        }).join('')}
+                    </div>
+                `;
+
+                bottomSheetBody.querySelectorAll('.sheet-sort-item').forEach(item => {
+                    item.addEventListener('click', () => {
+                        currentSort = item.getAttribute('data-sort');
+                        const labelText = item.getAttribute('data-label');
+                        if (currentSortLabel) currentSortLabel.textContent = labelText;
+                        executeFilterAndSort();
+                        updateMobileFilterPills();
+                        closeBottomSheet();
+                    });
+                });
             }
+
+            // Show Bottom Sheet Modal with slide-up animation
+            mobileBottomSheetModal.classList.remove('hidden');
+            document.body.style.overflow = 'hidden';
+            requestAnimationFrame(() => {
+                mobileBottomSheetPanel.classList.remove('translate-y-full');
+            });
         };
 
-        if (btnCloseMobileFilter) btnCloseMobileFilter.addEventListener('click', closeMobileFilter);
-        if (mobileFilterBackdrop) mobileFilterBackdrop.addEventListener('click', closeMobileFilter);
+        const closeBottomSheet = () => {
+            if (!mobileBottomSheetModal || !mobileBottomSheetPanel) return;
+            mobileBottomSheetPanel.classList.add('translate-y-full');
+            document.body.style.overflow = '';
+            setTimeout(() => {
+                mobileBottomSheetModal.classList.add('hidden');
+                activeBottomSheetType = null;
+            }, 250);
+        };
 
-        if (btnMobileApply) {
-            btnMobileApply.addEventListener('click', () => {
-                closeMobileFilter();
+        if (btnBottomSheetApply) {
+            btnBottomSheetApply.addEventListener('click', () => {
+                if (activeBottomSheetType === 'category') {
+                    currentSelectedCategories = [...tempSheetSelectedCategories];
+                    renderCategoryChips();
+                    executeFilterAndSort();
+                } else if (activeBottomSheetType === 'time') {
+                    currentCookTime = tempSheetCookTime;
+                    const radio = document.querySelector(`input[name="cook_time"][value="${currentCookTime}"]`);
+                    if (radio) radio.checked = true;
+                    document.querySelectorAll('#filter-time-group .filter-chip-item').forEach(lbl => {
+                        const r = lbl.querySelector('input[name="cook_time"]');
+                        lbl.classList.toggle('is-checked', r && r.value === currentCookTime);
+                    });
+                    executeFilterAndSort();
+                } else if (activeBottomSheetType === 'ingredient') {
+                    currentSelectedIngredients = [...tempSheetSelectedIngredients];
+                    updateIngredientCountBadge();
+                    renderIngredientChips();
+                    executeFilterAndSort();
+                }
+                updateMobileFilterPills();
+                closeBottomSheet();
             });
         }
 
-        if (btnMobileReset) {
-            btnMobileReset.addEventListener('click', () => {
+        if (btnBottomSheetReset) {
+            btnBottomSheetReset.addEventListener('click', () => {
+                if (activeBottomSheetType === 'category') {
+                    tempSheetSelectedCategories = [];
+                    currentSelectedCategories = [];
+                    renderCategoryChips();
+                    executeFilterAndSort();
+                } else if (activeBottomSheetType === 'time') {
+                    tempSheetCookTime = 'all';
+                    currentCookTime = 'all';
+                    const allR = document.querySelector('input[name="cook_time"][value="all"]');
+                    if (allR) allR.checked = true;
+                    document.querySelectorAll('#filter-time-group .filter-chip-item').forEach(lbl => {
+                        const r = lbl.querySelector('input[name="cook_time"]');
+                        lbl.classList.toggle('is-checked', r && r.value === 'all');
+                    });
+                    executeFilterAndSort();
+                } else if (activeBottomSheetType === 'ingredient') {
+                    tempSheetSelectedIngredients = [];
+                    currentSelectedIngredients = [];
+                    updateIngredientCountBadge();
+                    renderIngredientChips();
+                    executeFilterAndSort();
+                } else if (activeBottomSheetType === 'sort') {
+                    currentSort = 'newest';
+                    if (currentSortLabel) currentSortLabel.textContent = 'Mới nhất';
+                    executeFilterAndSort();
+                }
+                updateMobileFilterPills();
+                closeBottomSheet();
+            });
+        }
+
+        if (btnCloseBottomSheet) btnCloseBottomSheet.addEventListener('click', closeBottomSheet);
+        if (mobileBottomSheetBackdrop) mobileBottomSheetBackdrop.addEventListener('click', closeBottomSheet);
+
+        // Bind clicks on sticky pills
+        document.querySelectorAll('.mobile-filter-trigger').forEach(trigger => {
+            trigger.addEventListener('click', () => {
+                const target = trigger.getAttribute('data-target');
+                if (target) openBottomSheet(target);
+            });
+        });
+
+        // Pill Reset click
+        if (mobilePillReset) {
+            mobilePillReset.addEventListener('click', () => {
                 resetAllFilters();
-                closeMobileFilter();
             });
         }
 
@@ -1627,6 +2042,7 @@ const FoodList = {
         }
 
         executeFilterAndSort();
+        updateMobileFilterPills();
         if (window.updateNavbarFavBadge) window.updateNavbarFavBadge();
     }
 };
