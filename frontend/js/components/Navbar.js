@@ -269,30 +269,66 @@ export default function Navbar() {
         <div id="nav-shopping-drawer" class="fixed inset-y-0 right-0 w-[90vw] sm:w-[420px] bg-white shadow-2xl z-[70] transform translate-x-full invisible pointer-events-none hidden transition-transform duration-300 ease-in-out flex flex-col border-l border-gray-200">
             <div class="p-4 border-b border-gray-100 flex items-center justify-between bg-[#0F4937] text-white">
                 <div class="flex items-center gap-2 font-bold text-base">
-                    <i class="fa-solid fa-cart-shopping text-[#F4A62A]"></i>
-                    <span>Danh sách đi chợ</span>
+                    <i id="nav-shopping-title-icon" class="fa-solid fa-cart-shopping text-[#F4A62A]"></i>
+                    <span id="nav-shopping-title-text">Danh sách đi chợ</span>
                     <span id="nav-shopping-header-count" class="text-[11px] bg-white/15 px-2 py-0.5 rounded-full font-bold text-[#F4A62A]">0 món</span>
                 </div>
                 <button onclick="window.closeNavDrawers && window.closeNavDrawers()" class="hover:bg-white/10 text-white transition text-2xl w-8 h-8 flex items-center justify-center rounded-full cursor-pointer">&times;</button>
             </div>
 
-            <!-- Quick Add Item Form -->
-            <div class="p-3 bg-gray-100/70 border-b border-gray-200">
-                <form id="form-quick-add-item" onsubmit="window.quickAddShoppingItem && window.quickAddShoppingItem(event)" class="flex gap-1.5">
-                    <input type="text" id="quick-add-name" placeholder="Thêm nguyên liệu..." class="flex-1 px-3 py-1.5 bg-white border border-gray-200 rounded-xl text-xs focus:outline-none focus:ring-1 focus:ring-primary" required>
-                    <input type="number" id="quick-add-qty" placeholder="SL" value="1" min="0.1" step="any" class="w-14 px-2 py-1.5 bg-white border border-gray-200 rounded-xl text-xs text-center focus:outline-none focus:ring-1 focus:ring-primary">
-                    <input type="text" id="quick-add-unit" placeholder="ĐVT" value="cái" class="w-14 px-2 py-1.5 bg-white border border-gray-200 rounded-xl text-xs text-center focus:outline-none focus:ring-1 focus:ring-primary">
-                    <button type="submit" class="px-3 py-1.5 bg-[#0F4937] hover:bg-[#145A43] text-white font-bold text-xs rounded-xl shadow-xs transition cursor-pointer" title="Thêm">+</button>
-                </form>
-            </div>
-            
-            <div id="nav-shopping-items-list" class="flex-1 overflow-y-auto p-4 bg-gray-50 flex flex-col gap-2">
-                <p class="text-center text-xs text-gray-400 py-10">Đang tải danh sách đi chợ...</p>
+            <!-- Tab Switcher: Nguyên liệu đi chợ vs Món đã random (Gacha) -->
+            <div class="grid grid-cols-2 bg-gray-100/90 p-1 border-b border-gray-200 text-xs font-bold text-center shrink-0">
+                <button type="button" id="nav-tab-btn-shopping" onclick="window.switchNavShoppingTab && window.switchNavShoppingTab('shopping')" class="py-2 rounded-lg bg-white text-primary shadow-xs transition cursor-pointer flex items-center justify-center gap-1.5">
+                    <i class="fa-solid fa-cart-shopping text-emerald-600"></i>
+                    <span>Nguyên liệu</span>
+                </button>
+                <button type="button" id="nav-tab-btn-won" onclick="window.switchNavShoppingTab && window.switchNavShoppingTab('won')" class="py-2 rounded-lg text-gray-500 hover:text-primary transition cursor-pointer flex items-center justify-center gap-1.5">
+                    <i class="fa-solid fa-dice text-amber-500"></i>
+                    <span>Món đã random</span>
+                    <span id="nav-tab-won-badge" class="bg-amber-100 text-amber-800 text-[10px] px-1.5 py-0.2 rounded-full hidden">0</span>
+                </button>
             </div>
 
-            <div class="p-3 bg-white border-t border-gray-100 flex items-center justify-between">
-                <button onclick="window.clearShoppingList && window.clearShoppingList()" class="px-3 py-1.5 text-xs text-rose-600 hover:bg-rose-50 rounded-xl font-bold transition">Dọn sạch</button>
-                <button onclick="window.closeNavDrawers && window.closeNavDrawers()" class="px-4 py-1.5 bg-[#0F4937] hover:bg-[#145A43] text-white text-xs font-bold rounded-xl shadow-xs transition">Đóng</button>
+            <!-- Panel 1: Nguyên liệu đi chợ -->
+            <div id="nav-panel-shopping" class="flex-1 flex flex-col min-h-0">
+                <!-- Quick Add Item Form -->
+                <div class="p-3 bg-gray-100/70 border-b border-gray-200">
+                    <form id="form-quick-add-item" onsubmit="window.quickAddShoppingItem && window.quickAddShoppingItem(event)" class="flex gap-1.5">
+                        <input type="text" id="quick-add-name" placeholder="Thêm nguyên liệu..." class="flex-1 px-3 py-1.5 bg-white border border-gray-200 rounded-xl text-xs focus:outline-none focus:ring-1 focus:ring-primary" required>
+                        <input type="number" id="quick-add-qty" placeholder="SL" value="1" min="0.1" step="any" class="w-14 px-2 py-1.5 bg-white border border-gray-200 rounded-xl text-xs text-center focus:outline-none focus:ring-1 focus:ring-primary">
+                        <input type="text" id="quick-add-unit" placeholder="ĐVT" value="cái" class="w-14 px-2 py-1.5 bg-white border border-gray-200 rounded-xl text-xs text-center focus:outline-none focus:ring-1 focus:ring-primary">
+                        <button type="submit" class="px-3 py-1.5 bg-[#0F4937] hover:bg-[#145A43] text-white font-bold text-xs rounded-xl shadow-xs transition cursor-pointer" title="Thêm">+</button>
+                    </form>
+                </div>
+                
+                <div id="nav-shopping-items-list" class="flex-1 overflow-y-auto p-4 bg-gray-50 flex flex-col gap-2">
+                    <p class="text-center text-xs text-gray-400 py-10">Đang tải danh sách đi chợ...</p>
+                </div>
+
+                <div class="p-3 bg-white border-t border-gray-100 flex items-center justify-between shrink-0">
+                    <button type="button" onclick="window.clearShoppingList && window.clearShoppingList()" class="px-3 py-1.5 text-xs text-rose-600 hover:bg-rose-50 rounded-xl font-bold transition cursor-pointer">Dọn sạch</button>
+                    <button type="button" onclick="window.closeNavDrawers && window.closeNavDrawers()" class="px-4 py-1.5 bg-[#0F4937] hover:bg-[#145A43] text-white text-xs font-bold rounded-xl shadow-xs transition cursor-pointer">Đóng</button>
+                </div>
+            </div>
+
+            <!-- Panel 2: Món đã random (Gacha) -->
+            <div id="nav-panel-won" class="flex-1 flex flex-col min-h-0 hidden">
+                <div class="p-3 bg-amber-50/70 border-b border-amber-100 text-xs text-amber-800 flex items-center justify-between font-bold">
+                    <span class="flex items-center gap-1.5">
+                        <i class="fa-solid fa-dice text-[#F4A62A]"></i>
+                        <span>Món vừa quay từ Vòng quay Gacha</span>
+                    </span>
+                    <button type="button" onclick="window.clearWonDishes && window.clearWonDishes()" class="text-xs text-rose-600 hover:underline cursor-pointer font-bold">Xóa hết</button>
+                </div>
+                
+                <div id="nav-drawer-won-items-list" class="flex-1 overflow-y-auto p-4 bg-gray-50 flex flex-col gap-2">
+                    <!-- Rendered by renderWonDishesInDrawer -->
+                </div>
+
+                <div class="p-3 bg-white border-t border-gray-100 flex items-center justify-between shrink-0">
+                    <a href="#/" onclick="window.closeNavDrawers && window.closeNavDrawers()" class="px-3 py-1.5 text-xs text-[#0F4937] font-bold hover:underline">Quay thêm món</a>
+                    <button type="button" onclick="window.closeNavDrawers && window.closeNavDrawers()" class="px-4 py-1.5 bg-[#0F4937] hover:bg-[#145A43] text-white text-xs font-bold rounded-xl shadow-xs transition cursor-pointer">Đóng</button>
+                </div>
             </div>
 
             <!-- Footer Drawer -->
@@ -813,7 +849,7 @@ if (typeof window !== 'undefined') {
             shoppingModal.classList.add('translate-x-full');
             setTimeout(() => {
                 if (shoppingModal.classList.contains('translate-x-full')) {
-                    shoppingModal.classList.add('invisible', 'pointer-events-none');
+                    shoppingModal.classList.add('invisible', 'pointer-events-none', 'hidden');
                 }
             }, 300);
         }
@@ -835,14 +871,129 @@ if (typeof window !== 'undefined') {
         }
     };
 
-    window.openShoppingDrawer = () => {
+    window.openShoppingDrawer = (defaultTab = 'shopping') => {
         const overlay = document.getElementById('nav-drawer-overlay');
         const shoppingModal = document.getElementById('nav-shopping-drawer');
         if (overlay) overlay.classList.remove('hidden');
         if (shoppingModal) {
-            shoppingModal.classList.remove('invisible', 'pointer-events-none', 'translate-x-full');
-            window.loadShoppingListInNav();
+            shoppingModal.classList.remove('hidden');
+            requestAnimationFrame(() => {
+                shoppingModal.classList.remove('invisible', 'pointer-events-none', 'translate-x-full');
+            });
+            window.switchNavShoppingTab(defaultTab);
         }
+    };
+
+    window.switchNavShoppingTab = (tab = 'shopping') => {
+        const btnShop = document.getElementById('nav-tab-btn-shopping');
+        const btnWon = document.getElementById('nav-tab-btn-won');
+        const panelShop = document.getElementById('nav-panel-shopping');
+        const panelWon = document.getElementById('nav-panel-won');
+        const icon = document.getElementById('nav-shopping-title-icon');
+        const text = document.getElementById('nav-shopping-title-text');
+
+        // Cập nhật số lượng trên tab badge món random
+        try {
+            const won = JSON.parse(localStorage.getItem('won_dishes') || '[]');
+            const tabBadge = document.getElementById('nav-tab-won-badge');
+            if (tabBadge) {
+                tabBadge.textContent = won.length;
+                tabBadge.classList.toggle('hidden', won.length === 0);
+            }
+        } catch (e) {}
+
+        if (tab === 'shopping') {
+            panelShop?.classList.remove('hidden');
+            panelWon?.classList.add('hidden');
+
+            btnShop?.classList.add('bg-white', 'text-primary', 'shadow-xs');
+            btnShop?.classList.remove('text-gray-500');
+            btnWon?.classList.remove('bg-white', 'text-primary', 'shadow-xs');
+            btnWon?.classList.add('text-gray-500');
+
+            if (icon) icon.className = "fa-solid fa-cart-shopping text-[#F4A62A]";
+            if (text) text.textContent = "Danh sách đi chợ";
+
+            if (window.loadShoppingListInNav) window.loadShoppingListInNav();
+        } else {
+            panelShop?.classList.add('hidden');
+            panelWon?.classList.remove('hidden');
+
+            btnWon?.classList.add('bg-white', 'text-primary', 'shadow-xs');
+            btnWon?.classList.remove('text-gray-500');
+            btnShop?.classList.remove('bg-white', 'text-primary', 'shadow-xs');
+            btnShop?.classList.add('text-gray-500');
+
+            if (icon) icon.className = "fa-solid fa-dice text-[#F4A62A]";
+            if (text) text.textContent = "Món đã random";
+
+            if (window.renderWonDishesInDrawer) window.renderWonDishesInDrawer();
+        }
+    };
+
+    window.renderWonDishesInDrawer = () => {
+        const container = document.getElementById('nav-drawer-won-items-list');
+        const tabBadge = document.getElementById('nav-tab-won-badge');
+        const headerCount = document.getElementById('nav-shopping-header-count');
+        if (!container) return;
+
+        let won = [];
+        try {
+            won = JSON.parse(localStorage.getItem('won_dishes') || '[]');
+        } catch (e) {
+            won = [];
+        }
+
+        if (tabBadge) {
+            tabBadge.textContent = won.length;
+            tabBadge.classList.toggle('hidden', won.length === 0);
+        }
+
+        const panelWon = document.getElementById('nav-panel-won');
+        if (panelWon && !panelWon.classList.contains('hidden') && headerCount) {
+            headerCount.textContent = `${won.length} món`;
+        }
+
+        if (won.length === 0) {
+            container.innerHTML = `
+                <div class="flex flex-col items-center justify-center h-full text-gray-400 py-16 text-center">
+                    <div class="w-14 h-14 mb-3 rounded-full bg-amber-50 flex items-center justify-center text-amber-500">
+                        <i class="fa-solid fa-dice text-2xl"></i>
+                    </div>
+                    <p class="font-bold text-gray-700 text-sm">Chưa có món nào từ máy quay</p>
+                    <p class="text-xs text-gray-400 mt-1 max-w-[220px]">Hãy thử quay vòng quay Gacha ở Trang chủ để nhận gợi ý món ăn!</p>
+                    <a href="#/" onclick="window.closeNavDrawers && window.closeNavDrawers()" class="mt-4 px-4 py-2 bg-[#0F4937] hover:bg-[#145A43] text-white rounded-full text-xs font-bold shadow-xs transition">Đến vòng quay ngay</a>
+                </div>
+            `;
+            return;
+        }
+
+        container.innerHTML = won.map((item, idx) => {
+            const foodId = item.id_food || item.id || 1;
+            const foodName = item.name || 'Món ngon';
+            const foodImg = item.image || 'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?auto=format&fit=crop&w=120&q=80';
+            const foodTime = item.time || (item.cooking_time ? `${item.cooking_time} phút` : '30 phút');
+            const foodCat = item.category || 'Món ngon';
+
+            return `
+                <div class="bg-white rounded-xl p-3 border border-gray-100 flex items-center gap-3 shadow-2xs hover:border-amber-200 transition">
+                    <a href="#/mon-an/${foodId}" onclick="window.closeNavDrawers && window.closeNavDrawers()" class="shrink-0">
+                        <img src="${foodImg}" class="w-12 h-12 rounded-lg object-cover border border-gray-100" onerror="this.src='https://images.unsplash.com/photo-1546069901-ba9599a7e63c?auto=format&fit=crop&w=120&q=80'">
+                    </a>
+                    <div class="flex-1 min-w-0">
+                        <a href="#/mon-an/${foodId}" onclick="window.closeNavDrawers && window.closeNavDrawers()" class="font-bold text-xs text-text-main hover:text-[#0F4937] transition line-clamp-1">${foodName}</a>
+                        <div class="flex items-center gap-2 mt-0.5 text-[11px] text-gray-400">
+                            <span class="text-emerald-700 font-semibold">${foodCat}</span>
+                            <span>•</span>
+                            <span class="flex items-center gap-1"><i class="fa-regular fa-clock text-amber-500"></i> ${foodTime}</span>
+                        </div>
+                    </div>
+                    <button onclick="window.removeWonDish(${idx})" class="text-gray-300 hover:text-rose-500 p-2 transition cursor-pointer" title="Xóa món này">
+                        <i class="fa-solid fa-trash-can text-xs"></i>
+                    </button>
+                </div>
+            `;
+        }).join('');
     };
 
     window.loadFavoritesInNav = async () => {
@@ -1146,20 +1297,17 @@ if (typeof window !== 'undefined') {
     };
 
     window.removeWonDish = (index) => {
-        const token = localStorage.getItem('auth_token');
-        if (!token) return;
         try {
             let won = JSON.parse(localStorage.getItem('won_dishes') || '[]');
             won.splice(index, 1);
             localStorage.setItem('won_dishes', JSON.stringify(won));
-            window.renderWonDishesList();
+            if (window.renderWonDishesList) window.renderWonDishesList();
+            if (window.renderWonDishesInDrawer) window.renderWonDishesInDrawer();
             if (window.renderRecentWonDishes) window.renderRecentWonDishes();
         } catch (e) {}
     };
 
     window.clearWonDishes = async () => {
-        const token = localStorage.getItem('auth_token');
-        if (!token) return;
         if (window.Popup) {
             const confirmed = await window.Popup.confirm({
                 title: 'Xóa danh sách món đã random',
@@ -1173,7 +1321,8 @@ if (typeof window !== 'undefined') {
         }
 
         localStorage.removeItem('won_dishes');
-        window.renderWonDishesList();
+        if (window.renderWonDishesList) window.renderWonDishesList();
+        if (window.renderWonDishesInDrawer) window.renderWonDishesInDrawer();
         if (window.renderRecentWonDishes) window.renderRecentWonDishes();
         if (window.Popup) {
             window.Popup.toast('Đã làm trống danh sách món đã random.', 'info');
@@ -1181,15 +1330,14 @@ if (typeof window !== 'undefined') {
     };
 
     window.addWonDish = (dish) => {
-        const token = localStorage.getItem('auth_token');
-        if (!token) return;
         try {
             let won = JSON.parse(localStorage.getItem('won_dishes') || '[]');
             won = won.filter(d => (d.id || d.name) !== (dish.id || dish.name));
             won.unshift(dish);
             if (won.length > 20) won = won.slice(0, 20);
             localStorage.setItem('won_dishes', JSON.stringify(won));
-            window.renderWonDishesList();
+            if (window.renderWonDishesList) window.renderWonDishesList();
+            if (window.renderWonDishesInDrawer) window.renderWonDishesInDrawer();
             if (window.renderRecentWonDishes) window.renderRecentWonDishes();
         } catch (e) {}
     };
