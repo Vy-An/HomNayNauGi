@@ -34,6 +34,8 @@ function formatFoodSummary(food, userId = null) {
     const categoryName = food.categories?.name || 'Món ngon';
     const categorySlug = food.categories?.slug || 'viet';
     const cookingTime = food.cooking_time || 30;
+    const isFavorite = Boolean(userId && food.favorites && food.favorites.some((f) => f.id_user === userId));
+    const totalLikes = (food.favorites && food.favorites.length) ? food.favorites.length : 0;
 
     return {
         id: food.id_food,
@@ -46,14 +48,20 @@ function formatFoodSummary(food, userId = null) {
         servings: food.servings || 4,
         rating: 4.8,
         rating_count: '1.5k',
+<<<<<<< HEAD
         likes: (food.favorites && food.favorites.length) ? (food.favorites.length * 120 + 250) : 850,
         is_favorite: Boolean(userId && food.favorites && food.favorites.some((f) => f.id_user === userId)),
+=======
+        likes: totalLikes,
+        is_favorite: isFavorite,
+        isFavorite: isFavorite,
+>>>>>>> origin/develop
         category: categoryName,
         category_slug: categorySlug,
-        sub_category: categorySlug === 'mon-chay' ? 'chay' : (cookingTime <= 20 ? 'nhanh' : 'viet'),
+        sub_category: (food.cooking_time && food.cooking_time <= 15) ? 'nhanh' : 'viet',
         difficulty: cookingTime > 40 ? 'Trung bình' : 'Dễ làm',
         ingredients: rawIngredients,
-        tags: [categoryName, cookingTime <= 20 ? 'Món nhanh' : 'Món Việt', 'Dễ làm'].filter(Boolean),
+        tags: [categoryName, (food.cooking_time && food.cooking_time <= 15) ? 'Món nhanh' : 'Món Việt', 'Dễ làm'].filter(Boolean),
         author: {
             name: 'Hôm Nay Nấu Gì',
             avatar: 'https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=100'
@@ -66,6 +74,8 @@ function formatFoodDetail(food, relatedFoods = [], userId = null) {
     const categorySlug = food.categories?.slug || 'viet';
     const cookingTime = food.cooking_time || 30;
     const servings = food.servings || 4;
+    const isFavorite = Boolean(userId && food.favorites && food.favorites.some((f) => f.id_user === userId));
+    const totalLikes = (food.favorites && food.favorites.length) ? food.favorites.length : 0;
 
     const ingredients = (food.food_ingredients || []).map((item) => {
         const qty = formatQuantity(item.quantity);
@@ -93,8 +103,14 @@ function formatFoodDetail(food, relatedFoods = [], userId = null) {
         portions: `${servings} người`,
         servings: servings,
         difficulty: cookingTime > 40 ? 'Trung bình' : 'Dễ làm',
+<<<<<<< HEAD
         likes: (food.favorites && food.favorites.length) ? (food.favorites.length * 150 + 450) : '2.5k',
         is_favorite: Boolean(userId && food.favorites && food.favorites.some((f) => f.id_user === userId)),
+=======
+        likes: totalLikes,
+        is_favorite: isFavorite,
+        isFavorite: isFavorite,
+>>>>>>> origin/develop
         calories: cookingTime <= 20 ? '350 kcal' : '520 kcal',
         category: categoryName,
         category_slug: categorySlug,
@@ -149,20 +165,37 @@ async function getFoods(query = {}, userId = null) {
 
     // 2. Lọc theo danh mục
     if (category && category !== 'all') {
-        const catNum = Number(category);
-        if (!Number.isNaN(catNum)) {
-            where.id_category = catNum;
-        } else {
+        const catList = normalizeList(category);
+        if (catList.length === 1) {
+            const catNum = Number(catList[0]);
+            if (!Number.isNaN(catNum)) {
+                where.id_category = catNum;
+            } else {
+                where.categories = {
+                    OR: [
+                        { slug: catList[0] },
+                        { name: { contains: catList[0] } }
+                    ]
+                };
+            }
+        } else if (catList.length > 1) {
             where.categories = {
-                OR: [
-                    { slug: category },
-                    { name: { contains: category } }
-                ]
+                OR: catList.map((c) => {
+                    const catNum = Number(c);
+                    if (!Number.isNaN(catNum)) {
+                        return { id_category: catNum };
+                    }
+                    return {
+                        OR: [
+                            { slug: c },
+                            { name: { contains: c } }
+                        ]
+                    };
+                })
             };
         }
     }
 
-    // 3. Lọc theo nguyên liệu
     const ingredientList = normalizeList(ingredients);
     if (ingredientList.length > 0) {
         where.food_ingredients = {
@@ -180,9 +213,8 @@ async function getFoods(query = {}, userId = null) {
         };
     }
 
-    // 4. Lọc theo thời gian nấu
-    if (cook_time === 'under_15') {
-        where.cooking_time = { lte: 15 };
+    if (sub_category === 'nhanh' || cook_time === 'under_15') {
+        where.cooking_time = { not: null, gt: 0, lte: 15 };
     } else if (cook_time === '15_to_30') {
         where.cooking_time = { gt: 15, lte: 30 };
     } else if (cook_time === 'above_30') {
@@ -291,6 +323,86 @@ async function getFoodById(idOrSlug, userId = null) {
     });
 
     return formatFoodDetail(food, relatedFoods, userId);
+<<<<<<< HEAD
+=======
+}
+
+/**
+ * Chức năng lưu hoặc bỏ lưu món ăn yêu thích của người dùng (Toggle Favorite)
+ */
+async function toggleFavorite(idOrSlug, userId) {
+    if (!userId) {
+        const error = new Error('Vui lòng đăng nhập để lưu món ăn yêu thích.');
+        error.status = 401;
+        throw error;
+    }
+
+    const isNum = !Number.isNaN(Number(idOrSlug));
+    const food = await prisma.foods.findFirst({
+        where: {
+            status: 'active',
+            ...(isNum ? { id_food: Number(idOrSlug) } : { slug: String(idOrSlug) })
+        }
+    });
+
+    if (!food) {
+        const error = new Error('Không tìm thấy thông tin món ăn yêu cầu.');
+        error.status = 404;
+        throw error;
+    }
+
+    const foodId = food.id_food;
+
+    const existing = await prisma.favorites.findUnique({
+        where: {
+            id_user_id_food: {
+                id_user: userId,
+                id_food: foodId
+            }
+        }
+    });
+
+    let isFavorite = false;
+    let message = '';
+
+    if (existing) {
+        await prisma.favorites.delete({
+            where: {
+                id_favorite: existing.id_favorite
+            }
+        });
+        isFavorite = false;
+        message = `Đã bỏ lưu món "${food.name}" khỏi danh sách yêu thích.`;
+    } else {
+        await prisma.favorites.create({
+            data: {
+                id_user: userId,
+                id_food: foodId
+            }
+        });
+        isFavorite = true;
+        message = `Đã lưu món "${food.name}" vào danh sách yêu thích!`;
+    }
+
+    const [totalLikes, userTotalFavorites] = await Promise.all([
+        prisma.favorites.count({
+            where: { id_food: foodId }
+        }),
+        prisma.favorites.count({
+            where: { id_user: userId }
+        })
+    ]);
+
+    return {
+        success: true,
+        is_favorite: isFavorite,
+        isFavorite: isFavorite,
+        message,
+        id_food: foodId,
+        likes: totalLikes,
+        userTotalFavorites
+    };
+>>>>>>> origin/develop
 }
 
 /**
@@ -309,11 +421,13 @@ async function getFoodOptions() {
     return {
         categories: categories.map((c) => ({
             id: c.id_category,
+            id_category: c.id_category,
             name: c.name,
             slug: c.slug
         })),
         ingredients: ingredients.map((i) => ({
             id: i.id_ingredient,
+            id_ingredient: i.id_ingredient,
             name: i.name,
             unit: i.unit
         }))
@@ -418,5 +532,6 @@ module.exports = {
     getFoods,
     getFoodById,
     getFoodOptions,
-    getQuickSuggestions
+    getQuickSuggestions,
+    toggleFavorite
 };

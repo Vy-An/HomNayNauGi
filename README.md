@@ -45,6 +45,7 @@ DATABASE_URL="mysql://root:mat_khau_cua_ban@localhost:3306/homnaynaugi"
 
 > [!WARNING]
 > **Quy tắc quan trọng về mật khẩu MySQL trong URL:**
+>
 > - Nếu mật khẩu MySQL của bạn có ký tự đặc biệt `@` (ví dụ `vyan@1234@`), bạn **bắt buộc phải đổi ký tự `@` thành `%40`**:
 >   ```env
 >   DATABASE_URL="mysql://root:vyan%401234%40@localhost:3306/homnaynaugi"
@@ -75,6 +76,7 @@ npm run dev
 ```
 
 Khi chạy thành công, terminal sẽ thông báo:
+
 ```text
 Server Backend đang chạy tại: http://localhost:5000
 ```
@@ -100,10 +102,12 @@ npm run dev
 ```
 
 Lệnh `npm run dev` sẽ tự động chạy song song:
+
 - Lắng nghe và build Tailwind CSS tự động (`npm run build:css`).
 - Máy chủ web tĩnh phục vụ giao diện (`npm run start`).
 
 Terminal sẽ hiển thị địa chỉ truy cập:
+
 ```text
 http://localhost:3000
 ```
@@ -115,13 +119,13 @@ Mở trình duyệt truy cập:
 
 ## 🔍 Bảng xử lý các lỗi thường gặp (Troubleshooting)
 
-| Tình trạng lỗi | Nguyên nhân | Cách xử lý |
-| :--- | :--- | :--- |
-| `[nodemon] app crashed - waiting for file changes...` | Chưa sinh file Prisma Client | Chạy lệnh `npx prisma generate` trong thư mục `backend`. |
-| `EPERM: operation not permitted ... query_engine-windows.dll.node` | Server backend đang chạy và khóa file khi chạy `prisma generate` | Nhấn `Ctrl + C` tắt backend trước, chạy `npx prisma generate`, rồi chạy lại `npm run dev`. |
-| API trả về lỗi `500 Internal Server Error` | Sai mật khẩu MySQL hoặc sai tên database trong `.env` | Kiểm tra lại file `backend/.env`. Chú ý mã hóa ký tự `@` thành `%40` nếu mật khẩu có chứa `@`. |
-| Giao diện bị lệch mảng trắng khi chọn nguyên liệu | Trình duyệt tự cuộn focus vào input ẩn | Đã được khắc phục sẵn với thuộc tính `overflow-clip` và `relative` trong `frontend/js/views/khach/Home.js`. |
-| Không load được icon FontAwesome | Chế độ Tracking Prevention của trình duyệt Edge | Không ảnh hưởng đến giao diện, icon vẫn hiển thị bình thường. |
+| Tình trạng lỗi                                                    | Nguyên nhân                                                          | Cách xử lý                                                                                                                |
+| :------------------------------------------------------------------- | :--------------------------------------------------------------------- | :--------------------------------------------------------------------------------------------------------------------------- |
+| `[nodemon] app crashed - waiting for file changes...`              | Chưa sinh file Prisma Client                                          | Chạy lệnh`npx prisma generate` trong thư mục `backend`.                                                              |
+| `EPERM: operation not permitted ... query_engine-windows.dll.node` | Server backend đang chạy và khóa file khi chạy`prisma generate` | Nhấn`Ctrl + C` tắt backend trước, chạy `npx prisma generate`, rồi chạy lại `npm run dev`.                      |
+| API trả về lỗi`500 Internal Server Error`                       | Sai mật khẩu MySQL hoặc sai tên database trong`.env`             | Kiểm tra lại file`backend/.env`. Chú ý mã hóa ký tự `@` thành `%40` nếu mật khẩu có chứa `@`.          |
+| Giao diện bị lệch mảng trắng khi chọn nguyên liệu            | Trình duyệt tự cuộn focus vào input ẩn                           | Đã được khắc phục sẵn với thuộc tính`overflow-clip` và `relative` trong `frontend/js/views/khach/Home.js`. |
+| Không load được icon FontAwesome                                 | Chế độ Tracking Prevention của trình duyệt Edge                  | Không ảnh hưởng đến giao diện, icon vẫn hiển thị bình thường.                                                   |
 
 ---
 
@@ -136,40 +140,47 @@ http://localhost:3000/#/
 > Base URL backend: `http://localhost:5000/api`
 >
 > Các API có ghi **cần đăng nhập** phải gửi header:
+>
 > ```http
 > Authorization: Bearer <token_dang_nhap>
 > ```
+>
 > Lấy token từ API đăng nhập hoặc sau khi đăng nhập trên frontend.
 
 ### Auth
 
 | Method | Link API | Chức năng |
-| :--- | :--- | :--- |
-| POST | `http://localhost:5000/api/auth/login` | Đăng nhập |
-| POST | `http://localhost:5000/api/auth/register` | Đăng ký |
-| POST | `http://localhost:5000/api/auth/logout` | Đăng xuất, cần đăng nhập |
-| GET | `http://localhost:5000/api/auth/me` | Lấy thông tin tài khoản đang đăng nhập |
+| :----- | :------- | :-------- |
+| POST   | <nobr>`http://localhost:5000/api/auth/login`</nobr> | Đăng nhập |
+| POST   | <nobr>`http://localhost:5000/api/auth/register`</nobr> | Đăng ký |
+| POST   | <nobr>`http://localhost:5000/api/auth/logout`</nobr> | Đăng xuất, cần đăng nhập |
+| GET    | <nobr>`http://localhost:5000/api/auth/me`</nobr> | Lấy thông tin tài khoản đang đăng nhập |
+| PATCH  | <nobr>`http://localhost:5000/api/auth/me`</nobr> | Cập nhật thông tin cá nhân (tên, số điện thoại, bio, avatar), cần đăng nhập |
+| GET    | <nobr>`http://localhost:5000/api/auth/me/posts`</nobr> | Lấy danh sách bài viết của tôi (kèm trạng thái: pending, active, hidden & lý do ẩn), cần đăng nhập |
+| GET    | <nobr>`http://localhost:5000/api/auth/me/favorites`</nobr> | Lấy danh sách món ăn yêu thích của tôi, cần đăng nhập |
+| POST   | <nobr>`http://localhost:5000/api/auth/me/favorites/1`</nobr> | Thêm món ăn vào danh sách yêu thích của tôi, cần đăng nhập |
+| DELETE | <nobr>`http://localhost:5000/api/auth/me/favorites/1`</nobr> | Xóa món ăn khỏi danh sách yêu thích, cần đăng nhập |
 
 ### Random món ăn
 
 | Method | Link API | Chức năng |
-| :--- | :--- | :--- |
-| GET | `http://localhost:5000/api/random/options` | Lấy danh sách nguyên liệu và danh mục cho máy random |
-| GET | `http://localhost:5000/api/random?quantity=3` | Random 3 món |
-| GET | `http://localhost:5000/api/random?quantity=6&ingredients=Bi%20do,Ca%20basa&categories=mon-canh,mon-chien&cook_time=medium` | Random theo nguyên liệu, danh mục, thời gian nấu |
+| :----- | :------- | :-------- |
+| GET    | <nobr>`http://localhost:5000/api/random/options`</nobr> | Lấy danh sách nguyên liệu và danh mục cho máy random |
+| GET    | <nobr>`http://localhost:5000/api/random?quantity=3`</nobr> | Random 3 món |
+| GET    | <nobr>`http://localhost:5000/api/random?quantity=6&ingredients=Bi%20do,Ca%20basa&categories=mon-canh,mon-chien&cook_time=medium`</nobr> | Random theo nguyên liệu, danh mục, thời gian nấu |
 
 `cook_time` hỗ trợ: `quick` là dưới hoặc bằng 15 phút, `medium` là 15 - 30 phút, `long` là trên 30 phút.
 
 ### Món ăn
 
 | Method | Link API | Chức năng |
-| :--- | :--- | :--- |
-| GET | `http://localhost:5000/api/foods` | Lấy danh sách món ăn |
-| GET | `http://localhost:5000/api/foods?search=ga&page=1&limit=12` | Tìm kiếm món ăn |
-| GET | `http://localhost:5000/api/foods?category=mon-canh&cook_time=under_15&sort=time_asc` | Lọc món ăn theo danh mục, thời gian, sắp xếp |
-| GET | `http://localhost:5000/api/foods/options` | Lấy danh mục và nguyên liệu cho bộ lọc |
-| GET | `http://localhost:5000/api/foods/quick-suggestions` | Lấy gợi ý nhanh |
-| GET | `http://localhost:5000/api/foods/1` | Xem chi tiết món ăn theo ID hoặc slug |
+| :----- | :------- | :-------- |
+| GET    | <nobr>`http://localhost:5000/api/foods`</nobr> | Lấy danh sách món ăn |
+| GET    | <nobr>`http://localhost:5000/api/foods?search=ga&page=1&limit=12`</nobr> | Tìm kiếm món ăn |
+| GET    | <nobr>`http://localhost:5000/api/foods?category=mon-canh&cook_time=under_15&sort=time_asc`</nobr> | Lọc món ăn theo danh mục, thời gian, sắp xếp |
+| GET    | <nobr>`http://localhost:5000/api/foods/options`</nobr> | Lấy danh mục và nguyên liệu cho bộ lọc |
+| GET    | <nobr>`http://localhost:5000/api/foods/quick-suggestions`</nobr> | Lấy gợi ý nhanh |
+| GET    | <nobr>`http://localhost:5000/api/foods/1`</nobr> | Xem chi tiết món ăn theo ID hoặc slug |
 
 `cook_time` của `/api/foods` hỗ trợ: `all`, `under_15`, `15_to_30`, `above_30`.
 `sort` hỗ trợ: `newest`, `time_asc`, `time_desc`, `name_asc`.
@@ -177,50 +188,59 @@ http://localhost:3000/#/
 ### Bài viết cộng đồng
 
 | Method | Link API | Chức năng |
-| :--- | :--- | :--- |
-| GET | `http://localhost:5000/api/posts?filter=all&page=1&limit=10` | Lấy danh sách bài viết |
-| GET | `http://localhost:5000/api/posts?filter=newest` | Lọc bài viết mới nhất |
-| GET | `http://localhost:5000/api/posts?filter=liked` | Lọc bài viết nhiều lượt thích |
-| GET | `http://localhost:5000/api/posts?filter=trending` | Lọc bài viết nổi bật |
-| GET | `http://localhost:5000/api/posts?filter=random` | Lấy bài viết ngẫu nhiên |
-| GET | `http://localhost:5000/api/posts/featured?limit=4` | Lấy bài viết nổi bật cho trang chủ |
-| GET | `http://localhost:5000/api/posts/1` | Xem chi tiết bài viết |
-| POST | `http://localhost:5000/api/posts` | Tạo bài viết, cần đăng nhập |
-| POST | `http://localhost:5000/api/posts/1/like` | Thả tim hoặc bỏ tim bài viết, cần đăng nhập |
+| :----- | :------- | :-------- |
+| GET    | <nobr>`http://localhost:5000/api/posts?filter=all&page=1&limit=10`</nobr> | Lấy danh sách bài viết đã duyệt hiển thị công khai |
+| GET    | <nobr>`http://localhost:5000/api/posts?filter=newest`</nobr> | Lọc bài viết mới nhất |
+| GET    | <nobr>`http://localhost:5000/api/posts?filter=liked`</nobr> | Lọc bài viết nhiều lượt thích |
+| GET    | <nobr>`http://localhost:5000/api/posts?filter=trending`</nobr> | Lọc bài viết nổi bật |
+| GET    | <nobr>`http://localhost:5000/api/posts?filter=random`</nobr> | Lấy bài viết ngẫu nhiên |
+| GET    | <nobr>`http://localhost:5000/api/posts/featured?limit=4`</nobr> | Lấy bài viết nổi bật cho trang chủ |
+| GET    | <nobr>`http://localhost:5000/api/posts/1`</nobr> | Xem chi tiết bài viết |
+| POST   | <nobr>`http://localhost:5000/api/posts`</nobr> | Đăng bài viết (trạng thái ban đầu `pending` chờ kiểm duyệt), cần đăng nhập |
+| POST   | <nobr>`http://localhost:5000/api/posts/1/like`</nobr> | Thả tim hoặc bỏ tim bài viết, cần đăng nhập |
+| POST   | <nobr>`http://localhost:5000/api/posts/1/report`</nobr> | Báo cáo vi phạm bài viết (kèm `reason`, `description`), cần đăng nhập |
 
 ### Bình luận
 
 | Method | Link API | Chức năng |
-| :--- | :--- | :--- |
-| GET | `http://localhost:5000/api/posts/1/comments?page=1&limit=10` | Lấy bình luận của bài viết |
-| POST | `http://localhost:5000/api/posts/1/comments` | Thêm bình luận, cần đăng nhập |
-| PATCH | `http://localhost:5000/api/comments/1` | Sửa bình luận, cần đăng nhập |
-| DELETE | `http://localhost:5000/api/comments/1` | Ẩn/xóa mềm bình luận, cần đăng nhập |
+| :----- | :------- | :-------- |
+| GET    | <nobr>`http://localhost:5000/api/posts/1/comments?page=1&limit=10`</nobr> | Lấy bình luận của bài viết |
+| POST   | <nobr>`http://localhost:5000/api/posts/1/comments`</nobr> | Thêm bình luận, cần đăng nhập |
+| PATCH  | <nobr>`http://localhost:5000/api/comments/1`</nobr> | Sửa bình luận, cần đăng nhập |
+| DELETE | <nobr>`http://localhost:5000/api/comments/1`</nobr> | Ẩn/xóa mềm bình luận, cần đăng nhập |
+| POST   | <nobr>`http://localhost:5000/api/comments/1/report`</nobr> | Báo cáo vi phạm bình luận (kèm `reason`, `description`), cần đăng nhập |
 
 ### Admin
 
 > Các API admin cần tài khoản đăng nhập có `role = admin`.
 
 | Method | Link API | Chức năng |
-| :--- | :--- | :--- |
-| GET | `http://localhost:5000/api/admin/dashboard` | Lấy số liệu tổng quan dashboard |
-| GET | `http://localhost:5000/api/admin/users?page=1&limit=10` | Lấy danh sách người dùng |
-| GET | `http://localhost:5000/api/admin/users?search=admin&role=admin&status=active` | Tìm/lọc người dùng |
-| POST | `http://localhost:5000/api/admin/users` | Tạo người dùng |
-| GET | `http://localhost:5000/api/admin/users/1` | Xem chi tiết người dùng |
-| PATCH | `http://localhost:5000/api/admin/users/1/status` | Khóa/mở khóa người dùng |
-| GET | `http://localhost:5000/api/admin/foods/options` | Lấy options quản lý món ăn |
-| GET | `http://localhost:5000/api/admin/foods?page=1&limit=10` | Lấy danh sách món ăn trong admin |
-| GET | `http://localhost:5000/api/admin/foods?search=ga&status=active&sort=time_asc` | Tìm/lọc món ăn trong admin |
-| POST | `http://localhost:5000/api/admin/foods` | Tạo món ăn |
-| GET | `http://localhost:5000/api/admin/foods/1` | Xem chi tiết món ăn |
-| PATCH | `http://localhost:5000/api/admin/foods/1` | Cập nhật món ăn |
-| PATCH | `http://localhost:5000/api/admin/foods/1/status` | Ẩn/hiện món ăn |
+| :----- | :------- | :-------- |
+| GET    | <nobr>`http://localhost:5000/api/admin/dashboard`</nobr> | Lấy số liệu tổng quan dashboard |
+| GET    | <nobr>`http://localhost:5000/api/admin/users?page=1&limit=10`</nobr> | Lấy danh sách người dùng |
+| GET    | <nobr>`http://localhost:5000/api/admin/users?search=admin&role=admin&status=active`</nobr> | Tìm/lọc người dùng |
+| POST   | <nobr>`http://localhost:5000/api/admin/users`</nobr> | Tạo người dùng |
+| GET    | <nobr>`http://localhost:5000/api/admin/users/1`</nobr> | Xem chi tiết người dùng |
+| PATCH  | <nobr>`http://localhost:5000/api/admin/users/1/status`</nobr> | Khóa/mở khóa người dùng |
+| GET    | <nobr>`http://localhost:5000/api/admin/foods/options`</nobr> | Lấy options quản lý món ăn |
+| GET    | <nobr>`http://localhost:5000/api/admin/foods?page=1&limit=10`</nobr> | Lấy danh sách món ăn trong admin |
+| GET    | <nobr>`http://localhost:5000/api/admin/foods?search=ga&status=active&sort=time_asc`</nobr> | Tìm/lọc món ăn trong admin |
+| POST   | <nobr>`http://localhost:5000/api/admin/foods`</nobr> | Tạo món ăn |
+| GET    | <nobr>`http://localhost:5000/api/admin/foods/1`</nobr> | Xem chi tiết món ăn |
+| PATCH  | <nobr>`http://localhost:5000/api/admin/foods/1`</nobr> | Cập nhật món ăn |
+| PATCH  | <nobr>`http://localhost:5000/api/admin/foods/1/status`</nobr> | Ẩn/hiện món ăn |
+| GET    | <nobr>`http://localhost:5000/api/admin/posts?status=pending&page=1&limit=10`</nobr> | Lấy danh sách bài viết kiểm duyệt (lọc `status`: `pending`, `active`, `hidden`; tìm kiếm `search`) |
+| GET    | <nobr>`http://localhost:5000/api/admin/posts/1`</nobr> | Xem chi tiết bài viết (kèm thông tin tác giả, bình luận, lượt thích) |
+| PATCH  | <nobr>`http://localhost:5000/api/admin/posts/1/status`</nobr> | Duyệt bài (`active`), ẩn bài viết (`hidden` kèm `reason`), hoặc đưa về chờ duyệt (`pending`) |
+| DELETE | <nobr>`http://localhost:5000/api/admin/posts/1`</nobr> | Xóa bài viết vĩnh viễn (xóa kèm các báo cáo, bình luận, lượt thích liên quan) |
+| GET    | <nobr>`http://localhost:5000/api/admin/reports?status=pending&page=1&limit=10`</nobr> | Lấy danh sách báo cáo vi phạm cộng đồng (lọc `status`: `pending`, `resolved`, `rejected`) |
+| PATCH  | <nobr>`http://localhost:5000/api/admin/reports/1/status`</nobr> | Cập nhật trạng thái xử lý báo cáo vi phạm (`resolved`, `rejected`, `pending`) |
+| PATCH  | <nobr>`http://localhost:5000/api/admin/comments/1/status`</nobr> | Cập nhật trạng thái bình luận (`active`, `hidden`), ẩn hoặc khôi phục bình luận vi phạm |
 
 ### Ảnh tĩnh từ backend
 
 | Link | Chức năng |
-| :--- | :--- |
-| `http://localhost:5000/images/foods/thit-kho-trung.jpg` | Ảnh món ăn |
-| `http://localhost:5000/images/posts/post-1.jpg` | Ảnh bài viết |
-| `http://localhost:5000/images/users/admin.jpg` | Ảnh người dùng |
+| :--- | :-------- |
+| <nobr>`http://localhost:5000/images/foods/thit-kho-trung.jpg`</nobr> | Ảnh món ăn |
+| <nobr>`http://localhost:5000/images/posts/post-1.jpg`</nobr> | Ảnh bài viết |
+| <nobr>`http://localhost:5000/images/users/admin.jpg`</nobr> | Ảnh người dùng |

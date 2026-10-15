@@ -19,6 +19,7 @@ router.get('/foods/:id', adminController.getFoodById);
 router.patch('/foods/:id', adminController.updateFood);
 router.patch('/foods/:id/status', adminController.updateFoodStatus);
 
+<<<<<<< HEAD
 // Categories
 router.get('/categories', adminController.getCategories);
 router.post('/categories', adminController.createCategory);
@@ -32,5 +33,25 @@ router.patch('/posts/:id/status', adminController.updatePostStatus);
 // Community Reports
 router.get('/reports', adminController.getAdminReports);
 router.patch('/reports/:id', adminController.handleAdminReport);
+=======
+// Quản lý danh mục món ăn
+router.get('/categories', adminController.getCategories);
+router.post('/categories', adminController.createCategory);
+router.get('/categories/:id', adminController.getCategoryById);
+router.patch('/categories/:id', adminController.updateCategory);
+router.put('/categories/:id', adminController.updateCategory);
+router.patch('/categories/:id/status', adminController.updateCategoryStatus);
+
+// Quản lý bài viết cộng đồng (Kiểm duyệt & Báo cáo)
+router.get('/posts', adminController.getPosts);
+router.get('/posts/:id', adminController.getPostById);
+router.patch('/posts/:id/status', adminController.updatePostStatus);
+router.put('/posts/:id/status', adminController.updatePostStatus);
+router.delete('/posts/:id', adminController.deletePost);
+router.get('/reports', adminController.getReports);
+router.patch('/reports/:id/status', adminController.updateReportStatus);
+router.put('/reports/:id/status', adminController.updateReportStatus);
+router.patch('/comments/:id/status', adminController.updateCommentStatus);
+>>>>>>> origin/develop
 
 module.exports = router;

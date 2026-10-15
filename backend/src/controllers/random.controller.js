@@ -12,7 +12,7 @@ async function randomMeals(req, res) {
         if (!result.foods.length) {
             return res.status(404).json({
                 success: false,
-                message: 'Khong tim thay mon an nao trong database.',
+                message: 'Không tìm thấy món ăn nào phù hợp với bộ lọc đã chọn.',
                 data: []
             });
         }
@@ -20,8 +20,8 @@ async function randomMeals(req, res) {
         return res.json({
             success: true,
             message: result.fallbackCount
-                ? 'Khong du mon khop bo loc, da bo sung mon ngau nhien.'
-                : 'Lay mon an ngau nhien thanh cong.',
+                ? 'Không đủ món khớp bộ lọc, đã bổ sung món ngẫu nhiên.'
+                : 'Lấy món ăn ngẫu nhiên thành công.',
             meta: {
                 requested: result.requested,
                 matchedFilters: result.matchedFilters,

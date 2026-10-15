@@ -5,7 +5,11 @@ const foodService = require('../services/food.service');
  */
 async function getFoods(req, res) {
     try {
+<<<<<<< HEAD
         const userId = req.user ? req.user.id_user : null;
+=======
+        const userId = req.user?.id_user || null;
+>>>>>>> origin/develop
         const result = await foodService.getFoods(req.query, userId);
 
         return res.json({
@@ -33,7 +37,11 @@ async function getFoods(req, res) {
 async function getFoodById(req, res) {
     try {
         const { id } = req.params;
+<<<<<<< HEAD
         const userId = req.user ? req.user.id_user : null;
+=======
+        const userId = req.user?.id_user || null;
+>>>>>>> origin/develop
         const food = await foodService.getFoodById(id, userId);
 
         if (!food) {
@@ -106,10 +114,28 @@ async function getQuickSuggestions(req, res) {
     }
 }
 
+async function toggleFavorite(req, res) {
+    try {
+        const { id } = req.params;
+        const userId = req.user?.id_user;
+        const result = await foodService.toggleFavorite(id, userId);
+
+        return res.json(result);
+    } catch (error) {
+        console.error('Lỗi khi tương tác yêu thích món ăn:', error);
+
+        return res.status(error.status || 500).json({
+            success: false,
+            message: error.message || 'Không thể tương tác yêu thích lúc này.'
+        });
+    }
+}
+
 module.exports = {
     getFoods,
     listFoods: getFoods,
     getFoodById,
     getFoodOptions,
-    getQuickSuggestions
+    getQuickSuggestions,
+    toggleFavorite
 };

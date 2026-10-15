@@ -1,6 +1,9 @@
 const express = require('express');
 const foodController = require('../controllers/food.controller');
+<<<<<<< HEAD
 const authController = require('../controllers/auth.controller');
+=======
+>>>>>>> origin/develop
 const { requireAuth, optionalAuth } = require('../middleware/auth.middleware');
 
 const router = express.Router();
@@ -15,7 +18,12 @@ router.get('/options', foodController.getFoodOptions);
 router.get('/quick-suggestions', foodController.getQuickSuggestions);
 router.get('/:id', optionalAuth, foodController.getFoodById);
 
+<<<<<<< HEAD
 // Lưu / bỏ lưu món ăn yêu thích
 router.post('/:id/favorite', requireAuth, authController.toggleFavorite);
+=======
+// Lưu hoặc bỏ lưu món ăn yêu thích
+router.post('/:id/favorite', requireAuth, foodController.toggleFavorite);
+>>>>>>> origin/develop
 
 module.exports = router;

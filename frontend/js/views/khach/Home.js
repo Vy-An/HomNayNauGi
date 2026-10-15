@@ -1,4 +1,4 @@
-import { fetchAPI } from '../../api.js';
+import { fetchAPI, BACKEND_URL } from '../../api.js';
 import FoodCard from '../../components/FoodCard.js';
 
 const dummyFoods = [
@@ -9,12 +9,12 @@ const dummyFoods = [
 ];
 
 const categoryExplore = [
-    { title: 'Món mặn', slug: 'mon-man', icon: 'fa-bowl-rice', count: '1 món', image: 'http://localhost:5000/images/foods/thit-ba-chi-luoc.jpg' },
-    { title: 'Món canh', slug: 'mon-canh', icon: 'fa-spoon', count: '4 món', image: 'http://localhost:5000/images/foods/canh-chua-ca-loc.jpg' },
-    { title: 'Món kho', slug: 'mon-kho', icon: 'fa-fire-flame-simple', count: '3 món', image: 'http://localhost:5000/images/foods/thit-kho-trung.jpg' },
-    { title: 'Món xào', slug: 'mon-xao', icon: 'fa-fire-burner', count: '2 món', image: 'http://localhost:5000/images/foods/suon-xao-chua-ngot.jpg' },
-    { title: 'Món chiên', slug: 'mon-chien', icon: 'fa-fire', count: '3 món', image: 'http://localhost:5000/images/foods/ga-chien-nuoc-mam.jpg' },
-    { title: 'Món rau', slug: 'mon-rau', icon: 'fa-leaf', count: '3 món', image: 'http://localhost:5000/images/foods/rau-muong-xao-toi.jpg' }
+    { title: 'Món mặn', slug: 'mon-man', icon: 'fa-bowl-rice', count: '1 món', image: `${BACKEND_URL}/images/foods/thit-ba-chi-luoc.jpg` },
+    { title: 'Món canh', slug: 'mon-canh', icon: 'fa-spoon', count: '4 món', image: `${BACKEND_URL}/images/foods/canh-chua-ca-loc.jpg` },
+    { title: 'Món kho', slug: 'mon-kho', icon: 'fa-fire-flame-simple', count: '3 món', image: `${BACKEND_URL}/images/foods/thit-kho-trung.jpg` },
+    { title: 'Món xào', slug: 'mon-xao', icon: 'fa-fire-burner', count: '2 món', image: `${BACKEND_URL}/images/foods/suon-xao-chua-ngot.jpg` },
+    { title: 'Món chiên', slug: 'mon-chien', icon: 'fa-fire', count: '3 món', image: `${BACKEND_URL}/images/foods/ga-chien-nuoc-mam.jpg` },
+    { title: 'Món rau', slug: 'mon-rau', icon: 'fa-leaf', count: '3 món', image: `${BACKEND_URL}/images/foods/rau-muong-xao-toi.jpg` }
 ];
 
 const Home = {
@@ -169,38 +169,38 @@ const Home = {
                                         </span>
                                         <span class="text-xs text-[#718078] font-normal">Chọn 1 hoặc nhiều</span>
                                     </label>
-                                    <div id="ingredient-options" class="flex flex-nowrap gap-2 overflow-x-auto overflow-y-hidden pb-1 max-w-full scrollbar-none snap-x cursor-grab select-none">
-                                        <label class="cursor-pointer group shrink-0 snap-start">
+                                    <div id="ingredient-options" class="flex flex-nowrap gap-2 overflow-x-auto overflow-y-hidden pb-1 max-w-full scrollbar-none cursor-grab select-none">
+                                        <label class="cursor-pointer group shrink-0">
                                             <input type="checkbox" name="ingredients" value="Thịt heo" class="peer sr-only">
                                             <div class="py-1.5 px-3 rounded-xl border border-[#E5E1D6] bg-white peer-checked:bg-[#145A43] peer-checked:text-white peer-checked:border-[#145A43] text-xs font-bold flex items-center gap-1.5 transition whitespace-nowrap">
                                                 <i class="fa-solid fa-drumstick-bite text-amber-500 peer-checked:text-white"></i> Thịt heo
                                             </div>
                                         </label>
-                                        <label class="cursor-pointer group shrink-0 snap-start">
+                                        <label class="cursor-pointer group shrink-0">
                                             <input type="checkbox" name="ingredients" value="Thịt gà" class="peer sr-only">
                                             <div class="py-1.5 px-3 rounded-xl border border-[#E5E1D6] bg-white peer-checked:bg-[#145A43] peer-checked:text-white peer-checked:border-[#145A43] text-xs font-bold flex items-center gap-1.5 transition whitespace-nowrap">
                                                 <i class="fa-solid fa-kiwi-bird text-orange-500 peer-checked:text-white"></i> Thịt gà
                                             </div>
                                         </label>
-                                        <label class="cursor-pointer group shrink-0 snap-start">
+                                        <label class="cursor-pointer group shrink-0">
                                             <input type="checkbox" name="ingredients" value="Hải sản" class="peer sr-only">
                                             <div class="py-1.5 px-3 rounded-xl border border-[#E5E1D6] bg-white peer-checked:bg-[#145A43] peer-checked:text-white peer-checked:border-[#145A43] text-xs font-bold flex items-center gap-1.5 transition whitespace-nowrap">
                                                 <i class="fa-solid fa-shrimp text-rose-500 peer-checked:text-white"></i> Hải sản
                                             </div>
                                         </label>
-                                        <label class="cursor-pointer group shrink-0 snap-start">
+                                        <label class="cursor-pointer group shrink-0">
                                             <input type="checkbox" name="ingredients" value="Rau củ" class="peer sr-only">
                                             <div class="py-1.5 px-3 rounded-xl border border-[#E5E1D6] bg-white peer-checked:bg-[#145A43] peer-checked:text-white peer-checked:border-[#145A43] text-xs font-bold flex items-center gap-1.5 transition whitespace-nowrap">
                                                 <i class="fa-solid fa-leaf text-emerald-500 peer-checked:text-white"></i> Rau củ
                                             </div>
                                         </label>
-                                        <label class="cursor-pointer group shrink-0 snap-start">
+                                        <label class="cursor-pointer group shrink-0">
                                             <input type="checkbox" name="ingredients" value="Trứng" class="peer sr-only">
                                             <div class="py-1.5 px-3 rounded-xl border border-[#E5E1D6] bg-white peer-checked:bg-[#145A43] peer-checked:text-white peer-checked:border-[#145A43] text-xs font-bold flex items-center gap-1.5 transition whitespace-nowrap">
                                                 <i class="fa-solid fa-egg text-amber-500 peer-checked:text-white"></i> Trứng
                                             </div>
                                         </label>
-                                        <label class="cursor-pointer group shrink-0 snap-start">
+                                        <label class="cursor-pointer group shrink-0">
                                             <input type="checkbox" name="ingredients" value="Đậu hũ" class="peer sr-only">
                                             <div class="py-1.5 px-3 rounded-xl border border-[#E5E1D6] bg-white peer-checked:bg-[#145A43] peer-checked:text-white peer-checked:border-[#145A43] text-xs font-bold flex items-center gap-1.5 transition whitespace-nowrap">
                                                 <i class="fa-solid fa-cube text-yellow-600 peer-checked:text-white"></i> Đậu hũ
@@ -222,32 +222,32 @@ const Home = {
                                         </span>
                                         <span class="text-xs text-[#718078] font-normal">Kiểu chế biến</span>
                                     </label>
-                                    <div id="category-options" class="flex flex-nowrap gap-2 overflow-x-auto overflow-y-hidden pb-1 max-w-full scrollbar-none snap-x cursor-grab select-none">
-                                        <label class="cursor-pointer group shrink-0 snap-start">
+                                    <div id="category-options" class="flex flex-nowrap gap-2 overflow-x-auto overflow-y-hidden pb-1 max-w-full scrollbar-none cursor-grab select-none">
+                                        <label class="cursor-pointer group shrink-0">
                                             <input type="checkbox" name="categories" value="Món mặn" class="peer sr-only">
                                             <div class="py-1.5 px-3 rounded-xl border border-[#E5E1D6] bg-white peer-checked:bg-[#145A43] peer-checked:text-white peer-checked:border-[#145A43] text-xs font-bold flex items-center gap-1.5 transition whitespace-nowrap">
                                                 <i class="fa-solid fa-bowl-food text-orange-500 peer-checked:text-white"></i> Món mặn
                                             </div>
                                         </label>
-                                        <label class="cursor-pointer group shrink-0 snap-start">
+                                        <label class="cursor-pointer group shrink-0">
                                             <input type="checkbox" name="categories" value="Món canh" class="peer sr-only">
                                             <div class="py-1.5 px-3 rounded-xl border border-[#E5E1D6] bg-white peer-checked:bg-[#145A43] peer-checked:text-white peer-checked:border-[#145A43] text-xs font-bold flex items-center gap-1.5 transition whitespace-nowrap">
                                                 <i class="fa-solid fa-spoon text-blue-500 peer-checked:text-white"></i> Món canh
                                             </div>
                                         </label>
-                                        <label class="cursor-pointer group shrink-0 snap-start">
+                                        <label class="cursor-pointer group shrink-0">
                                             <input type="checkbox" name="categories" value="Món xào" class="peer sr-only">
                                             <div class="py-1.5 px-3 rounded-xl border border-[#E5E1D6] bg-white peer-checked:bg-[#145A43] peer-checked:text-white peer-checked:border-[#145A43] text-xs font-bold flex items-center gap-1.5 transition whitespace-nowrap">
                                                 <i class="fa-solid fa-fire-burner text-amber-500 peer-checked:text-white"></i> Món xào
                                             </div>
                                         </label>
-                                        <label class="cursor-pointer group shrink-0 snap-start">
+                                        <label class="cursor-pointer group shrink-0">
                                             <input type="checkbox" name="categories" value="Món nướng" class="peer sr-only">
                                             <div class="py-1.5 px-3 rounded-xl border border-[#E5E1D6] bg-white peer-checked:bg-[#145A43] peer-checked:text-white peer-checked:border-[#145A43] text-xs font-bold flex items-center gap-1.5 transition whitespace-nowrap">
                                                 <i class="fa-solid fa-fire text-red-500 peer-checked:text-white"></i> Món nướng
                                             </div>
                                         </label>
-                                        <label class="cursor-pointer group shrink-0 snap-start">
+                                        <label class="cursor-pointer group shrink-0">
                                             <input type="checkbox" name="categories" value="Món kho" class="peer sr-only">
                                             <div class="py-1.5 px-3 rounded-xl border border-[#E5E1D6] bg-white peer-checked:bg-[#145A43] peer-checked:text-white peer-checked:border-[#145A43] text-xs font-bold flex items-center gap-1.5 transition whitespace-nowrap">
                                                 <i class="fa-solid fa-fire-flame-simple text-amber-600 peer-checked:text-white"></i> Món kho
@@ -275,7 +275,7 @@ const Home = {
                                             <div class="text-center py-2 rounded-xl border border-[#E5E1D6] bg-white peer-checked:bg-[#145A43] peer-checked:text-white peer-checked:border-[#145A43] transition text-xs font-bold hover:border-[#145A43]">&lt; 15 phút</div>
                                         </label>
                                         <label class="cursor-pointer">
-                                            <input type="radio" name="cook_time" value="medium" class="peer sr-only" checked>
+                                            <input type="radio" name="cook_time" value="medium" class="peer sr-only">
                                             <div class="text-center py-2 rounded-xl border border-[#E5E1D6] bg-white peer-checked:bg-[#145A43] peer-checked:text-white peer-checked:border-[#145A43] transition text-xs font-bold hover:border-[#145A43]">15 - 30 phút</div>
                                         </label>
                                         <label class="cursor-pointer">
@@ -471,22 +471,23 @@ const Home = {
         const fetchRandomFoods = async (quantity) => {
             try {
                 const response = await fetchAPI(buildRandomEndpoint(quantity));
-                if (response.success && Array.isArray(response.data) && response.data.length > 0) {
+                if (response && response.success && Array.isArray(response.data) && response.data.length > 0) {
                     const foods = response.data.map(normalizeFood);
                     randomFoodsPool = [...foods, ...randomFoodsPool].slice(0, 30);
-                    return foods;
+                    return { success: true, foods, message: response.message };
                 }
+                return {
+                    success: false,
+                    foods: [],
+                    message: response?.message || 'Không tìm thấy món ăn nào phù hợp với bộ lọc đã chọn.'
+                };
             } catch (e) {
-                console.warn('Fallback to foods pool for random:', e);
+                return {
+                    success: false,
+                    foods: [],
+                    message: 'Không thể kết nối đến máy chủ. Vui lòng thử lại sau.'
+                };
             }
-
-            // Fallback from pool
-            const shuffled = [...randomFoodsPool, ...dummyFoods].sort(() => 0.5 - Math.random());
-            const results = [];
-            for (let i = 0; i < quantity; i++) {
-                results.push(normalizeFood(shuffled[i % shuffled.length]));
-            }
-            return results;
         };
 
         const getRandomPoolFood = () => {
@@ -518,6 +519,18 @@ const Home = {
         window.renderRecentWonDishes = () => {
             const container = document.getElementById('gacha-results-container');
             if (!container) return;
+
+            const token = localStorage.getItem('auth_token');
+            if (!token) {
+                container.innerHTML = `
+                    <div class="w-full text-center py-2.5 bg-[#F8F5EA]/60 rounded-xl border border-dashed border-[#E5E1D6] text-xs text-[#718078] font-medium flex items-center justify-center gap-1.5">
+                        <i class="fa-solid fa-lock text-[#F4A62A]"></i>
+                        <span>Đăng nhập để tự động lưu lại các món bạn quay được!</span>
+                        <a href="#/login" class="ml-1 text-[#0F4937] font-bold underline hover:text-[#145A43]">Đăng nhập ngay</a>
+                    </div>
+                `;
+                return;
+            }
 
             let won = [];
             try {
@@ -552,6 +565,9 @@ const Home = {
         };
 
         const addWonDishes = (dishes) => {
+            const token = localStorage.getItem('auth_token');
+            if (!token) return; // Chỉ lưu món khi đã đăng nhập
+
             const items = (Array.isArray(dishes) ? dishes : [dishes]).filter(Boolean);
             if (!items.length) return;
 
@@ -765,16 +781,36 @@ const Home = {
                 heroRandomBtnText.innerHTML = '<i class="fa-solid fa-spinner fa-spin text-sm mr-1"></i> Đang tìm món phù hợp...';
             }
 
-            let resultDishes = [];
+            let result = null;
             try {
-                resultDishes = await fetchRandomFoods(numDishes);
+                result = await fetchRandomFoods(numDishes);
             } catch (error) {
-                console.error(error);
-                resultDishes = [getRandomPoolFood()];
+                result = {
+                    success: false,
+                    foods: [],
+                    message: 'Không thể kết nối đến máy chủ. Vui lòng thử lại sau.'
+                };
             }
-            resultDishes = resultDishes.filter(Boolean);
-            if (resultDishes.length === 0) {
-                resultDishes = [getRandomPoolFood()];
+
+            const resultDishes = (result && result.foods) ? result.foods.filter(Boolean) : [];
+            if (!result || !result.success || resultDishes.length === 0) {
+                isSpinning = false;
+                if (spinBtn) spinBtn.disabled = false;
+                if (heroRandomBtn) heroRandomBtn.disabled = false;
+                if (spinBtnText) {
+                    spinBtnText.innerHTML = '<i class="fa-solid fa-dice text-sm sm:text-base"></i><span>QUAY NGAY</span><i class="fa-solid fa-arrow-right text-xs"></i>';
+                }
+                if (heroRandomBtnText) heroRandomBtnText.textContent = 'RANDOM NGAY →';
+
+                const errorMsg = result?.message || 'Không tìm thấy món ăn nào phù hợp với bộ lọc đã chọn. Bạn hãy thử nới lỏng bộ lọc nhé!';
+                if (window.Popup && typeof window.Popup.warning === 'function') {
+                    window.Popup.warning(errorMsg, 'Không tìm thấy món phù hợp');
+                } else if (window.Popup && typeof window.Popup.toast === 'function') {
+                    window.Popup.toast(errorMsg, 'warning');
+                } else {
+                    alert(errorMsg);
+                }
+                return;
             }
 
             if (spinBtnText && resultDishes.length > 1) {
@@ -792,7 +828,6 @@ const Home = {
             }
             if (heroRandomBtnText) heroRandomBtnText.textContent = 'RANDOM NGAY →';
 
-            // Show result modal
             if (resultDishes.length === 1) {
                 showResultModal(resultDishes[0]);
             } else if (resultDishes.length > 1) {
@@ -901,14 +936,27 @@ const Home = {
         }
 
         // Reset filter button
+        let activeCookTimeRadio = document.querySelector('#gacha-form input[name="cook_time"]:checked');
+        const cookTimeRadios = document.querySelectorAll('#gacha-form input[name="cook_time"]');
+        cookTimeRadios.forEach(radio => {
+            radio.addEventListener('click', () => {
+                if (activeCookTimeRadio === radio) {
+                    radio.checked = false;
+                    activeCookTimeRadio = null;
+                } else {
+                    activeCookTimeRadio = radio;
+                }
+            });
+        });
+
         const resetBtn = document.getElementById('btn-reset-filters');
         if (resetBtn) {
             resetBtn.addEventListener('click', () => {
                 document.querySelectorAll('#gacha-form input[type="checkbox"]').forEach(cb => cb.checked = false);
                 const firstRadio = document.querySelector('#gacha-form input[name="quantity"][value="1"]');
                 if (firstRadio) firstRadio.checked = true;
-                const mediumRadio = document.querySelector('#gacha-form input[name="cook_time"][value="medium"]');
-                if (mediumRadio) mediumRadio.checked = true;
+                cookTimeRadios.forEach(cb => { cb.checked = false; });
+                activeCookTimeRadio = null;
                 
                 const ingSearch = document.getElementById('ingredient-search');
                 if (ingSearch) ingSearch.value = '';
@@ -1005,6 +1053,104 @@ const Home = {
         bindFilterSearch('ingredient-search', 'ingredient-options');
         bindFilterSearch('category-search', 'category-options');
 
+        // Cho phép cuộn chuột để lăn ngang sang trái/phải với tốc độ chậm, thấy rõ hiệu ứng
+        const setupSmoothHorizontalScroll = (containerId) => {
+            const container = document.getElementById(containerId);
+            if (!container) return;
+
+            container.classList.remove('snap-x');
+            container.style.overscrollBehaviorX = 'contain';
+
+            let targetScroll = container.scrollLeft;
+            let isAnimating = false;
+
+            // Đồng bộ targetScroll nếu có sự thay đổi vị trí cuộn
+            container.addEventListener('scroll', () => {
+                if (!isAnimating) {
+                    targetScroll = container.scrollLeft;
+                }
+            }, { passive: true });
+
+            container.addEventListener('wheel', (e) => {
+                const maxScroll = container.scrollWidth - container.clientWidth;
+                if (maxScroll <= 0) return;
+
+                // Lấy hướng và giá trị delta của con lăn chuột
+                const rawDelta = Math.abs(e.deltaX) > Math.abs(e.deltaY) ? e.deltaX : e.deltaY;
+                if (rawDelta === 0) return;
+
+                // Chặn cuộn trang web dọc khi trỏ chuột vào vùng bộ lọc
+                e.preventDefault();
+
+                // Tốc độ lăn chậm: 45px mỗi khấc lăn chuột để thấy rõ hiệu ứng chuyển động
+                const direction = Math.sign(rawDelta);
+                const step = Math.abs(rawDelta) >= 50 ? direction * 45 : rawDelta * 0.5;
+
+                targetScroll = Math.max(0, Math.min(maxScroll, targetScroll + step));
+
+                if (!isAnimating) {
+                    isAnimating = true;
+                    const animate = () => {
+                        const diff = targetScroll - container.scrollLeft;
+                        if (Math.abs(diff) > 0.5) {
+                            // Hệ số 0.08 tạo độ trôi êm ái, chậm rãi, thấy rõ hiệu ứng
+                            container.scrollLeft += diff * 0.08;
+                            requestAnimationFrame(animate);
+                        } else {
+                            container.scrollLeft = targetScroll;
+                            isAnimating = false;
+                        }
+                    };
+                    requestAnimationFrame(animate);
+                }
+            }, { passive: false });
+
+            // Hỗ trợ kéo rê chuột (drag to scroll) mượt mà
+            let isDown = false;
+            let startX = 0;
+            let scrollStart = 0;
+            let hasDragged = false;
+
+            container.addEventListener('mousedown', (e) => {
+                isDown = true;
+                hasDragged = false;
+                container.classList.add('cursor-grabbing');
+                container.classList.remove('cursor-grab');
+                startX = e.pageX - container.offsetLeft;
+                scrollStart = container.scrollLeft;
+                targetScroll = container.scrollLeft;
+            });
+
+            window.addEventListener('mousemove', (e) => {
+                if (!isDown) return;
+                const x = e.pageX - container.offsetLeft;
+                const walk = (x - startX) * 1.2;
+                if (Math.abs(walk) > 4) {
+                    hasDragged = true;
+                }
+                container.scrollLeft = scrollStart - walk;
+                targetScroll = container.scrollLeft;
+            });
+
+            window.addEventListener('mouseup', () => {
+                if (!isDown) return;
+                isDown = false;
+                container.classList.remove('cursor-grabbing');
+                container.classList.add('cursor-grab');
+            });
+
+            container.addEventListener('click', (e) => {
+                if (hasDragged) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    hasDragged = false;
+                }
+            }, true);
+        };
+
+        setupSmoothHorizontalScroll('ingredient-options');
+        setupSmoothHorizontalScroll('category-options');
+
         const ingredientIconMap = {
             'thit ba chi': 'fa-drumstick-bite text-amber-500',
             'trung ga': 'fa-egg text-amber-500',
@@ -1040,13 +1186,13 @@ const Home = {
         };
 
         const categoryExploreImages = {
-            'mon-man': 'http://localhost:5000/images/foods/thit-ba-chi-luoc.jpg',
-            'mon-canh': 'http://localhost:5000/images/foods/canh-chua-ca-loc.jpg',
-            'mon-kho': 'http://localhost:5000/images/foods/thit-kho-trung.jpg',
-            'mon-xao': 'http://localhost:5000/images/foods/suon-xao-chua-ngot.jpg',
-            'mon-chien': 'http://localhost:5000/images/foods/ga-chien-nuoc-mam.jpg',
-            'mon-rau': 'http://localhost:5000/images/foods/rau-muong-xao-toi.jpg',
-            'mon-luoc': 'http://localhost:5000/images/foods/rau-cu-luoc.jpg'
+            'mon-man': `${BACKEND_URL}/images/foods/thit-ba-chi-luoc.jpg`,
+            'mon-canh': `${BACKEND_URL}/images/foods/canh-chua-ca-loc.jpg`,
+            'mon-kho': `${BACKEND_URL}/images/foods/thit-kho-trung.jpg`,
+            'mon-xao': `${BACKEND_URL}/images/foods/suon-xao-chua-ngot.jpg`,
+            'mon-chien': `${BACKEND_URL}/images/foods/ga-chien-nuoc-mam.jpg`,
+            'mon-rau': `${BACKEND_URL}/images/foods/rau-muong-xao-toi.jpg`,
+            'mon-luoc': `${BACKEND_URL}/images/foods/rau-cu-luoc.jpg`
         };
 
         try {
@@ -1061,7 +1207,7 @@ const Home = {
                             const normalized = normalizeText(ing.name);
                             const iconClass = ingredientIconMap[normalized] || 'fa-leaf text-emerald-500';
                             return `
-                                <label class="cursor-pointer group shrink-0 snap-start">
+                                <label class="cursor-pointer group shrink-0">
                                     <input type="checkbox" name="ingredients" value="${ing.name}" class="peer sr-only">
                                     <div class="py-1.5 px-3 rounded-xl border border-[#E5E1D6] bg-white peer-checked:bg-[#145A43] peer-checked:text-white peer-checked:border-[#145A43] text-xs font-bold flex items-center gap-1.5 transition whitespace-nowrap">
                                         <i class="fa-solid ${iconClass} peer-checked:text-white"></i> ${ing.name}
@@ -1078,7 +1224,7 @@ const Home = {
                         catContainer.innerHTML = categories.map(cat => {
                             const iconClass = categoryIconMap[cat.slug] || 'fa-bowl-food text-orange-500';
                             return `
-                                <label class="cursor-pointer group shrink-0 snap-start">
+                                <label class="cursor-pointer group shrink-0">
                                     <input type="checkbox" name="categories" value="${cat.name}" class="peer sr-only">
                                     <div class="py-1.5 px-3 rounded-xl border border-[#E5E1D6] bg-white peer-checked:bg-[#145A43] peer-checked:text-white peer-checked:border-[#145A43] text-xs font-bold flex items-center gap-1.5 transition whitespace-nowrap">
                                         <i class="fa-solid ${iconClass} peer-checked:text-white"></i> ${cat.name}

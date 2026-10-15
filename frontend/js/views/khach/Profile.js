@@ -1,4 +1,4 @@
-import { fetchAPI } from '../../api.js';
+import { fetchAPI, BACKEND_URL } from '../../api.js';
 
 function escapeHTML(value) {
     const div = document.createElement('div');
@@ -23,93 +23,9 @@ const Profile = {
     render: async () => {
         return `
         <div class="cozy-kitchen-bg text-text-main font-sans min-h-screen flex flex-col antialiased selection:bg-primary/20 selection:text-primary">
-            <header class="h-[70px] bg-white border-b border-beige-border sticky top-0 z-50 px-4 sm:px-6 lg:px-8 flex items-center justify-between gap-4 shadow-2xs">
-                <div class="flex items-center gap-3 shrink-0">
-                    <a href="#/" class="flex items-center gap-2.5 group">
-                        <div class="w-10 h-10 rounded-xl bg-accent flex items-center justify-center text-primary-deep shadow-2xs group-hover:scale-105 transition-transform">
-                            <i class="fa-solid fa-kitchen-set text-lg sm:text-xl"></i>
-                        </div>
-                        <div class="flex flex-col">
-                            <span class="text-base sm:text-lg font-black tracking-tight text-primary-deep leading-tight font-sans">Hôm Nay Nấu Gì</span>
-                            <span class="text-[9px] uppercase tracking-[0.2em] text-accent font-black leading-none">MÓN NGON MỖI NGÀY</span>
-                        </div>
-                    </a>
-                </div>
-
-                <div class="flex-1 max-w-xl mx-4 hidden sm:block">
-                    <form id="profile-top-search-form" class="relative">
-                        <span class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-text-muted">
-                            <i class="fa-solid fa-magnifying-glass text-xs"></i>
-                        </span>
-                        <input 
-                            type="search" 
-                            id="profile-top-search-input"
-                            placeholder="Tìm kiếm món ăn, công thức hoặc nguyên liệu..." 
-                            class="w-full pl-9 pr-4 py-2 bg-cream-card hover:bg-cream-soft focus:bg-white border border-beige-border focus:border-primary focus:ring-2 focus:ring-primary/15 rounded-xl text-xs sm:text-sm text-text-main placeholder:text-text-muted outline-none transition-all"
-                        >
-                    </form>
-                </div>
-
-                <div class="flex items-center gap-2.5 sm:gap-3 shrink-0">
-                    <div class="relative">
-                        <button 
-                            id="btn-profile-top-notif" 
-                            type="button" 
-                            class="w-9 h-9 rounded-xl bg-cream-card hover:bg-cream-soft text-text-muted hover:text-primary flex items-center justify-center transition-colors relative cursor-pointer border border-beige-border/80 shadow-2xs"
-                            title="Thông báo"
-                        >
-                            <i class="fa-regular fa-bell text-sm"></i>
-                            <span class="absolute top-1.5 right-1.5 w-2 h-2 rounded-full bg-rose-500"></span>
-                        </button>
-                        <div id="profile-top-notif-popover" class="hidden absolute right-0 top-full mt-2 w-72 bg-white rounded-2xl shadow-xl border border-beige-border p-3.5 z-50 text-xs">
-                            <div class="flex items-center justify-between pb-2 mb-2 border-b border-beige-border/60">
-                                <span class="font-extrabold text-text-main">Thông báo của bạn</span>
-                                <span class="text-[10px] text-text-muted">Gần đây</span>
-                            </div>
-                            <div class="py-3 text-center text-text-muted">
-                                <i class="fa-regular fa-bell-slash text-lg mb-1 block"></i>
-                                <span>Chưa có thông báo mới nào</span>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="relative">
-                        <button 
-                            id="btn-profile-top-user-menu" 
-                            type="button" 
-                            class="flex items-center gap-2 p-1 pl-1.5 pr-2.5 rounded-xl bg-cream-card hover:bg-cream-soft border border-beige-border/80 transition-colors cursor-pointer"
-                        >
-                            <img 
-                                id="header-avatar" 
-                                src="http://localhost:5000/images/users/admin.jpg" 
-                                alt="Avatar" 
-                                class="w-8 h-8 rounded-full object-cover border border-white shadow-2xs"
-                            >
-                            <span id="header-name" class="text-xs font-bold text-text-main hidden md:inline-block max-w-[110px] truncate">Người dùng</span>
-                            <i class="fa-solid fa-chevron-down text-[10px] text-text-muted"></i>
-                        </button>
-                        <div id="profile-top-user-popover" class="hidden absolute right-0 top-full mt-2 w-48 bg-white rounded-2xl shadow-xl border border-beige-border py-1.5 z-50 text-xs">
-                            <a href="#/ca-nhan" class="flex items-center gap-2.5 px-3.5 py-2 text-primary hover:bg-primary-subtle font-bold">
-                                <i class="fa-regular fa-user text-xs text-primary"></i>
-                                <span>Trang cá nhân</span>
-                            </a>
-                            <a href="#/" class="flex items-center gap-2.5 px-3.5 py-2 text-text-main hover:bg-cream-soft font-semibold">
-                                <i class="fa-solid fa-house text-xs text-text-muted"></i>
-                                <span>Trang chủ</span>
-                            </a>
-                            <div class="my-1 border-t border-beige-border/60"></div>
-                            <button id="btn-top-logout" type="button" class="w-full text-left flex items-center gap-2.5 px-3.5 py-2 text-rose-600 hover:bg-rose-50 font-semibold cursor-pointer">
-                                <i class="fa-solid fa-arrow-right-from-bracket text-xs"></i>
-                                <span>Đăng xuất</span>
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            </header>
-
             <div class="max-w-[1360px] w-full mx-auto px-4 sm:px-6 lg:px-8 pt-5 pb-3">
                 <section class="relative rounded-2xl overflow-hidden shadow-sm border border-beige-border/80 bg-gradient-to-r from-[#145A43] via-[#0F4937] to-[#0A3628] text-white">
-                    <div class="absolute inset-0 bg-cover bg-center opacity-25 mix-blend-overlay" style="background-image: url('http://localhost:5000/images/foods/thit-kho-trung.jpg');"></div>
+                    <div class="absolute inset-0 bg-cover bg-center opacity-25 mix-blend-overlay" style="background-image: url('${BACKEND_URL}/images/foods/thit-kho-trung.jpg');"></div>
                     <div class="absolute inset-0 bg-gradient-to-r from-black/75 via-[#0F4937]/80 to-[#145A43]/70 pointer-events-none"></div>
 
                     <div class="relative z-10 p-4 sm:p-5 flex flex-col md:flex-row items-center md:items-start justify-between gap-4">
@@ -117,7 +33,7 @@ const Profile = {
                             <div class="relative shrink-0">
                                 <img 
                                     id="profile-hero-avatar" 
-                                    src="http://localhost:5000/images/users/admin.jpg" 
+                                    src="${BACKEND_URL}/images/users/admin.jpg" 
                                     alt="Avatar" 
                                     class="w-[100px] h-[100px] sm:w-[110px] sm:h-[110px] rounded-full object-cover border-3 border-white shadow-md bg-white/20"
                                 >
@@ -492,51 +408,30 @@ const Profile = {
             }, 3000);
         };
 
-        const topSearchForm = document.getElementById('profile-top-search-form');
-        const topSearchInput = document.getElementById('profile-top-search-input');
-        if (topSearchForm && topSearchInput) {
-            topSearchForm.addEventListener('submit', (e) => {
-                e.preventDefault();
-                const q = topSearchInput.value.trim();
-                if (q) {
-                    window.location.hash = `#/danh-sach?search=${encodeURIComponent(q)}`;
-                }
-            });
-        }
-
-        const btnNotif = document.getElementById('btn-profile-top-notif');
-        const notifPopover = document.getElementById('profile-top-notif-popover');
-        if (btnNotif && notifPopover) {
-            btnNotif.addEventListener('click', (e) => {
-                e.stopPropagation();
-                notifPopover.classList.toggle('hidden');
-                document.getElementById('profile-top-user-popover')?.classList.add('hidden');
-            });
-        }
-
-        const btnUserMenu = document.getElementById('btn-profile-top-user-menu');
-        const userPopover = document.getElementById('profile-top-user-popover');
-        if (btnUserMenu && userPopover) {
-            btnUserMenu.addEventListener('click', (e) => {
-                e.stopPropagation();
-                userPopover.classList.toggle('hidden');
-                notifPopover?.classList.add('hidden');
-            });
-        }
-
-        document.addEventListener('click', () => {
-            notifPopover?.classList.add('hidden');
-            userPopover?.classList.add('hidden');
-        });
-
-        const handleLogout = () => {
+        const handleLogout = async () => {
+            if (window.logoutAuth) {
+                return window.logoutAuth();
+            }
+            if (window.Popup) {
+                const confirmed = await window.Popup.confirm({
+                    title: 'Đăng xuất tài khoản',
+                    message: 'Bạn có chắc chắn muốn đăng xuất không?',
+                    type: 'question',
+                    confirmText: 'Đăng xuất',
+                    cancelText: 'Hủy bỏ',
+                    confirmButtonColor: 'warning'
+                });
+                if (!confirmed) return;
+            }
             localStorage.removeItem('auth_token');
             localStorage.removeItem('auth_user');
             localStorage.removeItem('user');
             window.location.hash = '#/login';
+            if (window.Popup) {
+                window.Popup.toast('Đã đăng xuất tài khoản thành công.', 'info');
+            }
         };
 
-        document.getElementById('btn-top-logout')?.addEventListener('click', handleLogout);
         document.getElementById('sidebar-btn-logout')?.addEventListener('click', handleLogout);
 
         document.getElementById('sidebar-btn-notifs')?.addEventListener('click', () => {
@@ -653,18 +548,19 @@ const Profile = {
             const heroAvatar = document.getElementById('profile-hero-avatar');
             const heroJoined = document.getElementById('profile-hero-joined');
             const heroBadge = document.getElementById('profile-hero-badge');
-            const headerAvatar = document.getElementById('header-avatar');
-            const headerName = document.getElementById('header-name');
+            const navAvatar = document.getElementById('nav-user-avatar');
+            const navName = document.getElementById('nav-user-name');
 
             if (heroName) heroName.textContent = user.name || 'Người dùng';
             if (heroEmail) heroEmail.textContent = user.email || '';
-            if (heroAvatar) heroAvatar.src = user.avatar || 'http://localhost:5000/images/users/admin.jpg';
-            if (headerAvatar) headerAvatar.src = user.avatar || 'http://localhost:5000/images/users/admin.jpg';
-            if (headerName) headerName.textContent = user.name || 'Tài khoản';
+            if (heroAvatar) heroAvatar.src = user.avatar || `${BACKEND_URL}/images/users/admin.jpg`;
+            if (navAvatar) navAvatar.src = user.avatar || `${BACKEND_URL}/images/users/admin.jpg`;
+            if (navName) navName.textContent = user.name || 'Tài khoản';
             if (heroJoined) heroJoined.textContent = formatDate(user.created_at);
             if (heroBadge) heroBadge.textContent = user.role === 'admin' ? 'Quản trị viên' : 'Thành viên Bếp';
 
-            const postsCount = user.stats?.posts ?? myPosts.length ?? 0;
+            const approvedPostsCount = myPosts.filter(p => p.status === 'active').length || user.stats?.activePosts || user.stats?.posts || 0;
+            const totalPostsCount = myPosts.length || user.stats?.posts || 0;
             const favsCount = user.stats?.favorites ?? myFavorites.length ?? 0;
 
             const statPosts = document.getElementById('stat-posts-count');
@@ -674,11 +570,11 @@ const Profile = {
             const secCounter = document.getElementById('section-posts-counter');
             const fullFavBadge = document.getElementById('full-favs-count-badge');
 
-            if (statPosts) statPosts.textContent = postsCount;
+            if (statPosts) statPosts.textContent = approvedPostsCount;
             if (statFavs) statFavs.textContent = favsCount;
-            if (tabBadgePosts) tabBadgePosts.textContent = postsCount;
+            if (tabBadgePosts) tabBadgePosts.textContent = totalPostsCount;
             if (tabBadgeFavs) tabBadgeFavs.textContent = favsCount;
-            if (secCounter) secCounter.textContent = `(${postsCount})`;
+            if (secCounter) secCounter.textContent = `(${totalPostsCount})`;
             if (fullFavBadge) fullFavBadge.textContent = `${favsCount} món`;
 
             const tabName = document.getElementById('tab-info-name');
@@ -719,26 +615,77 @@ const Profile = {
                 const likes = post.likesCount ?? post.likes ?? 0;
                 const comments = post.commentsCount ?? post.comments ?? 0;
                 const isLiked = Boolean(post.isLiked || post.liked);
-                const postImg = post.image || (post.food?.image || 'http://localhost:5000/images/foods/thit-kho-trung.jpg');
+                const postImg = post.image || (post.food?.image || `${BACKEND_URL}/images/foods/thit-kho-trung.jpg`);
                 const foodName = post.foodName || post.food?.name || '';
+                const isPending = post.status === 'pending';
+                const isHidden = post.status === 'hidden';
+
+                let statusBadge = `
+                    <span class="text-[10px] bg-emerald-50 text-emerald-700 font-extrabold px-2 py-0.5 rounded-full border border-emerald-200 flex items-center gap-1">
+                        <span>🟢</span> Đã đăng
+                    </span>
+                `;
+                let cardStyle = "bg-white rounded-2xl border border-beige-border/90 p-3.5 shadow-sm hover:shadow-md transition-all flex flex-col justify-between";
+                let statusNotice = '';
+
+                if (isPending) {
+                    statusBadge = `
+                        <span class="text-[10px] bg-amber-50 text-amber-700 font-extrabold px-2.5 py-0.5 rounded-full border border-amber-300 shadow-2xs flex items-center gap-1">
+                            <span>🟡</span> Đang chờ duyệt
+                        </span>
+                    `;
+                    cardStyle = "bg-amber-50/20 rounded-2xl border-2 border-amber-300/80 p-3.5 shadow-xs opacity-75 hover:opacity-95 transition-all flex flex-col justify-between ring-1 ring-amber-200/50";
+                    statusNotice = `
+                        <div class="px-3 py-2 rounded-xl bg-amber-100/70 border border-amber-300/70 text-[#8C5300] text-[11px] font-semibold flex items-center gap-2">
+                            <i class="fa-solid fa-hourglass-half text-amber-600 text-xs shrink-0"></i>
+                            <span>Bài viết đang chờ Admin duyệt.</span>
+                        </div>
+                    `;
+                } else if (isHidden) {
+                    statusBadge = `
+                        <span class="text-[10px] bg-rose-50 text-rose-700 font-extrabold px-2.5 py-0.5 rounded-full border border-rose-300 shadow-2xs flex items-center gap-1">
+                            <span>🔴</span> Bị từ chối
+                        </span>
+                    `;
+                    cardStyle = "bg-rose-50/20 rounded-2xl border-2 border-rose-300/80 p-3.5 shadow-xs opacity-70 hover:opacity-90 transition-all flex flex-col justify-between ring-1 ring-rose-200/50";
+                    statusNotice = `
+                        <div class="px-3 py-2 rounded-xl bg-rose-50 border border-rose-200 text-rose-800 text-[11px] font-semibold flex items-start gap-2">
+                            <i class="fa-solid fa-circle-exclamation text-rose-600 text-xs shrink-0 mt-0.5"></i>
+                            <div class="leading-tight">
+                                <p class="font-bold">Bài viết bị từ chối</p>
+                                ${post.hidden_reason ? `<p class="text-[10px] text-rose-700 mt-0.5 font-medium">Lý do: <span class="font-bold underline">${escapeHTML(post.hidden_reason)}</span></p>` : ''}
+                            </div>
+                        </div>
+                    `;
+                }
 
                 return `
-                    <article class="bg-white rounded-2xl border border-beige-border/90 p-3.5 shadow-sm hover:shadow-md transition-all flex flex-col justify-between" id="my-post-card-${post.id_post}">
+                    <article class="${cardStyle}" id="my-post-card-${post.id_post}">
                         <div class="space-y-2.5">
                             <div class="flex items-center justify-between">
                                 <div class="flex items-center gap-2">
-                                    <img src="${post.author?.avatar || currentUser?.avatar || 'http://localhost:5000/images/users/admin.jpg'}" class="w-7 h-7 rounded-full object-cover border border-gray-100 shadow-2xs">
+                                    <img src="${post.author?.avatar || currentUser?.avatar || `${BACKEND_URL}/images/users/admin.jpg`}" class="w-7 h-7 rounded-full object-cover border border-gray-100 shadow-2xs">
                                     <div class="leading-tight">
                                         <p class="font-bold text-xs text-text-main">${escapeHTML(post.author?.name || currentUser?.name)}</p>
                                         <span class="text-[10px] text-text-muted">${formatDate(post.created_at)}</span>
                                     </div>
                                 </div>
-                                <span class="text-[10px] bg-primary-subtle text-primary font-bold px-2 py-0.5 rounded-full border border-primary/20">Bài của bạn</span>
+                                ${statusBadge}
                             </div>
 
+                            ${statusNotice}
+
                             ${postImg ? `
-                                <div class="rounded-xl overflow-hidden aspect-video bg-gray-100 border border-beige-border/50">
-                                    <img src="${postImg}" alt="Ảnh món ăn" class="w-full h-full object-cover">
+                                <div class="rounded-xl overflow-hidden aspect-video bg-gray-100 border border-beige-border/50 relative">
+                                    <img src="${postImg}" alt="Ảnh món ăn" class="w-full h-full object-cover ${isPending ? 'filter blur-[0.5px]' : ''}">
+                                    ${isPending ? `
+                                        <div class="absolute inset-0 bg-amber-950/20 backdrop-blur-[1px] flex items-center justify-center">
+                                            <span class="bg-black/60 backdrop-blur-md text-amber-200 text-xs font-extrabold px-3 py-1.5 rounded-full border border-amber-300/40 shadow-md flex items-center gap-1.5">
+                                                <span>🟡</span>
+                                                Đang chờ duyệt
+                                            </span>
+                                        </div>
+                                    ` : ''}
                                 </div>
                             ` : ''}
 
@@ -757,7 +704,7 @@ const Profile = {
 
                         <div class="pt-3 mt-3 border-t border-gray-100 flex items-center justify-between text-xs">
                             <div class="flex items-center gap-3">
-                                <button type="button" class="btn-like-post flex items-center gap-1.5 font-bold ${isLiked ? 'text-rose-500' : 'text-text-muted hover:text-rose-500'} cursor-pointer transition-colors" data-id="${post.id_post}">
+                                <button type="button" class="btn-like-post flex items-center gap-1.5 font-bold ${isLiked ? 'text-rose-500' : 'text-text-muted hover:text-rose-500'} ${isPending || isHidden ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer'} transition-colors" data-id="${post.id_post}" ${isPending || isHidden ? 'disabled' : ''}>
                                     <i class="${isLiked ? 'fa-solid text-rose-500' : 'fa-regular'} fa-heart"></i>
                                     <span class="like-number">${likes}</span>
                                 </button>
@@ -768,14 +715,26 @@ const Profile = {
                             </div>
 
                             <div class="flex items-center gap-1.5">
-                                <button type="button" class="btn-share-post px-2.5 py-1 rounded-lg bg-cream-card hover:bg-cream-soft border border-beige-border/70 text-text-muted text-xs font-semibold flex items-center gap-1 cursor-pointer transition-colors" data-id="${post.id_post}" title="Chia sẻ bài viết">
-                                    <i class="fa-solid fa-share-nodes text-[10px]"></i>
-                                    <span>Chia sẻ</span>
-                                </button>
-                                <a href="#/cong-dong" class="px-2.5 py-1 rounded-lg bg-primary hover:bg-primary-deep text-white text-xs font-semibold flex items-center gap-1 transition-colors shadow-2xs">
-                                    <span>Chi tiết</span>
-                                    <i class="fa-solid fa-chevron-right text-[9px]"></i>
-                                </a>
+                                ${isPending ? `
+                                    <span class="px-3 py-1 rounded-lg bg-amber-100 text-[#8C5300] text-xs font-bold flex items-center gap-1.5 border border-amber-300/70 shadow-2xs">
+                                        <i class="fa-solid fa-hourglass-half text-[10px] text-amber-600"></i>
+                                        <span>Đang chờ duyệt</span>
+                                    </span>
+                                ` : isHidden ? `
+                                    <span class="px-3 py-1 rounded-lg bg-rose-100 text-rose-700 text-xs font-bold flex items-center gap-1.5 border border-rose-300/70 shadow-2xs">
+                                        <i class="fa-solid fa-eye-slash text-[10px] text-rose-600"></i>
+                                        <span>Đã bị ẩn</span>
+                                    </span>
+                                ` : `
+                                    <button type="button" class="btn-share-post px-2.5 py-1 rounded-lg bg-cream-card hover:bg-cream-soft border border-beige-border/70 text-text-muted text-xs font-semibold flex items-center gap-1 cursor-pointer transition-colors" data-id="${post.id_post}" title="Chia sẻ bài viết">
+                                        <i class="fa-solid fa-share-nodes text-[10px]"></i>
+                                        <span>Chia sẻ</span>
+                                    </button>
+                                    <a href="#/cong-dong" class="px-2.5 py-1 rounded-lg bg-primary hover:bg-primary-deep text-white text-xs font-semibold flex items-center gap-1 transition-colors shadow-2xs">
+                                        <span>Chi tiết</span>
+                                        <i class="fa-solid fa-chevron-right text-[9px]"></i>
+                                    </a>
+                                `}
                             </div>
                         </div>
                     </article>
@@ -807,7 +766,7 @@ const Profile = {
                 return `
                     <div class="flex items-center justify-between gap-2.5 p-2 rounded-xl hover:bg-cream-soft transition-colors group">
                         <a href="${link}" class="flex items-center gap-2.5 min-w-0 flex-1">
-                            <img src="${food.image || 'http://localhost:5000/images/foods/thit-kho-trung.jpg'}" alt="${escapeHTML(food.name)}" class="w-11 h-11 rounded-xl object-cover shrink-0 border border-beige-border/70 shadow-2xs">
+                            <img src="${food.image || `${BACKEND_URL}/images/foods/thit-kho-trung.jpg`}" alt="${escapeHTML(food.name)}" class="w-11 h-11 rounded-xl object-cover shrink-0 border border-beige-border/70 shadow-2xs">
                             <div class="min-w-0">
                                 <h4 class="font-extrabold text-xs text-text-main group-hover:text-primary transition-colors truncate">${escapeHTML(food.name || 'Món ngon')}</h4>
                                 <span class="text-[10px] text-text-muted font-medium">${escapeHTML(food.category || 'Món ngon')}</span>
@@ -856,10 +815,10 @@ const Profile = {
                 const link = foodId ? `#/mon-an/${foodId}` : '#/danh-sach';
 
                 return `
-                    <div class="bg-white rounded-2xl border border-beige-border/90 p-3 shadow-sm hover:shadow-md transition-all flex flex-col justify-between group">
+                    <div class="bg-white rounded-2xl border border-beige-border/90 p-3 shadow-sm hover:shadow-md transition-all flex flex-col justify-between group cursor-pointer" data-fav-link="${link}">
                         <div>
                             <div class="relative rounded-xl overflow-hidden aspect-[4/3] mb-2.5 bg-gray-100 border border-beige-border/50">
-                                <img src="${food.image || 'http://localhost:5000/images/foods/thit-kho-trung.jpg'}" alt="${escapeHTML(food.name)}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">
+                                <img src="${food.image || `${BACKEND_URL}/images/foods/thit-kho-trung.jpg`}" alt="${escapeHTML(food.name)}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">
                                 ${food.cooking_time ? `
                                     <span class="absolute bottom-2 left-2 bg-black/60 backdrop-blur-2xs text-white text-[10px] font-bold px-2 py-0.5 rounded-md flex items-center gap-1">
                                         <i class="fa-regular fa-clock text-[9px]"></i>
@@ -977,6 +936,19 @@ const Profile = {
                     if (tabBadgeFavs) tabBadgeFavs.textContent = newCount;
                     if (fullFavBadge) fullFavBadge.textContent = `${newCount} món`;
 
+                    if (window._favListCache) {
+                        window._favListCache = window._favListCache.filter(item => Number(item.id_food || item.id) !== Number(foodId));
+                    }
+                    if (window._userFavIds) {
+                        window._userFavIds.delete(Number(foodId));
+                    }
+                    if (typeof window !== 'undefined' && window.syncFavBadge) {
+                        window.syncFavBadge();
+                    }
+                    if (window.updateNavbarFavBadge) {
+                        window.updateNavbarFavBadge(newCount);
+                    }
+
                     showToast(`Đã bỏ lưu "${foodName}" khỏi danh sách yêu thích.`, 'info');
                 } else {
                     showToast(res?.message || 'Không thể bỏ yêu thích món ăn.', 'error');
@@ -1008,6 +980,13 @@ const Profile = {
                     const foodName = btn.getAttribute('data-name') || 'Món ăn';
                     btn.disabled = true;
                     handleRemoveFavorite(foodId, foodName);
+                    return;
+                }
+
+                const card = e.target.closest('[data-fav-link]');
+                if (card) {
+                    const link = card.getAttribute('data-fav-link');
+                    if (link) window.location.hash = link;
                 }
             });
         }
@@ -1031,13 +1010,14 @@ const Profile = {
             if (postsRes?.success && Array.isArray(postsRes.data)) {
                 myPosts = postsRes.data;
                 renderPostsGrid();
-                const count = myPosts.length;
+                const approvedCount = myPosts.filter(p => p.status === 'active').length;
+                const totalCount = myPosts.length;
                 const statPosts = document.getElementById('stat-posts-count');
                 const tabBadgePosts = document.getElementById('tab-badge-posts');
                 const secCounter = document.getElementById('section-posts-counter');
-                if (statPosts) statPosts.textContent = count;
-                if (tabBadgePosts) tabBadgePosts.textContent = count;
-                if (secCounter) secCounter.textContent = `(${count})`;
+                if (statPosts) statPosts.textContent = approvedCount;
+                if (tabBadgePosts) tabBadgePosts.textContent = totalCount;
+                if (secCounter) secCounter.textContent = `(${totalCount})`;
             } else {
                 renderPostsGrid();
             }

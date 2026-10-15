@@ -208,6 +208,7 @@ async function getRandomMeals(options = {}) {
     const matchedFoods = await findFoods(filteredWhere);
 <<<<<<< Updated upstream
     const selectedFoods = shuffle(matchedFoods).slice(0, quantity);
+<<<<<<< HEAD
     let fallbackCount = 0;
     let timeRelaxedCount = 0;
 
@@ -326,17 +327,24 @@ async function getRandomMeals(options = {}) {
 
     const selectedFoods = Array.from(selectedById.values());
 >>>>>>> Stashed changes
+=======
+>>>>>>> origin/develop
 
     return {
         requested: quantity,
         matchedFilters: !hasFilters || matchedFoods.length > 0,
         totalCandidates: matchedFoods.length,
+<<<<<<< HEAD
 <<<<<<< Updated upstream
         fallbackCount,
 =======
         fallbackCount: Math.max(0, selectedFoods.length - exactCount),
 >>>>>>> Stashed changes
         timeRelaxedCount,
+=======
+        fallbackCount: 0,
+        timeRelaxedCount: 0,
+>>>>>>> origin/develop
         cookTime,
         foods: selectedFoods.map(formatFood)
     };

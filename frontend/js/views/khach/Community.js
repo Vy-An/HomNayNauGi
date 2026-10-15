@@ -1,4 +1,5 @@
-import { fetchAPI } from '../../api.js';
+import { fetchAPI, BACKEND_URL } from '../../api.js';
+import Popup from '../../components/Popup.js';
 
 const INITIAL_BATCH = 6;
 const LOAD_MORE_BATCH = 4;
@@ -63,50 +64,62 @@ const Community = {
                 <div class="grid grid-cols-1 lg:grid-cols-12 gap-5 lg:gap-6 items-start">
                     <aside class="lg:col-span-3 space-y-4.5 order-2 lg:order-1 lg:sticky lg:top-[80px] lg:self-start">
                         <div class="bg-white rounded-[20px] border border-beige-border/80 p-4.5 shadow-sm">
-                            <div class="flex items-center gap-2 mb-3 pb-2 border-b border-[#F0EBE0]">
-                                <span class="text-sm">🍽️</span>
+                            <div class="flex items-center gap-2.5 mb-3 pb-2 border-b border-[#F0EBE0]">
+                                <span class="w-6 h-6 rounded-lg bg-primary-subtle text-primary flex items-center justify-center text-xs">
+                                    <i class="fa-solid fa-compass"></i>
+                                </span>
                                 <h2 class="text-xs font-extrabold uppercase tracking-wider text-text-main">
                                     Khám phá
                                 </h2>
                             </div>
 
-                            <nav class="space-y-1" id="category-navigation">
-                                <button class="filter-nav-btn w-full text-left px-3 py-2 rounded-xl text-xs sm:text-sm font-bold bg-primary text-white shadow-sm transition-all flex items-center justify-between cursor-pointer" data-filter="all">
-                                    <span class="flex items-center gap-2">
-                                        <span>✨</span>
-                                        <span>Tất cả bài viết</span>
+                            <nav class="space-y-1.5" id="category-navigation">
+                                <button class="filter-nav-btn w-full text-left px-3 py-2 rounded-xl text-xs sm:text-sm font-bold bg-primary text-white shadow-sm transition-all flex items-center justify-between cursor-pointer" data-filter="all" data-icon-class="bg-emerald-50 text-emerald-600">
+                                    <span class="flex items-center gap-2.5">
+                                        <span class="filter-icon-box w-6 h-6 rounded-lg bg-white/20 text-white flex items-center justify-center text-xs transition-colors">
+                                            <i class="fa-solid fa-border-all"></i>
+                                        </span>
+                                        <span class="filter-btn-title">Tất cả bài viết</span>
                                     </span>
                                     <i class="fa-solid fa-chevron-right text-[10px]"></i>
                                 </button>
 
-                                <button class="filter-nav-btn w-full text-left px-3 py-2 rounded-xl text-xs sm:text-sm font-semibold text-text-muted hover:text-primary hover:bg-cream-soft transition-all flex items-center justify-between cursor-pointer" data-filter="newest">
-                                    <span class="flex items-center gap-2">
-                                        <span>🕐</span>
-                                        <span>Mới nhất</span>
+                                <button class="filter-nav-btn w-full text-left px-3 py-2 rounded-xl text-xs sm:text-sm font-semibold text-text-muted hover:text-primary hover:bg-cream-soft transition-all flex items-center justify-between cursor-pointer" data-filter="newest" data-icon-class="bg-blue-50 text-blue-600">
+                                    <span class="flex items-center gap-2.5">
+                                        <span class="filter-icon-box w-6 h-6 rounded-lg bg-blue-50 text-blue-600 flex items-center justify-center text-xs transition-colors">
+                                            <i class="fa-solid fa-clock"></i>
+                                        </span>
+                                        <span class="filter-btn-title">Mới nhất</span>
                                     </span>
                                     <i class="fa-solid fa-chevron-right text-[10px] opacity-40"></i>
                                 </button>
 
-                                <button class="filter-nav-btn w-full text-left px-3 py-2 rounded-xl text-xs sm:text-sm font-semibold text-text-muted hover:text-primary hover:bg-cream-soft transition-all flex items-center justify-between cursor-pointer" data-filter="liked">
-                                    <span class="flex items-center gap-2">
-                                        <span>❤️</span>
-                                        <span>Được yêu thích</span>
+                                <button class="filter-nav-btn w-full text-left px-3 py-2 rounded-xl text-xs sm:text-sm font-semibold text-text-muted hover:text-primary hover:bg-cream-soft transition-all flex items-center justify-between cursor-pointer" data-filter="liked" data-icon-class="bg-rose-50 text-rose-500">
+                                    <span class="flex items-center gap-2.5">
+                                        <span class="filter-icon-box w-6 h-6 rounded-lg bg-rose-50 text-rose-500 flex items-center justify-center text-xs transition-colors">
+                                            <i class="fa-solid fa-heart"></i>
+                                        </span>
+                                        <span class="filter-btn-title">Được yêu thích</span>
                                     </span>
                                     <i class="fa-solid fa-chevron-right text-[10px] opacity-40"></i>
                                 </button>
 
-                                <button class="filter-nav-btn w-full text-left px-3 py-2 rounded-xl text-xs sm:text-sm font-semibold text-text-muted hover:text-primary hover:bg-cream-soft transition-all flex items-center justify-between cursor-pointer" data-filter="trending">
-                                    <span class="flex items-center gap-2">
-                                        <span>🔥</span>
-                                        <span>Đang nổi bật</span>
+                                <button class="filter-nav-btn w-full text-left px-3 py-2 rounded-xl text-xs sm:text-sm font-semibold text-text-muted hover:text-primary hover:bg-cream-soft transition-all flex items-center justify-between cursor-pointer" data-filter="trending" data-icon-class="bg-amber-50 text-amber-500">
+                                    <span class="flex items-center gap-2.5">
+                                        <span class="filter-icon-box w-6 h-6 rounded-lg bg-amber-50 text-amber-500 flex items-center justify-center text-xs transition-colors">
+                                            <i class="fa-solid fa-fire"></i>
+                                        </span>
+                                        <span class="filter-btn-title">Đang nổi bật</span>
                                     </span>
                                     <i class="fa-solid fa-chevron-right text-[10px] opacity-40"></i>
                                 </button>
 
-                                <button class="filter-nav-btn w-full text-left px-3 py-2 rounded-xl text-xs sm:text-sm font-semibold text-text-muted hover:text-primary hover:bg-cream-soft transition-all flex items-center justify-between cursor-pointer" data-filter="random">
-                                    <span class="flex items-center gap-2">
-                                        <span>🎲</span>
-                                        <span>Khám phá ngẫu nhiên</span>
+                                <button class="filter-nav-btn w-full text-left px-3 py-2 rounded-xl text-xs sm:text-sm font-semibold text-text-muted hover:text-primary hover:bg-cream-soft transition-all flex items-center justify-between cursor-pointer" data-filter="random" data-icon-class="bg-purple-50 text-purple-600">
+                                    <span class="flex items-center gap-2.5">
+                                        <span class="filter-icon-box w-6 h-6 rounded-lg bg-purple-50 text-purple-600 flex items-center justify-center text-xs transition-colors">
+                                            <i class="fa-solid fa-dice"></i>
+                                        </span>
+                                        <span class="filter-btn-title">Khám phá ngẫu nhiên</span>
                                     </span>
                                     <i class="fa-solid fa-chevron-right text-[10px] opacity-40"></i>
                                 </button>
@@ -228,7 +241,7 @@ const Community = {
                         </div>
 
                         <div id="community-feed-header" class="flex items-center justify-between text-xs text-text-muted font-semibold px-1">
-                            <span id="feed-filter-title">✨ Tất cả bài viết</span>
+                            <span id="feed-filter-title" class="inline-flex items-center"><i class="fa-solid fa-border-all mr-1.5 text-primary"></i> Tất cả bài viết</span>
                             <span id="feed-post-count-badge" class="bg-white border border-beige-border px-2 py-0.5 rounded-full text-[11px]">Đang tải...</span>
                         </div>
 
@@ -283,7 +296,77 @@ const Community = {
                         </div>
                     </aside>
                 </div>
-            </main>
+            <!-- Modal Báo cáo bài viết -->
+            <div id="post-report-modal" class="fixed inset-0 bg-black/50 backdrop-blur-xs hidden items-center justify-center z-50 p-4">
+                <div class="bg-white rounded-2xl shadow-2xl border border-gray-100 w-full max-w-md overflow-hidden animate-scaleIn">
+                    <!-- Header -->
+                    <div class="p-5 border-b border-gray-100 flex items-center justify-between bg-rose-50/60">
+                        <div class="flex items-center gap-3">
+                            <div class="w-10 h-10 rounded-full bg-rose-100 text-rose-600 flex items-center justify-center text-base shrink-0">
+                                <i class="fa-solid fa-triangle-exclamation"></i>
+                            </div>
+                            <div>
+                                <h3 id="report-modal-title" class="text-base font-bold text-text-main">Báo cáo bài viết</h3>
+                                <p class="text-xs text-text-muted">Nội dung sẽ được gửi tới Ban quản trị phê duyệt</p>
+                            </div>
+                        </div>
+                        <button type="button" id="btn-close-report-modal" class="w-8 h-8 rounded-full hover:bg-gray-200/60 text-text-muted flex items-center justify-center transition cursor-pointer">
+                            <i class="fa-solid fa-xmark"></i>
+                        </button>
+                    </div>
+
+                    <!-- Form -->
+                    <form id="post-report-form" class="p-5 space-y-4">
+                        <input type="hidden" id="report-target-type" value="post">
+                        <input type="hidden" id="report-post-id" value="">
+                        
+                        <div>
+                            <label class="block text-xs font-bold text-text-main uppercase tracking-wider mb-2">
+                                Lý do báo cáo vi phạm <span class="text-rose-500">*</span>
+                            </label>
+                            <div class="space-y-2 text-xs">
+                                <label class="flex items-center gap-2.5 p-2.5 rounded-xl border border-gray-200 hover:border-rose-300 hover:bg-rose-50/30 cursor-pointer transition">
+                                    <input type="radio" name="report_reason" value="Spam hoặc quảng cáo không phù hợp" checked class="accent-rose-600">
+                                    <span class="font-medium text-text-main">Spam hoặc quảng cáo không phù hợp</span>
+                                </label>
+                                <label class="flex items-center gap-2.5 p-2.5 rounded-xl border border-gray-200 hover:border-rose-300 hover:bg-rose-50/30 cursor-pointer transition">
+                                    <input type="radio" name="report_reason" value="Ngôn từ thù ghét, quấy rối hoặc xúc phạm" class="accent-rose-600">
+                                    <span class="font-medium text-text-main">Ngôn từ thù ghét, quấy rối hoặc xúc phạm</span>
+                                </label>
+                                <label class="flex items-center gap-2.5 p-2.5 rounded-xl border border-gray-200 hover:border-rose-300 hover:bg-rose-50/30 cursor-pointer transition">
+                                    <input type="radio" name="report_reason" value="Nội dung phản cảm, độc hại hoặc bạo lực" class="accent-rose-600">
+                                    <span class="font-medium text-text-main">Nội dung phản cảm, độc hại hoặc bạo lực</span>
+                                </label>
+                                <label class="flex items-center gap-2.5 p-2.5 rounded-xl border border-gray-200 hover:border-rose-300 hover:bg-rose-50/30 cursor-pointer transition">
+                                    <input type="radio" name="report_reason" value="Thông tin sai lệch về an toàn thực phẩm" class="accent-rose-600">
+                                    <span class="font-medium text-text-main">Thông tin sai lệch về an toàn thực phẩm</span>
+                                </label>
+                                <label class="flex items-center gap-2.5 p-2.5 rounded-xl border border-gray-200 hover:border-rose-300 hover:bg-rose-50/30 cursor-pointer transition">
+                                    <input type="radio" name="report_reason" value="Lý do khác" class="accent-rose-600">
+                                    <span class="font-medium text-text-main">Lý do khác</span>
+                                </label>
+                            </div>
+                        </div>
+
+                        <div>
+                            <label class="block text-xs font-bold text-text-main mb-1.5">
+                                Chi tiết bổ sung (tùy chọn)
+                            </label>
+                            <textarea id="report-description" rows="3" placeholder="Nhập thêm chi tiết vi phạm để Admin dễ kiểm tra..." class="w-full px-3.5 py-2 border border-gray-200 rounded-xl text-xs focus:outline-none focus:border-rose-500 focus:ring-1 focus:ring-rose-500 resize-none"></textarea>
+                        </div>
+
+                        <div class="pt-2 border-t border-gray-100 flex items-center justify-end gap-2.5">
+                            <button type="button" id="btn-cancel-report" class="px-4 py-2 rounded-xl text-xs font-bold border border-gray-200 text-text-muted hover:bg-gray-100 transition cursor-pointer">
+                                Hủy bỏ
+                            </button>
+                            <button type="submit" id="btn-submit-report" class="px-5 py-2 rounded-xl text-xs font-bold bg-rose-600 hover:bg-rose-700 text-white shadow-sm hover:shadow transition flex items-center gap-1.5 cursor-pointer">
+                                <i class="fa-solid fa-paper-plane text-[10px]"></i>
+                                <span>Gửi báo cáo</span>
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
 
             <div id="community-toast-container" class="fixed bottom-6 right-6 z-50 flex flex-col gap-2 pointer-events-none"></div>
         </div>
@@ -302,6 +385,7 @@ const Community = {
         let selectedFoodName = null;
         let uploadedImageSrc = null;
         let currentFilter = 'all';
+        let isSubmittingPost = false;
 
         const formCreatePost = document.getElementById('form-create-post');
         const postTitleInput = document.getElementById('post-title-input');
@@ -417,9 +501,17 @@ const Community = {
                             </div>
                         </div>
 
-                        <button class="btn-more-options text-text-muted hover:text-text-main p-1.5 rounded-full hover:bg-gray-100 transition-colors cursor-pointer" title="Tùy chọn">
-                            <i class="fa-solid fa-ellipsis"></i>
-                        </button>
+                        <div class="relative post-options-container">
+                            <button class="btn-more-options text-text-muted hover:text-text-main p-1.5 rounded-full hover:bg-gray-100 transition-colors cursor-pointer" data-id="${post.id_post}" title="Tùy chọn">
+                                <i class="fa-solid fa-ellipsis"></i>
+                            </button>
+                            <div class="post-options-dropdown hidden absolute right-0 top-full mt-1 w-44 bg-white rounded-xl shadow-lg border border-gray-100 py-1.5 z-30">
+                                <button type="button" class="btn-open-report w-full px-3.5 py-2 text-left text-xs font-semibold text-rose-600 hover:bg-rose-50 flex items-center gap-2 transition cursor-pointer" data-id="${post.id_post}">
+                                    <i class="fa-regular fa-flag text-rose-500 text-sm"></i>
+                                    <span>Báo cáo bài viết</span>
+                                </button>
+                            </div>
+                        </div>
                     </div>
 
                     ${post.title ? `<h4 class="text-sm font-extrabold text-text-main mb-1.5">${post.title}</h4>` : ''}
@@ -479,7 +571,7 @@ const Community = {
 
                     <div id="comments-section-${post.id_post}" class="hidden pt-3 mt-3 border-t border-[#F0EBE0]/80 space-y-3">
                         <div class="comments-composer flex items-start gap-2.5">
-                            <img src="${currentUser?.avatar || 'http://localhost:5000/images/users/admin.jpg'}" alt="Avatar" class="w-8 h-8 rounded-full object-cover shrink-0 ring-1 ring-beige-border" loading="lazy">
+                            <img src="${currentUser?.avatar || `${BACKEND_URL}/images/users/admin.jpg`}" alt="Avatar" class="w-8 h-8 rounded-full object-cover shrink-0 ring-1 ring-beige-border" loading="lazy">
                             <div class="flex-1 space-y-1.5">
                                 <div class="relative">
                                     <textarea 
@@ -898,6 +990,8 @@ const Community = {
         if (formCreatePost) {
             formCreatePost.addEventListener('submit', async (e) => {
                 e.preventDefault();
+                if (isSubmittingPost) return;
+
                 const content = postContentInput?.value.trim() || '';
                 const title = postTitleInput?.value.trim() || '';
 
@@ -916,9 +1010,10 @@ const Community = {
                     return;
                 }
 
+                isSubmittingPost = true;
                 if (btnSubmitPost) {
                     btnSubmitPost.disabled = true;
-                    btnSubmitPost.innerHTML = '<span>Đang đăng...</span><i class="fa-solid fa-spinner animate-spin text-xs"></i>';
+                    btnSubmitPost.innerHTML = '<span>Đang gửi...</span><i class="fa-solid fa-spinner animate-spin text-xs"></i>';
                 }
 
                 try {
@@ -936,37 +1031,7 @@ const Community = {
 
                     if (response?.success && response.data) {
                         const newPostData = response.data;
-                        const createdPost = {
-                            id_post: newPostData.id_post || newPostData.id,
-                            id_user: newPostData.id_user,
-                            id_food: newPostData.id_food,
-                            title: newPostData.title || title,
-                            content: newPostData.content || content,
-                            image: newPostData.image || uploadedImageSrc,
-                            foodName: newPostData.food?.name || selectedFoodName || '',
-                            author: {
-                                name: newPostData.user?.name || currentUser?.name || 'Bạn',
-                                avatar: newPostData.user?.avatar || currentUser?.avatar || 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=150'
-                            },
-                            created_at: newPostData.created_at || new Date().toISOString(),
-                            likes: 0,
-                            liked: false,
-                            comments: 0
-                        };
-
-                        allPosts.unshift(createdPost);
-                        currentFilteredPosts.unshift(createdPost);
-                        displayedCount++;
-
-                        if (feedContainer) {
-                            const tempDiv = document.createElement('div');
-                            tempDiv.innerHTML = createPostCardHTML(createdPost, true);
-                            const newCard = tempDiv.firstElementChild;
-                            feedContainer.insertBefore(newCard, feedContainer.firstChild);
-                        }
-
-                        updateFeedBadge();
-                        renderSidebars();
+                        const isPending = newPostData.status === 'pending';
 
                         formCreatePost.reset();
                         uploadedImageSrc = null;
@@ -976,13 +1041,50 @@ const Community = {
                         if (imagePreviewImg) imagePreviewImg.src = '';
                         if (attachedFoodPill) attachedFoodPill.classList.add('hidden');
 
-                        showToast('Đăng bài chia sẻ thành công!', 'success');
+                        if (isPending) {
+                            showToast('Đã gửi bài viết. Bài viết đang chờ Admin duyệt.', 'info');
+                        } else {
+                            const createdPost = {
+                                id_post: newPostData.id_post || newPostData.id,
+                                id_user: newPostData.id_user,
+                                id_food: newPostData.id_food,
+                                title: newPostData.title || title,
+                                content: newPostData.content || content,
+                                image: newPostData.image || uploadedImageSrc,
+                                foodName: newPostData.food?.name || selectedFoodName || '',
+                                author: {
+                                    name: newPostData.user?.name || currentUser?.name || 'Bạn',
+                                    avatar: newPostData.user?.avatar || currentUser?.avatar || 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=150'
+                                },
+                                created_at: newPostData.created_at || new Date().toISOString(),
+                                likes: 0,
+                                liked: false,
+                                comments: 0
+                            };
+
+                            allPosts.unshift(createdPost);
+                            currentFilteredPosts.unshift(createdPost);
+                            displayedCount++;
+
+                            if (feedContainer) {
+                                const tempDiv = document.createElement('div');
+                                tempDiv.innerHTML = createPostCardHTML(createdPost, true);
+                                const newCard = tempDiv.firstElementChild;
+                                feedContainer.insertBefore(newCard, feedContainer.firstChild);
+                            }
+
+                            updateFeedBadge();
+                            renderSidebars();
+
+                            showToast('Đăng bài chia sẻ thành công!', 'success');
+                        }
                     } else {
-                        showToast(response?.message || 'Không thể đăng bài viết.', 'error');
+                        showToast(response?.message || 'Không thể gửi bài viết. Vui lòng thử lại.', 'error');
                     }
                 } catch (err) {
-                    showToast(err.message || 'Lỗi khi gửi yêu cầu đăng bài.', 'error');
+                    showToast('Không thể gửi bài viết. Vui lòng thử lại.', 'error');
                 } finally {
+                    isSubmittingPost = false;
                     if (btnSubmitPost) {
                         btnSubmitPost.disabled = false;
                         btnSubmitPost.innerHTML = '<span>Đăng bài</span><span class="text-xs">→</span>';
@@ -1091,7 +1193,113 @@ const Community = {
 
                 const moreBtn = e.target.closest('.btn-more-options');
                 if (moreBtn) {
-                    showToast('Tùy chọn bài viết', 'info');
+                    const dropdown = moreBtn.parentElement?.querySelector('.post-options-dropdown');
+                    if (dropdown) {
+                        const isHidden = dropdown.classList.contains('hidden');
+                        document.querySelectorAll('.post-options-dropdown').forEach(d => d.classList.add('hidden'));
+                        if (isHidden) {
+                            dropdown.classList.remove('hidden');
+                        }
+                    }
+                    return;
+                }
+
+                const openReportBtn = e.target.closest('.btn-open-report');
+                if (openReportBtn) {
+                    const postId = parseInt(openReportBtn.getAttribute('data-id'), 10);
+                    openReportBtn.closest('.post-options-dropdown')?.classList.add('hidden');
+                    if (!postId) return;
+
+                    const token = localStorage.getItem('auth_token');
+                    if (!token) {
+                        const goToLogin = await Popup.confirm({
+                            title: 'Yêu cầu đăng nhập',
+                            message: 'Bạn cần đăng nhập tài khoản để gửi báo cáo vi phạm bài viết. Bạn có muốn đăng nhập ngay?',
+                            type: 'warning',
+                            confirmText: 'Đăng nhập ngay',
+                            cancelText: 'Để sau',
+                            confirmButtonColor: 'primary'
+                        });
+                        if (goToLogin) {
+                            window.location.hash = '#/login';
+                        }
+                        return;
+                    }
+
+                    // Mở popup modal báo cáo bài viết
+                    const reportModal = document.getElementById('post-report-modal');
+                    const reportModalTitle = document.getElementById('report-modal-title');
+                    const reportTargetType = document.getElementById('report-target-type');
+                    const reportPostIdInput = document.getElementById('report-post-id');
+                    const reportDescInput = document.getElementById('report-description');
+                    const defaultRadio = document.querySelector('input[name="report_reason"][value="Spam hoặc quảng cáo không phù hợp"]');
+
+                    if (reportModalTitle) reportModalTitle.textContent = 'Báo cáo bài viết';
+                    if (reportTargetType) reportTargetType.value = 'post';
+                    if (reportPostIdInput) reportPostIdInput.value = postId;
+                    if (reportDescInput) reportDescInput.value = '';
+                    if (defaultRadio) defaultRadio.checked = true;
+
+                    if (reportModal) {
+                        reportModal.classList.remove('hidden');
+                        reportModal.classList.add('flex');
+                    }
+                    return;
+                }
+
+                const moreCommentBtn = e.target.closest('.btn-more-comment-options');
+                if (moreCommentBtn) {
+                    const dropdown = moreCommentBtn.parentElement?.querySelector('.comment-options-dropdown');
+                    if (dropdown) {
+                        const isHidden = dropdown.classList.contains('hidden');
+                        document.querySelectorAll('.post-options-dropdown, .comment-options-dropdown').forEach(d => d.classList.add('hidden'));
+                        if (isHidden) {
+                            dropdown.classList.remove('hidden');
+                        }
+                    }
+                    return;
+                }
+
+                const openReportCommentBtn = e.target.closest('.btn-open-report-comment');
+                if (openReportCommentBtn) {
+                    const commentId = parseInt(openReportCommentBtn.getAttribute('data-comment-id'), 10);
+                    openReportCommentBtn.closest('.comment-options-dropdown')?.classList.add('hidden');
+                    if (!commentId) return;
+
+                    const token = localStorage.getItem('auth_token');
+                    if (!token) {
+                        const goToLogin = await Popup.confirm({
+                            title: 'Yêu cầu đăng nhập',
+                            message: 'Bạn cần đăng nhập tài khoản để gửi báo cáo vi phạm bình luận. Bạn có muốn đăng nhập ngay?',
+                            type: 'warning',
+                            confirmText: 'Đăng nhập ngay',
+                            cancelText: 'Để sau',
+                            confirmButtonColor: 'primary'
+                        });
+                        if (goToLogin) {
+                            window.location.hash = '#/login';
+                        }
+                        return;
+                    }
+
+                    // Mở popup modal báo cáo bình luận
+                    const reportModal = document.getElementById('post-report-modal');
+                    const reportModalTitle = document.getElementById('report-modal-title');
+                    const reportTargetType = document.getElementById('report-target-type');
+                    const reportPostIdInput = document.getElementById('report-post-id');
+                    const reportDescInput = document.getElementById('report-description');
+                    const defaultRadio = document.querySelector('input[name="report_reason"][value="Spam hoặc quảng cáo không phù hợp"]');
+
+                    if (reportModalTitle) reportModalTitle.textContent = 'Báo cáo bình luận';
+                    if (reportTargetType) reportTargetType.value = 'comment';
+                    if (reportPostIdInput) reportPostIdInput.value = commentId;
+                    if (reportDescInput) reportDescInput.value = '';
+                    if (defaultRadio) defaultRadio.checked = true;
+
+                    if (reportModal) {
+                        reportModal.classList.remove('hidden');
+                        reportModal.classList.add('flex');
+                    }
                     return;
                 }
 
@@ -1134,7 +1342,7 @@ const Community = {
                                 } else {
                                     commentsList.innerHTML = comments.map(c => {
                                         const cAuthor = c.author || c.user || {};
-                                        const isMyComment = currentUser && (c.id_user === currentUser.id_user || c.id_user === currentUser.id || currentUser.role === 'admin');
+                                        const isMyComment = currentUser && (c.id_user === currentUser.id_user || c.id_user === currentUser.id);
                                         const cTime = c.time || formatTimeAgo(c.created_at);
                                         const cId = c.id_comment || c.id;
 
@@ -1142,7 +1350,7 @@ const Community = {
                                             <div class="comment-item bg-[#FBF9F5] rounded-xl p-2.5 sm:p-3 border border-beige-border/60 text-xs transition-all" id="comment-item-${cId}">
                                                 <div class="flex items-start justify-between gap-2">
                                                     <div class="flex items-center gap-2">
-                                                        <img src="${cAuthor.avatar || 'http://localhost:5000/images/users/admin.jpg'}" alt="${cAuthor.name || 'Người dùng'}" class="w-6 h-6 rounded-full object-cover ring-1 ring-beige-border">
+                                                        <img src="${cAuthor.avatar || `${BACKEND_URL}/images/users/admin.jpg`}" alt="${cAuthor.name || 'Người dùng'}" class="w-6 h-6 rounded-full object-cover ring-1 ring-beige-border">
                                                         <div>
                                                             <strong class="text-text-main text-xs font-bold">${cAuthor.name || 'Thành viên'}</strong>
                                                             <span class="text-[10px] text-text-muted ml-1.5">${cTime}</span>
@@ -1158,7 +1366,19 @@ const Community = {
                                                                 <i class="fa-solid fa-trash-can"></i>
                                                             </button>
                                                         </div>
-                                                    ` : ''}
+                                                    ` : `
+                                                        <div class="relative comment-options-container">
+                                                            <button type="button" class="btn-more-comment-options text-text-muted hover:text-text-main p-1 rounded-full hover:bg-gray-200/50 transition-colors cursor-pointer text-[10px]" data-comment-id="${cId}" title="Tùy chọn">
+                                                                <i class="fa-solid fa-ellipsis"></i>
+                                                            </button>
+                                                            <div class="comment-options-dropdown hidden absolute right-0 top-full mt-0.5 w-40 bg-white rounded-xl shadow-lg border border-gray-100 py-1 z-30">
+                                                                <button type="button" class="btn-open-report-comment w-full px-3 py-1.5 text-left text-[11px] font-semibold text-rose-600 hover:bg-rose-50 flex items-center gap-2 transition cursor-pointer" data-comment-id="${cId}" data-post-id="${postId}">
+                                                                    <i class="fa-regular fa-flag text-rose-500 text-xs"></i>
+                                                                    <span>Báo cáo bình luận</span>
+                                                                </button>
+                                                            </div>
+                                                        </div>
+                                                    `}
                                                 </div>
 
                                                 <div class="comment-body mt-1.5 text-text-main text-xs leading-relaxed" id="comment-content-${cId}">
@@ -1219,7 +1439,7 @@ const Community = {
                                 <div class="comment-item bg-[#FBF9F5] rounded-xl p-2.5 sm:p-3 border border-beige-border/60 text-xs transition-all" id="comment-item-${cId}">
                                     <div class="flex items-start justify-between gap-2">
                                         <div class="flex items-center gap-2">
-                                            <img src="${cAuthor.avatar || currentUser?.avatar || 'http://localhost:5000/images/users/admin.jpg'}" alt="${cAuthor.name || currentUser?.name}" class="w-6 h-6 rounded-full object-cover ring-1 ring-beige-border">
+                                            <img src="${cAuthor.avatar || currentUser?.avatar || `${BACKEND_URL}/images/users/admin.jpg`}" alt="${cAuthor.name || currentUser?.name}" class="w-6 h-6 rounded-full object-cover ring-1 ring-beige-border">
                                             <div>
                                                 <strong class="text-text-main text-xs font-bold">${cAuthor.name || currentUser?.name || 'Bạn'}</strong>
                                                 <span class="text-[10px] text-text-muted ml-1.5">Vừa xong</span>
@@ -1272,7 +1492,15 @@ const Community = {
                     const commentId = deleteCommentBtn.getAttribute('data-comment-id');
                     const postId = parseInt(deleteCommentBtn.getAttribute('data-post-id'), 10);
 
-                    if (!confirm('Bạn có chắc chắn muốn xóa bình luận này không?')) return;
+                    const confirmed = await Popup.confirm({
+                        title: 'Xóa bình luận',
+                        message: 'Bạn có chắc chắn muốn xóa bình luận này không? Thao tác này không thể hoàn tác.',
+                        type: 'danger',
+                        confirmText: 'Xóa bình luận',
+                        cancelText: 'Hủy bỏ',
+                        confirmButtonColor: 'danger'
+                    });
+                    if (!confirmed) return;
 
                     try {
                         const res = await fetchAPI(`/comments/${commentId}`, { method: 'DELETE' });
@@ -1355,6 +1583,92 @@ const Community = {
             });
         }
 
+        // Đóng dropdown tùy chọn bài viết hoặc bình luận khi click ra ngoài
+        document.addEventListener('click', (e) => {
+            if (!e.target.closest('.post-options-container') && !e.target.closest('.comment-options-container')) {
+                document.querySelectorAll('.post-options-dropdown, .comment-options-dropdown').forEach(d => d.classList.add('hidden'));
+            }
+        });
+
+        // Xử lý Modal Báo cáo vi phạm (Bài viết & Bình luận)
+        const reportModal = document.getElementById('post-report-modal');
+        const btnCloseReportModal = document.getElementById('btn-close-report-modal');
+        const btnCancelReport = document.getElementById('btn-cancel-report');
+        const postReportForm = document.getElementById('post-report-form');
+        const btnSubmitReport = document.getElementById('btn-submit-report');
+
+        const closeReportModal = () => {
+            if (reportModal) {
+                reportModal.classList.add('hidden');
+                reportModal.classList.remove('flex');
+            }
+        };
+
+        if (btnCloseReportModal) {
+            btnCloseReportModal.addEventListener('click', closeReportModal);
+        }
+
+        if (btnCancelReport) {
+            btnCancelReport.addEventListener('click', closeReportModal);
+        }
+
+        if (reportModal) {
+            reportModal.addEventListener('click', (e) => {
+                if (e.target === reportModal) {
+                    closeReportModal();
+                }
+            });
+        }
+
+        if (postReportForm) {
+            postReportForm.addEventListener('submit', async (e) => {
+                e.preventDefault();
+                const targetType = document.getElementById('report-target-type')?.value || 'post';
+                const targetId = parseInt(document.getElementById('report-post-id')?.value, 10);
+                const reasonEl = document.querySelector('input[name="report_reason"]:checked');
+                const reason = reasonEl ? reasonEl.value : '';
+                const description = document.getElementById('report-description')?.value.trim() || '';
+
+                if (!targetId) {
+                    showToast(`Không xác định được ${targetType === 'comment' ? 'bình luận' : 'bài viết'} cần báo cáo.`, 'error');
+                    return;
+                }
+
+                if (!reason) {
+                    showToast('Vui lòng chọn lý do báo cáo vi phạm.', 'warning');
+                    return;
+                }
+
+                const originalBtnContent = btnSubmitReport ? btnSubmitReport.innerHTML : '';
+                if (btnSubmitReport) {
+                    btnSubmitReport.disabled = true;
+                    btnSubmitReport.innerHTML = '<i class="fa-solid fa-spinner animate-spin text-[10px]"></i><span>Đang gửi...</span>';
+                }
+
+                try {
+                    const endpoint = targetType === 'comment' ? `/comments/${targetId}/report` : `/posts/${targetId}/report`;
+                    const res = await fetchAPI(endpoint, {
+                        method: 'POST',
+                        body: JSON.stringify({ reason, description })
+                    });
+
+                    if (res?.success) {
+                        showToast(res.message || 'Báo cáo vi phạm đã được gửi thành công. Ban quản trị sẽ sớm xem xét và xử lý.', 'success');
+                        closeReportModal();
+                    } else {
+                        showToast(res?.message || 'Không thể gửi báo cáo vi phạm lúc này.', 'error');
+                    }
+                } catch (err) {
+                    showToast(err.message || 'Lỗi khi gửi báo cáo.', 'error');
+                } finally {
+                    if (btnSubmitReport) {
+                        btnSubmitReport.disabled = false;
+                        btnSubmitReport.innerHTML = originalBtnContent;
+                    }
+                }
+            });
+        }
+
         const filterButtons = document.querySelectorAll('.filter-nav-btn');
         filterButtons.forEach(btn => {
             btn.addEventListener('click', async () => {
@@ -1365,21 +1679,30 @@ const Community = {
                     b.className = "filter-nav-btn w-full text-left px-3 py-2 rounded-xl text-xs sm:text-sm font-semibold text-text-muted hover:text-primary hover:bg-cream-soft transition-all flex items-center justify-between cursor-pointer";
                     const chevron = b.querySelector('.fa-chevron-right');
                     if (chevron) chevron.className = "fa-solid fa-chevron-right text-[10px] opacity-40";
+                    const iconBox = b.querySelector('.filter-icon-box');
+                    const defaultClass = b.getAttribute('data-icon-class');
+                    if (iconBox && defaultClass) {
+                        iconBox.className = `filter-icon-box w-6 h-6 rounded-lg ${defaultClass} flex items-center justify-center text-xs transition-colors`;
+                    }
                 });
 
                 btn.className = "filter-nav-btn w-full text-left px-3 py-2 rounded-xl text-xs sm:text-sm font-bold bg-primary text-white shadow-sm transition-all flex items-center justify-between cursor-pointer";
                 const activeChevron = btn.querySelector('.fa-chevron-right');
                 if (activeChevron) activeChevron.className = "fa-solid fa-chevron-right text-[10px]";
+                const activeIconBox = btn.querySelector('.filter-icon-box');
+                if (activeIconBox) {
+                    activeIconBox.className = "filter-icon-box w-6 h-6 rounded-lg bg-white/20 text-white flex items-center justify-center text-xs transition-colors";
+                }
 
                 if (feedFilterTitle) {
                     const titles = {
-                        all: '✨ Tất cả bài viết',
-                        newest: '🕐 Mới nhất',
-                        liked: '❤️ Được yêu thích',
-                        trending: '🔥 Đang nổi bật',
-                        random: '🎲 Khám phá ngẫu nhiên'
+                        all: '<i class="fa-solid fa-border-all mr-1.5 text-primary"></i> Tất cả bài viết',
+                        newest: '<i class="fa-solid fa-clock mr-1.5 text-blue-600"></i> Mới nhất',
+                        liked: '<i class="fa-solid fa-heart mr-1.5 text-rose-500"></i> Được yêu thích',
+                        trending: '<i class="fa-solid fa-fire mr-1.5 text-amber-500"></i> Đang nổi bật',
+                        random: '<i class="fa-solid fa-dice mr-1.5 text-purple-600"></i> Khám phá ngẫu nhiên'
                     };
-                    feedFilterTitle.textContent = titles[filterType] || '✨ Bài viết';
+                    feedFilterTitle.innerHTML = titles[filterType] || '<i class="fa-solid fa-border-all mr-1.5 text-primary"></i> Bài viết';
                 }
 
                 await loadPostsFromAPI(filterType);
@@ -1389,7 +1712,8 @@ const Community = {
                     target.scrollIntoView({ behavior: 'smooth', block: 'start' });
                 }
 
-                showToast(`Đã lọc: ${btn.querySelector('span span:last-child')?.textContent || 'Danh sách'}`, 'info');
+                const labelText = btn.querySelector('.filter-btn-title')?.textContent?.trim() || 'Danh sách';
+                showToast(`Đã lọc: ${labelText}`, 'info');
             });
         });
 

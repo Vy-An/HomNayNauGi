@@ -172,7 +172,8 @@ async function getMe(req, res) {
             });
         }
 
-        const [postsCount, favoritesCount] = await Promise.all([
+        const [postsCount, activePostsCount, favoritesCount] = await Promise.all([
+            prisma.posts.count({ where: { id_user: req.user.id_user } }),
             prisma.posts.count({ where: { id_user: req.user.id_user, status: 'active' } }),
             prisma.favorites.count({ where: { id_user: req.user.id_user } })
         ]);
@@ -183,6 +184,7 @@ async function getMe(req, res) {
                 ...formatUser(req.user),
                 stats: {
                     posts: postsCount,
+                    activePosts: activePostsCount,
                     favorites: favoritesCount
                 }
             }
@@ -229,7 +231,8 @@ async function updateProfile(req, res) {
             data: updateData
         });
 
-        const [postsCount, favoritesCount] = await Promise.all([
+        const [postsCount, activePostsCount, favoritesCount] = await Promise.all([
+            prisma.posts.count({ where: { id_user: req.user.id_user } }),
             prisma.posts.count({ where: { id_user: req.user.id_user, status: 'active' } }),
             prisma.favorites.count({ where: { id_user: req.user.id_user } })
         ]);
@@ -241,6 +244,7 @@ async function updateProfile(req, res) {
                 ...formatUser(updatedUser),
                 stats: {
                     posts: postsCount,
+                    activePosts: activePostsCount,
                     favorites: favoritesCount
                 }
             }
@@ -264,8 +268,7 @@ async function getMyPosts(req, res) {
 
         const posts = await prisma.posts.findMany({
             where: {
-                id_user: req.user.id_user,
-                status: 'active'
+                id_user: req.user.id_user
             },
             include: {
                 users: {
@@ -316,6 +319,7 @@ async function getMyPosts(req, res) {
                 content: post.content,
                 image: resolveAssetUrl(post.image),
                 status: post.status,
+                hidden_reason: post.hidden_reason || null,
                 created_at: post.created_at,
                 likesCount,
                 likes: likesCount,
@@ -469,16 +473,28 @@ async function removeFavorite(req, res) {
     }
 }
 
+<<<<<<< HEAD
 async function toggleFavorite(req, res) {
+=======
+async function addFavorite(req, res) {
+>>>>>>> origin/develop
     try {
         if (!req.user) {
             return res.status(401).json({
                 success: false,
+<<<<<<< HEAD
                 message: 'Vui lòng đăng nhập để lưu món yêu thích.'
             });
         }
 
         const foodId = Number(req.params.id || req.body?.id_food || req.body?.foodId);
+=======
+                message: 'Chưa đăng nhập.'
+            });
+        }
+
+        const foodId = Number(req.params.id || req.body?.id_food || req.body?.foodId || req.body?.id);
+>>>>>>> origin/develop
         if (!foodId || Number.isNaN(foodId)) {
             return res.status(400).json({
                 success: false,
@@ -487,13 +503,22 @@ async function toggleFavorite(req, res) {
         }
 
         const food = await prisma.foods.findUnique({
+<<<<<<< HEAD
             where: { id_food: foodId }
+=======
+            where: { id_food: foodId },
+            include: { categories: true }
+>>>>>>> origin/develop
         });
 
         if (!food) {
             return res.status(404).json({
                 success: false,
+<<<<<<< HEAD
                 message: 'Món ăn không tồn tại.'
+=======
+                message: 'Không tìm thấy món ăn này.'
+>>>>>>> origin/develop
             });
         }
 
@@ -506,6 +531,7 @@ async function toggleFavorite(req, res) {
             }
         });
 
+<<<<<<< HEAD
         let isFavorite = false;
         if (existing) {
             await prisma.favorites.delete({
@@ -515,21 +541,31 @@ async function toggleFavorite(req, res) {
             });
             isFavorite = false;
         } else {
+=======
+        if (!existing) {
+>>>>>>> origin/develop
             await prisma.favorites.create({
                 data: {
                     id_user: req.user.id_user,
                     id_food: foodId
                 }
             });
+<<<<<<< HEAD
             isFavorite = true;
         }
 
         const totalFavorites = await prisma.favorites.count({
+=======
+        }
+
+        const totalCount = await prisma.favorites.count({
+>>>>>>> origin/develop
             where: { id_user: req.user.id_user }
         });
 
         return res.json({
             success: true,
+<<<<<<< HEAD
             is_favorite: isFavorite,
             message: isFavorite ? 'Đã lưu món vào danh sách yêu thích!' : 'Đã bỏ lưu món khỏi danh sách yêu thích.',
             id_food: foodId,
@@ -540,6 +576,54 @@ async function toggleFavorite(req, res) {
         return res.status(500).json({
             success: false,
             message: 'Không thể cập nhật món yêu thích lúc này.'
+=======
+            message: 'Đã thêm món vào danh sách yêu thích.',
+            id_food: foodId,
+            totalCount,
+            food: {
+                id: food.id_food,
+                id_food: food.id_food,
+                name: food.name,
+                image: resolveAssetUrl(food.image || '/images/foods/thit-kho-trung.jpg'),
+                cooking_time: food.cooking_time,
+                time: food.cooking_time ? `${food.cooking_time} phút` : '30 phút',
+                category: food.categories?.name || 'Món ngon'
+            }
+        });
+    } catch (error) {
+        return res.status(500).json({
+            success: false,
+            message: 'Không thể thêm món yêu thích lúc này.'
+        });
+    }
+}
+
+async function toggleFavorite(req, res) {
+    try {
+        if (!req.user) {
+            return res.status(401).json({
+                success: false,
+                message: 'Vui lòng đăng nhập để thực hiện chức năng này.'
+            });
+        }
+
+        const foodId = Number(req.params.id || req.body?.id_food || req.body?.foodId || req.body?.id);
+        if (!foodId || Number.isNaN(foodId)) {
+            return res.status(400).json({
+                success: false,
+                message: 'ID món ăn không hợp lệ.'
+            });
+        }
+
+        const foodService = require('../services/food.service');
+        const result = await foodService.toggleFavorite(foodId, req.user.id_user);
+
+        return res.json(result);
+    } catch (error) {
+        return res.status(error.status || 500).json({
+            success: false,
+            message: error.message || 'Không thể tương tác yêu thích lúc này.'
+>>>>>>> origin/develop
         });
     }
 }
@@ -552,6 +636,11 @@ module.exports = {
     updateProfile,
     getMyPosts,
     getMyFavorites,
+<<<<<<< HEAD
+=======
+    addFavorite,
+>>>>>>> origin/develop
     removeFavorite,
     toggleFavorite
 };
+

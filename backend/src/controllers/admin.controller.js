@@ -601,6 +601,7 @@ async function getDashboard(req, res) {
             postsTotal,
             postsActive,
             postsHidden,
+            postsPending,
             reportsTotal,
             reportsPending,
             latestFoods
@@ -610,6 +611,7 @@ async function getDashboard(req, res) {
             prisma.posts.count(),
             prisma.posts.count({ where: { status: 'active' } }),
             prisma.posts.count({ where: { status: 'hidden' } }),
+            prisma.posts.count({ where: { status: 'pending' } }),
             prisma.reports.count(),
             prisma.reports.count({ where: { status: 'pending' } }),
             prisma.foods.findMany({
@@ -632,7 +634,8 @@ async function getDashboard(req, res) {
                     posts: {
                         total: postsTotal,
                         active: postsActive,
-                        hidden: postsHidden
+                        hidden: postsHidden,
+                        pending: postsPending
                     },
                     reports: {
                         total: reportsTotal,
@@ -1043,9 +1046,12 @@ async function updateFoodStatus(req, res) {
 }
 
 // ==========================================
+<<<<<<< HEAD
 <<<<<<< Updated upstream
 // 3. QUẢN LÝ DANH MỤC (CATEGORIES)
 =======
+=======
+>>>>>>> origin/develop
 // QUẢN LÝ BÀI VIẾT CỘNG ĐỒNG & KIỂM DUYỆT
 // ==========================================
 
@@ -1143,7 +1149,11 @@ async function getPosts(req, res) {
                         id_user: r.users.id_user,
                         name: r.users.name || 'Người dùng ẩn danh',
                         email: r.users.email,
+<<<<<<< HEAD
                         avatar: resolveAssetUrl(r.users.avatar || '/images/users/admin.jpg')
+=======
+                        avatar: resolveAssetUrl(r.users.avatar || '/images/users/default.png')
+>>>>>>> origin/develop
                     } : null
                 });
             });
@@ -1168,7 +1178,11 @@ async function getPosts(req, res) {
                 id_user: p.users?.id_user,
                 name: p.users?.name || 'Ẩn danh',
                 email: p.users?.email || '',
+<<<<<<< HEAD
                 avatar: resolveAssetUrl(p.users?.avatar || '/images/users/admin.jpg'),
+=======
+                avatar: resolveAssetUrl(p.users?.avatar || '/images/users/default.png'),
+>>>>>>> origin/develop
                 role: p.users?.role,
                 status: p.users?.status
             },
@@ -1492,7 +1506,11 @@ async function getReports(req, res) {
                     id_user: r.users.id_user,
                     name: r.users.name || 'Người dùng ẩn danh',
                     email: r.users.email,
+<<<<<<< HEAD
                     avatar: resolveAssetUrl(r.users.avatar || '/images/users/admin.jpg')
+=======
+                    avatar: resolveAssetUrl(r.users.avatar || '/images/users/default.png')
+>>>>>>> origin/develop
                 } : null,
                 post: targetPost ? {
                     id_post: targetPost.id_post,
@@ -1507,7 +1525,11 @@ async function getReports(req, res) {
                         id_user: targetPost.users?.id_user,
                         name: targetPost.users?.name || 'Tác giả',
                         email: targetPost.users?.email,
+<<<<<<< HEAD
                         avatar: resolveAssetUrl(targetPost.users?.avatar || '/images/users/admin.jpg')
+=======
+                        avatar: resolveAssetUrl(targetPost.users?.avatar || '/images/users/default.png')
+>>>>>>> origin/develop
                     }
                 } : null,
                 comment: targetComment ? {
@@ -1521,7 +1543,11 @@ async function getReports(req, res) {
                         id_user: targetComment.users?.id_user,
                         name: targetComment.users?.name || 'Tác giả bình luận',
                         email: targetComment.users?.email,
+<<<<<<< HEAD
                         avatar: resolveAssetUrl(targetComment.users?.avatar || '/images/users/admin.jpg')
+=======
+                        avatar: resolveAssetUrl(targetComment.users?.avatar || '/images/users/default.png')
+>>>>>>> origin/develop
                     }
                 } : null
             };
@@ -1628,11 +1654,15 @@ async function updateReportStatus(req, res) {
 }
 // ==========================================
 // QUẢN LÝ DANH MỤC MÓN ĂN (CATEGORIES)
+<<<<<<< HEAD
 >>>>>>> Stashed changes
+=======
+>>>>>>> origin/develop
 // ==========================================
 
 async function getCategories(req, res) {
     try {
+<<<<<<< HEAD
         const search = String(req.query?.search || '').trim();
         const status = req.query?.status;
         const where = {};
@@ -1674,6 +1704,82 @@ async function getCategories(req, res) {
         });
     } catch (error) {
         console.error('Lỗi getCategories:', error);
+=======
+        const { search = '', status = 'all', sort = 'newest' } = req.query;
+        const page = parsePositiveInt(req.query.page) || 1;
+        const limit = req.query.limit === 'all' ? null : clampLimit(req.query.limit, 10, 100);
+
+        const where = {};
+
+        if (search.trim()) {
+            const trimmed = search.trim();
+            where.OR = [
+                { name: { contains: trimmed } },
+                { slug: { contains: createSlug(trimmed) || trimmed } }
+            ];
+        }
+
+        let orderBy = { created_at: 'desc' };
+        if (sort === 'oldest') orderBy = { created_at: 'asc' };
+        else if (sort === 'name_asc') orderBy = { name: 'asc' };
+        else if (sort === 'name_desc') orderBy = { name: 'desc' };
+
+        const [totalMatching, totalAll, rawCategories] = await Promise.all([
+            prisma.categories.count({ where }),
+            prisma.categories.count(),
+            prisma.categories.findMany({
+                where,
+                include: {
+                    _count: {
+                        select: { foods: true }
+                    }
+                },
+                orderBy,
+                ...(limit ? { skip: (page - 1) * limit, take: limit } : {})
+            })
+        ]);
+
+        const formattedCategories = rawCategories.map((c) => ({
+            id: c.id_category,
+            id_category: c.id_category,
+            name: c.name,
+            slug: c.slug,
+            status: c.status || 'active',
+            created_at: c.created_at,
+            updated_at: c.updated_at,
+            foodsCount: c._count?.foods || 0
+        }));
+
+        if (sort === 'foods_desc') {
+            formattedCategories.sort((a, b) => b.foodsCount - a.foodsCount);
+        }
+
+        const totalFoodsAssigned = rawCategories.reduce((sum, c) => sum + (c._count?.foods || 0), 0);
+        const pageNum = limit ? page : 1;
+        const totalPages = limit ? Math.max(1, Math.ceil(totalMatching / limit)) : 1;
+        const skip = limit ? (page - 1) * limit : 0;
+        const hasMore = limit ? (skip + rawCategories.length < totalMatching) : false;
+
+        return res.json({
+            success: true,
+            data: formattedCategories,
+            stats: {
+                total: totalAll,
+                active: totalAll,
+                inactive: 0,
+                totalFoodsAssigned
+            },
+            pagination: {
+                total: totalMatching,
+                page: pageNum,
+                limit: limit || totalMatching,
+                totalPages,
+                hasMore
+            }
+        });
+    } catch (error) {
+        console.error('Lỗi khi lấy danh sách danh mục:', error);
+>>>>>>> origin/develop
         return res.status(500).json({
             success: false,
             message: 'Không thể tải danh sách danh mục lúc này.',
@@ -1682,6 +1788,7 @@ async function getCategories(req, res) {
     }
 }
 
+<<<<<<< HEAD
 async function createCategory(req, res) {
     try {
         const name = String(req.body?.name || '').trim();
@@ -1728,6 +1835,120 @@ async function createCategory(req, res) {
             success: false,
             message: 'Không thể tạo danh mục lúc này.'
         });
+=======
+async function getCategoryById(req, res) {
+    try {
+        const id = parsePositiveInt(req.params.id);
+        if (!id) {
+            return res.status(400).json({ success: false, message: 'ID danh mục không hợp lệ.' });
+        }
+
+        const category = await prisma.categories.findUnique({
+            where: { id_category: id },
+            include: {
+                _count: {
+                    select: { foods: true }
+                },
+                foods: {
+                    take: 5,
+                    select: {
+                        id_food: true,
+                        name: true,
+                        slug: true,
+                        image: true,
+                        cooking_time: true,
+                        status: true
+                    }
+                }
+            }
+        });
+
+        if (!category) {
+            return res.status(404).json({ success: false, message: 'Không tìm thấy thông tin danh mục.' });
+        }
+
+        return res.json({
+            success: true,
+            data: {
+                id: category.id_category,
+                id_category: category.id_category,
+                name: category.name,
+                slug: category.slug,
+                status: category.status,
+                created_at: category.created_at,
+                updated_at: category.updated_at,
+                foodsCount: category._count?.foods || 0,
+                recentFoods: (category.foods || []).map(f => ({
+                    ...f,
+                    image: resolveAssetUrl(f.image)
+                }))
+            }
+        });
+    } catch (error) {
+        console.error('Lỗi khi lấy chi tiết danh mục:', error);
+        return res.status(500).json({ success: false, message: 'Không thể lấy thông tin danh mục.' });
+    }
+}
+
+async function createCategory(req, res) {
+    try {
+        const { name, slug, status } = req.body;
+        const trimmedName = String(name || '').trim();
+
+        if (!trimmedName || trimmedName.length < 2 || trimmedName.length > 100) {
+            return res.status(400).json({
+                success: false,
+                message: 'Tên danh mục là bắt buộc và phải có từ 2 đến 100 ký tự.'
+            });
+        }
+
+        const existingName = await prisma.categories.findFirst({
+            where: { name: trimmedName }
+        });
+
+        if (existingName) {
+            return res.status(400).json({
+                success: false,
+                message: `Tên danh mục "${trimmedName}" đã tồn tại.`
+            });
+        }
+
+        let baseSlug = createSlug(slug || trimmedName);
+        if (!baseSlug) baseSlug = `danh-muc-${Date.now()}`;
+
+        let finalSlug = baseSlug;
+        let suffix = 1;
+        while (await prisma.categories.findUnique({ where: { slug: finalSlug } })) {
+            finalSlug = `${baseSlug}-${suffix++}`;
+        }
+
+        const categoryStatus = status === 'inactive' ? 'inactive' : 'active';
+
+        const newCategory = await prisma.categories.create({
+            data: {
+                name: trimmedName,
+                slug: finalSlug
+            }
+        });
+
+        return res.status(201).json({
+            success: true,
+            message: `Tạo danh mục "${newCategory.name}" thành công!`,
+            data: {
+                id: newCategory.id_category,
+                id_category: newCategory.id_category,
+                name: newCategory.name,
+                slug: newCategory.slug,
+                status: categoryStatus,
+                created_at: newCategory.created_at,
+                updated_at: newCategory.updated_at,
+                foodsCount: 0
+            }
+        });
+    } catch (error) {
+        console.error('Lỗi khi tạo danh mục:', error);
+        return res.status(500).json({ success: false, message: 'Không thể tạo danh mục lúc này.' });
+>>>>>>> origin/develop
     }
 }
 
@@ -1735,10 +1956,14 @@ async function updateCategory(req, res) {
     try {
         const id = parsePositiveInt(req.params.id);
         if (!id) {
+<<<<<<< HEAD
             return res.status(400).json({
                 success: false,
                 message: 'ID danh mục không hợp lệ.'
             });
+=======
+            return res.status(400).json({ success: false, message: 'ID danh mục không hợp lệ.' });
+>>>>>>> origin/develop
         }
 
         const category = await prisma.categories.findUnique({
@@ -1746,6 +1971,7 @@ async function updateCategory(req, res) {
         });
 
         if (!category) {
+<<<<<<< HEAD
             return res.status(404).json({
                 success: false,
                 message: 'Không tìm thấy danh mục.'
@@ -1775,11 +2001,90 @@ async function updateCategory(req, res) {
                 name,
                 slug,
                 updated_at: new Date()
+=======
+            return res.status(404).json({ success: false, message: 'Không tìm thấy danh mục yêu cầu.' });
+        }
+
+        const { name, slug, status } = req.body;
+        const data = {};
+
+        if (name !== undefined) {
+            const trimmedName = String(name || '').trim();
+            if (!trimmedName || trimmedName.length < 2 || trimmedName.length > 100) {
+                return res.status(400).json({
+                    success: false,
+                    message: 'Tên danh mục phải có từ 2 đến 100 ký tự.'
+                });
+            }
+
+            const duplicate = await prisma.categories.findFirst({
+                where: {
+                    name: trimmedName,
+                    id_category: { not: id }
+                }
+            });
+
+            if (duplicate) {
+                return res.status(400).json({
+                    success: false,
+                    message: `Tên danh mục "${trimmedName}" đã được sử dụng bởi danh mục khác.`
+                });
+            }
+
+            data.name = trimmedName;
+        }
+
+        if (slug !== undefined) {
+            const trimmedSlug = createSlug(slug);
+            if (!trimmedSlug) {
+                return res.status(400).json({
+                    success: false,
+                    message: 'Slug danh mục không hợp lệ.'
+                });
+            }
+
+            const duplicateSlug = await prisma.categories.findFirst({
+                where: {
+                    slug: trimmedSlug,
+                    id_category: { not: id }
+                }
+            });
+
+            if (duplicateSlug) {
+                return res.status(400).json({
+                    success: false,
+                    message: `Slug "${trimmedSlug}" đã được sử dụng bởi danh mục khác.`
+                });
+            }
+
+            data.slug = trimmedSlug;
+        }
+
+        if (status !== undefined) {
+            if (!['active', 'inactive'].includes(status)) {
+                return res.status(400).json({
+                    success: false,
+                    message: 'Trạng thái danh mục chỉ có thể là "active" hoặc "inactive".'
+                });
+            }
+        }
+
+        data.updated_at = new Date();
+
+        const updated = await prisma.categories.update({
+            where: { id_category: id },
+            data,
+            include: {
+                _count: {
+                    select: { foods: true }
+                }
+>>>>>>> origin/develop
             }
         });
 
         return res.json({
             success: true,
+<<<<<<< HEAD
             message: 'Cập nhật danh mục thành công.',
             data: updated
         });
@@ -1789,12 +2094,30 @@ async function updateCategory(req, res) {
             success: false,
             message: 'Không thể cập nhật danh mục lúc này.'
         });
+=======
+            message: `Cập nhật danh mục "${updated.name}" thành công!`,
+            data: {
+                id: updated.id_category,
+                id_category: updated.id_category,
+                name: updated.name,
+                slug: updated.slug,
+                status: status || 'active',
+                created_at: updated.created_at,
+                updated_at: updated.updated_at,
+                foodsCount: updated._count?.foods || 0
+            }
+        });
+    } catch (error) {
+        console.error('Lỗi khi cập nhật danh mục:', error);
+        return res.status(500).json({ success: false, message: 'Không thể cập nhật danh mục lúc này.' });
+>>>>>>> origin/develop
     }
 }
 
 async function updateCategoryStatus(req, res) {
     try {
         const id = parsePositiveInt(req.params.id);
+<<<<<<< HEAD
         const status = req.body?.status;
 
         if (!id) {
@@ -1820,16 +2143,40 @@ async function updateCategoryStatus(req, res) {
                 success: false,
                 message: 'Không tìm thấy danh mục.'
             });
+=======
+        if (!id) {
+            return res.status(400).json({ success: false, message: 'ID danh mục không hợp lệ.' });
+        }
+
+        const category = await prisma.categories.findUnique({
+            where: { id_category: id },
+            include: {
+                _count: { select: { foods: true } }
+            }
+        });
+
+        if (!category) {
+            return res.status(404).json({ success: false, message: 'Không tìm thấy danh mục yêu cầu.' });
+        }
+
+        let targetStatus = req.body.status;
+        if (!targetStatus || !['active', 'inactive'].includes(targetStatus)) {
+            targetStatus = 'active';
+>>>>>>> origin/develop
         }
 
         const updated = await prisma.categories.update({
             where: { id_category: id },
             data: {
+<<<<<<< HEAD
                 status,
+=======
+>>>>>>> origin/develop
                 updated_at: new Date()
             }
         });
 
+<<<<<<< HEAD
         return res.json({
             success: true,
             message: status === 'active' ? 'Đã cho phép hiển thị danh mục.' : 'Đã ẩn danh mục.',
@@ -2008,12 +2355,60 @@ async function updatePostStatus(req, res) {
 
         const updated = await prisma.posts.update({
             where: { id_post: id },
+=======
+        const actionText = targetStatus === 'active' ? 'kích hoạt hiển thị' : 'ẩn';
+
+        return res.json({
+            success: true,
+            message: `Đã ${actionText} danh mục "${category.name}" thành công.`,
+            data: {
+                id: updated.id_category,
+                id_category: updated.id_category,
+                name: updated.name,
+                slug: updated.slug,
+                status: targetStatus,
+                foodsCount: category._count?.foods || 0
+            }
+        });
+    } catch (error) {
+        console.error('Lỗi khi cập nhật trạng thái danh mục:', error);
+        return res.status(500).json({ success: false, message: 'Không thể thay đổi trạng thái danh mục.' });
+    }
+}
+
+async function updateCommentStatus(req, res) {
+    try {
+        const id = parsePositiveInt(req.params.id);
+        const { status } = req.body || {};
+
+        if (!id || !['active', 'hidden'].includes(status)) {
+            return res.status(400).json({
+                success: false,
+                message: 'Trạng thái bình luận không hợp lệ. Chấp nhận: active, hidden.'
+            });
+        }
+
+        const comment = await prisma.comments.findUnique({
+            where: { id_comment: id }
+        });
+
+        if (!comment) {
+            return res.status(404).json({
+                success: false,
+                message: 'Bình luận không tồn tại.'
+            });
+        }
+
+        const updated = await prisma.comments.update({
+            where: { id_comment: id },
+>>>>>>> origin/develop
             data: {
                 status,
                 updated_at: new Date()
             }
         });
 
+<<<<<<< HEAD
         return res.json({
             success: true,
             message: status === 'active' ? 'Đã cho phép hiển thị bài viết.' : 'Đã ẩn bài viết khỏi cộng đồng.',
@@ -2186,6 +2581,18 @@ async function handleAdminReport(req, res) {
             success: false,
             message: 'Không thể xử lý báo cáo lúc này.'
         });
+=======
+        const statusLabel = status === 'hidden' ? 'Đã ẩn bình luận' : 'Hiển thị bình luận';
+
+        return res.json({
+            success: true,
+            message: `Đã cập nhật: ${statusLabel}.`,
+            data: updated
+        });
+    } catch (error) {
+        console.error('updateCommentStatus error:', error);
+        return res.status(500).json({ success: false, message: 'Không thể cập nhật trạng thái bình luận.' });
+>>>>>>> origin/develop
     }
 }
 
@@ -2201,6 +2608,7 @@ module.exports = {
     createFood,
     updateFood,
     updateFoodStatus,
+<<<<<<< HEAD
     getCategories,
     createCategory,
     updateCategory,
@@ -2211,4 +2619,23 @@ module.exports = {
     deleteAdminPost,
     getAdminReports,
     handleAdminReport
+=======
+    getPosts,
+    getPostById,
+    updatePostStatus,
+    deletePost,
+    getReports,
+    updateReportStatus,
+    updateCommentStatus,
+    getCategories,
+    getCategoryById,
+    createCategory,
+    updateCategory,
+    updateCategoryStatus,
+    getAdminPosts: getPosts,
+    deleteAdminPost: deletePost,
+    getAdminReports: getReports,
+    handleAdminReport: updateReportStatus
+>>>>>>> origin/develop
 };
+
