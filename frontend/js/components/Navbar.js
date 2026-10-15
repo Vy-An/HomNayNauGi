@@ -85,7 +85,7 @@ export default function Navbar() {
                 <!-- Right Action Icons & Auth -->
                 <div class="flex items-center gap-1 sm:gap-2 lg:gap-3 shrink-0">
                     <!-- Quick Search Button -->
-                    <button onclick="document.getElementById('nav-search-bar').classList.toggle('hidden'); document.getElementById('nav-search-input')?.focus();" class="w-7 h-7 sm:w-8.5 sm:h-8.5 rounded-full bg-white/10 hover:bg-white/20 text-white flex items-center justify-center transition-all hover:text-[#F4A62A] cursor-pointer" title="Tìm kiếm món">
+                    <button id="nav-search-toggle-btn" onclick="window.toggleNavSearch && window.toggleNavSearch()" class="w-7 h-7 sm:w-8.5 sm:h-8.5 rounded-full bg-white/10 hover:bg-white/20 text-white flex items-center justify-center transition-all hover:text-[#F4A62A] cursor-pointer" title="Tìm kiếm món">
                         <i class="fa-solid fa-magnifying-glass text-[11px] sm:text-sm"></i>
                     </button>
 
@@ -222,10 +222,27 @@ export default function Navbar() {
             <!-- Dropdown Search Bar -->
             <div id="nav-search-bar" class="hidden absolute top-full left-0 w-full bg-white shadow-xl py-2.5 border-t border-beige-border z-40 transition-all">
                 <div class="max-w-[1360px] mx-auto px-4 sm:px-6 lg:px-8">
-                    <form onsubmit="event.preventDefault(); const q = document.getElementById('nav-search-input').value; if(q) window.location.hash = '#/danh-sach?search=' + encodeURIComponent(q);" class="relative max-w-2xl mx-auto flex items-center">
-                        <i class="fa-solid fa-magnifying-glass absolute left-4 text-gray-400 text-xs"></i>
-                        <input id="nav-search-input" type="text" placeholder="Tìm kiếm món ăn, nguyên liệu, loại món..." class="w-full pl-10 pr-20 py-2 bg-gray-50 border border-gray-200 rounded-full text-text-main text-xs sm:text-sm focus:outline-none focus:ring-2 focus:ring-[#0F4937] focus:bg-white transition-all">
-                        <button type="submit" class="absolute right-1.5 px-3.5 py-1 bg-[#0F4937] hover:bg-[#145A43] text-white rounded-full text-xs font-bold transition">Tìm</button>
+                    <form onsubmit="event.preventDefault(); const q = document.getElementById('nav-search-input')?.value?.trim(); if(q) { window.location.hash = '#/danh-sach?search=' + encodeURIComponent(q); } else { document.getElementById('nav-search-bar')?.classList.add('hidden'); }" class="relative max-w-2xl mx-auto flex items-center gap-1.5">
+                        <div class="relative flex-1 flex items-center">
+                            <i class="fa-solid fa-magnifying-glass absolute left-3.5 text-gray-400 text-xs"></i>
+                            <input 
+                                id="nav-search-input" 
+                                type="text" 
+                                placeholder="Tìm kiếm món ăn, nguyên liệu, loại món..." 
+                                onblur="setTimeout(() => { if (!this.value.trim()) document.getElementById('nav-search-bar')?.classList.add('hidden'); }, 200);"
+                                onkeydown="if (event.key === 'Escape') { if (!this.value.trim()) { document.getElementById('nav-search-bar')?.classList.add('hidden'); } else { this.value = ''; } }"
+                                class="w-full pl-9 pr-8 py-2 bg-gray-50 border border-gray-200 rounded-full text-text-main text-xs sm:text-sm focus:outline-none focus:ring-2 focus:ring-[#0F4937] focus:bg-white transition-all"
+                            >
+                            <button 
+                                type="button" 
+                                onclick="window.clearNavSearch && window.clearNavSearch()" 
+                                class="absolute right-2.5 text-gray-400 hover:text-gray-600 p-1 cursor-pointer" 
+                                title="Đóng thanh tìm kiếm"
+                            >
+                                <i class="fa-solid fa-xmark text-xs"></i>
+                            </button>
+                        </div>
+                        <button type="submit" class="px-3.5 py-2 bg-[#0F4937] hover:bg-[#145A43] text-white rounded-full text-xs font-bold transition shrink-0 cursor-pointer shadow-xs">Tìm</button>
                     </form>
                 </div>
             </div>
@@ -869,7 +886,78 @@ if (typeof window !== 'undefined') {
             }, 300);
         }
         if (wonPopover) wonPopover.classList.add('hidden');
+        window.closeNavSearchIfEmpty && window.closeNavSearchIfEmpty();
     };
+
+    window.toggleNavSearch = () => {
+        const bar = document.getElementById('nav-search-bar');
+        const input = document.getElementById('nav-search-input');
+        if (!bar) return;
+        const isHidden = bar.classList.contains('hidden');
+        if (isHidden) {
+            bar.classList.remove('hidden');
+            setTimeout(() => input?.focus(), 60);
+        } else {
+            bar.classList.add('hidden');
+        }
+    };
+
+    window.clearNavSearch = () => {
+        const input = document.getElementById('nav-search-input');
+        const bar = document.getElementById('nav-search-bar');
+        if (input) input.value = '';
+        if (bar) bar.classList.add('hidden');
+    };
+
+    window.closeNavSearchIfEmpty = () => {
+        const bar = document.getElementById('nav-search-bar');
+        const input = document.getElementById('nav-search-input');
+        if (bar && !bar.classList.contains('hidden')) {
+            if (!input || !input.value.trim()) {
+                bar.classList.add('hidden');
+            }
+        }
+    };
+
+    if (!window._navSearchListenersAttached) {
+        window._navSearchListenersAttached = true;
+
+        // Tự động ẩn thanh search khi click ra ngoài nếu không có chữ
+        document.addEventListener('click', (e) => {
+            const bar = document.getElementById('nav-search-bar');
+            const toggleBtn = document.getElementById('nav-search-toggle-btn');
+            const input = document.getElementById('nav-search-input');
+            if (!bar || bar.classList.contains('hidden')) return;
+
+            if (!bar.contains(e.target) && !toggleBtn?.contains(e.target)) {
+                if (!input || !input.value.trim()) {
+                    bar.classList.add('hidden');
+                }
+            }
+        });
+
+        // Tự động ẩn thanh search khi cuộn trang nếu không có chữ
+        window.addEventListener('scroll', () => {
+            const bar = document.getElementById('nav-search-bar');
+            const input = document.getElementById('nav-search-input');
+            if (bar && !bar.classList.contains('hidden')) {
+                if (!input || !input.value.trim()) {
+                    bar.classList.add('hidden');
+                }
+            }
+        }, { passive: true });
+
+        // Tự động ẩn thanh search khi chuyển trang (hashchange) nếu không có chữ
+        window.addEventListener('hashchange', () => {
+            const bar = document.getElementById('nav-search-bar');
+            const input = document.getElementById('nav-search-input');
+            if (bar && !bar.classList.contains('hidden')) {
+                if (!input || !input.value.trim()) {
+                    bar.classList.add('hidden');
+                }
+            }
+        });
+    }
 
     window.openFavoritesDrawer = () => {
         const overlay = document.getElementById('nav-drawer-overlay');
