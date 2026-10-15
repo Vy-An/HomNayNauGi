@@ -155,7 +155,7 @@ const Community = {
                     </aside>
 
                     <section class="lg:col-span-6 space-y-5 order-1 lg:order-2" id="center-feed-column">
-                        <div id="post-composer" class="bg-white rounded-[20px] border border-beige-border/80 p-4.5 sm:p-5 shadow-sm">
+                        <div id="post-composer" class="bg-white rounded-[20px] border border-beige-border/80 p-3.5 sm:p-5 shadow-sm">
                             <div class="flex items-center gap-3 mb-3">
                                 <img id="composer-user-avatar" src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=100&auto=format&fit=crop&q=80" alt="Bạn" class="w-9 h-9 rounded-full object-cover ring-2 ring-primary/20">
                                 <div>
@@ -195,27 +195,27 @@ const Community = {
                                     </button>
                                 </div>
 
-                                <div class="flex items-center justify-between pt-2 border-t border-[#F0EBE0]">
-                                    <div class="flex items-center gap-1.5">
+                                <div class="flex items-center justify-between pt-2.5 border-t border-[#F0EBE0] gap-1.5 sm:gap-2">
+                                    <div class="flex items-center gap-1 sm:gap-1.5 shrink-0">
                                         <input type="file" id="post-image-file" accept="image/*" class="hidden">
 
                                         <button 
                                             type="button" 
                                             id="btn-trigger-upload" 
-                                            class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold text-text-muted hover:text-primary hover:bg-primary-subtle transition-colors cursor-pointer"
+                                            class="inline-flex items-center gap-1 sm:gap-1.5 px-2 sm:px-3 py-1.5 rounded-xl text-xs font-bold text-text-muted hover:text-primary hover:bg-primary-subtle transition-colors cursor-pointer whitespace-nowrap shrink-0"
                                         >
-                                            <i class="fa-solid fa-camera text-primary text-sm"></i>
-                                            <span>Thêm ảnh</span>
+                                            <i class="fa-solid fa-camera text-primary text-xs sm:text-sm"></i>
+                                            <span class="whitespace-nowrap">Thêm ảnh</span>
                                         </button>
 
-                                        <div class="relative">
+                                        <div class="relative shrink-0">
                                             <button 
                                                 type="button" 
                                                 id="btn-trigger-attach-food" 
-                                                class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold text-text-muted hover:text-primary hover:bg-primary-subtle transition-colors cursor-pointer"
+                                                class="inline-flex items-center gap-1 sm:gap-1.5 px-2 sm:px-3 py-1.5 rounded-xl text-xs font-bold text-text-muted hover:text-primary hover:bg-primary-subtle transition-colors cursor-pointer whitespace-nowrap shrink-0"
                                             >
-                                                <i class="fa-solid fa-bowl-food text-accent text-sm"></i>
-                                                <span>Gắn món ăn</span>
+                                                <i class="fa-solid fa-bowl-food text-accent text-xs sm:text-sm"></i>
+                                                <span class="whitespace-nowrap">Gắn món ăn</span>
                                             </button>
 
                                             <div id="attach-food-dropdown" class="hidden absolute top-full left-0 mt-1.5 w-64 bg-white rounded-2xl shadow-xl border border-beige-border p-2 z-30 max-h-56 overflow-y-auto">
@@ -232,9 +232,9 @@ const Community = {
                                     <button 
                                         type="submit" 
                                         id="btn-submit-post" 
-                                        class="px-4.5 py-2 bg-primary hover:bg-[#1B4633] active:bg-[#143627] text-white font-bold text-xs sm:text-sm rounded-full shadow-md shadow-primary/20 hover:shadow-lg transition-all flex items-center gap-1.5 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
+                                        class="px-3 sm:px-4.5 py-1.5 sm:py-2 bg-primary hover:bg-[#1B4633] active:bg-[#143627] text-white font-bold text-xs sm:text-sm rounded-full shadow-md shadow-primary/20 hover:shadow-lg transition-all flex items-center gap-1 sm:gap-1.5 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed whitespace-nowrap shrink-0"
                                     >
-                                        <span>Đăng bài</span>
+                                        <span class="whitespace-nowrap">Đăng bài</span>
                                         <span class="text-xs">→</span>
                                     </button>
                                 </div>
@@ -997,7 +997,7 @@ const Community = {
                 isSubmittingPost = true;
                 if (btnSubmitPost) {
                     btnSubmitPost.disabled = true;
-                    btnSubmitPost.innerHTML = '<span>Đang gửi...</span><i class="fa-solid fa-spinner animate-spin text-xs"></i>';
+                    btnSubmitPost.innerHTML = '<span class="whitespace-nowrap">Đang gửi...</span><i class="fa-solid fa-spinner animate-spin text-xs"></i>';
                 }
 
                 try {
@@ -1071,7 +1071,7 @@ const Community = {
                     isSubmittingPost = false;
                     if (btnSubmitPost) {
                         btnSubmitPost.disabled = false;
-                        btnSubmitPost.innerHTML = '<span>Đăng bài</span><span class="text-xs">→</span>';
+                        btnSubmitPost.innerHTML = '<span class="whitespace-nowrap">Đăng bài</span><span class="text-xs">→</span>';
                     }
                 }
             });
