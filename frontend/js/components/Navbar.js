@@ -351,7 +351,7 @@ export default function Navbar() {
         <!-- BOTTOM NAVIGATION BAR FOR MOBILE (< md) -->
         <nav class="md:hidden fixed bottom-0 left-0 right-0 z-40 bg-white/95 backdrop-blur-md border-t border-[#E5E1D6] shadow-[0_-4px_20px_rgba(0,0,0,0.06)] px-2 pt-1 pb-2 flex items-center justify-around select-none" style="padding-bottom: max(0.5rem, env(safe-area-inset-bottom, 8px));">
             <!-- 1. Trang chủ -->
-            <a href="#/" class="flex flex-col items-center justify-center py-1 px-2.5 rounded-xl transition-all ${isHome ? 'text-[#145A43] font-black' : 'text-[#718078] hover:text-[#145A43] font-semibold'}">
+            <a href="#/" onclick="${isHome ? 'window.scrollTo({ top: 0, behavior: \'smooth\' });' : ''}" class="flex flex-col items-center justify-center py-1 px-2.5 rounded-xl transition-all ${isHome ? 'text-[#145A43] font-black' : 'text-[#718078] hover:text-[#145A43] font-semibold'}">
                 <div class="relative flex items-center justify-center w-6 h-6">
                     <i class="fa-solid fa-house text-base ${isHome ? 'text-[#145A43] scale-110' : ''}"></i>
                 </div>
@@ -359,7 +359,7 @@ export default function Navbar() {
             </a>
 
             <!-- 2. Thực đơn (Danh sách món) -->
-            <a href="#/danh-sach" class="flex flex-col items-center justify-center py-1 px-2.5 rounded-xl transition-all ${isList ? 'text-[#145A43] font-black' : 'text-[#718078] hover:text-[#145A43] font-semibold'}">
+            <a href="#/danh-sach" onclick="${isList ? 'window.scrollTo({ top: 0, behavior: \'smooth\' });' : ''}" class="flex flex-col items-center justify-center py-1 px-2.5 rounded-xl transition-all ${isList ? 'text-[#145A43] font-black' : 'text-[#718078] hover:text-[#145A43] font-semibold'}">
                 <div class="relative flex items-center justify-center w-6 h-6">
                     <i class="fa-solid fa-utensils text-base ${isList ? 'text-[#145A43] scale-110' : ''}"></i>
                 </div>
@@ -367,7 +367,7 @@ export default function Navbar() {
             </a>
 
             <!-- 3. Cộng đồng -->
-            <a href="#/cong-dong" class="flex flex-col items-center justify-center py-1 px-2.5 rounded-xl transition-all ${isCommunity ? 'text-[#145A43] font-black' : 'text-[#718078] hover:text-[#145A43] font-semibold'}">
+            <a href="#/cong-dong" onclick="${isCommunity ? 'window.scrollTo({ top: 0, behavior: \'smooth\' });' : ''}" class="flex flex-col items-center justify-center py-1 px-2.5 rounded-xl transition-all ${isCommunity ? 'text-[#145A43] font-black' : 'text-[#718078] hover:text-[#145A43] font-semibold'}">
                 <div class="relative flex items-center justify-center w-6 h-6">
                     <i class="fa-solid fa-users text-base ${isCommunity ? 'text-[#145A43] scale-110' : ''}"></i>
                 </div>
@@ -384,7 +384,7 @@ export default function Navbar() {
             </button>
 
             <!-- 5. Cá nhân -->
-            <a href="#/ca-nhan" class="flex flex-col items-center justify-center py-1 px-2.5 rounded-xl transition-all ${isProfile ? 'text-[#145A43] font-black' : 'text-[#718078] hover:text-[#145A43] font-semibold'}">
+            <a href="#/ca-nhan" onclick="${isProfile ? 'window.scrollTo({ top: 0, behavior: \'smooth\' });' : ''}" class="flex flex-col items-center justify-center py-1 px-2.5 rounded-xl transition-all ${isProfile ? 'text-[#145A43] font-black' : 'text-[#718078] hover:text-[#145A43] font-semibold'}">
                 <div class="relative flex items-center justify-center w-6 h-6">
                     ${isLoggedIn ? `
                         <img src="${authAvatar}" alt="${authName}" class="w-5 h-5 rounded-full object-cover ring-1 ${isProfile ? 'ring-[#145A43] ring-2' : 'ring-gray-300'}">
