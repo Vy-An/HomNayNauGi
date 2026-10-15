@@ -551,7 +551,7 @@ const FoodList = {
             </div>
 
             <!-- FLOATING TOAST CONTAINER -->
-            <div id="foodlist-toast-container" class="fixed bottom-6 right-6 z-50 flex flex-col gap-2 pointer-events-none"></div>
+            <div id="foodlist-toast-container" class="fixed top-16 sm:top-20 left-4 right-4 sm:left-auto sm:right-6 sm:max-w-sm z-[9999] flex flex-col gap-2 items-center sm:items-end pointer-events-none"></div>
 
         </div>
         `;
@@ -678,7 +678,7 @@ const FoodList = {
             if (!container) return;
 
             const toast = document.createElement('div');
-            toast.className = `pointer-events-auto transform translate-y-2 opacity-0 transition-all duration-300 flex items-center gap-2.5 px-4 py-3 rounded-2xl shadow-xl border text-xs sm:text-sm font-bold ${
+            toast.className = `pointer-events-auto transform -translate-y-2 opacity-0 transition-all duration-300 flex items-center gap-2.5 px-4.5 py-3 rounded-2xl shadow-xl border text-xs sm:text-sm font-bold ${
                 type === 'success' 
                     ? 'bg-primary text-white border-primary-light/40 shadow-primary/20' 
                     : type === 'info'
@@ -696,13 +696,13 @@ const FoodList = {
             container.appendChild(toast);
 
             requestAnimationFrame(() => {
-                toast.classList.remove('translate-y-2', 'opacity-0');
+                toast.classList.remove('-translate-y-2', 'opacity-0');
                 toast.classList.add('translate-y-0', 'opacity-100');
             });
 
             setTimeout(() => {
                 toast.classList.remove('translate-y-0', 'opacity-100');
-                toast.classList.add('translate-y-2', 'opacity-0');
+                toast.classList.add('-translate-y-2', 'opacity-0');
                 setTimeout(() => toast.remove(), 300);
             }, 2500);
         };

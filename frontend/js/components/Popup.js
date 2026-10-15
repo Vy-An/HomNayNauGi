@@ -24,7 +24,7 @@ class PopupManager {
         if (!document.getElementById('app-popup-toast-container')) {
             const toastBox = document.createElement('div');
             toastBox.id = 'app-popup-toast-container';
-            toastBox.className = 'fixed top-5 right-5 z-[99999] flex flex-col gap-2.5 pointer-events-none max-w-sm w-full px-4 sm:px-0';
+            toastBox.className = 'fixed top-16 sm:top-20 left-4 right-4 sm:left-auto sm:right-6 z-[99999] flex flex-col gap-2.5 pointer-events-none sm:max-w-sm w-auto items-center sm:items-end';
             document.body.appendChild(toastBox);
             this.toastContainer = toastBox;
         } else {

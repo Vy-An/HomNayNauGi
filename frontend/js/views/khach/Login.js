@@ -468,7 +468,7 @@ const Login = {
             </footer>
 
             <!-- FLOATING TOAST NOTIFICATION CONTAINER -->
-            <div id="toast-container" class="fixed top-6 right-6 z-50 flex flex-col gap-2 pointer-events-none"></div>
+            <div id="toast-container" class="fixed top-6 sm:top-8 left-4 right-4 sm:left-auto sm:right-6 sm:max-w-sm z-[9999] flex flex-col gap-2 items-center sm:items-end pointer-events-none"></div>
 
         </div>
         `;

@@ -192,7 +192,7 @@ const FoodDetail = {
             </div>
 
             <!-- Toast notification -->
-            <div id="toast-msg" class="fixed bottom-5 left-1/2 -translate-x-1/2 sm:left-auto sm:right-5 sm:translate-x-0 bg-gray-900 text-white px-5 py-3 rounded-xl shadow-xl translate-y-20 opacity-0 transition-all duration-300 flex items-center gap-2.5 z-50 max-w-[90vw] text-xs sm:text-sm">
+            <div id="toast-msg" class="fixed top-16 sm:top-20 left-1/2 -translate-x-1/2 sm:left-auto sm:right-6 sm:translate-x-0 bg-[#18382D] text-white px-5 py-3 rounded-2xl shadow-xl border border-beige-border/40 -translate-y-4 opacity-0 transition-all duration-300 flex items-center gap-2.5 z-[9999] max-w-[90vw] text-xs sm:text-sm font-bold pointer-events-none">
                 <span class="text-green-400"><i class="fa-solid fa-check"></i></span>
                 <span id="toast-text">Đã lưu món yêu thích!</span>
             </div>
@@ -230,9 +230,11 @@ const FoodDetail = {
         function showToast(text) {
             if (!toast) return;
             if (toastText) toastText.textContent = text;
-            toast.classList.remove('translate-y-20', 'opacity-0');
+            toast.classList.remove('-translate-y-4', 'opacity-0');
+            toast.classList.add('translate-y-0', 'opacity-100');
             setTimeout(() => {
-                toast.classList.add('translate-y-20', 'opacity-0');
+                toast.classList.remove('translate-y-0', 'opacity-100');
+                toast.classList.add('-translate-y-4', 'opacity-0');
             }, 3000);
         }
 
