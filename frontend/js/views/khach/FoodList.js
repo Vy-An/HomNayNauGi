@@ -406,42 +406,42 @@ const FoodList = {
                         </div>
                     </div>
 
-                    <!-- RECIPE TOOLBAR: Count + Sort Dropdown + View Toggle -->
-                    <div class="recipe-toolbar bg-white rounded-[20px] border border-beige-border/80 p-3 sm:p-4 shadow-sm flex flex-col sm:flex-row items-center justify-between gap-3.5">
+                    <!-- RECIPE TOOLBAR: Count + Sort Dropdown + View Toggle (Sticky on Mobile) -->
+                    <div class="recipe-toolbar sticky top-[102px] sm:top-[120px] lg:static z-20 bg-white/95 backdrop-blur-md rounded-2xl sm:rounded-[20px] border border-beige-border/80 p-2.5 sm:p-4 shadow-xs sm:shadow-sm flex items-center justify-between gap-2 sm:gap-3.5 mb-2">
                         
                         <!-- Left: Dish Count Badge & Active Filters Info -->
-                        <div class="flex items-center gap-2.5 w-full sm:w-auto justify-between sm:justify-start">
-                            <div class="flex items-center gap-2">
-                                <span class="w-7 h-7 rounded-xl bg-primary-subtle text-primary flex items-center justify-center text-xs font-bold">
+                        <div class="flex items-center gap-1.5 sm:gap-2.5 min-w-0">
+                            <div class="flex items-center gap-1.5 sm:gap-2">
+                                <span class="w-6 h-6 sm:w-7 sm:h-7 rounded-lg sm:rounded-xl bg-primary-subtle text-primary flex items-center justify-center text-[10px] sm:text-xs font-bold shrink-0">
                                     <i class="fa-solid fa-bowl-food"></i>
                                 </span>
-                                <span id="recipe-total-count" class="font-extrabold text-sm text-text-main inline-flex items-center">
-                                    <span class="inline-block h-4 w-28 rounded-md skeleton-shimmer"></span>
+                                <span id="recipe-total-count" class="font-extrabold text-xs sm:text-sm text-text-main inline-flex items-center truncate">
+                                    <span class="inline-block h-4 w-20 sm:w-28 rounded-md skeleton-shimmer"></span>
                                 </span>
                             </div>
-                            <span id="active-filter-indicator" class="hidden text-[11px] font-semibold text-accent bg-accent/10 border border-accent/20 px-2 py-0.5 rounded-full">
+                            <span id="active-filter-indicator" class="hidden text-[10px] sm:text-[11px] font-semibold text-accent bg-accent/10 border border-accent/20 px-1.5 sm:px-2 py-0.5 rounded-full shrink-0">
                                 Đang lọc
                             </span>
                         </div>
 
                         <!-- Right: Sort Dropdown & View Mode Switcher -->
-                        <div class="flex items-center gap-2.5 w-full sm:w-auto justify-end">
+                        <div class="flex items-center gap-1.5 sm:gap-2.5 shrink-0">
                             
                             <!-- Sort Dropdown -->
-                            <div class="relative flex-1 sm:flex-initial" id="sort-dropdown-wrapper">
+                            <div class="relative" id="sort-dropdown-wrapper">
                                 <button 
                                     type="button" 
                                     id="btn-sort-toggle" 
-                                    class="w-full sm:w-auto inline-flex items-center justify-between gap-2 px-3 py-2 bg-[#FCFAF6] hover:bg-white border border-[#DFD5BE] rounded-xl text-xs font-bold text-text-main shadow-2xs transition-all cursor-pointer"
+                                    class="inline-flex items-center justify-between gap-1.5 sm:gap-2 px-2.5 sm:px-3 py-1.5 sm:py-2 bg-[#FCFAF6] hover:bg-white border border-[#DFD5BE] rounded-xl text-xs font-bold text-text-main shadow-2xs transition-all cursor-pointer"
                                     aria-haspopup="listbox"
                                     aria-expanded="false"
                                 >
-                                    <span class="flex items-center gap-1.5">
-                                        <i class="fa-solid fa-arrow-down-wide-short text-primary text-[11px]"></i>
-                                        <span class="text-text-muted font-normal">Sắp xếp:</span>
-                                        <span id="current-sort-label">Mới nhất</span>
+                                    <span class="flex items-center gap-1 sm:gap-1.5">
+                                        <i class="fa-solid fa-arrow-down-wide-short text-primary text-[10px] sm:text-[11px]"></i>
+                                        <span class="text-text-muted font-normal hidden min-[400px]:inline">Sắp xếp:</span>
+                                        <span id="current-sort-label" class="truncate max-w-[80px] min-[480px]:max-w-none">Mới nhất</span>
                                     </span>
-                                    <i class="fa-solid fa-chevron-down text-[10px] text-gray-400"></i>
+                                    <i class="fa-solid fa-chevron-down text-[9px] text-gray-400"></i>
                                 </button>
 
                                 <!-- Dropdown Menu List -->
@@ -461,11 +461,11 @@ const FoodList = {
                             </div>
 
                             <!-- View Mode Switcher (Grid / List) -->
-                            <div class="inline-flex items-center bg-[#FCFAF6] border border-[#DFD5BE] p-0.5 rounded-xl shadow-2xs">
+                            <div class="inline-flex items-center bg-[#FCFAF6] border border-[#DFD5BE] p-0.5 rounded-xl shadow-2xs shrink-0">
                                 <button 
                                     type="button" 
                                     id="btn-view-grid" 
-                                    class="w-8 h-8 rounded-lg flex items-center justify-center text-xs font-bold bg-primary text-white shadow-2xs transition-all cursor-pointer"
+                                    class="w-7 h-7 sm:w-8 sm:h-8 rounded-lg flex items-center justify-center text-[11px] sm:text-xs font-bold bg-primary text-white shadow-2xs transition-all cursor-pointer"
                                     title="Chế độ Lưới (Grid View)"
                                 >
                                     <i class="fa-solid fa-grip"></i>
@@ -473,7 +473,7 @@ const FoodList = {
                                 <button 
                                     type="button" 
                                     id="btn-view-list" 
-                                    class="w-8 h-8 rounded-lg flex items-center justify-center text-xs font-bold text-text-muted hover:text-primary transition-all cursor-pointer"
+                                    class="w-7 h-7 sm:w-8 sm:h-8 rounded-lg flex items-center justify-center text-[11px] sm:text-xs font-bold text-text-muted hover:text-primary transition-all cursor-pointer"
                                     title="Chế độ Danh sách (List View)"
                                 >
                                     <i class="fa-solid fa-list"></i>
@@ -1581,6 +1581,7 @@ const FoodList = {
                     sortDropdownMenu.classList.add('hidden');
                     btnSortToggle.setAttribute('aria-expanded', 'false');
                     executeFilterAndSort();
+                    updateMobileFilterPills();
                 });
             });
         }
