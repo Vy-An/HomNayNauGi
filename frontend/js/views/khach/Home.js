@@ -370,9 +370,9 @@ const Home = {
                 </section>
 
 
-                <!-- SECTION 4: KHÁM PHÁ THÊM (6 CATEGORIES) -->
-                <section class="max-w-[1360px] w-full mx-auto px-4 sm:px-6 lg:px-8 py-8 border-t border-[#E5E1D6] mb-8">
-                    <div class="text-center max-w-xl mx-auto mb-8">
+                <!-- SECTION 4: KHÁM PHÁ THÊM (CAROUSEL TRƯỢT LIÊN TỤC TỪ TRÁI SANG PHẢI) -->
+                <section class="w-full py-8 border-t border-[#E5E1D6] mb-8 overflow-hidden">
+                    <div class="text-center max-w-xl mx-auto mb-8 px-4">
                         <div class="inline-flex items-center gap-1.5 text-xs font-black uppercase tracking-wider text-[#F4A62A]">
                             <i class="fa-solid fa-compass"></i> ĐA DẠNG ẨM THỰC
                         </div>
@@ -382,21 +382,28 @@ const Home = {
                         <p class="text-xs sm:text-sm text-[#718078] mt-1">Tìm kiếm công thức theo phong cách và sở thích ẩm thực</p>
                     </div>
 
-                    <div id="home-explore-categories" class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4">
-                        ${categoryExplore.map(cat => `
-                            <a href="#/danh-sach?category=${cat.slug}" class="group relative rounded-2xl overflow-hidden bg-white border border-[#E5E1D6] shadow-2xs hover:shadow-xs transition-all duration-300 transform hover:-translate-y-1 block aspect-[4/5] flex flex-col justify-end p-3.5">
-                                <img src="${cat.image}" alt="${cat.title}" class="absolute inset-0 w-full h-full object-cover group-hover:scale-110 transition-transform duration-500 ease-out" loading="lazy" decoding="async">
-                                <div class="absolute inset-0 bg-gradient-to-t from-black/85 via-black/25 to-transparent"></div>
-                                
-                                <div class="relative z-10 text-white">
-                                    <div class="w-8 h-8 rounded-full bg-white/20 backdrop-blur-md flex items-center justify-center text-sm mb-2 group-hover:bg-[#F4A62A] group-hover:text-[#0F4937] transition-colors">
-                                        <i class="fa-solid ${cat.icon}"></i>
+                    <div class="relative w-full overflow-hidden group/marquee py-2">
+                        <!-- Left & Right smooth fade gradients -->
+                        <div class="pointer-events-none absolute left-0 top-0 bottom-0 w-8 sm:w-24 bg-gradient-to-r from-[#F8F5EA] to-transparent z-10"></div>
+                        <div class="pointer-events-none absolute right-0 top-0 bottom-0 w-8 sm:w-24 bg-gradient-to-l from-[#F8F5EA] to-transparent z-10"></div>
+
+                        <!-- Continuous marquee track -->
+                        <div id="home-explore-categories" class="flex gap-4 w-max animate-marquee-ltr hover:[animation-play-state:paused] active:[animation-play-state:paused] will-change-transform py-1 px-4">
+                            ${[...categoryExplore, ...categoryExplore, ...categoryExplore, ...categoryExplore].map(cat => `
+                                <a href="#/danh-sach?category=${cat.slug}" class="group/card relative rounded-2xl overflow-hidden bg-white border border-[#E5E1D6] shadow-2xs hover:shadow-md transition-all duration-300 transform hover:-translate-y-1.5 block w-[150px] sm:w-[180px] md:w-[200px] aspect-[4/5] flex flex-col justify-end p-3.5 shrink-0 select-none">
+                                    <img src="${cat.image}" alt="${cat.title}" class="absolute inset-0 w-full h-full object-cover group-hover/card:scale-110 transition-transform duration-500 ease-out" loading="lazy" decoding="async">
+                                    <div class="absolute inset-0 bg-gradient-to-t from-black/85 via-black/25 to-transparent"></div>
+                                    
+                                    <div class="relative z-10 text-white">
+                                        <div class="w-8 h-8 rounded-full bg-white/20 backdrop-blur-md flex items-center justify-center text-sm mb-2 group-hover/card:bg-[#F4A62A] group-hover/card:text-[#0F4937] transition-colors">
+                                            <i class="fa-solid ${cat.icon}"></i>
+                                        </div>
+                                        <h3 class="font-bold text-sm sm:text-base leading-tight">${cat.title}</h3>
+                                        <span class="text-xs text-white/80 font-medium">${cat.count}</span>
                                     </div>
-                                    <h3 class="font-bold text-sm sm:text-base leading-tight">${cat.title}</h3>
-                                    <span class="text-xs text-white/80 font-medium">${cat.count}</span>
-                                </div>
-                            </a>
-                        `).join('')}
+                                </a>
+                            `).join('')}
+                        </div>
                     </div>
                 </section>
 
@@ -1494,16 +1501,18 @@ const Home = {
 
                     const exploreContainer = document.getElementById('home-explore-categories');
                     if (exploreContainer) {
-                        exploreContainer.innerHTML = categories.slice(0, 6).map(cat => {
+                        const items = categories.slice(0, 8);
+                        const repeatedItems = [...items, ...items, ...items, ...items];
+                        exploreContainer.innerHTML = repeatedItems.map(cat => {
                             const iconClass = categoryIconMap[cat.slug]?.split(' ')[0] || 'fa-bowl-food';
                             const image = categoryExploreImages[cat.slug] || categoryExploreImages['mon-man'];
                             const countText = `${cat.foodCount || 0} món`;
                             return `
-                                <a href="#/danh-sach?category=${cat.slug}" class="group relative rounded-2xl overflow-hidden bg-white border border-[#E5E1D6] shadow-2xs hover:shadow-xs transition-all duration-300 transform hover:-translate-y-1 block aspect-[4/5] flex flex-col justify-end p-3.5">
-                                    <img src="${image}" alt="${cat.name}" class="absolute inset-0 w-full h-full object-cover group-hover:scale-110 transition-transform duration-500 ease-out" loading="lazy" decoding="async">
+                                <a href="#/danh-sach?category=${cat.slug}" class="group/card relative rounded-2xl overflow-hidden bg-white border border-[#E5E1D6] shadow-2xs hover:shadow-md transition-all duration-300 transform hover:-translate-y-1.5 block w-[150px] sm:w-[180px] md:w-[200px] aspect-[4/5] flex flex-col justify-end p-3.5 shrink-0 select-none">
+                                    <img src="${image}" alt="${cat.name}" class="absolute inset-0 w-full h-full object-cover group-hover/card:scale-110 transition-transform duration-500 ease-out" loading="lazy" decoding="async">
                                     <div class="absolute inset-0 bg-gradient-to-t from-black/85 via-black/25 to-transparent"></div>
                                     <div class="relative z-10 text-white">
-                                        <div class="w-8 h-8 rounded-full bg-white/20 backdrop-blur-md flex items-center justify-center text-sm mb-2 group-hover:bg-[#F4A62A] group-hover:text-[#0F4937] transition-colors">
+                                        <div class="w-8 h-8 rounded-full bg-white/20 backdrop-blur-md flex items-center justify-center text-sm mb-2 group-hover/card:bg-[#F4A62A] group-hover/card:text-[#0F4937] transition-colors">
                                             <i class="fa-solid ${iconClass}"></i>
                                         </div>
                                         <h3 class="font-bold text-sm sm:text-base leading-tight">${cat.name}</h3>
@@ -1512,6 +1521,19 @@ const Home = {
                                 </a>
                             `;
                         }).join('');
+
+                        if (!exploreContainer._touchBound) {
+                            exploreContainer._touchBound = true;
+                            exploreContainer.addEventListener('touchstart', () => {
+                                exploreContainer.style.animationPlayState = 'paused';
+                            }, { passive: true });
+                            exploreContainer.addEventListener('touchend', () => {
+                                exploreContainer.style.animationPlayState = 'running';
+                            }, { passive: true });
+                            exploreContainer.addEventListener('touchcancel', () => {
+                                exploreContainer.style.animationPlayState = 'running';
+                            }, { passive: true });
+                        }
                     }
                 }
             }
