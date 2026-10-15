@@ -2042,6 +2042,48 @@ const FoodList = {
             if (btnClearSearch) btnClearSearch.classList.remove('hidden');
         }
 
+        // Drag to scroll for mobile filter pills row
+        const setupPillRowDrag = () => {
+            const row = document.getElementById('mobile-filter-pills-row');
+            if (!row) return;
+            row.addEventListener('dragstart', (e) => e.preventDefault());
+            let isDown = false;
+            let startX = 0;
+            let scrollStart = 0;
+            let hasDragged = false;
+            row.addEventListener('mousedown', (e) => {
+                if (e.button !== 0) return;
+                isDown = true;
+                hasDragged = false;
+                startX = e.pageX;
+                scrollStart = row.scrollLeft;
+                const onMove = (me) => {
+                    if (!isDown) return;
+                    const delta = me.pageX - startX;
+                    if (Math.abs(delta) > 4) hasDragged = true;
+                    row.scrollLeft = scrollStart - delta;
+                };
+                const onUp = () => {
+                    isDown = false;
+                    window.removeEventListener('mousemove', onMove);
+                    window.removeEventListener('mouseup', onUp);
+                    if (hasDragged) {
+                        setTimeout(() => { hasDragged = false; }, 80);
+                    }
+                };
+                window.addEventListener('mousemove', onMove);
+                window.addEventListener('mouseup', onUp);
+            });
+            row.addEventListener('click', (e) => {
+                if (hasDragged) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    e.stopImmediatePropagation();
+                }
+            }, true);
+        };
+        setupPillRowDrag();
+
         executeFilterAndSort();
         updateMobileFilterPills();
         if (window.updateNavbarFavBadge) window.updateNavbarFavBadge();

@@ -169,43 +169,51 @@ const Home = {
                                         </span>
                                         <span class="text-[10px] sm:text-xs text-[#718078] font-normal shrink-0">Chọn 1 hoặc nhiều</span>
                                     </label>
-                                    <div id="ingredient-options" class="flex flex-nowrap gap-2 overflow-x-auto overflow-y-hidden pb-1 w-full max-w-full scrollbar-none cursor-grab select-none relative">
-                                        <label class="cursor-pointer group shrink-0 relative">
-                                            <input type="checkbox" name="ingredients" value="Thịt heo" class="peer sr-only">
-                                            <div class="py-1.5 px-3 rounded-xl border border-[#E5E1D6] bg-white peer-checked:bg-[#145A43] peer-checked:text-white peer-checked:border-[#145A43] text-xs font-bold flex items-center gap-1.5 transition whitespace-nowrap">
-                                                <i class="fa-solid fa-drumstick-bite text-amber-500 peer-checked:text-white"></i> Thịt heo
-                                            </div>
-                                        </label>
-                                        <label class="cursor-pointer group shrink-0 relative">
-                                            <input type="checkbox" name="ingredients" value="Thịt gà" class="peer sr-only">
-                                            <div class="py-1.5 px-3 rounded-xl border border-[#E5E1D6] bg-white peer-checked:bg-[#145A43] peer-checked:text-white peer-checked:border-[#145A43] text-xs font-bold flex items-center gap-1.5 transition whitespace-nowrap">
-                                                <i class="fa-solid fa-kiwi-bird text-orange-500 peer-checked:text-white"></i> Thịt gà
-                                            </div>
-                                        </label>
-                                        <label class="cursor-pointer group shrink-0 relative">
-                                            <input type="checkbox" name="ingredients" value="Hải sản" class="peer sr-only">
-                                            <div class="py-1.5 px-3 rounded-xl border border-[#E5E1D6] bg-white peer-checked:bg-[#145A43] peer-checked:text-white peer-checked:border-[#145A43] text-xs font-bold flex items-center gap-1.5 transition whitespace-nowrap">
-                                                <i class="fa-solid fa-shrimp text-rose-500 peer-checked:text-white"></i> Hải sản
-                                            </div>
-                                        </label>
-                                        <label class="cursor-pointer group shrink-0 relative">
-                                            <input type="checkbox" name="ingredients" value="Rau củ" class="peer sr-only">
-                                            <div class="py-1.5 px-3 rounded-xl border border-[#E5E1D6] bg-white peer-checked:bg-[#145A43] peer-checked:text-white peer-checked:border-[#145A43] text-xs font-bold flex items-center gap-1.5 transition whitespace-nowrap">
-                                                <i class="fa-solid fa-leaf text-emerald-500 peer-checked:text-white"></i> Rau củ
-                                            </div>
-                                        </label>
-                                        <label class="cursor-pointer group shrink-0 relative">
-                                            <input type="checkbox" name="ingredients" value="Trứng" class="peer sr-only">
-                                            <div class="py-1.5 px-3 rounded-xl border border-[#E5E1D6] bg-white peer-checked:bg-[#145A43] peer-checked:text-white peer-checked:border-[#145A43] text-xs font-bold flex items-center gap-1.5 transition whitespace-nowrap">
-                                                <i class="fa-solid fa-egg text-amber-500 peer-checked:text-white"></i> Trứng
-                                            </div>
-                                        </label>
-                                        <label class="cursor-pointer group shrink-0 relative">
-                                            <input type="checkbox" name="ingredients" value="Đậu hũ" class="peer sr-only">
-                                            <div class="py-1.5 px-3 rounded-xl border border-[#E5E1D6] bg-white peer-checked:bg-[#145A43] peer-checked:text-white peer-checked:border-[#145A43] text-xs font-bold flex items-center gap-1.5 transition whitespace-nowrap">
-                                                <i class="fa-solid fa-cube text-yellow-600 peer-checked:text-white"></i> Đậu hũ
-                                            </div>
-                                        </label>
+                                    <div class="relative group/scroll">
+                                        <button type="button" class="btn-scroll-left hidden sm:flex absolute -left-1.5 top-1/2 -translate-y-1/2 z-10 w-6 h-6 rounded-full bg-white/95 border border-[#E5E1D6] shadow-sm items-center justify-center text-[10px] text-[#18382D] hover:bg-[#145A43] hover:text-white transition-all opacity-0 group-hover/scroll:opacity-100 cursor-pointer pointer-events-none" title="Cuộn sang trái">
+                                            <i class="fa-solid fa-chevron-left"></i>
+                                        </button>
+                                        <div id="ingredient-options" class="flex flex-nowrap gap-2 overflow-x-auto overflow-y-hidden pb-1 w-full max-w-full scrollbar-none cursor-grab select-none relative">
+                                            <label class="cursor-pointer group shrink-0 relative">
+                                                <input type="checkbox" name="ingredients" value="Thịt heo" class="peer sr-only">
+                                                <div class="py-1.5 px-3 rounded-xl border border-[#E5E1D6] bg-white peer-checked:bg-[#145A43] peer-checked:text-white peer-checked:border-[#145A43] text-xs font-bold flex items-center gap-1.5 transition whitespace-nowrap">
+                                                    <i class="fa-solid fa-drumstick-bite text-amber-500 peer-checked:text-white"></i> Thịt heo
+                                                </div>
+                                            </label>
+                                            <label class="cursor-pointer group shrink-0 relative">
+                                                <input type="checkbox" name="ingredients" value="Thịt gà" class="peer sr-only">
+                                                <div class="py-1.5 px-3 rounded-xl border border-[#E5E1D6] bg-white peer-checked:bg-[#145A43] peer-checked:text-white peer-checked:border-[#145A43] text-xs font-bold flex items-center gap-1.5 transition whitespace-nowrap">
+                                                    <i class="fa-solid fa-kiwi-bird text-orange-500 peer-checked:text-white"></i> Thịt gà
+                                                </div>
+                                            </label>
+                                            <label class="cursor-pointer group shrink-0 relative">
+                                                <input type="checkbox" name="ingredients" value="Hải sản" class="peer sr-only">
+                                                <div class="py-1.5 px-3 rounded-xl border border-[#E5E1D6] bg-white peer-checked:bg-[#145A43] peer-checked:text-white peer-checked:border-[#145A43] text-xs font-bold flex items-center gap-1.5 transition whitespace-nowrap">
+                                                    <i class="fa-solid fa-shrimp text-rose-500 peer-checked:text-white"></i> Hải sản
+                                                </div>
+                                            </label>
+                                            <label class="cursor-pointer group shrink-0 relative">
+                                                <input type="checkbox" name="ingredients" value="Rau củ" class="peer sr-only">
+                                                <div class="py-1.5 px-3 rounded-xl border border-[#E5E1D6] bg-white peer-checked:bg-[#145A43] peer-checked:text-white peer-checked:border-[#145A43] text-xs font-bold flex items-center gap-1.5 transition whitespace-nowrap">
+                                                    <i class="fa-solid fa-leaf text-emerald-500 peer-checked:text-white"></i> Rau củ
+                                                </div>
+                                            </label>
+                                            <label class="cursor-pointer group shrink-0 relative">
+                                                <input type="checkbox" name="ingredients" value="Trứng" class="peer sr-only">
+                                                <div class="py-1.5 px-3 rounded-xl border border-[#E5E1D6] bg-white peer-checked:bg-[#145A43] peer-checked:text-white peer-checked:border-[#145A43] text-xs font-bold flex items-center gap-1.5 transition whitespace-nowrap">
+                                                    <i class="fa-solid fa-egg text-amber-500 peer-checked:text-white"></i> Trứng
+                                                </div>
+                                            </label>
+                                            <label class="cursor-pointer group shrink-0 relative">
+                                                <input type="checkbox" name="ingredients" value="Đậu hũ" class="peer sr-only">
+                                                <div class="py-1.5 px-3 rounded-xl border border-[#E5E1D6] bg-white peer-checked:bg-[#145A43] peer-checked:text-white peer-checked:border-[#145A43] text-xs font-bold flex items-center gap-1.5 transition whitespace-nowrap">
+                                                    <i class="fa-solid fa-cube text-yellow-600 peer-checked:text-white"></i> Đậu hũ
+                                                </div>
+                                            </label>
+                                        </div>
+                                        <button type="button" class="btn-scroll-right hidden sm:flex absolute -right-1.5 top-1/2 -translate-y-1/2 z-10 w-6 h-6 rounded-full bg-white/95 border border-[#E5E1D6] shadow-sm items-center justify-center text-[10px] text-[#18382D] hover:bg-[#145A43] hover:text-white transition-all opacity-0 group-hover/scroll:opacity-100 cursor-pointer pointer-events-none" title="Cuộn sang phải">
+                                            <i class="fa-solid fa-chevron-right"></i>
+                                        </button>
                                     </div>
                                     <div class="mt-2 relative">
                                         <i class="fa-solid fa-magnifying-glass absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 text-xs"></i>
@@ -222,37 +230,45 @@ const Home = {
                                         </span>
                                         <span class="text-[10px] sm:text-xs text-[#718078] font-normal shrink-0">Kiểu chế biến</span>
                                     </label>
-                                    <div id="category-options" class="flex flex-nowrap gap-2 overflow-x-auto overflow-y-hidden pb-1 w-full max-w-full scrollbar-none cursor-grab select-none relative">
-                                        <label class="cursor-pointer group shrink-0 relative">
-                                            <input type="checkbox" name="categories" value="Món mặn" class="peer sr-only">
-                                            <div class="py-1.5 px-3 rounded-xl border border-[#E5E1D6] bg-white peer-checked:bg-[#145A43] peer-checked:text-white peer-checked:border-[#145A43] text-xs font-bold flex items-center gap-1.5 transition whitespace-nowrap">
-                                                <i class="fa-solid fa-bowl-food text-orange-500 peer-checked:text-white"></i> Món mặn
-                                            </div>
-                                        </label>
-                                        <label class="cursor-pointer group shrink-0 relative">
-                                            <input type="checkbox" name="categories" value="Món canh" class="peer sr-only">
-                                            <div class="py-1.5 px-3 rounded-xl border border-[#E5E1D6] bg-white peer-checked:bg-[#145A43] peer-checked:text-white peer-checked:border-[#145A43] text-xs font-bold flex items-center gap-1.5 transition whitespace-nowrap">
-                                                <i class="fa-solid fa-spoon text-blue-500 peer-checked:text-white"></i> Món canh
-                                            </div>
-                                        </label>
-                                        <label class="cursor-pointer group shrink-0 relative">
-                                            <input type="checkbox" name="categories" value="Món xào" class="peer sr-only">
-                                            <div class="py-1.5 px-3 rounded-xl border border-[#E5E1D6] bg-white peer-checked:bg-[#145A43] peer-checked:text-white peer-checked:border-[#145A43] text-xs font-bold flex items-center gap-1.5 transition whitespace-nowrap">
-                                                <i class="fa-solid fa-fire-burner text-amber-500 peer-checked:text-white"></i> Món xào
-                                            </div>
-                                        </label>
-                                        <label class="cursor-pointer group shrink-0 relative">
-                                            <input type="checkbox" name="categories" value="Món nướng" class="peer sr-only">
-                                            <div class="py-1.5 px-3 rounded-xl border border-[#E5E1D6] bg-white peer-checked:bg-[#145A43] peer-checked:text-white peer-checked:border-[#145A43] text-xs font-bold flex items-center gap-1.5 transition whitespace-nowrap">
-                                                <i class="fa-solid fa-fire text-red-500 peer-checked:text-white"></i> Món nướng
-                                            </div>
-                                        </label>
-                                        <label class="cursor-pointer group shrink-0 relative">
-                                            <input type="checkbox" name="categories" value="Món kho" class="peer sr-only">
-                                            <div class="py-1.5 px-3 rounded-xl border border-[#E5E1D6] bg-white peer-checked:bg-[#145A43] peer-checked:text-white peer-checked:border-[#145A43] text-xs font-bold flex items-center gap-1.5 transition whitespace-nowrap">
-                                                <i class="fa-solid fa-fire-flame-simple text-amber-600 peer-checked:text-white"></i> Món kho
-                                            </div>
-                                        </label>
+                                    <div class="relative group/scroll">
+                                        <button type="button" class="btn-scroll-left hidden sm:flex absolute -left-1.5 top-1/2 -translate-y-1/2 z-10 w-6 h-6 rounded-full bg-white/95 border border-[#E5E1D6] shadow-sm items-center justify-center text-[10px] text-[#18382D] hover:bg-[#145A43] hover:text-white transition-all opacity-0 group-hover/scroll:opacity-100 cursor-pointer pointer-events-none" title="Cuộn sang trái">
+                                            <i class="fa-solid fa-chevron-left"></i>
+                                        </button>
+                                        <div id="category-options" class="flex flex-nowrap gap-2 overflow-x-auto overflow-y-hidden pb-1 w-full max-w-full scrollbar-none cursor-grab select-none relative">
+                                            <label class="cursor-pointer group shrink-0 relative">
+                                                <input type="checkbox" name="categories" value="Món mặn" class="peer sr-only">
+                                                <div class="py-1.5 px-3 rounded-xl border border-[#E5E1D6] bg-white peer-checked:bg-[#145A43] peer-checked:text-white peer-checked:border-[#145A43] text-xs font-bold flex items-center gap-1.5 transition whitespace-nowrap">
+                                                    <i class="fa-solid fa-bowl-food text-orange-500 peer-checked:text-white"></i> Món mặn
+                                                </div>
+                                            </label>
+                                            <label class="cursor-pointer group shrink-0 relative">
+                                                <input type="checkbox" name="categories" value="Món canh" class="peer sr-only">
+                                                <div class="py-1.5 px-3 rounded-xl border border-[#E5E1D6] bg-white peer-checked:bg-[#145A43] peer-checked:text-white peer-checked:border-[#145A43] text-xs font-bold flex items-center gap-1.5 transition whitespace-nowrap">
+                                                    <i class="fa-solid fa-spoon text-blue-500 peer-checked:text-white"></i> Món canh
+                                                </div>
+                                            </label>
+                                            <label class="cursor-pointer group shrink-0 relative">
+                                                <input type="checkbox" name="categories" value="Món xào" class="peer sr-only">
+                                                <div class="py-1.5 px-3 rounded-xl border border-[#E5E1D6] bg-white peer-checked:bg-[#145A43] peer-checked:text-white peer-checked:border-[#145A43] text-xs font-bold flex items-center gap-1.5 transition whitespace-nowrap">
+                                                    <i class="fa-solid fa-fire-burner text-amber-500 peer-checked:text-white"></i> Món xào
+                                                </div>
+                                            </label>
+                                            <label class="cursor-pointer group shrink-0 relative">
+                                                <input type="checkbox" name="categories" value="Món nướng" class="peer sr-only">
+                                                <div class="py-1.5 px-3 rounded-xl border border-[#E5E1D6] bg-white peer-checked:bg-[#145A43] peer-checked:text-white peer-checked:border-[#145A43] text-xs font-bold flex items-center gap-1.5 transition whitespace-nowrap">
+                                                    <i class="fa-solid fa-fire text-red-500 peer-checked:text-white"></i> Món nướng
+                                                </div>
+                                            </label>
+                                            <label class="cursor-pointer group shrink-0 relative">
+                                                <input type="checkbox" name="categories" value="Món kho" class="peer sr-only">
+                                                <div class="py-1.5 px-3 rounded-xl border border-[#E5E1D6] bg-white peer-checked:bg-[#145A43] peer-checked:text-white peer-checked:border-[#145A43] text-xs font-bold flex items-center gap-1.5 transition whitespace-nowrap">
+                                                    <i class="fa-solid fa-fire-flame-simple text-amber-600 peer-checked:text-white"></i> Món kho
+                                                </div>
+                                            </label>
+                                        </div>
+                                        <button type="button" class="btn-scroll-right hidden sm:flex absolute -right-1.5 top-1/2 -translate-y-1/2 z-10 w-6 h-6 rounded-full bg-white/95 border border-[#E5E1D6] shadow-sm items-center justify-center text-[10px] text-[#18382D] hover:bg-[#145A43] hover:text-white transition-all opacity-0 group-hover/scroll:opacity-100 cursor-pointer pointer-events-none" title="Cuộn sang phải">
+                                            <i class="fa-solid fa-chevron-right"></i>
+                                        </button>
                                     </div>
                                     <div class="mt-2 relative">
                                         <i class="fa-solid fa-magnifying-glass absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 text-xs"></i>
@@ -1157,72 +1173,94 @@ const Home = {
         bindFilterSearch('ingredient-search', 'ingredient-options');
         bindFilterSearch('category-search', 'category-options');
 
-        // Cho phép cuộn chuột để lăn ngang sang trái/phải với tốc độ chậm, thấy rõ hiệu ứng
+        // Cho phép cuộn chuột, kéo rê chuột (drag to scroll) mượt mà có quán tính và nút điều hướng
         const setupSmoothHorizontalScroll = (containerId) => {
             const container = document.getElementById(containerId);
             if (!container) return;
 
             container.classList.remove('snap-x');
             container.style.overscrollBehaviorX = 'contain';
+            container.style.webkitOverflowScrolling = 'touch';
 
-            let targetScroll = container.scrollLeft;
-            let isAnimating = false;
-
-            // Đồng bộ targetScroll nếu có sự thay đổi vị trí cuộn
-            container.addEventListener('scroll', () => {
-                if (!isAnimating) {
-                    targetScroll = container.scrollLeft;
-                }
-            }, { passive: true });
-
-            container.addEventListener('wheel', (e) => {
-                const maxScroll = container.scrollWidth - container.clientWidth;
-                if (maxScroll <= 0) return;
-
-                // Lấy hướng và giá trị delta của con lăn chuột
-                const rawDelta = Math.abs(e.deltaX) > Math.abs(e.deltaY) ? e.deltaX : e.deltaY;
-                if (rawDelta === 0) return;
-
-                // Chặn cuộn trang web dọc khi trỏ chuột vào vùng bộ lọc
+            // 1. Chặn HTML5 drag-and-drop mặc định (nguyên nhân chính khiến kéo chuột trên thẻ/chữ bị khựng/chặn mousemove)
+            container.addEventListener('dragstart', (e) => {
                 e.preventDefault();
+            });
 
-                // Tốc độ lăn chậm: 45px mỗi khấc lăn chuột để thấy rõ hiệu ứng chuyển động
-                const direction = Math.sign(rawDelta);
-                const step = Math.abs(rawDelta) >= 50 ? direction * 45 : rawDelta * 0.5;
-
-                targetScroll = Math.max(0, Math.min(maxScroll, targetScroll + step));
-
-                if (!isAnimating) {
-                    isAnimating = true;
-                    const animate = () => {
-                        const diff = targetScroll - container.scrollLeft;
-                        if (Math.abs(diff) > 0.5) {
-                            // Hệ số 0.08 tạo độ trôi êm ái, chậm rãi, thấy rõ hiệu ứng
-                            container.scrollLeft += diff * 0.08;
-                            requestAnimationFrame(animate);
-                        } else {
-                            container.scrollLeft = targetScroll;
-                            isAnimating = false;
-                        }
-                    };
-                    requestAnimationFrame(animate);
-                }
-            }, { passive: false });
-
-            // Hỗ trợ kéo rê chuột (drag to scroll) mượt mà
             let isDown = false;
             let startX = 0;
             let scrollStart = 0;
             let hasDragged = false;
+            let lastX = 0;
+            let lastTime = 0;
+            let velocity = 0;
+            let momentumAnimId = null;
+
+            const stopMomentum = () => {
+                if (momentumAnimId) {
+                    cancelAnimationFrame(momentumAnimId);
+                    momentumAnimId = null;
+                }
+            };
+
+            // 2. Con lăn chuột (Wheel): lăn chuột trôi ngang êm ái
+            container.addEventListener('wheel', (e) => {
+                const maxScroll = container.scrollWidth - container.clientWidth;
+                if (maxScroll <= 0) return;
+
+                const rawDelta = Math.abs(e.deltaX) > Math.abs(e.deltaY) ? e.deltaX : e.deltaY;
+                if (rawDelta === 0) return;
+
+                e.preventDefault();
+                stopMomentum();
+
+                const direction = Math.sign(rawDelta);
+                const step = Math.abs(rawDelta) >= 40 ? direction * 55 : rawDelta * 1.2;
+                container.scrollLeft = Math.max(0, Math.min(maxScroll, container.scrollLeft + step));
+                updateNavButtons();
+            }, { passive: false });
+
+            // 3. Kéo rê chuột (Mouse Drag to Scroll)
+            const onMouseDown = (e) => {
+                // Chỉ nhận nút chuột trái
+                if (e.button !== 0) return;
+
+                stopMomentum();
+                isDown = true;
+                hasDragged = false;
+                startX = e.pageX;
+                lastX = e.pageX;
+                lastTime = performance.now();
+                scrollStart = container.scrollLeft;
+                velocity = 0;
+
+                container.classList.add('cursor-grabbing');
+                container.classList.remove('cursor-grab');
+
+                window.addEventListener('mousemove', onMouseMove, { passive: false });
+                window.addEventListener('mouseup', onMouseUp);
+            };
 
             const onMouseMove = (e) => {
                 if (!isDown) return;
-                const walk = (e.pageX - startX) * 1.2;
-                if (Math.abs(walk) > 4) {
+                const currentX = e.pageX;
+                const delta = currentX - startX;
+
+                if (Math.abs(delta) > 4) {
                     hasDragged = true;
+                    if (e.cancelable) e.preventDefault();
                 }
-                container.scrollLeft = scrollStart - walk;
-                targetScroll = container.scrollLeft;
+
+                const now = performance.now();
+                const dt = now - lastTime;
+                if (dt > 10) {
+                    velocity = (currentX - lastX) / dt;
+                    lastX = currentX;
+                    lastTime = now;
+                }
+
+                container.scrollLeft = scrollStart - delta;
+                updateNavButtons();
             };
 
             const onMouseUp = () => {
@@ -1230,33 +1268,103 @@ const Home = {
                 isDown = false;
                 container.classList.remove('cursor-grabbing');
                 container.classList.add('cursor-grab');
+
                 window.removeEventListener('mousemove', onMouseMove);
                 window.removeEventListener('mouseup', onMouseUp);
+
+                // Quán tính lướt trôi (Momentum glide) khi thả chuột
+                if (hasDragged && Math.abs(velocity) > 0.12) {
+                    let currentVelocity = velocity * 15;
+                    const friction = 0.93;
+
+                    const glide = () => {
+                        if (Math.abs(currentVelocity) < 0.5) {
+                            momentumAnimId = null;
+                            updateNavButtons();
+                            return;
+                        }
+                        container.scrollLeft -= currentVelocity;
+                        currentVelocity *= friction;
+                        updateNavButtons();
+                        momentumAnimId = requestAnimationFrame(glide);
+                    };
+                    momentumAnimId = requestAnimationFrame(glide);
+                }
+
+                if (hasDragged) {
+                    setTimeout(() => {
+                        hasDragged = false;
+                    }, 80);
+                }
             };
 
-            container.addEventListener('mousedown', (e) => {
-                isDown = true;
-                hasDragged = false;
-                container.classList.add('cursor-grabbing');
-                container.classList.remove('cursor-grab');
-                startX = e.pageX;
-                scrollStart = container.scrollLeft;
-                targetScroll = container.scrollLeft;
-                window.addEventListener('mousemove', onMouseMove);
-                window.addEventListener('mouseup', onMouseUp);
-            });
+            container.addEventListener('mousedown', onMouseDown);
 
+            // Chặn click nhầm vào checkbox/label nếu đang thao tác kéo chuột
             container.addEventListener('click', (e) => {
                 if (hasDragged) {
                     e.preventDefault();
                     e.stopPropagation();
-                    hasDragged = false;
+                    e.stopImmediatePropagation();
                 }
             }, true);
+
+            // 4. Quản lý 2 nút mũi tên điều hướng Trái / Phải
+            const parent = container.parentElement;
+            const btnLeft = parent ? parent.querySelector('.btn-scroll-left') : null;
+            const btnRight = parent ? parent.querySelector('.btn-scroll-right') : null;
+
+            const updateNavButtons = () => {
+                if (!btnLeft && !btnRight) return;
+                const maxScroll = container.scrollWidth - container.clientWidth;
+                if (maxScroll <= 5) {
+                    if (btnLeft) btnLeft.classList.add('hidden');
+                    if (btnRight) btnRight.classList.add('hidden');
+                    return;
+                }
+                if (btnLeft) {
+                    btnLeft.classList.remove('hidden');
+                    const canScrollLeft = container.scrollLeft > 6;
+                    btnLeft.style.opacity = canScrollLeft ? '1' : '0';
+                    btnLeft.style.pointerEvents = canScrollLeft ? 'auto' : 'none';
+                }
+                if (btnRight) {
+                    btnRight.classList.remove('hidden');
+                    const canScrollRight = container.scrollLeft < maxScroll - 6;
+                    btnRight.style.opacity = canScrollRight ? '1' : '0';
+                    btnRight.style.pointerEvents = canScrollRight ? 'auto' : 'none';
+                }
+            };
+
+            if (btnLeft) {
+                btnLeft.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    stopMomentum();
+                    container.scrollBy({ left: -220, behavior: 'smooth' });
+                    setTimeout(updateNavButtons, 350);
+                });
+            }
+
+            if (btnRight) {
+                btnRight.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    stopMomentum();
+                    container.scrollBy({ left: 220, behavior: 'smooth' });
+                    setTimeout(updateNavButtons, 350);
+                });
+            }
+
+            container.addEventListener('scroll', () => {
+                updateNavButtons();
+            }, { passive: true });
+
+            setTimeout(updateNavButtons, 150);
         };
 
         setupSmoothHorizontalScroll('ingredient-options');
         setupSmoothHorizontalScroll('category-options');
+        setupSmoothHorizontalScroll('gacha-results-container');
+        setupSmoothHorizontalScroll('quick-suggestions-container');
 
         // Bộ lọc tìm kiếm nguyên liệu & loại món
         const setupFilterSearch = (inputId, containerId) => {
@@ -1363,6 +1471,7 @@ const Home = {
                                 </label>
                             `;
                         }).join('');
+                        ingContainer.dispatchEvent(new Event('scroll'));
                     }
                 }
 
@@ -1380,6 +1489,7 @@ const Home = {
                                 </label>
                             `;
                         }).join('');
+                        catContainer.dispatchEvent(new Event('scroll'));
                     }
 
                     const exploreContainer = document.getElementById('home-explore-categories');
