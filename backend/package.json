@@ -5,7 +5,13 @@
   "main": "src/app.js",
   "scripts": {
     "start": "node src/app.js",
-    "dev": "nodemon src/app.js"
+    "dev": "nodemon src/app.js",
+    "recipes:check": "node scripts/build-recipe-sql.js --check",
+    "recipes:sql": "node scripts/build-recipe-sql.js",
+    "recipes:update": "node scripts/update-detailed-recipes.js",
+    "recipes:verify": "node scripts/verify-detailed-recipes.js",
+    "images:sql": "node scripts/build-food-image-update.js",
+    "images:check": "node scripts/build-food-image-update.js --check"
   },
   "keywords": [],
   "author": "",

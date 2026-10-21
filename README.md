@@ -30,7 +30,57 @@ Tài liệu hướng dẫn cài đặt và khởi chạy dự án từng bước
    ```text
    hom_nay_an_gi.sql (nằm ngay tại thư mục gốc dự án)
    ```
-5. Nhấn **Import (Thực hiện)** để nạp toàn bộ 18 món ăn, nguyên liệu và danh mục vào database.
+5. Nhấn **Import (Thực hiện)** để nạp toàn bộ 50 món ăn, nguyên liệu và danh mục vào database.
+
+### Cập nhật 50 công thức chi tiết cho database đã có
+
+Nếu database đã có trên **hosting**, dùng phpMyAdmin:
+
+1. Chọn đúng database của website trong cột bên trái.
+2. Chọn **Export (Xuất) → Quick → SQL → Go** để tải bản sao lưu trước khi cập nhật.
+3. Chọn **Import (Nhập)**, chọn file [`update_detailed_recipes.sql`](update_detailed_recipes.sql) tại thư mục gốc dự án, giữ mã hóa `utf-8` rồi nhấn **Import/Go**. Để việc import chạy đến hết, không chọn chế độ chia nhỏ một phần file.
+4. Thành công khi kết quả `trang_thai = UPDATED`, `so_mon_da_cap_nhat = 50`, `so_buoc_moi = 325`, `so_dinh_luong_moi = 441`. Tải lại website để xem dữ liệu mới; không cần triển khai lại code chỉ để cập nhật dữ liệu.
+
+File này cập nhật món theo `slug` và nguyên liệu theo tên, nên ID trên hosting có thể khác local. File giữ nguyên ảnh, ID món, trạng thái, danh mục, tài khoản, bài viết, yêu thích và các danh sách đi chợ đã tạo. Nếu thiếu món, đơn vị nguyên liệu khác hoặc các bảng không dùng InnoDB, file không cập nhật và trả `NOT_UPDATED_CHECK_DETAILS` kèm thông tin kiểm tra. Chạy file trong cùng một lần import; file dùng bảng tạm và transaction, không cần quyền tạo stored procedure. Không import lại `hom_nay_an_gi.sql` vào database đang sử dụng; đó là file khởi tạo database mới. `add_foods_to_50.sql` chỉ bổ sung món thiếu, không thay công thức đã tồn tại.
+
+Nếu bản SQL cũ báo `#1109 - Unknown table 'tmp_hnng_recipe_foods' in information_schema` tại lệnh `SET @hnng_recipe_ready`, dùng bản `update_detailed_recipes.sql` đã sửa trong dự án, chọn lại database website rồi **Import toàn bộ file từ đầu**, không tiếp tục từ dòng báo lỗi. Bản sửa đếm bảng tạm bằng các lệnh `SELECT ... INTO` riêng và kiểm tra metadata bằng prepared statement với tên database đã lưu; lệnh `SET` chỉ so sánh các biến. File cập nhật ảnh cũng dùng cách này.
+
+Nếu có quyền chạy Node.js tại nơi kết nối database, trong thư mục `backend`, chạy:
+
+```bash
+npm run recipes:update
+npm run recipes:verify -- --api http://localhost:5000
+```
+
+Trên PowerShell, nếu `npm.ps1` bị chặn bởi Execution Policy, dùng `npm.cmd` thay cho `npm`. Lệnh kiểm tra API cần backend đang chạy; dùng `npm run recipes:verify` nếu chỉ kiểm tra database.
+
+Bộ dữ liệu gồm **50 món, 325 bước và 441 định lượng nguyên liệu**. Mỗi món có 6–7 bước riêng: sơ chế, lượng gia vị, mức lửa, thời gian, cách kiểm tra độ chín và hoàn thành. Thời gian của món là ước tính tổng cả sơ chế, ướp và nấu; không tính thời gian rã đông. Một thìa canh tương ứng 15 ml, một thìa cà phê tương ứng 5 ml; lượng gram vẫn là định lượng chính cho nguyên liệu khô. Khẩu phần đi cùng lượng nguyên liệu của từng công thức, không tự nhân theo số người.
+
+Lệnh cập nhật tìm món bằng `slug`, thay mô tả, thời gian, khẩu phần, nguyên liệu và các bước trong một transaction. Nếu thiếu món hoặc đơn vị nguyên liệu khác dữ liệu chuẩn, lệnh dừng; lỗi khi ghi sẽ rollback. Trước khi ghi, dữ liệu cũ được lưu ở `tmp/recipe-backups/` tại thư mục gốc dự án (đã được `.gitignore` bỏ qua). ID món, ảnh, danh mục và dữ liệu tài khoản, bài viết, yêu thích, danh sách đi chợ được giữ nguyên. Có thể chạy lại lệnh cập nhật mà không nhân đôi nguyên liệu hoặc bước nấu. Danh sách đi chợ đã tạo trước đó giữ nguyên; thêm món lại nếu muốn lấy định lượng mới.
+
+Nguồn công thức là [`backend/data/recipes.json`](backend/data/recipes.json). Mỗi nguyên liệu có dạng `[tên, số lượng, đơn vị, ghi chú hoặc null]`; mỗi phần tử trong `steps` là một bước theo thứ tự. Sau khi sửa dữ liệu, chạy:
+
+```bash
+npm run recipes:sql
+npm run recipes:check
+npm run recipes:update
+```
+
+`recipes:sql` đồng bộ `hom_nay_an_gi.sql`, các món tương ứng trong `add_foods_to_50.sql` và file cập nhật hosting `update_detailed_recipes.sql`; `recipes:check` kiểm tra đủ 50 món, định lượng hợp lệ, đơn vị nhất quán và SQL khớp dữ liệu nguồn. Với database đã có công thức ngắn, dùng `recipes:update` hoặc import file cập nhật hosting để thay toàn bộ nội dung.
+
+Các mốc nhiệt độ tâm thực phẩm được đối chiếu với [bảng nhiệt độ tối thiểu của USDA FSIS](https://www.fsis.usda.gov/food-safety/safe-food-handling-and-preparation/food-safety-basics/safe-temperature-chart). Thời gian thực tế còn tùy kích thước miếng và thiết bị; bước kiểm tra chín trong mỗi món là mốc để điều chỉnh.
+
+### Cập nhật ảnh 50 món trên hosting
+
+Gói `cap_nhat_anh_50_mon.zip` gồm 50 ảnh hiện tại ở `public/images/foods/`, file [`update_food_images.sql`](update_food_images.sql), bảng đối chiếu `food_images_manifest.json` và hướng dẫn. Gói giữ nguyên nội dung và tên các ảnh gốc.
+
+1. Upload/ghi đè các file ảnh vào **`public/images/foods` của backend** (tương ứng `backend/public/images/foods` trong repo). Nếu dùng Render, đưa ảnh mới vào repo rồi deploy lại backend để các file mới được phục vụ. Chỉ triển khai frontend chưa thay được ảnh của backend.
+2. Trong phpMyAdmin, chọn database website, **Export** bản sao lưu rồi **Import `update_food_images.sql`**.
+3. Khi kết quả `trang_thai = UPDATED`, `so_mon_khop_anh = 50`, tải lại website. `so_mon_thay_doi` có thể là 0 nếu đã import trước đó.
+
+SQL tìm món theo `slug`, chỉ đổi trường ảnh và thời điểm cập nhật, giữ nguyên công thức và dữ liệu khác. File có kiểm tra đủ 50 món và transaction. URL có thêm `?v=` theo nội dung ảnh để trình duyệt tải phiên bản mới; giữ nguyên tên file `.jpg` khi upload. SQL chỉ lưu đường dẫn, nên phải đưa các file ảnh mới lên backend trước.
+
+Sau khi thay ảnh local, chạy `npm run images:sql` trong `backend` để tạo lại SQL, bảng đối chiếu và hướng dẫn; chạy `npm run images:check` để kiểm tra chúng khớp 50 file hiện tại. Gói ZIP cần đóng lại từ các file mới nếu tiếp tục thay ảnh.
 
 ---
 

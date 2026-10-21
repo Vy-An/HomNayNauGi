@@ -27,7 +27,6 @@ export default function Footer() {
                         <li><a href="#/danh-sach" class="hover:text-accent transition-colors flex items-center gap-1.5"><i class="fa-solid fa-angle-right text-[10px] text-accent"></i> Danh sách món ăn</a></li>
                         <li><a href="#/" class="hover:text-accent transition-colors flex items-center gap-1.5"><i class="fa-solid fa-angle-right text-[10px] text-accent"></i> Random món ăn</a></li>
                         <li><a href="#/cong-dong" class="hover:text-accent transition-colors flex items-center gap-1.5"><i class="fa-solid fa-angle-right text-[10px] text-accent"></i> Cộng đồng bếp</a></li>
-                        <li><a href="#/" class="hover:text-accent transition-colors flex items-center gap-1.5"><i class="fa-solid fa-angle-right text-[10px] text-accent"></i> Về chúng tôi</a></li>
                     </ul>
                 </div>
 
@@ -45,26 +44,20 @@ export default function Footer() {
                     </div>
                 </div>
 
-                <!-- Cột 4: Đăng ký nhận công thức mới -->
+                <!-- Cột 4: Đăng ký tài khoản để lưu công thức -->
                 <div class="space-y-3">
                     <h4 class="text-sm font-extrabold uppercase tracking-wider text-accent-light">
-                        Đăng ký nhận công thức
+                        Đăng ký để lưu công thức
                     </h4>
-                    <p class="text-xs text-white/75">Nhận gợi ý mâm cơm ngon và bí quyết nấu ăn hàng tuần qua email:</p>
-                    <form onsubmit="event.preventDefault(); if (window.Popup) { window.Popup.success('Cảm ơn bạn đã đăng ký nhận công thức mới!', 'Đăng ký thành công'); } else { alert('Cảm ơn bạn đã đăng ký nhận công thức mới!'); } this.reset();" class="space-y-2 pt-1">
-                        <input 
-                            type="email" 
-                            required 
-                            placeholder="Nhập email của bạn..." 
-                            class="w-full px-3.5 py-2.5 rounded-xl bg-white/10 border border-white/20 text-xs text-white placeholder:text-white/50 focus:outline-none focus:ring-2 focus:ring-accent focus:bg-white/15 transition-all"
-                        />
-                        <button 
-                            type="submit" 
-                            class="w-full py-2.5 bg-accent hover:bg-accent-hover text-white font-bold text-xs rounded-xl shadow-md transition-all cursor-pointer"
+                    <p class="text-xs text-white/75">Hãy đăng ký để có thể lưu công thức nấu ăn yêu thích và xem lại bất cứ lúc nào.</p>
+                    <div class="pt-1">
+                        <a
+                            href="#/login?mode=register"
+                            class="w-full flex items-center justify-center py-2.5 bg-accent hover:bg-accent-hover text-white font-bold text-xs rounded-xl shadow-md transition-all cursor-pointer"
                         >
                             Đăng ký
-                        </button>
-                    </form>
+                        </a>
+                    </div>
                 </div>
 
             </div>

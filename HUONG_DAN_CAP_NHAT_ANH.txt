@@ -1,0 +1,26 @@
+CẬP NHẬT ẢNH 50 MÓN ĂN TRÊN HOSTING
+
+Gói này chứa đúng 50 ảnh hiện tại, giữ nguyên byte ảnh gốc và tên file.
+
+1. Giải nén gói. Sao lưu thư mục ảnh đang dùng trên hosting nếu cần quay lại.
+2. Upload/ghi đè thư mục public/images/foods vào thư mục public/images/foods
+   của BACKEND. Nếu dùng repo dự án, chép vào backend/public/images/foods.
+   Nếu backend chạy trên Render: đưa ảnh đã cập nhật vào repo và deploy lại
+   backend để dịch vụ có đủ file mới. Chỉ upload frontend chưa cập nhật được ảnh.
+3. Vào phpMyAdmin, chọn đúng database website, Export bản sao lưu SQL.
+4. Import file update_food_images.sql trong gói, giữ mã hóa utf-8.
+   Chạy toàn bộ file trong cùng một lần import.
+5. Thành công: trang_thai = UPDATED, so_mon_khop_anh = 50.
+   so_mon_thay_doi có thể bằng 0 nếu ảnh đã được cập nhật từ lần trước.
+6. Tải lại website để xem ảnh mới.
+
+File SQL chỉ cập nhật đường dẫn ảnh và thời điểm cập nhật của các món có slug
+trong bộ 50 món, giữ nguyên ID, công thức, định lượng, tài khoản và bài viết.
+Nếu thiếu một món, file không cập nhật và liệt kê slug còn thiếu.
+
+Phần ?v= trong đường dẫn là phiên bản theo nội dung ảnh, KHÔNG phải tên file.
+Ví dụ URL /images/foods/thit-kho-trung.jpg?v=abc vẫn dùng file thit-kho-trung.jpg.
+Không đổi tên file thành chuỗi có ?v=.
+
+food_images_manifest.json liệt kê slug, tên món, tên file, URL và SHA-256
+để đối chiếu đúng ảnh trong gói. Không cần import file JSON vào phpMyAdmin.

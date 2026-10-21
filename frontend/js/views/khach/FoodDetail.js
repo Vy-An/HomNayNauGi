@@ -28,12 +28,12 @@ const FoodDetail = {
         window.currentFoodDetail = food;
 
         const ingredientsCardsHTML = (food.ingredients || []).map(ing => `
-            <div class="bg-gray-50/80 border border-gray-100 rounded-xl px-3 py-2 sm:px-3.5 sm:py-2.5 flex items-center justify-between text-xs hover:border-primary/30 transition">
-                <div class="flex items-center gap-2 font-semibold text-text-main min-w-0 pr-2">
+            <div class="bg-gray-50/80 border border-gray-100 rounded-xl px-3 py-2 sm:px-3.5 sm:py-2.5 flex flex-col items-start gap-1 text-xs hover:border-primary/30 transition">
+                <div class="flex items-start gap-2 font-semibold text-text-main min-w-0">
                     <span class="w-1.5 h-1.5 rounded-full bg-primary shrink-0"></span>
-                    <span class="truncate">${ing.name}</span>
+                    <span class="break-words">${ing.name}</span>
                 </div>
-                <span class="text-[11px] font-bold text-text-muted bg-white px-2 py-0.5 rounded-full border border-gray-100 shadow-2xs shrink-0">${ing.amount}</span>
+                <span class="text-[11px] leading-relaxed text-text-muted break-words">${ing.amount}</span>
             </div>
         `).join('');
 
@@ -127,10 +127,6 @@ const FoodDetail = {
                                         <i class="${food.is_favorite ? 'fa-solid' : 'fa-regular'} fa-heart text-rose-500 text-base"></i>
                                         <span id="fav-btn-label">Lưu món</span>
                                     </button>
-                                    <button id="add-to-cart-btn" class="flex-[1.5] py-3 sm:py-3.5 px-5 bg-primary hover:bg-[#1B4633] active:bg-[#143627] text-white font-bold rounded-2xl transition shadow-md shadow-primary/20 flex items-center justify-center gap-2 text-xs sm:text-sm cursor-pointer">
-                                        <i class="fa-solid fa-cart-shopping text-accent-light"></i>
-                                        <span>Thêm vào đi chợ</span>
-                                    </button>
                                 </div>
                             </div>
 
@@ -201,7 +197,6 @@ const FoodDetail = {
 
     afterRender: async (id) => {
         const btnFav = document.getElementById('fav-btn');
-        const btnAdd = document.getElementById('add-to-cart-btn');
         const toast = document.getElementById('toast-msg');
         const toastText = document.getElementById('toast-text');
 
@@ -236,44 +231,6 @@ const FoodDetail = {
                 toast.classList.remove('translate-y-0', 'opacity-100');
                 toast.classList.add('-translate-y-4', 'opacity-0');
             }, 3000);
-        }
-
-        if (btnAdd) {
-            btnAdd.addEventListener('click', async () => {
-                const token = localStorage.getItem('auth_token');
-                if (!token) {
-                    showToast('Vui lòng đăng nhập để lưu danh sách đi chợ! 🔒');
-                    setTimeout(() => { window.location.hash = '#/login'; }, 1200);
-                    return;
-                }
-
-                if (!currentFoodDetail) return;
-                btnAdd.disabled = true;
-                const originalText = btnAdd.innerHTML;
-                btnAdd.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i><span>Đang thêm...</span>';
-
-                try {
-                    const res = await fetchAPI('/shopping-list/add-food', {
-                        method: 'POST',
-                        body: JSON.stringify({ foodId: currentFoodDetail.id })
-                    });
-
-                    if (res && res.success) {
-                        showToast(`Đã thêm nguyên liệu món "${currentFoodDetail.name}" vào Đi chợ! 🛒`);
-                        if (window.loadShoppingListInNav) window.loadShoppingListInNav();
-                        if (window.openShoppingDrawer) {
-                            setTimeout(() => window.openShoppingDrawer(), 800);
-                        }
-                    } else {
-                        showToast(res.message || 'Không thể thêm vào đi chợ.');
-                    }
-                } catch (err) {
-                    showToast('Lỗi khi thêm nguyên liệu.');
-                } finally {
-                    btnAdd.disabled = false;
-                    btnAdd.innerHTML = originalText;
-                }
-            });
         }
 
         if (btnFav) {

@@ -42,7 +42,7 @@ export default function Navbar() {
     }
 
     return `
-        <!-- Overlay for Cart / Favorite Drawer -->
+        <!-- Overlay for Favorites Drawer -->
         <div id="nav-drawer-overlay" onclick="window.closeNavDrawers && window.closeNavDrawers()" class="fixed inset-0 bg-black/50 z-[65] hidden transition-opacity backdrop-blur-xs"></div>
 
         <header class="bg-[#0F4937] text-white sticky top-0 z-50 shadow-sm border-b border-white/10 overflow-x-clip">
@@ -93,12 +93,6 @@ export default function Navbar() {
                     <button onclick="window.openFavoritesDrawer && window.openFavoritesDrawer()" class="hidden md:flex w-7 h-7 sm:w-8.5 sm:h-8.5 rounded-full bg-white/10 hover:bg-white/20 text-white items-center justify-center transition-all hover:text-rose-400 relative cursor-pointer" title="Món yêu thích">
                         <i class="fa-solid fa-heart text-[11px] sm:text-sm"></i>
                         <span id="nav-fav-badge" class="hidden absolute -top-1 -right-1 bg-rose-500 text-white text-[9px] sm:text-[10px] font-black w-4 h-4 sm:w-4.5 sm:h-4.5 rounded-full flex items-center justify-center shadow-sm ring-2 ring-[#0F4937] animate-pulse">0</span>
-                    </button>
-
-                    <!-- Shopping List Drawer Button (Desktop Only) -->
-                    <button onclick="window.openShoppingDrawer && window.openShoppingDrawer()" class="hidden md:flex w-7 h-7 sm:w-8.5 sm:h-8.5 rounded-full bg-white/10 hover:bg-white/20 text-white items-center justify-center transition-all hover:text-emerald-300 relative cursor-pointer" title="Danh sách đi chợ">
-                        <i class="fa-solid fa-cart-shopping text-[11px] sm:text-sm"></i>
-                        <span id="nav-shopping-badge" class="hidden absolute -top-1 -right-1 bg-emerald-500 text-white text-[9px] sm:text-[10px] font-black w-4 h-4 sm:w-4.5 sm:h-4.5 rounded-full flex items-center justify-center shadow-sm ring-2 ring-[#0F4937]">0</span>
                     </button>
 
                     <!-- Won Dishes / Random Cart Basket (Desktop Only) -->
@@ -297,89 +291,6 @@ export default function Navbar() {
             </div>
         </div>
 
-        <!-- SHOPPING LIST DRAWER -->
-        <div id="nav-shopping-drawer" class="fixed inset-y-0 right-0 w-[90vw] sm:w-[420px] bg-white shadow-2xl z-[70] transform translate-x-full invisible pointer-events-none hidden transition-transform duration-300 ease-in-out flex flex-col border-l border-gray-200">
-            <div class="p-4 border-b border-gray-100 flex items-center justify-between bg-[#0F4937] text-white">
-                <div class="flex items-center gap-2 font-bold text-base">
-                    <i id="nav-shopping-title-icon" class="fa-solid fa-cart-shopping text-[#F4A62A]"></i>
-                    <span id="nav-shopping-title-text">Danh sách đi chợ</span>
-                    <span id="nav-shopping-header-count" class="text-[11px] bg-white/15 px-2 py-0.5 rounded-full font-bold text-[#F4A62A]">0 món</span>
-                </div>
-                <button onclick="window.closeNavDrawers && window.closeNavDrawers()" class="hover:bg-white/10 text-white transition text-2xl w-8 h-8 flex items-center justify-center rounded-full cursor-pointer">&times;</button>
-            </div>
-
-            <!-- Tab Switcher: Nguyên liệu đi chợ vs Món đã random (Gacha) -->
-            <div class="grid grid-cols-2 bg-gray-100/90 p-1 border-b border-gray-200 text-xs font-bold text-center shrink-0">
-                <button type="button" id="nav-tab-btn-shopping" onclick="window.switchNavShoppingTab && window.switchNavShoppingTab('shopping')" class="py-2 rounded-lg bg-white text-primary shadow-xs transition cursor-pointer flex items-center justify-center gap-1.5">
-                    <i class="fa-solid fa-cart-shopping text-emerald-600"></i>
-                    <span>Nguyên liệu</span>
-                </button>
-                <button type="button" id="nav-tab-btn-won" onclick="window.switchNavShoppingTab && window.switchNavShoppingTab('won')" class="py-2 rounded-lg text-gray-500 hover:text-primary transition cursor-pointer flex items-center justify-center gap-1.5">
-                    <i class="fa-solid fa-dice text-amber-500"></i>
-                    <span>Món đã random</span>
-                    <span id="nav-tab-won-badge" class="bg-amber-100 text-amber-800 text-[10px] px-1.5 py-0.2 rounded-full hidden">0</span>
-                </button>
-            </div>
-
-            <!-- Panel 1: Nguyên liệu đi chợ -->
-            <div id="nav-panel-shopping" class="flex-1 flex flex-col min-h-0">
-                <!-- Quick Add Item Form -->
-                <div class="p-3 bg-gray-100/70 border-b border-gray-200">
-                    <form id="form-quick-add-item" onsubmit="window.quickAddShoppingItem && window.quickAddShoppingItem(event)" class="flex gap-1.5">
-                        <input type="text" id="quick-add-name" placeholder="Thêm nguyên liệu..." class="flex-1 px-3 py-1.5 bg-white border border-gray-200 rounded-xl text-xs focus:outline-none focus:ring-1 focus:ring-primary" required>
-                        <input type="number" id="quick-add-qty" placeholder="SL" value="1" min="0.1" step="any" class="w-14 px-2 py-1.5 bg-white border border-gray-200 rounded-xl text-xs text-center focus:outline-none focus:ring-1 focus:ring-primary">
-                        <input type="text" id="quick-add-unit" placeholder="ĐVT" value="cái" class="w-14 px-2 py-1.5 bg-white border border-gray-200 rounded-xl text-xs text-center focus:outline-none focus:ring-1 focus:ring-primary">
-                        <button type="submit" class="px-3 py-1.5 bg-[#0F4937] hover:bg-[#145A43] text-white font-bold text-xs rounded-xl shadow-xs transition cursor-pointer" title="Thêm">+</button>
-                    </form>
-                </div>
-                
-                <div id="nav-shopping-items-list" class="flex-1 overflow-y-auto p-4 bg-gray-50 flex flex-col gap-2">
-                    <p class="text-center text-xs text-gray-400 py-10">Đang tải danh sách đi chợ...</p>
-                </div>
-
-                <div class="p-3 bg-white border-t border-gray-100 flex items-center justify-between shrink-0">
-                    <button type="button" onclick="window.clearShoppingList && window.clearShoppingList()" class="px-3 py-1.5 text-xs text-rose-600 hover:bg-rose-50 rounded-xl font-bold transition cursor-pointer">Dọn sạch</button>
-                    <button type="button" onclick="window.closeNavDrawers && window.closeNavDrawers()" class="px-4 py-1.5 bg-[#0F4937] hover:bg-[#145A43] text-white text-xs font-bold rounded-xl shadow-xs transition cursor-pointer">Đóng</button>
-                </div>
-            </div>
-
-            <!-- Panel 2: Món đã random (Gacha) -->
-            <div id="nav-panel-won" class="flex-1 flex flex-col min-h-0 hidden">
-                <div class="p-3 bg-amber-50/70 border-b border-amber-100 text-xs text-amber-800 flex items-center justify-between font-bold">
-                    <span class="flex items-center gap-1.5">
-                        <i class="fa-solid fa-dice text-[#F4A62A]"></i>
-                        <span>Món vừa quay từ Vòng quay Gacha</span>
-                    </span>
-                    <button type="button" onclick="window.clearWonDishes && window.clearWonDishes()" class="text-xs text-rose-600 hover:underline cursor-pointer font-bold">Xóa hết</button>
-                </div>
-                
-                <div id="nav-drawer-won-items-list" class="flex-1 overflow-y-auto p-4 bg-gray-50 flex flex-col gap-2">
-                    <!-- Rendered by renderWonDishesInDrawer -->
-                </div>
-
-                <div class="p-3 bg-white border-t border-gray-100 flex items-center justify-between shrink-0">
-                    <a href="#/" onclick="window.closeNavDrawers && window.closeNavDrawers()" class="px-3 py-1.5 text-xs text-[#0F4937] font-bold hover:underline">Quay thêm món</a>
-                    <button type="button" onclick="window.closeNavDrawers && window.closeNavDrawers()" class="px-4 py-1.5 bg-[#0F4937] hover:bg-[#145A43] text-white text-xs font-bold rounded-xl shadow-xs transition cursor-pointer">Đóng</button>
-                </div>
-            </div>
-
-            <!-- Footer Drawer -->
-            <div class="p-3 bg-white border-t border-gray-200 flex items-center gap-2 shadow-xs">
-                <a href="#/danh-sach" onclick="window.closeNavDrawers && window.closeNavDrawers()" class="flex-1 text-center py-2 bg-gray-100 hover:bg-gray-200 text-text-main text-xs font-bold rounded-xl transition">Khám phá món</a>
-                ${isLoggedIn ? `
-                    <a href="#/ca-nhan" onclick="window.closeNavDrawers && window.closeNavDrawers()" class="flex-1 text-center py-2 bg-[#0F4937] hover:bg-[#145A43] text-white text-xs font-bold rounded-xl transition shadow-xs flex items-center justify-center gap-1.5">
-                        <i class="fa-solid fa-user text-[11px] text-[#F4A62A]"></i>
-                        <span>Quản lý cá nhân</span>
-                    </a>
-                ` : `
-                    <a href="#/login" onclick="window.closeNavDrawers && window.closeNavDrawers()" class="flex-1 text-center py-2 bg-[#F4A62A] hover:bg-[#E59516] text-[#0F4937] text-xs font-black rounded-xl transition shadow-xs flex items-center justify-center gap-1.5">
-                        <i class="fa-solid fa-arrow-right-to-bracket text-[11px]"></i>
-                        <span>Đăng nhập để lưu</span>
-                    </a>
-                `}
-            </div>
-        </div>
-
         <!-- BOTTOM NAVIGATION BAR FOR MOBILE (< md) -->
         <nav class="md:hidden fixed bottom-0 left-0 right-0 z-40 bg-white/95 backdrop-blur-md border-t border-[#E5E1D6] shadow-[0_-4px_20px_rgba(0,0,0,0.06)] px-2 pt-1 pb-2 flex items-center justify-around select-none" style="padding-bottom: max(0.5rem, env(safe-area-inset-bottom, 8px));">
             <!-- 1. Trang chủ -->
@@ -406,16 +317,7 @@ export default function Navbar() {
                 <span class="text-[10px] mt-0.5 leading-tight ${isCommunity ? 'font-bold text-[#145A43]' : ''}">Cộng đồng</span>
             </a>
 
-            <!-- 4. Đi chợ (kèm badge số lượng) -->
-            <button type="button" onclick="window.openShoppingDrawer && window.openShoppingDrawer()" class="relative flex flex-col items-center justify-center py-1 px-2.5 rounded-xl transition-all text-[#718078] hover:text-[#145A43] font-semibold cursor-pointer">
-                <div class="relative flex items-center justify-center w-6 h-6">
-                    <i class="fa-solid fa-cart-shopping text-base"></i>
-                    <span id="nav-bottom-shopping-badge" class="hidden absolute -top-1 -right-2 bg-emerald-500 text-white text-[8px] font-black w-3.5 h-3.5 rounded-full flex items-center justify-center shadow-xs">0</span>
-                </div>
-                <span class="text-[10px] mt-0.5 leading-tight">Đi chợ</span>
-            </button>
-
-            <!-- 5. Cá nhân -->
+            <!-- 4. Cá nhân -->
             <a href="#/ca-nhan" onclick="${isProfile ? 'window.scrollTo({ top: 0, behavior: \'smooth\' });' : ''}" class="flex flex-col items-center justify-center py-1 px-2.5 rounded-xl transition-all ${isProfile ? 'text-[#145A43] font-black' : 'text-[#718078] hover:text-[#145A43] font-semibold'}">
                 <div class="relative flex items-center justify-center w-6 h-6">
                     ${isLoggedIn ? `
@@ -866,7 +768,6 @@ if (typeof window !== 'undefined') {
     window.closeNavDrawers = () => {
         const overlay = document.getElementById('nav-drawer-overlay');
         const favModal = document.getElementById('nav-fav-modal');
-        const shoppingModal = document.getElementById('nav-shopping-drawer');
         const wonPopover = document.getElementById('nav-won-popover');
         if (overlay) overlay.classList.add('hidden');
         if (favModal) {
@@ -874,14 +775,6 @@ if (typeof window !== 'undefined') {
             setTimeout(() => {
                 if (favModal.classList.contains('translate-x-full')) {
                     favModal.classList.add('invisible', 'pointer-events-none', 'hidden');
-                }
-            }, 300);
-        }
-        if (shoppingModal) {
-            shoppingModal.classList.add('translate-x-full');
-            setTimeout(() => {
-                if (shoppingModal.classList.contains('translate-x-full')) {
-                    shoppingModal.classList.add('invisible', 'pointer-events-none', 'hidden');
                 }
             }, 300);
         }
@@ -974,131 +867,6 @@ if (typeof window !== 'undefined') {
         }
     };
 
-    window.openShoppingDrawer = (defaultTab = 'shopping') => {
-        const overlay = document.getElementById('nav-drawer-overlay');
-        const shoppingModal = document.getElementById('nav-shopping-drawer');
-        if (overlay) overlay.classList.remove('hidden');
-        if (shoppingModal) {
-            shoppingModal.classList.remove('hidden');
-            requestAnimationFrame(() => {
-                shoppingModal.classList.remove('invisible', 'pointer-events-none', 'translate-x-full');
-            });
-            window.switchNavShoppingTab(defaultTab);
-        }
-    };
-
-    window.switchNavShoppingTab = (tab = 'shopping') => {
-        const btnShop = document.getElementById('nav-tab-btn-shopping');
-        const btnWon = document.getElementById('nav-tab-btn-won');
-        const panelShop = document.getElementById('nav-panel-shopping');
-        const panelWon = document.getElementById('nav-panel-won');
-        const icon = document.getElementById('nav-shopping-title-icon');
-        const text = document.getElementById('nav-shopping-title-text');
-
-        // Cập nhật số lượng trên tab badge món random
-        try {
-            const won = JSON.parse(localStorage.getItem('won_dishes') || '[]');
-            const tabBadge = document.getElementById('nav-tab-won-badge');
-            if (tabBadge) {
-                tabBadge.textContent = won.length;
-                tabBadge.classList.toggle('hidden', won.length === 0);
-            }
-        } catch (e) {}
-
-        if (tab === 'shopping') {
-            panelShop?.classList.remove('hidden');
-            panelWon?.classList.add('hidden');
-
-            btnShop?.classList.add('bg-white', 'text-primary', 'shadow-xs');
-            btnShop?.classList.remove('text-gray-500');
-            btnWon?.classList.remove('bg-white', 'text-primary', 'shadow-xs');
-            btnWon?.classList.add('text-gray-500');
-
-            if (icon) icon.className = "fa-solid fa-cart-shopping text-[#F4A62A]";
-            if (text) text.textContent = "Danh sách đi chợ";
-
-            if (window.loadShoppingListInNav) window.loadShoppingListInNav();
-        } else {
-            panelShop?.classList.add('hidden');
-            panelWon?.classList.remove('hidden');
-
-            btnWon?.classList.add('bg-white', 'text-primary', 'shadow-xs');
-            btnWon?.classList.remove('text-gray-500');
-            btnShop?.classList.remove('bg-white', 'text-primary', 'shadow-xs');
-            btnShop?.classList.add('text-gray-500');
-
-            if (icon) icon.className = "fa-solid fa-dice text-[#F4A62A]";
-            if (text) text.textContent = "Món đã random";
-
-            if (window.renderWonDishesInDrawer) window.renderWonDishesInDrawer();
-        }
-    };
-
-    window.renderWonDishesInDrawer = () => {
-        const container = document.getElementById('nav-drawer-won-items-list');
-        const tabBadge = document.getElementById('nav-tab-won-badge');
-        const headerCount = document.getElementById('nav-shopping-header-count');
-        if (!container) return;
-
-        let won = [];
-        try {
-            won = JSON.parse(localStorage.getItem('won_dishes') || '[]');
-        } catch (e) {
-            won = [];
-        }
-
-        if (tabBadge) {
-            tabBadge.textContent = won.length;
-            tabBadge.classList.toggle('hidden', won.length === 0);
-        }
-
-        const panelWon = document.getElementById('nav-panel-won');
-        if (panelWon && !panelWon.classList.contains('hidden') && headerCount) {
-            headerCount.textContent = `${won.length} món`;
-        }
-
-        if (won.length === 0) {
-            container.innerHTML = `
-                <div class="flex flex-col items-center justify-center h-full text-gray-400 py-16 text-center">
-                    <div class="w-14 h-14 mb-3 rounded-full bg-amber-50 flex items-center justify-center text-amber-500">
-                        <i class="fa-solid fa-dice text-2xl"></i>
-                    </div>
-                    <p class="font-bold text-gray-700 text-sm">Chưa có món nào từ máy quay</p>
-                    <p class="text-xs text-gray-400 mt-1 max-w-[220px]">Hãy thử quay vòng quay Gacha ở Trang chủ để nhận gợi ý món ăn!</p>
-                    <a href="#/" onclick="window.closeNavDrawers && window.closeNavDrawers()" class="mt-4 px-4 py-2 bg-[#0F4937] hover:bg-[#145A43] text-white rounded-full text-xs font-bold shadow-xs transition">Đến vòng quay ngay</a>
-                </div>
-            `;
-            return;
-        }
-
-        container.innerHTML = won.map((item, idx) => {
-            const foodId = item.id_food || item.id || 1;
-            const foodName = item.name || 'Món ngon';
-            const foodImg = item.image || 'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?auto=format&fit=crop&w=120&q=80';
-            const foodTime = item.time || (item.cooking_time ? `${item.cooking_time} phút` : '30 phút');
-            const foodCat = item.category || 'Món ngon';
-
-            return `
-                <div class="bg-white rounded-xl p-3 border border-gray-100 flex items-center gap-3 shadow-2xs hover:border-amber-200 transition">
-                    <a href="#/mon-an/${foodId}" onclick="window.closeNavDrawers && window.closeNavDrawers()" class="shrink-0">
-                        <img src="${foodImg}" class="w-12 h-12 rounded-lg object-cover border border-gray-100" onerror="this.src='https://images.unsplash.com/photo-1546069901-ba9599a7e63c?auto=format&fit=crop&w=120&q=80'">
-                    </a>
-                    <div class="flex-1 min-w-0">
-                        <a href="#/mon-an/${foodId}" onclick="window.closeNavDrawers && window.closeNavDrawers()" class="font-bold text-xs text-text-main hover:text-[#0F4937] transition line-clamp-1">${foodName}</a>
-                        <div class="flex items-center gap-2 mt-0.5 text-[11px] text-gray-400">
-                            <span class="text-emerald-700 font-semibold">${foodCat}</span>
-                            <span>•</span>
-                            <span class="flex items-center gap-1"><i class="fa-regular fa-clock text-amber-500"></i> ${foodTime}</span>
-                        </div>
-                    </div>
-                    <button onclick="window.removeWonDish(${idx})" class="text-gray-300 hover:text-rose-500 p-2 transition cursor-pointer" title="Xóa món này">
-                        <i class="fa-solid fa-trash-can text-xs"></i>
-                    </button>
-                </div>
-            `;
-        }).join('');
-    };
-
     window.loadFavoritesInNav = async () => {
         const container = document.getElementById('nav-fav-items-list');
         const headerCount = document.getElementById('nav-fav-header-count');
@@ -1188,137 +956,6 @@ if (typeof window !== 'undefined') {
         } catch (e) {}
     };
 
-    window.loadShoppingListInNav = async () => {
-        const container = document.getElementById('nav-shopping-items-list');
-        const headerCount = document.getElementById('nav-shopping-header-count');
-        const badge = document.getElementById('nav-shopping-badge');
-        if (!container) return;
-
-        const token = localStorage.getItem('auth_token');
-        if (!token) {
-            container.innerHTML = `
-                <div class="flex flex-col items-center justify-center h-full text-gray-400 py-16 text-center">
-                    <i class="fa-solid fa-cart-shopping text-3xl mb-2 text-gray-300"></i>
-                    <p class="font-bold text-gray-700 text-sm">Chưa đăng nhập</p>
-                    <p class="text-xs text-gray-400 mt-1 max-w-[220px]">Đăng nhập để đồng bộ và lưu trữ danh sách đi chợ của bạn.</p>
-                    <a href="#/login" onclick="window.closeNavDrawers && window.closeNavDrawers()" class="mt-4 px-4 py-2 bg-[#0F4937] text-white rounded-full text-xs font-bold shadow hover:bg-[#145A43] transition-all">Đăng nhập</a>
-                </div>
-            `;
-            if (headerCount) headerCount.textContent = '0 món';
-            if (badge) badge.classList.add('hidden');
-            const bottomBadge = document.getElementById('nav-bottom-shopping-badge');
-            if (bottomBadge) bottomBadge.classList.add('hidden');
-            return;
-        }
-
-        try {
-            const res = await fetchAPI('/shopping-list');
-            if (res && res.success) {
-                const total = res.total_items || 0;
-                const remaining = res.remaining_items ?? total;
-                if (headerCount) headerCount.textContent = `${total} nguyên liệu`;
-                if (badge) {
-                    badge.textContent = remaining;
-                    badge.classList.toggle('hidden', remaining === 0);
-                }
-                const bottomBadge = document.getElementById('nav-bottom-shopping-badge');
-                if (bottomBadge) {
-                    bottomBadge.textContent = remaining;
-                    bottomBadge.classList.toggle('hidden', remaining === 0);
-                }
-
-                if (total === 0) {
-                    container.innerHTML = `
-                        <div class="flex flex-col items-center justify-center h-full text-gray-400 py-16 text-center">
-                            <i class="fa-solid fa-basket-shopping text-3xl mb-2 text-gray-300"></i>
-                            <p class="font-bold text-gray-700 text-sm">Danh sách đi chợ đang trống</p>
-                            <p class="text-xs text-gray-400 mt-1 max-w-[220px]">Nhấn "Thêm vào đi chợ" ở chi tiết món ăn hoặc tự gõ vào ô phía trên!</p>
-                        </div>
-                    `;
-                    return;
-                }
-
-                const lists = res.lists || [];
-                container.innerHTML = lists.map(l => `
-                    <div class="bg-white rounded-xl p-3 border border-gray-100 shadow-2xs space-y-2">
-                        <div class="flex items-center justify-between border-b border-gray-100 pb-1.5">
-                            <span class="font-bold text-xs text-primary flex items-center gap-1.5">
-                                <i class="fa-solid fa-utensils text-accent text-[11px]"></i>
-                                ${l.food_name}
-                            </span>
-                            <span class="text-[10px] text-gray-400 font-semibold">${l.items.length} món</span>
-                        </div>
-                        <div class="space-y-1.5">
-                            ${l.items.map(it => `
-                                <div class="flex items-center justify-between py-1 px-1.5 rounded-lg hover:bg-gray-50 transition">
-                                    <label class="flex items-center gap-2 cursor-pointer flex-1 min-w-0">
-                                        <input type="checkbox" ${it.is_checked ? 'checked' : ''} onchange="window.toggleShoppingItem(${it.id_shopping_list_item})" class="rounded text-primary focus:ring-primary h-4 w-4">
-                                        <span class="text-xs font-medium text-text-main truncate ${it.is_checked ? 'line-through text-gray-400' : ''}">${it.name}</span>
-                                    </label>
-                                    <div class="flex items-center gap-2 shrink-0">
-                                        <span class="text-[11px] font-bold ${it.is_checked ? 'text-gray-400' : 'text-emerald-700 bg-emerald-50'} px-2 py-0.5 rounded-md">${it.quantity} ${it.unit}</span>
-                                        <button onclick="window.deleteShoppingItem(${it.id_shopping_list_item})" class="text-gray-300 hover:text-rose-500 transition p-1 cursor-pointer">
-                                            <i class="fa-solid fa-xmark text-xs"></i>
-                                        </button>
-                                    </div>
-                                </div>
-                            `).join('')}
-                        </div>
-                    </div>
-                `).join('');
-            }
-        } catch (e) {
-            container.innerHTML = `<p class="text-xs text-red-500 text-center py-4">Lỗi khi tải danh sách đi chợ.</p>`;
-        }
-    };
-
-    window.toggleShoppingItem = async (itemId) => {
-        try {
-            await fetchAPI(`/shopping-list/items/${itemId}/toggle`, { method: 'PATCH' });
-            window.loadShoppingListInNav();
-        } catch (e) {}
-    };
-
-    window.deleteShoppingItem = async (itemId) => {
-        try {
-            await fetchAPI(`/shopping-list/items/${itemId}`, { method: 'DELETE' });
-            window.loadShoppingListInNav();
-        } catch (e) {}
-    };
-
-    window.quickAddShoppingItem = async (event) => {
-        event.preventDefault();
-        const nameInput = document.getElementById('quick-add-name');
-        const qtyInput = document.getElementById('quick-add-qty');
-        const unitInput = document.getElementById('quick-add-unit');
-        if (!nameInput) return;
-
-        const name = nameInput.value.trim();
-        const quantity = Number(qtyInput?.value) || 1;
-        const unit = unitInput?.value?.trim() || 'cái';
-        if (!name) return;
-
-        try {
-            const res = await fetchAPI('/shopping-list/add-item', {
-                method: 'POST',
-                body: JSON.stringify({ name, quantity, unit })
-            });
-            if (res && res.success) {
-                nameInput.value = '';
-                if (qtyInput) qtyInput.value = '1';
-                window.loadShoppingListInNav();
-            }
-        } catch (e) {}
-    };
-
-    window.clearShoppingList = async () => {
-        if (!confirm('Bạn có chắc muốn dọn sạch toàn bộ danh sách đi chợ?')) return;
-        try {
-            await fetchAPI('/shopping-list/clear', { method: 'DELETE' });
-            window.loadShoppingListInNav();
-        } catch (e) {}
-    };
-
     window.toggleWonDishesPopover = () => {
         const popover = document.getElementById('nav-won-popover');
         if (!popover) return;
@@ -1405,7 +1042,6 @@ if (typeof window !== 'undefined') {
             won.splice(index, 1);
             localStorage.setItem('won_dishes', JSON.stringify(won));
             if (window.renderWonDishesList) window.renderWonDishesList();
-            if (window.renderWonDishesInDrawer) window.renderWonDishesInDrawer();
             if (window.renderRecentWonDishes) window.renderRecentWonDishes();
         } catch (e) {}
     };
@@ -1425,7 +1061,6 @@ if (typeof window !== 'undefined') {
 
         localStorage.removeItem('won_dishes');
         if (window.renderWonDishesList) window.renderWonDishesList();
-        if (window.renderWonDishesInDrawer) window.renderWonDishesInDrawer();
         if (window.renderRecentWonDishes) window.renderRecentWonDishes();
         if (window.Popup) {
             window.Popup.toast('Đã làm trống danh sách món đã random.', 'info');
@@ -1440,7 +1075,6 @@ if (typeof window !== 'undefined') {
             if (won.length > 20) won = won.slice(0, 20);
             localStorage.setItem('won_dishes', JSON.stringify(won));
             if (window.renderWonDishesList) window.renderWonDishesList();
-            if (window.renderWonDishesInDrawer) window.renderWonDishesInDrawer();
             if (window.renderRecentWonDishes) window.renderRecentWonDishes();
         } catch (e) {}
     };
@@ -1450,7 +1084,6 @@ if (typeof window !== 'undefined') {
         if (window.updateNavbarFavBadge) window.updateNavbarFavBadge();
         if (localStorage.getItem('auth_token')) {
             if (window.loadFavoritesInNav) window.loadFavoritesInNav();
-            if (window.loadShoppingListInNav) window.loadShoppingListInNav();
         }
     }, 100);
 
