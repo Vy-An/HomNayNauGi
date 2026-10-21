@@ -1,0 +1,73 @@
+0 verbose cli C:\Program Files\nodejs\node.exe C:\Program Files\nodejs\node_modules\npm\bin\npm-cli.js
+1 info using npm@11.12.1
+2 info using node@v24.15.0
+3 silly config load:file:C:\Program Files\nodejs\node_modules\npm\npmrc
+4 silly config load:file:C:\Users\Admin\Documents\FPT\project-team\HomNayNauGi\tmp\lab8-lodash-20261019-133459-127\.npmrc
+5 silly config load:file:C:\Users\Admin\.npmrc
+6 silly config load:file:C:\Users\Admin\AppData\Roaming\npm\etc\npmrc
+7 verbose title npm install lodash @types/lodash
+8 verbose argv "install" "lodash" "@types/lodash" "--cache" "C:\\Users\\Admin\\Documents\\FPT\\project-team\\HomNayNauGi\\tmp\\lab8-npm-cache" "--no-audit" "--no-fund"
+9 verbose logfile logs-max:10 dir:C:\Users\Admin\Documents\FPT\project-team\HomNayNauGi\tmp\lab8-npm-cache\_logs\2026-10-19T06_35_17_721Z-
+10 verbose logfile C:\Users\Admin\Documents\FPT\project-team\HomNayNauGi\tmp\lab8-npm-cache\_logs\2026-10-19T06_35_17_721Z-debug-0.log
+11 silly logfile done cleaning log files
+12 silly packumentCache heap:2348810240 maxSize:587202560 maxEntrySize:293601280
+13 silly idealTree buildDeps
+14 silly fetch manifest lodash@*
+15 silly packumentCache full:https://registry.npmjs.org/lodash cache-miss
+16 http fetch GET 200 https://registry.npmjs.org/lodash 393ms (cache miss)
+17 silly packumentCache full:https://registry.npmjs.org/lodash set size:undefined disposed:false
+18 silly fetch manifest @types/lodash@*
+19 silly packumentCache full:https://registry.npmjs.org/@types%2flodash cache-miss
+20 http fetch GET 200 https://registry.npmjs.org/@types%2flodash 210ms (cache miss)
+21 silly packumentCache full:https://registry.npmjs.org/@types%2flodash set size:undefined disposed:false
+22 silly placeDep ROOT @types/lodash@4.17.26 OK for: lab8-ps47415-nguyensidang@1.0.0 want: *
+23 silly placeDep ROOT lodash@4.18.1 OK for: lab8-ps47415-nguyensidang@1.0.0 want: *
+24 silly reify moves {}
+25 http cache @types/lodash@https://registry.npmjs.org/@types/lodash/-/lodash-4.17.26.tgz 0ms (cache hit)
+26 http cache lodash@https://registry.npmjs.org/lodash/-/lodash-4.18.1.tgz 0ms (cache hit)
+27 http cache typescript@https://registry.npmjs.org/typescript/-/typescript-7.0.2.tgz 0ms (cache hit)
+28 http cache vite@https://registry.npmjs.org/vite/-/vite-7.3.7.tgz 0ms (cache hit)
+29 http cache tinyglobby@https://registry.npmjs.org/tinyglobby/-/tinyglobby-0.2.17.tgz 0ms (cache hit)
+30 http cache source-map-js@https://registry.npmjs.org/source-map-js/-/source-map-js-1.2.2.tgz 0ms (cache hit)
+31 http cache rollup@https://registry.npmjs.org/rollup/-/rollup-4.64.10.tgz 0ms (cache hit)
+32 http cache postcss@https://registry.npmjs.org/postcss/-/postcss-8.5.31.tgz 0ms (cache hit)
+33 http cache picomatch@https://registry.npmjs.org/picomatch/-/picomatch-4.0.7.tgz 0ms (cache hit)
+34 http cache picocolors@https://registry.npmjs.org/picocolors/-/picocolors-1.1.1.tgz 0ms (cache hit)
+35 http cache @typescript/typescript-win32-x64@https://registry.npmjs.org/@typescript/typescript-win32-x64/-/typescript-win32-x64-7.0.2.tgz 0ms (cache hit)
+36 http cache @types/estree@https://registry.npmjs.org/@types/estree/-/estree-1.0.9.tgz 0ms (cache hit)
+37 http cache nanoid@https://registry.npmjs.org/nanoid/-/nanoid-3.3.20.tgz 0ms (cache hit)
+38 http cache esbuild@https://registry.npmjs.org/esbuild/-/esbuild-0.28.2.tgz 0ms (cache hit)
+39 http cache fdir@https://registry.npmjs.org/fdir/-/fdir-6.5.0.tgz 0ms (cache hit)
+40 silly tarball no local data for @types/lodash@https://registry.npmjs.org/@types/lodash/-/lodash-4.17.26.tgz. Extracting by manifest.
+41 silly tarball no local data for lodash@https://registry.npmjs.org/lodash/-/lodash-4.18.1.tgz. Extracting by manifest.
+42 http cache @rollup/rollup-win32-x64-gnu@https://registry.npmjs.org/@rollup/rollup-win32-x64-gnu/-/rollup-win32-x64-gnu-4.64.10.tgz 0ms (cache hit)
+43 http cache @rollup/rollup-win32-x64-msvc@https://registry.npmjs.org/@rollup/rollup-win32-x64-msvc/-/rollup-win32-x64-msvc-4.64.10.tgz 0ms (cache hit)
+44 http cache @esbuild/win32-x64@https://registry.npmjs.org/@esbuild/win32-x64/-/win32-x64-0.28.2.tgz 0ms (cache hit)
+45 http fetch GET 200 https://registry.npmjs.org/@types/lodash/-/lodash-4.17.26.tgz 4428ms (cache miss)
+46 http fetch GET 200 https://registry.npmjs.org/lodash/-/lodash-4.18.1.tgz 5886ms (cache miss)
+47 info run esbuild@0.28.2 postinstall node_modules/esbuild node install.js
+48 info run esbuild@0.28.2 postinstall { code: 0, signal: null }
+49 silly ADD node_modules/lodash
+50 silly ADD node_modules/@types/lodash
+51 silly ADD node_modules/vite
+52 silly ADD node_modules/typescript
+53 silly ADD node_modules/tinyglobby
+54 silly ADD node_modules/source-map-js
+55 silly ADD node_modules/rollup
+56 silly ADD node_modules/postcss
+57 silly ADD node_modules/picomatch
+58 silly ADD node_modules/picocolors
+59 silly ADD node_modules/nanoid
+60 silly ADD node_modules/fdir
+61 silly ADD node_modules/esbuild
+62 silly ADD node_modules/@typescript/typescript-win32-x64
+63 silly ADD node_modules/@types/estree
+64 silly ADD node_modules/@rollup/rollup-win32-x64-msvc
+65 silly ADD node_modules/@rollup/rollup-win32-x64-gnu
+66 silly ADD node_modules/@esbuild/win32-x64
+67 verbose cwd C:\Users\Admin\Documents\FPT\project-team\HomNayNauGi\tmp\lab8-lodash-20261019-133459-127
+68 verbose os Windows_NT 10.0.22621
+69 verbose node v24.15.0
+70 verbose npm  v11.12.1
+71 verbose exit 0
+72 info ok

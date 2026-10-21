@@ -1,0 +1,1 @@
+import{t as o,f as e}from"./chunks/module_laptop-B9Wx0ZVO.js";const t=document.querySelector("main");t&&(t.innerHTML=`<h2>${o}</h2><h3>THÊM LAPTOP</h3>`,t.innerHTML+=e());const r=document.querySelector("main form"),n=r?.querySelector('button[name="btn"]');n&&(n.onclick=function(){alert("Đã thêm")});

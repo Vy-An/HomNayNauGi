@@ -1,0 +1,123 @@
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    padding: 24px 16px;
+    color: #111;
+    background: #fff;
+    font-family: "Times New Roman", Times, serif;
+    font-size: 16px;
+}
+
+main {
+    width: 100%;
+    max-width: 760px;
+    margin: 0 auto;
+    border: 1px solid #777;
+}
+
+h2 {
+    margin: 0;
+    padding: 5px 8px;
+    font-size: 24px;
+}
+
+h3 {
+    margin: 0;
+    padding: 7px 8px;
+    color: #fff;
+    background: #008b8b;
+    font-size: 20px;
+}
+
+main > p {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    margin: 0;
+    padding: 9px 10px;
+    border-bottom: 1px solid #999;
+}
+
+main > p:last-child {
+    border-bottom: 0;
+}
+
+main > p span {
+    flex-shrink: 0;
+    white-space: nowrap;
+}
+
+form {
+    margin: 0;
+}
+
+form p {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin: 0;
+    padding: 8px 10px;
+    border-bottom: 1px solid #999;
+}
+
+form p:last-of-type {
+    border-bottom: 0;
+}
+
+label {
+    flex: 0 0 14%;
+}
+
+input {
+    width: 100%;
+    min-width: 0;
+    padding: 6px 8px;
+    border: 1px solid transparent;
+    background: #ddd;
+    font: inherit;
+}
+
+input:focus {
+    outline: 2px solid #008b8b;
+    outline-offset: 1px;
+}
+
+button {
+    min-width: 130px;
+    padding: 7px 16px;
+    border: 1px solid #bbb;
+    border-radius: 2px;
+    color: #111;
+    background: #eee;
+    font: 14px Arial, sans-serif;
+    cursor: pointer;
+}
+
+button:hover {
+    background: #ddd;
+}
+
+button:focus-visible {
+    outline: 2px solid #008b8b;
+    outline-offset: 2px;
+}
+
+@media (max-width: 480px) {
+    body {
+        padding: 12px 8px;
+    }
+
+    main > p {
+        align-items: flex-start;
+        flex-direction: column;
+        gap: 4px;
+    }
+
+    label {
+        flex-basis: 48px;
+    }
+}

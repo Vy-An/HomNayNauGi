@@ -1,0 +1,121 @@
+{
+  "apiUrl": "https://otakuminihub.io.vn/api",
+  "version": "f6fc70a84d8c",
+  "entries": [
+    {
+      "entry": "index.html",
+      "source": "C:\\Users\\Admin\\Documents\\FPT\\project-team\\HomNayNauGi\\tmp\\frontend-deploy-ready\\index.html",
+      "sha256": "cc66e35e74f0c927c529d3bd7c1db934d1dde7538d54aaad0b4f251d9d1eec3c"
+    },
+    {
+      "entry": "vercel.json",
+      "source": "C:\\Users\\Admin\\Documents\\FPT\\project-team\\HomNayNauGi\\tmp\\frontend-deploy-ready\\vercel.json",
+      "sha256": "1ae573119604c9a2d123bb4cfb7044cc8710d607a2a1577bc52a71dc8c406b06"
+    },
+    {
+      "entry": "js/api.js",
+      "source": "C:\\Users\\Admin\\Documents\\FPT\\project-team\\HomNayNauGi\\tmp\\frontend-deploy-ready\\js\\api.js",
+      "sha256": "04f6f5f2ea1491d56c239b63ca7cdfd8c7607fdffe518e4aa8fe2860a4588c6b"
+    },
+    {
+      "entry": "js/app.js",
+      "source": "C:\\Users\\Admin\\Documents\\FPT\\project-team\\HomNayNauGi\\tmp\\frontend-deploy-ready\\js\\app.js",
+      "sha256": "da842ba9377405e60bc1d854ce40c021e99eaa8b4fc22db6eb7702fb9b735eab"
+    },
+    {
+      "entry": "js/components/BackToTop.js",
+      "source": "C:\\Users\\Admin\\Documents\\FPT\\project-team\\HomNayNauGi\\tmp\\frontend-deploy-ready\\js\\components\\BackToTop.js",
+      "sha256": "3a26c86f5f57e00b4dc9b91b093aa928e81550d087f4b3fcda8e2d014a64ed66"
+    },
+    {
+      "entry": "js/components/FoodCard.js",
+      "source": "C:\\Users\\Admin\\Documents\\FPT\\project-team\\HomNayNauGi\\tmp\\frontend-deploy-ready\\js\\components\\FoodCard.js",
+      "sha256": "1fb8a36cce4175bb92e4df5156c8dffe6871310e7f036a2bade90d97a68c1abf"
+    },
+    {
+      "entry": "js/components/Footer.js",
+      "source": "C:\\Users\\Admin\\Documents\\FPT\\project-team\\HomNayNauGi\\tmp\\frontend-deploy-ready\\js\\components\\Footer.js",
+      "sha256": "f3975201280ffab9f4894834be90eec7fbd10c22df35044de08ee59e1cbf4193"
+    },
+    {
+      "entry": "js/components/Navbar.js",
+      "source": "C:\\Users\\Admin\\Documents\\FPT\\project-team\\HomNayNauGi\\tmp\\frontend-deploy-ready\\js\\components\\Navbar.js",
+      "sha256": "c7d54a3fe22d7cb2b31c7b721166cc5214960cb46f8617b03426460a618cac36"
+    },
+    {
+      "entry": "js/components/Popup.js",
+      "source": "C:\\Users\\Admin\\Documents\\FPT\\project-team\\HomNayNauGi\\tmp\\frontend-deploy-ready\\js\\components\\Popup.js",
+      "sha256": "b1b04ae8e8d40276c4e05f2d7b2edb206e8195ed49405268f2d39571416ccf6e"
+    },
+    {
+      "entry": "js/components/Skeleton.js",
+      "source": "C:\\Users\\Admin\\Documents\\FPT\\project-team\\HomNayNauGi\\tmp\\frontend-deploy-ready\\js\\components\\Skeleton.js",
+      "sha256": "870423fdcab78c491eb41a2e8114e99a16f242020f7a56f6a41f8482a58b082d"
+    },
+    {
+      "entry": "js/config.js",
+      "source": "C:\\Users\\Admin\\Documents\\FPT\\project-team\\HomNayNauGi\\tmp\\frontend-deploy-ready\\js\\config.js",
+      "sha256": "919d114b51ba5365d76de49510297aa630c9c2aea09e808c0179fa430e8e7979"
+    },
+    {
+      "entry": "js/views/admin/Admin.js",
+      "source": "C:\\Users\\Admin\\Documents\\FPT\\project-team\\HomNayNauGi\\tmp\\frontend-deploy-ready\\js\\views\\admin\\Admin.js",
+      "sha256": "5627fc08b6713f6089fec0cc19f80d117be0533f90c9da17e383abbeb1593fa1"
+    },
+    {
+      "entry": "js/views/khach/Community.js",
+      "source": "C:\\Users\\Admin\\Documents\\FPT\\project-team\\HomNayNauGi\\tmp\\frontend-deploy-ready\\js\\views\\khach\\Community.js",
+      "sha256": "30595846e8442897522db3896cd005547616ca6492e6148712103b436ed84e53"
+    },
+    {
+      "entry": "js/views/khach/FoodDetail.js",
+      "source": "C:\\Users\\Admin\\Documents\\FPT\\project-team\\HomNayNauGi\\tmp\\frontend-deploy-ready\\js\\views\\khach\\FoodDetail.js",
+      "sha256": "5acf8cc8871ff52b3f94ae58eb925980d4fe2ee2d977f975da7569be122fc624"
+    },
+    {
+      "entry": "js/views/khach/FoodList.js",
+      "source": "C:\\Users\\Admin\\Documents\\FPT\\project-team\\HomNayNauGi\\tmp\\frontend-deploy-ready\\js\\views\\khach\\FoodList.js",
+      "sha256": "60bc2470ac4203e087f74a56a4637bb2e20fcf9db210e1e5df150b5e4c7c719a"
+    },
+    {
+      "entry": "js/views/khach/Home.js",
+      "source": "C:\\Users\\Admin\\Documents\\FPT\\project-team\\HomNayNauGi\\tmp\\frontend-deploy-ready\\js\\views\\khach\\Home.js",
+      "sha256": "426242efeaa6cf3ff1ae148dda3d4db37363f39e6a085bcdf2fa360cd2ef0730"
+    },
+    {
+      "entry": "js/views/khach/Login.js",
+      "source": "C:\\Users\\Admin\\Documents\\FPT\\project-team\\HomNayNauGi\\tmp\\frontend-deploy-ready\\js\\views\\khach\\Login.js",
+      "sha256": "bbbb4c382d4e5eb4e10ef4814e1e1f6f27c5e93b7b3e81d8959b0eb2371e12fc"
+    },
+    {
+      "entry": "js/views/khach/Profile.js",
+      "source": "C:\\Users\\Admin\\Documents\\FPT\\project-team\\HomNayNauGi\\tmp\\frontend-deploy-ready\\js\\views\\khach\\Profile.js",
+      "sha256": "ad2d5966a64fd1abf7bf63c14e862bcdcd42e06fb144b7e427c722905169a36e"
+    },
+    {
+      "entry": "assets/images/1 PM.png",
+      "source": "C:\\Users\\Admin\\Documents\\FPT\\project-team\\HomNayNauGi\\tmp\\frontend-deploy-ready\\assets\\images\\1 PM.png",
+      "sha256": "2e3081029159e60e0e6c0881b23d7c6f84cf7ec17534e3d93da580195e28d40b"
+    },
+    {
+      "entry": "assets/images/gacha-machine-blank.png",
+      "source": "C:\\Users\\Admin\\Documents\\FPT\\project-team\\HomNayNauGi\\tmp\\frontend-deploy-ready\\assets\\images\\gacha-machine-blank.png",
+      "sha256": "adf60ee173f78df0908e861d3120a23a3e548eca3c1bee5f0a39a70ef92def61"
+    },
+    {
+      "entry": "assets/images/gacha-machine-square-new.png",
+      "source": "C:\\Users\\Admin\\Documents\\FPT\\project-team\\HomNayNauGi\\tmp\\frontend-deploy-ready\\assets\\images\\gacha-machine-square-new.png",
+      "sha256": "6e25daa466999ba9bf0d8eae464c4e7a6af1e14bee3fd3e640a85e5185c3bcd1"
+    },
+    {
+      "entry": "assets/images/gacha-machine-wood.png",
+      "source": "C:\\Users\\Admin\\Documents\\FPT\\project-team\\HomNayNauGi\\tmp\\frontend-deploy-ready\\assets\\images\\gacha-machine-wood.png",
+      "sha256": "e6fa75e46d6df7714d192ee13306ba17da26343fe7b3b545edbbb6bf1c7b0ca6"
+    },
+    {
+      "entry": "css/style.css",
+      "source": "C:\\Users\\Admin\\Documents\\FPT\\project-team\\HomNayNauGi\\tmp\\frontend-deploy-ready\\css\\style.css",
+      "sha256": "1679287b34595361a12c6b22a17218e6a147c8123e5fc0c50ed533fa2c3f244f"
+    }
+  ]
+}

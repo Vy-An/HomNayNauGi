@@ -1,0 +1,62 @@
+﻿[
+    {
+        "path":  "laptop_ds.html",
+        "sha256":  "56339467BD40FF5E5D0FE12F8B25E68607EDAE44934CCBD7BA2274156764F449"
+    },
+    {
+        "path":  "laptop_sua.html",
+        "sha256":  "20A5DE1B11219F9EE163DB1395673EBFF3DED47B99ADCF661EF30FE796AC05CA"
+    },
+    {
+        "path":  "laptop_them.html",
+        "sha256":  "2C8F04594135805C7A6E6FDC5439FD72A73C1036ED0EE523D7332E1E84706DE6"
+    },
+    {
+        "path":  "tsconfig.json",
+        "sha256":  "0F784BF9F1B6EC7B460DE9ACBF196B8DA52B6153264F0E0E987C929318E5908E"
+    },
+    {
+        "path":  "public\\css\\style.css",
+        "sha256":  "26246D792CE741F867459A3FBF9B342DE820C3521C2A6B1C879FB8B57B971767"
+    },
+    {
+        "path":  "public\\js\\base.js",
+        "sha256":  "ED39A9F342C6536F8B62D4C991347E713CBFDD9B58038FD4BA43F9DCB45F02D7"
+    },
+    {
+        "path":  "public\\js\\laptop_ds.js",
+        "sha256":  "9D3C1A2C070BD25A5EBB43DCBAFCDA6E77906E9B8E6A07D287F868F3CA1C4063"
+    },
+    {
+        "path":  "public\\js\\laptop_sua.js",
+        "sha256":  "6346D3F93D44BA43DFB6D9D1C375D96EE18DACD76B32848F548A2245E39CF2CE"
+    },
+    {
+        "path":  "public\\js\\laptop_them.js",
+        "sha256":  "F63403DE88264E70CD645BF0E635A48748A4060AF8A2F790895FB4080DD5AFBF"
+    },
+    {
+        "path":  "public\\js\\module_laptop.js",
+        "sha256":  "5C112C034A6D831D7365C51345150D81165D5A0636002EF7F7FF216DF02A9D7F"
+    },
+    {
+        "path":  "src\\base.ts",
+        "sha256":  "489DF72ADCF42BD18EDFF3BF76E98744BCAEF51FA7F74B666111276DB935B769"
+    },
+    {
+        "path":  "src\\laptop_ds.ts",
+        "sha256":  "451D9B67E7BF62C993971CDB790D6204CAD00F537D5C85A789BFD461A9136DC0"
+    },
+    {
+        "path":  "src\\laptop_sua.ts",
+        "sha256":  "0BE4085EFC711A1A3E0B7B8370C4D9D29AF9CB4CC85AA44B5B18D9D86B391137"
+    },
+    {
+        "path":  "src\\laptop_them.ts",
+        "sha256":  "26226FB088A74495582BC89ED20A36B999D106E8E514ECF81AE153F7712C592B"
+    },
+    {
+        "path":  "src\\module_laptop.ts",
+        "sha256":  "C64A11E4DAD23F8C7296A118F456BCCD79FC56501A2F498EA5F807CD9221386A"
+    }
+]

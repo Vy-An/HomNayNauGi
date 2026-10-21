@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hôm Nay Nấu Gì</title>
+    <!-- Google Fonts: Nunito, Quicksand, Dancing Script, Itim, Caveat with full Vietnamese support -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@600;700&family=Itim&family=Nunito:wght@400;500;600;700;800;900&family=Quicksand:wght@500;600;700&family=Caveat:wght@600;700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="css/style.css?v=20261016-6c6851d781">
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-RJJM1QJHWY"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag() { dataLayer.push(arguments); }
+        gtag('js', new Date());
+
+        gtag('config', 'G-RJJM1QJHWY');
+    </script>
+    <style>
+        html {
+            overflow-x: clip;
+            width: 100%;
+            max-width: 100%;
+        }
+
+        body {
+            overflow-x: clip;
+            width: 100%;
+            max-width: 100%;
+            position: relative;
+        }
+
+        ::-webkit-scrollbar {
+            display: none;
+        }
+
+        * {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+
+        /* Custom scrollbar for gacha modal results */
+        .custom-gacha-scroll {
+            scrollbar-width: thin !important;
+            scrollbar-color: #145A43 #F8F5EA !important;
+            -ms-overflow-style: auto !important;
+        }
+
+        .custom-gacha-scroll::-webkit-scrollbar {
+            display: block !important;
+            width: 6px !important;
+            height: 6px !important;
+        }
+
+        .custom-gacha-scroll::-webkit-scrollbar-track {
+            background: #F8F5EA !important;
+            border-radius: 9999px !important;
+        }
+
+        .custom-gacha-scroll::-webkit-scrollbar-thumb {
+            background-color: #145A43 !important;
+            border-radius: 9999px !important;
+        }
+
+        .custom-gacha-scroll::-webkit-scrollbar-thumb:hover {
+            background-color: #0F4937 !important;
+        }
+
+        /* Custom scrollbar for filter groups */
+        .custom-filter-scroll {
+            scrollbar-width: thin !important;
+            scrollbar-color: #245B43 #F8F5EE !important;
+            -ms-overflow-style: auto !important;
+        }
+
+        .custom-filter-scroll::-webkit-scrollbar {
+            display: block !important;
+            width: 4px !important;
+        }
+
+        .custom-filter-scroll::-webkit-scrollbar-track {
+            background: #F8F5EE !important;
+            border-radius: 9999px !important;
+        }
+
+        .custom-filter-scroll::-webkit-scrollbar-thumb {
+            background-color: #245B43 !important;
+            border-radius: 9999px !important;
+        }
+
+        .custom-filter-scroll::-webkit-scrollbar-thumb:hover {
+            background-color: #1B4633 !important;
+        }
+
+        /* Filter chip item states (Checkbox & Radio hidden input styling) */
+        .filter-chip-item .check-icon {
+            display: none;
+        }
+
+        .filter-chip-item:has(input:checked),
+        .filter-chip-item.is-checked {
+            background-color: #EAF3ED !important;
+            border-color: #245B43 !important;
+            color: #145A43 !important;
+            font-weight: 700 !important;
+            box-shadow: 0 1px 2px 0 rgba(20, 90, 67, 0.08) !important;
+        }
+
+        .filter-chip-item:has(input:checked) .check-icon,
+        .filter-chip-item.is-checked .check-icon {
+            display: flex !important;
+        }
+
+        /* Facebook-style Skeleton Shimmer Animation */
+        @keyframes skeletonShimmer {
+            0% {
+                background-position: -200% 0;
+            }
+
+            100% {
+                background-position: 200% 0;
+            }
+        }
+
+        .skeleton-shimmer {
+            background: linear-gradient(90deg, #ECE6DA 0%, #F8F5EE 50%, #ECE6DA 100%) !important;
+            background-size: 200% 100% !important;
+            animation: skeletonShimmer 1.5s infinite ease-in-out !important;
+        }
+    </style>
+</head>
+
+<body class="bg-background text-text-main font-sans antialiased min-h-screen flex flex-col pb-16 md:pb-0">
+    <!-- Thanh điều hướng -->
+    <div id="navbar-container" class="sticky top-0 z-50 w-full"></div>
+
+    <!-- Nội dung chính -->
+    <main id="app-content" class="flex-grow">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 animate-fade-in select-none pointer-events-none">
+            <div class="mb-8 space-y-2">
+                <div class="h-8 w-56 rounded-xl skeleton-shimmer"></div>
+                <div class="h-4 w-72 rounded-md skeleton-shimmer"></div>
+            </div>
+            <div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-6">
+                <div
+                    class="bg-white rounded-[20px] shadow-sm border border-beige-border/80 flex flex-col h-72 overflow-hidden skeleton-shimmer">
+                </div>
+                <div
+                    class="bg-white rounded-[20px] shadow-sm border border-beige-border/80 flex flex-col h-72 overflow-hidden skeleton-shimmer">
+                </div>
+                <div
+                    class="bg-white rounded-[20px] shadow-sm border border-beige-border/80 flex flex-col h-72 overflow-hidden skeleton-shimmer">
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <div id="footer-container"></div>
+
+    <!-- Canvas Confetti cho hiệu ứng pháo hoa Gacha -->
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.3/dist/confetti.browser.min.js"></script>
+    <script type="module" src="js/app.js?v=20261016-6c6851d781"></script>
+</body>
+
+</html>

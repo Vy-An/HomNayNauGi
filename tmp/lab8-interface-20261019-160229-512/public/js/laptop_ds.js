@@ -1,0 +1,14 @@
+import{l as h,d as i,t as d}from"./chunks/module_laptop-DfiqcQv5.js";import{h as g,d as m,i as a,a as o}from"./chunks/giaodien-CxGco4gL.js";const t=h(),l=t.reduce((s,n)=>s+n.gia,0);g("danhsach",`
+    ${m("BỘ SƯU TẬP CỦA BẠN","Danh sách laptop","Mọi sản phẩm, gọn gàng trong một không gian.",`<a class="button button-primary" href="laptop_them.html">${a("plus")}Thêm laptop</a>`)}
+    <section class="stats-grid" aria-label="Thống kê sản phẩm">
+        <article class="stat-card"><span class="stat-icon">${a("laptop")}</span><div><p>Tổng sản phẩm</p><strong>${t.length}<small>laptop</small></strong></div><span class="stat-corner">01</span></article>
+        <article class="stat-card"><span class="stat-icon stat-icon-purple">${a("money")}</span><div><p>Giá bán trung bình</p><strong>${o(l/(t.length||1))}</strong></div><span class="stat-corner">02</span></article>
+        <article class="stat-card"><span class="stat-icon stat-icon-amber">${a("chart")}</span><div><p>Tổng giá trị</p><strong>${o(l)}</strong></div><span class="stat-corner">03</span></article>
+    </section>
+    <section class="panel catalog-panel" aria-labelledby="catalog-title">
+        <div class="catalog-toolbar"><div><h2 id="catalog-title">Tất cả laptop <span class="count-badge">${t.length}</span></h2><p>Danh mục sản phẩm trong bài thực hành.</p></div>
+            <div class="catalog-controls"><label class="search-box">${a("search")}<input id="search" type="search" placeholder="Tìm tên laptop..." aria-label="Tìm kiếm laptop"></label><select id="sort" aria-label="Sắp xếp laptop"><option value="default">Sắp xếp mặc định</option><option value="price-asc">Giá tăng dần</option><option value="price-desc">Giá giảm dần</option></select></div></div>
+        <div class="table-scroll"><table><thead><tr><th scope="col">SẢN PHẨM</th><th scope="col">GIÁ BÁN</th><th scope="col">MÃ SẢN PHẨM</th><th scope="col" class="action-cell">THAO TÁC</th></tr></thead><tbody id="product-rows">${i()}</tbody></table></div>
+        <div class="catalog-footer"><span id="result-count" role="status" aria-live="polite">Hiển thị ${t.length} / ${t.length} sản phẩm</span><span class="collection-note"><i></i>Bộ sưu tập Lab 08</span></div>
+    </section>
+    <section class="learning-banner"><span class="banner-icon">${a("code")}</span><div><p>THÊM MỘT CHÚT THỰC HÀNH</p><h2>Khám phá sức mạnh của Lodash</h2><span>Tìm số lớn nhất, nhỏ nhất và tính tổng chỉ với vài dòng code.</span></div><a class="button button-secondary" href="mang_lodash.html">Mở bài thực hành ${a("arrow")}</a></section>`);const p=document.querySelector("#search"),e=document.querySelector("#sort"),r=()=>{const s=d(p.value);e.value==="price-asc"&&s.sort((n,c)=>n.gia-c.gia),e.value==="price-desc"&&s.sort((n,c)=>c.gia-n.gia),document.querySelector("#product-rows").innerHTML=i(s),document.querySelector("#result-count").textContent=`Hiển thị ${s.length} / ${t.length} sản phẩm`};p.addEventListener("input",r);e.addEventListener("change",r);

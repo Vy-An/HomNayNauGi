@@ -1,0 +1,302 @@
+﻿[
+    {
+        "slug":  "thit-kho-trung",
+        "width":  1200,
+        "height":  896,
+        "format":  "JPEG"
+    },
+    {
+        "slug":  "ca-kho-to",
+        "width":  1024,
+        "height":  768,
+        "format":  "JPEG"
+    },
+    {
+        "slug":  "ga-kho-gung",
+        "width":  1200,
+        "height":  896,
+        "format":  "JPEG"
+    },
+    {
+        "slug":  "suon-xao-chua-ngot",
+        "width":  654,
+        "height":  449,
+        "format":  "PNG"
+    },
+    {
+        "slug":  "bo-xao-hanh-tay",
+        "width":  3120,
+        "height":  3417,
+        "format":  "JPEG"
+    },
+    {
+        "slug":  "trung-chien-hanh",
+        "width":  4032,
+        "height":  3024,
+        "format":  "JPEG"
+    },
+    {
+        "slug":  "ca-chien-nuoc-mam",
+        "width":  4608,
+        "height":  2592,
+        "format":  "JPEG"
+    },
+    {
+        "slug":  "canh-chua-ca-loc",
+        "width":  942,
+        "height":  657,
+        "format":  "JPEG"
+    },
+    {
+        "slug":  "canh-bi-do-thit-bam",
+        "width":  1200,
+        "height":  896,
+        "format":  "JPEG"
+    },
+    {
+        "slug":  "canh-cai-thit-bam",
+        "width":  960,
+        "height":  1280,
+        "format":  "JPEG"
+    },
+    {
+        "slug":  "canh-ca-chua-trung",
+        "width":  960,
+        "height":  720,
+        "format":  "JPEG"
+    },
+    {
+        "slug":  "rau-muong-xao-toi",
+        "width":  960,
+        "height":  1129,
+        "format":  "JPEG"
+    },
+    {
+        "slug":  "cai-thia-xao-toi",
+        "width":  960,
+        "height":  720,
+        "format":  "JPEG"
+    },
+    {
+        "slug":  "dau-que-xao-toi",
+        "width":  960,
+        "height":  638,
+        "format":  "JPEG"
+    },
+    {
+        "slug":  "rau-cu-luoc",
+        "width":  960,
+        "height":  960,
+        "format":  "JPEG"
+    },
+    {
+        "slug":  "thit-ba-chi-luoc",
+        "width":  960,
+        "height":  960,
+        "format":  "JPEG"
+    },
+    {
+        "slug":  "dau-hu-sot-ca-chua",
+        "width":  900,
+        "height":  600,
+        "format":  "JPEG"
+    },
+    {
+        "slug":  "ga-chien-nuoc-mam",
+        "width":  960,
+        "height":  765,
+        "format":  "JPEG"
+    },
+    {
+        "slug":  "canh-rau-ngot-thit-bam",
+        "width":  1200,
+        "height":  896,
+        "format":  "JPEG"
+    },
+    {
+        "slug":  "canh-muop-tom",
+        "width":  1200,
+        "height":  896,
+        "format":  "JPEG"
+    },
+    {
+        "slug":  "canh-kho-qua-nhoi-thit",
+        "width":  1200,
+        "height":  896,
+        "format":  "JPEG"
+    },
+    {
+        "slug":  "canh-bi-xanh-tom",
+        "width":  1200,
+        "height":  896,
+        "format":  "JPEG"
+    },
+    {
+        "slug":  "canh-rong-bien-dau-hu",
+        "width":  1200,
+        "height":  896,
+        "format":  "JPEG"
+    },
+    {
+        "slug":  "canh-khoai-mo-thit-bam",
+        "width":  1200,
+        "height":  896,
+        "format":  "JPEG"
+    },
+    {
+        "slug":  "canh-cai-chua-suon",
+        "width":  1200,
+        "height":  896,
+        "format":  "JPEG"
+    },
+    {
+        "slug":  "ca-loc-kho-tieu",
+        "width":  1024,
+        "height":  768,
+        "format":  "JPEG"
+    },
+    {
+        "slug":  "thit-kho-mam-ruoc",
+        "width":  1500,
+        "height":  1500,
+        "format":  "JPEG"
+    },
+    {
+        "slug":  "tom-rim-thit-ba-chi",
+        "width":  1500,
+        "height":  1500,
+        "format":  "JPEG"
+    },
+    {
+        "slug":  "suon-kho-thom",
+        "width":  1500,
+        "height":  1500,
+        "format":  "JPEG"
+    },
+    {
+        "slug":  "bo-kho-ca-rot",
+        "width":  1200,
+        "height":  896,
+        "format":  "JPEG"
+    },
+    {
+        "slug":  "ca-basa-kho-nghe",
+        "width":  1500,
+        "height":  1500,
+        "format":  "JPEG"
+    },
+    {
+        "slug":  "ga-kho-sa-ot",
+        "width":  1500,
+        "height":  1500,
+        "format":  "JPEG"
+    },
+    {
+        "slug":  "muc-xao-can-tay",
+        "width":  1200,
+        "height":  896,
+        "format":  "JPEG"
+    },
+    {
+        "slug":  "tom-xao-bong-cai",
+        "width":  4928,
+        "height":  3264,
+        "format":  "JPEG"
+    },
+    {
+        "slug":  "ga-xao-muop",
+        "width":  1500,
+        "height":  1500,
+        "format":  "JPEG"
+    },
+    {
+        "slug":  "bo-xao-bong-cai",
+        "width":  2448,
+        "height":  2448,
+        "format":  "JPEG"
+    },
+    {
+        "slug":  "nui-xao-bo",
+        "width":  3000,
+        "height":  4000,
+        "format":  "JPEG"
+    },
+    {
+        "slug":  "cai-chua-xao-trung",
+        "width":  1200,
+        "height":  750,
+        "format":  "JPEG"
+    },
+    {
+        "slug":  "muop-xao-toi",
+        "width":  1920,
+        "height":  1272,
+        "format":  "JPEG"
+    },
+    {
+        "slug":  "dau-hu-chien-sa",
+        "width":  1200,
+        "height":  896,
+        "format":  "JPEG"
+    },
+    {
+        "slug":  "cha-ca-chien-thi-la",
+        "width":  960,
+        "height":  654,
+        "format":  "JPEG"
+    },
+    {
+        "slug":  "tom-chien-bot",
+        "width":  234,
+        "height":  312,
+        "format":  "JPEG"
+    },
+    {
+        "slug":  "canh-ga-chien-gion",
+        "width":  1280,
+        "height":  960,
+        "format":  "JPEG"
+    },
+    {
+        "slug":  "trung-chien-thit-bam",
+        "width":  1500,
+        "height":  1500,
+        "format":  "JPEG"
+    },
+    {
+        "slug":  "ca-ro-phi-chien-gion",
+        "width":  2848,
+        "height":  2136,
+        "format":  "JPEG"
+    },
+    {
+        "slug":  "bau-luoc-cham-trung",
+        "width":  1500,
+        "height":  1500,
+        "format":  "JPEG"
+    },
+    {
+        "slug":  "rau-lang-luoc",
+        "width":  1500,
+        "height":  1500,
+        "format":  "JPEG"
+    },
+    {
+        "slug":  "ga-luoc-la-chanh",
+        "width":  4032,
+        "height":  3016,
+        "format":  "JPEG"
+    },
+    {
+        "slug":  "thit-heo-luoc-cuon-rau",
+        "width":  8000,
+        "height":  6000,
+        "format":  "JPEG"
+    },
+    {
+        "slug":  "bap-cai-luoc",
+        "width":  1500,
+        "height":  1500,
+        "format":  "JPEG"
+    }
+]

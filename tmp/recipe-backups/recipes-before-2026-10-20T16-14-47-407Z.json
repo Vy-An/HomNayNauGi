@@ -1,0 +1,3549 @@
+{
+  "createdAt": "2026-10-20T16:14:47.408Z",
+  "foods": [
+    {
+      "id_food": 1,
+      "id_category": 7,
+      "name": "Thịt kho trứng",
+      "slug": "thit-kho-trung",
+      "description": "Thịt ba chỉ kho mềm cùng trứng và nước dừa.",
+      "image": "/images/foods/thit-kho-trung.jpg",
+      "cooking_time": 60,
+      "servings": 4,
+      "status": "active",
+      "created_at": "2026-10-05T21:52:02.000Z",
+      "updated_at": "2026-10-05T21:52:02.000Z",
+      "food_ingredients": [
+        {
+          "id_food_ingredient": 88,
+          "id_food": 1,
+          "id_ingredient": 1,
+          "quantity": "500",
+          "note": null,
+          "ingredients": {
+            "id_ingredient": 1,
+            "name": "Thịt ba chỉ",
+            "unit": "g",
+            "created_at": "2026-10-05T21:52:02.000Z",
+            "updated_at": "2026-10-05T21:52:02.000Z"
+          }
+        },
+        {
+          "id_food_ingredient": 89,
+          "id_food": 1,
+          "id_ingredient": 2,
+          "quantity": "4",
+          "note": null,
+          "ingredients": {
+            "id_ingredient": 2,
+            "name": "Trứng gà",
+            "unit": "quả",
+            "created_at": "2026-10-05T21:52:02.000Z",
+            "updated_at": "2026-10-05T21:52:02.000Z"
+          }
+        }
+      ],
+      "recipe_steps": [
+        {
+          "id_recipe_step": 1,
+          "id_food": 1,
+          "step_number": 1,
+          "instruction": "Luộc trứng, bóc vỏ và cắt thịt ba chỉ thành miếng vừa ăn."
+        },
+        {
+          "id_recipe_step": 2,
+          "id_food": 1,
+          "step_number": 2,
+          "instruction": "Ướp thịt với nước mắm, đường, hành tím và tiêu khoảng 20 phút."
+        },
+        {
+          "id_recipe_step": 3,
+          "id_food": 1,
+          "step_number": 3,
+          "instruction": "Cho thịt, trứng và nước dừa vào nồi, kho nhỏ lửa đến khi thịt mềm."
+        }
+      ]
+    },
+    {
+      "id_food": 2,
+      "id_category": 7,
+      "name": "Cá kho tộ",
+      "slug": "ca-kho-to",
+      "description": "Cá kho đậm vị với nước mắm, tiêu và hành.",
+      "image": "/images/foods/ca-kho-to.jpg",
+      "cooking_time": 45,
+      "servings": 4,
+      "status": "active",
+      "created_at": "2026-10-05T21:52:02.000Z",
+      "updated_at": "2026-10-05T21:52:02.000Z",
+      "food_ingredients": [
+        {
+          "id_food_ingredient": 90,
+          "id_food": 2,
+          "id_ingredient": 8,
+          "quantity": "500",
+          "note": null,
+          "ingredients": {
+            "id_ingredient": 8,
+            "name": "Cá basa",
+            "unit": "g",
+            "created_at": "2026-10-05T21:52:02.000Z",
+            "updated_at": "2026-10-05T21:52:02.000Z"
+          }
+        }
+      ],
+      "recipe_steps": [
+        {
+          "id_recipe_step": 4,
+          "id_food": 2,
+          "step_number": 1,
+          "instruction": "Rửa sạch cá và cắt thành khúc."
+        },
+        {
+          "id_recipe_step": 5,
+          "id_food": 2,
+          "step_number": 2,
+          "instruction": "Ướp cá với nước mắm, hành tím, đường và tiêu."
+        },
+        {
+          "id_recipe_step": 6,
+          "id_food": 2,
+          "step_number": 3,
+          "instruction": "Kho cá trên lửa nhỏ đến khi nước kho sánh lại."
+        }
+      ]
+    },
+    {
+      "id_food": 3,
+      "id_category": 7,
+      "name": "Gà kho gừng",
+      "slug": "ga-kho-gung",
+      "description": "Thịt gà kho cùng gừng thơm và đậm vị.",
+      "image": "/images/foods/ga-kho-gung.jpg",
+      "cooking_time": 40,
+      "servings": 4,
+      "status": "active",
+      "created_at": "2026-10-05T21:52:02.000Z",
+      "updated_at": "2026-10-20T15:56:41.000Z",
+      "food_ingredients": [
+        {
+          "id_food_ingredient": 91,
+          "id_food": 3,
+          "id_ingredient": 10,
+          "quantity": "600",
+          "note": null,
+          "ingredients": {
+            "id_ingredient": 10,
+            "name": "Thịt gà",
+            "unit": "g",
+            "created_at": "2026-10-05T21:52:02.000Z",
+            "updated_at": "2026-10-05T21:52:02.000Z"
+          }
+        }
+      ],
+      "recipe_steps": [
+        {
+          "id_recipe_step": 7,
+          "id_food": 3,
+          "step_number": 1,
+          "instruction": "Rửa sạch gà và cắt thành miếng vừa ăn."
+        },
+        {
+          "id_recipe_step": 8,
+          "id_food": 3,
+          "step_number": 2,
+          "instruction": "Ướp gà với nước mắm, gừng, hành tím và đường."
+        },
+        {
+          "id_recipe_step": 9,
+          "id_food": 3,
+          "step_number": 3,
+          "instruction": "Kho gà đến khi thịt mềm và nước kho sệt lại."
+        }
+      ]
+    },
+    {
+      "id_food": 4,
+      "id_category": 4,
+      "name": "Sườn xào chua ngọt",
+      "slug": "suon-xao-chua-ngot",
+      "description": "Sườn non xào cùng rau củ với vị chua ngọt.",
+      "image": "/images/foods/suon-xao-chua-ngot.jpg",
+      "cooking_time": 45,
+      "servings": 4,
+      "status": "active",
+      "created_at": "2026-10-05T21:52:02.000Z",
+      "updated_at": "2026-10-05T21:52:02.000Z",
+      "food_ingredients": [
+        {
+          "id_food_ingredient": 92,
+          "id_food": 4,
+          "id_ingredient": 11,
+          "quantity": "500",
+          "note": null,
+          "ingredients": {
+            "id_ingredient": 11,
+            "name": "Sườn non",
+            "unit": "g",
+            "created_at": "2026-10-05T21:52:02.000Z",
+            "updated_at": "2026-10-05T21:52:02.000Z"
+          }
+        },
+        {
+          "id_food_ingredient": 93,
+          "id_food": 4,
+          "id_ingredient": 19,
+          "quantity": "200",
+          "note": null,
+          "ingredients": {
+            "id_ingredient": 19,
+            "name": "Cà chua",
+            "unit": "g",
+            "created_at": "2026-10-05T21:52:02.000Z",
+            "updated_at": "2026-10-05T21:52:02.000Z"
+          }
+        },
+        {
+          "id_food_ingredient": 94,
+          "id_food": 4,
+          "id_ingredient": 13,
+          "quantity": "150",
+          "note": null,
+          "ingredients": {
+            "id_ingredient": 13,
+            "name": "Thơm",
+            "unit": "g",
+            "created_at": "2026-10-05T21:52:02.000Z",
+            "updated_at": "2026-10-05T21:52:02.000Z"
+          }
+        },
+        {
+          "id_food_ingredient": 95,
+          "id_food": 4,
+          "id_ingredient": 14,
+          "quantity": "100",
+          "note": null,
+          "ingredients": {
+            "id_ingredient": 14,
+            "name": "Hành tây",
+            "unit": "g",
+            "created_at": "2026-10-05T21:52:02.000Z",
+            "updated_at": "2026-10-05T21:52:02.000Z"
+          }
+        },
+        {
+          "id_food_ingredient": 96,
+          "id_food": 4,
+          "id_ingredient": 12,
+          "quantity": "100",
+          "note": null,
+          "ingredients": {
+            "id_ingredient": 12,
+            "name": "Ớt chuông",
+            "unit": "g",
+            "created_at": "2026-10-05T21:52:02.000Z",
+            "updated_at": "2026-10-05T21:52:02.000Z"
+          }
+        }
+      ],
+      "recipe_steps": [
+        {
+          "id_recipe_step": 10,
+          "id_food": 4,
+          "step_number": 1,
+          "instruction": "Sơ chế sườn và chần sơ với nước nóng."
+        },
+        {
+          "id_recipe_step": 11,
+          "id_food": 4,
+          "step_number": 2,
+          "instruction": "Chiên sơ sườn đến khi mặt ngoài vàng."
+        },
+        {
+          "id_recipe_step": 12,
+          "id_food": 4,
+          "step_number": 3,
+          "instruction": "Xào sườn cùng cà chua, thơm, hành tây và ớt chuông."
+        }
+      ]
+    },
+    {
+      "id_food": 5,
+      "id_category": 4,
+      "name": "Bò xào hành tây",
+      "slug": "bo-xao-hanh-tay",
+      "description": "Thịt bò mềm xào nhanh cùng hành tây.",
+      "image": "/images/foods/bo-xao-hanh-tay.jpg",
+      "cooking_time": 25,
+      "servings": 3,
+      "status": "active",
+      "created_at": "2026-10-05T21:52:02.000Z",
+      "updated_at": "2026-10-05T21:52:02.000Z",
+      "food_ingredients": [
+        {
+          "id_food_ingredient": 97,
+          "id_food": 5,
+          "id_ingredient": 15,
+          "quantity": "400",
+          "note": null,
+          "ingredients": {
+            "id_ingredient": 15,
+            "name": "Thịt bò",
+            "unit": "g",
+            "created_at": "2026-10-05T21:52:02.000Z",
+            "updated_at": "2026-10-05T21:52:02.000Z"
+          }
+        },
+        {
+          "id_food_ingredient": 98,
+          "id_food": 5,
+          "id_ingredient": 14,
+          "quantity": "200",
+          "note": null,
+          "ingredients": {
+            "id_ingredient": 14,
+            "name": "Hành tây",
+            "unit": "g",
+            "created_at": "2026-10-05T21:52:02.000Z",
+            "updated_at": "2026-10-05T21:52:02.000Z"
+          }
+        }
+      ],
+      "recipe_steps": [
+        {
+          "id_recipe_step": 13,
+          "id_food": 5,
+          "step_number": 1,
+          "instruction": "Thịt bò thái mỏng và ướp gia vị."
+        },
+        {
+          "id_recipe_step": 14,
+          "id_food": 5,
+          "step_number": 2,
+          "instruction": "Phi thơm tỏi rồi xào nhanh thịt bò trên lửa lớn."
+        },
+        {
+          "id_recipe_step": 15,
+          "id_food": 5,
+          "step_number": 3,
+          "instruction": "Cho hành tây vào đảo đều rồi tắt bếp."
+        }
+      ]
+    },
+    {
+      "id_food": 6,
+      "id_category": 5,
+      "name": "Trứng chiên hành",
+      "slug": "trung-chien-hanh",
+      "description": "Trứng chiên đơn giản cùng hành lá.",
+      "image": "/images/foods/trung-chien-hanh.jpg",
+      "cooking_time": 15,
+      "servings": 2,
+      "status": "active",
+      "created_at": "2026-10-05T21:52:02.000Z",
+      "updated_at": "2026-10-05T21:52:02.000Z",
+      "food_ingredients": [
+        {
+          "id_food_ingredient": 28,
+          "id_food": 6,
+          "id_ingredient": 2,
+          "quantity": "4",
+          "note": null,
+          "ingredients": {
+            "id_ingredient": 2,
+            "name": "Trứng gà",
+            "unit": "quả",
+            "created_at": "2026-10-05T21:52:02.000Z",
+            "updated_at": "2026-10-05T21:52:02.000Z"
+          }
+        }
+      ],
+      "recipe_steps": [
+        {
+          "id_recipe_step": 16,
+          "id_food": 6,
+          "step_number": 1,
+          "instruction": "Đập trứng vào tô và cho hành lá vào."
+        },
+        {
+          "id_recipe_step": 17,
+          "id_food": 6,
+          "step_number": 2,
+          "instruction": "Thêm nước mắm rồi đánh đều hỗn hợp."
+        },
+        {
+          "id_recipe_step": 18,
+          "id_food": 6,
+          "step_number": 3,
+          "instruction": "Cho dầu vào chảo và chiên trứng vàng đều hai mặt."
+        }
+      ]
+    },
+    {
+      "id_food": 7,
+      "id_category": 5,
+      "name": "Cá chiên nước mắm",
+      "slug": "ca-chien-nuoc-mam",
+      "description": "Cá chiên vàng kết hợp sốt nước mắm.",
+      "image": "/images/foods/ca-chien-nuoc-mam.jpg",
+      "cooking_time": 35,
+      "servings": 4,
+      "status": "active",
+      "created_at": "2026-10-05T21:52:02.000Z",
+      "updated_at": "2026-10-05T21:52:02.000Z",
+      "food_ingredients": [
+        {
+          "id_food_ingredient": 32,
+          "id_food": 7,
+          "id_ingredient": 8,
+          "quantity": "500",
+          "note": null,
+          "ingredients": {
+            "id_ingredient": 8,
+            "name": "Cá basa",
+            "unit": "g",
+            "created_at": "2026-10-05T21:52:02.000Z",
+            "updated_at": "2026-10-05T21:52:02.000Z"
+          }
+        }
+      ],
+      "recipe_steps": [
+        {
+          "id_recipe_step": 19,
+          "id_food": 7,
+          "step_number": 1,
+          "instruction": "Làm sạch cá và để ráo nước."
+        },
+        {
+          "id_recipe_step": 20,
+          "id_food": 7,
+          "step_number": 2,
+          "instruction": "Chiên cá đến khi vàng giòn."
+        },
+        {
+          "id_recipe_step": 21,
+          "id_food": 7,
+          "step_number": 3,
+          "instruction": "Làm sốt nước mắm tỏi đường rồi rưới lên cá."
+        }
+      ]
+    },
+    {
+      "id_food": 8,
+      "id_category": 2,
+      "name": "Canh chua cá lóc",
+      "slug": "canh-chua-ca-loc",
+      "description": "Món canh chua thanh mát với cá lóc.",
+      "image": "/images/foods/canh-chua-ca-loc.jpg",
+      "cooking_time": 40,
+      "servings": 4,
+      "status": "active",
+      "created_at": "2026-10-05T21:52:02.000Z",
+      "updated_at": "2026-10-05T21:52:02.000Z",
+      "food_ingredients": [
+        {
+          "id_food_ingredient": 37,
+          "id_food": 8,
+          "id_ingredient": 17,
+          "quantity": "500",
+          "note": null,
+          "ingredients": {
+            "id_ingredient": 17,
+            "name": "Cá lóc",
+            "unit": "g",
+            "created_at": "2026-10-05T21:52:02.000Z",
+            "updated_at": "2026-10-05T21:52:02.000Z"
+          }
+        },
+        {
+          "id_food_ingredient": 39,
+          "id_food": 8,
+          "id_ingredient": 19,
+          "quantity": "200",
+          "note": null,
+          "ingredients": {
+            "id_ingredient": 19,
+            "name": "Cà chua",
+            "unit": "g",
+            "created_at": "2026-10-05T21:52:02.000Z",
+            "updated_at": "2026-10-05T21:52:02.000Z"
+          }
+        },
+        {
+          "id_food_ingredient": 40,
+          "id_food": 8,
+          "id_ingredient": 13,
+          "quantity": "150",
+          "note": null,
+          "ingredients": {
+            "id_ingredient": 13,
+            "name": "Thơm",
+            "unit": "g",
+            "created_at": "2026-10-05T21:52:02.000Z",
+            "updated_at": "2026-10-05T21:52:02.000Z"
+          }
+        },
+        {
+          "id_food_ingredient": 41,
+          "id_food": 8,
+          "id_ingredient": 20,
+          "quantity": "100",
+          "note": null,
+          "ingredients": {
+            "id_ingredient": 20,
+            "name": "Giá đỗ",
+            "unit": "g",
+            "created_at": "2026-10-05T21:52:02.000Z",
+            "updated_at": "2026-10-05T21:52:02.000Z"
+          }
+        }
+      ],
+      "recipe_steps": [
+        {
+          "id_recipe_step": 22,
+          "id_food": 8,
+          "step_number": 1,
+          "instruction": "Làm sạch cá và chuẩn bị cà chua, thơm, giá đỗ."
+        },
+        {
+          "id_recipe_step": 23,
+          "id_food": 8,
+          "step_number": 2,
+          "instruction": "Nấu nước với me rồi cho cá vào nấu chín."
+        },
+        {
+          "id_recipe_step": 24,
+          "id_food": 8,
+          "step_number": 3,
+          "instruction": "Cho rau củ vào, nêm gia vị rồi tắt bếp."
+        }
+      ]
+    },
+    {
+      "id_food": 9,
+      "id_category": 2,
+      "name": "Canh bí đỏ thịt bằm",
+      "slug": "canh-bi-do-thit-bam",
+      "description": "Canh bí đỏ nấu cùng thịt heo bằm.",
+      "image": "/images/foods/canh-bi-do-thit-bam.jpg",
+      "cooking_time": 30,
+      "servings": 4,
+      "status": "active",
+      "created_at": "2026-10-05T21:52:02.000Z",
+      "updated_at": "2026-10-20T15:56:41.000Z",
+      "food_ingredients": [
+        {
+          "id_food_ingredient": 43,
+          "id_food": 9,
+          "id_ingredient": 21,
+          "quantity": "400",
+          "note": null,
+          "ingredients": {
+            "id_ingredient": 21,
+            "name": "Bí đỏ",
+            "unit": "g",
+            "created_at": "2026-10-05T21:52:02.000Z",
+            "updated_at": "2026-10-05T21:52:02.000Z"
+          }
+        },
+        {
+          "id_food_ingredient": 44,
+          "id_food": 9,
+          "id_ingredient": 22,
+          "quantity": "200",
+          "note": null,
+          "ingredients": {
+            "id_ingredient": 22,
+            "name": "Thịt heo bằm",
+            "unit": "g",
+            "created_at": "2026-10-05T21:52:02.000Z",
+            "updated_at": "2026-10-05T21:52:02.000Z"
+          }
+        }
+      ],
+      "recipe_steps": [
+        {
+          "id_recipe_step": 25,
+          "id_food": 9,
+          "step_number": 1,
+          "instruction": "Gọt bí đỏ và cắt thành miếng vừa ăn."
+        },
+        {
+          "id_recipe_step": 26,
+          "id_food": 9,
+          "step_number": 2,
+          "instruction": "Xào sơ thịt bằm rồi cho nước vào nấu."
+        },
+        {
+          "id_recipe_step": 27,
+          "id_food": 9,
+          "step_number": 3,
+          "instruction": "Cho bí đỏ vào nấu mềm và nêm gia vị."
+        }
+      ]
+    },
+    {
+      "id_food": 10,
+      "id_category": 2,
+      "name": "Canh cải thịt bằm",
+      "slug": "canh-cai-thit-bam",
+      "description": "Cải xanh nấu cùng thịt bằm.",
+      "image": "/images/foods/canh-cai-thit-bam.jpg",
+      "cooking_time": 25,
+      "servings": 4,
+      "status": "active",
+      "created_at": "2026-10-05T21:52:02.000Z",
+      "updated_at": "2026-10-05T21:52:02.000Z",
+      "food_ingredients": [
+        {
+          "id_food_ingredient": 48,
+          "id_food": 10,
+          "id_ingredient": 23,
+          "quantity": "400",
+          "note": null,
+          "ingredients": {
+            "id_ingredient": 23,
+            "name": "Cải xanh",
+            "unit": "g",
+            "created_at": "2026-10-05T21:52:02.000Z",
+            "updated_at": "2026-10-05T21:52:02.000Z"
+          }
+        },
+        {
+          "id_food_ingredient": 49,
+          "id_food": 10,
+          "id_ingredient": 22,
+          "quantity": "200",
+          "note": null,
+          "ingredients": {
+            "id_ingredient": 22,
+            "name": "Thịt heo bằm",
+            "unit": "g",
+            "created_at": "2026-10-05T21:52:02.000Z",
+            "updated_at": "2026-10-05T21:52:02.000Z"
+          }
+        }
+      ],
+      "recipe_steps": [
+        {
+          "id_recipe_step": 28,
+          "id_food": 10,
+          "step_number": 1,
+          "instruction": "Rửa sạch cải xanh và cắt vừa ăn."
+        },
+        {
+          "id_recipe_step": 29,
+          "id_food": 10,
+          "step_number": 2,
+          "instruction": "Xào sơ thịt bằm rồi thêm nước."
+        },
+        {
+          "id_recipe_step": 30,
+          "id_food": 10,
+          "step_number": 3,
+          "instruction": "Cho cải vào nấu chín và nêm gia vị."
+        }
+      ]
+    },
+    {
+      "id_food": 11,
+      "id_category": 2,
+      "name": "Canh cà chua trứng",
+      "slug": "canh-ca-chua-trung",
+      "description": "Món canh nhanh với cà chua và trứng.",
+      "image": "/images/foods/canh-ca-chua-trung.jpg",
+      "cooking_time": 20,
+      "servings": 3,
+      "status": "active",
+      "created_at": "2026-10-05T21:52:02.000Z",
+      "updated_at": "2026-10-05T21:52:02.000Z",
+      "food_ingredients": [
+        {
+          "id_food_ingredient": 53,
+          "id_food": 11,
+          "id_ingredient": 19,
+          "quantity": "300",
+          "note": null,
+          "ingredients": {
+            "id_ingredient": 19,
+            "name": "Cà chua",
+            "unit": "g",
+            "created_at": "2026-10-05T21:52:02.000Z",
+            "updated_at": "2026-10-05T21:52:02.000Z"
+          }
+        },
+        {
+          "id_food_ingredient": 54,
+          "id_food": 11,
+          "id_ingredient": 2,
+          "quantity": "3",
+          "note": null,
+          "ingredients": {
+            "id_ingredient": 2,
+            "name": "Trứng gà",
+            "unit": "quả",
+            "created_at": "2026-10-05T21:52:02.000Z",
+            "updated_at": "2026-10-05T21:52:02.000Z"
+          }
+        }
+      ],
+      "recipe_steps": [
+        {
+          "id_recipe_step": 31,
+          "id_food": 11,
+          "step_number": 1,
+          "instruction": "Cắt cà chua thành múi và đánh đều trứng."
+        },
+        {
+          "id_recipe_step": 32,
+          "id_food": 11,
+          "step_number": 2,
+          "instruction": "Xào cà chua rồi thêm nước vào đun sôi."
+        },
+        {
+          "id_recipe_step": 33,
+          "id_food": 11,
+          "step_number": 3,
+          "instruction": "Cho từ từ trứng vào, khuấy nhẹ và nêm gia vị."
+        }
+      ]
+    },
+    {
+      "id_food": 12,
+      "id_category": 3,
+      "name": "Rau muống xào tỏi",
+      "slug": "rau-muong-xao-toi",
+      "description": "Rau muống xanh giòn xào thơm với tỏi.",
+      "image": "/images/foods/rau-muong-xao-toi.jpg",
+      "cooking_time": 15,
+      "servings": 3,
+      "status": "active",
+      "created_at": "2026-10-05T21:52:02.000Z",
+      "updated_at": "2026-10-05T21:52:02.000Z",
+      "food_ingredients": [
+        {
+          "id_food_ingredient": 58,
+          "id_food": 12,
+          "id_ingredient": 24,
+          "quantity": "500",
+          "note": null,
+          "ingredients": {
+            "id_ingredient": 24,
+            "name": "Rau muống",
+            "unit": "g",
+            "created_at": "2026-10-05T21:52:02.000Z",
+            "updated_at": "2026-10-05T21:52:02.000Z"
+          }
+        }
+      ],
+      "recipe_steps": [
+        {
+          "id_recipe_step": 34,
+          "id_food": 12,
+          "step_number": 1,
+          "instruction": "Nhặt và rửa sạch rau muống."
+        },
+        {
+          "id_recipe_step": 35,
+          "id_food": 12,
+          "step_number": 2,
+          "instruction": "Phi thơm tỏi với dầu ăn."
+        },
+        {
+          "id_recipe_step": 36,
+          "id_food": 12,
+          "step_number": 3,
+          "instruction": "Cho rau muống vào xào nhanh trên lửa lớn."
+        }
+      ]
+    },
+    {
+      "id_food": 13,
+      "id_category": 3,
+      "name": "Cải thìa xào tỏi",
+      "slug": "cai-thia-xao-toi",
+      "description": "Cải thìa xào tỏi đơn giản và dễ nấu.",
+      "image": "/images/foods/cai-thia-xao-toi.jpg",
+      "cooking_time": 15,
+      "servings": 3,
+      "status": "active",
+      "created_at": "2026-10-05T21:52:02.000Z",
+      "updated_at": "2026-10-05T21:52:02.000Z",
+      "food_ingredients": [
+        {
+          "id_food_ingredient": 62,
+          "id_food": 13,
+          "id_ingredient": 26,
+          "quantity": "500",
+          "note": null,
+          "ingredients": {
+            "id_ingredient": 26,
+            "name": "Cải thìa",
+            "unit": "g",
+            "created_at": "2026-10-05T21:52:02.000Z",
+            "updated_at": "2026-10-05T21:52:02.000Z"
+          }
+        }
+      ],
+      "recipe_steps": [
+        {
+          "id_recipe_step": 37,
+          "id_food": 13,
+          "step_number": 1,
+          "instruction": "Rửa sạch cải thìa và để ráo."
+        },
+        {
+          "id_recipe_step": 38,
+          "id_food": 13,
+          "step_number": 2,
+          "instruction": "Phi thơm tỏi với dầu ăn."
+        },
+        {
+          "id_recipe_step": 39,
+          "id_food": 13,
+          "step_number": 3,
+          "instruction": "Xào cải thìa trên lửa lớn và nêm gia vị."
+        }
+      ]
+    },
+    {
+      "id_food": 14,
+      "id_category": 3,
+      "name": "Đậu que xào tỏi",
+      "slug": "dau-que-xao-toi",
+      "description": "Đậu que xào tỏi giòn và thơm.",
+      "image": "/images/foods/dau-que-xao-toi.jpg",
+      "cooking_time": 20,
+      "servings": 3,
+      "status": "active",
+      "created_at": "2026-10-05T21:52:02.000Z",
+      "updated_at": "2026-10-05T21:52:02.000Z",
+      "food_ingredients": [
+        {
+          "id_food_ingredient": 66,
+          "id_food": 14,
+          "id_ingredient": 27,
+          "quantity": "500",
+          "note": null,
+          "ingredients": {
+            "id_ingredient": 27,
+            "name": "Đậu que",
+            "unit": "g",
+            "created_at": "2026-10-05T21:52:02.000Z",
+            "updated_at": "2026-10-05T21:52:02.000Z"
+          }
+        }
+      ],
+      "recipe_steps": [
+        {
+          "id_recipe_step": 40,
+          "id_food": 14,
+          "step_number": 1,
+          "instruction": "Rửa sạch đậu que và cắt khúc."
+        },
+        {
+          "id_recipe_step": 41,
+          "id_food": 14,
+          "step_number": 2,
+          "instruction": "Phi thơm tỏi rồi cho đậu que vào."
+        },
+        {
+          "id_recipe_step": 42,
+          "id_food": 14,
+          "step_number": 3,
+          "instruction": "Xào đến khi đậu chín và nêm gia vị."
+        }
+      ]
+    },
+    {
+      "id_food": 15,
+      "id_category": 6,
+      "name": "Rau củ luộc",
+      "slug": "rau-cu-luoc",
+      "description": "Rau củ luộc đơn giản dùng trong bữa cơm gia đình.",
+      "image": "/images/foods/rau-cu-luoc.jpg",
+      "cooking_time": 20,
+      "servings": 4,
+      "status": "active",
+      "created_at": "2026-10-05T21:52:02.000Z",
+      "updated_at": "2026-10-05T21:52:02.000Z",
+      "food_ingredients": [
+        {
+          "id_food_ingredient": 70,
+          "id_food": 15,
+          "id_ingredient": 28,
+          "quantity": "200",
+          "note": null,
+          "ingredients": {
+            "id_ingredient": 28,
+            "name": "Cà rốt",
+            "unit": "g",
+            "created_at": "2026-10-05T21:52:02.000Z",
+            "updated_at": "2026-10-05T21:52:02.000Z"
+          }
+        },
+        {
+          "id_food_ingredient": 71,
+          "id_food": 15,
+          "id_ingredient": 29,
+          "quantity": "300",
+          "note": null,
+          "ingredients": {
+            "id_ingredient": 29,
+            "name": "Bông cải xanh",
+            "unit": "g",
+            "created_at": "2026-10-05T21:52:02.000Z",
+            "updated_at": "2026-10-05T21:52:02.000Z"
+          }
+        },
+        {
+          "id_food_ingredient": 72,
+          "id_food": 15,
+          "id_ingredient": 27,
+          "quantity": "200",
+          "note": null,
+          "ingredients": {
+            "id_ingredient": 27,
+            "name": "Đậu que",
+            "unit": "g",
+            "created_at": "2026-10-05T21:52:02.000Z",
+            "updated_at": "2026-10-05T21:52:02.000Z"
+          }
+        }
+      ],
+      "recipe_steps": [
+        {
+          "id_recipe_step": 43,
+          "id_food": 15,
+          "step_number": 1,
+          "instruction": "Rửa sạch và cắt rau củ thành miếng vừa ăn."
+        },
+        {
+          "id_recipe_step": 44,
+          "id_food": 15,
+          "step_number": 2,
+          "instruction": "Đun sôi nước và thêm một ít muối."
+        },
+        {
+          "id_recipe_step": 45,
+          "id_food": 15,
+          "step_number": 3,
+          "instruction": "Cho rau củ vào luộc vừa chín rồi vớt ra."
+        }
+      ]
+    },
+    {
+      "id_food": 16,
+      "id_category": 6,
+      "name": "Thịt ba chỉ luộc",
+      "slug": "thit-ba-chi-luoc",
+      "description": "Thịt ba chỉ luộc mềm dùng cùng nước mắm.",
+      "image": "/images/foods/thit-ba-chi-luoc.jpg",
+      "cooking_time": 35,
+      "servings": 4,
+      "status": "active",
+      "created_at": "2026-10-05T21:52:02.000Z",
+      "updated_at": "2026-10-05T21:52:02.000Z",
+      "food_ingredients": [
+        {
+          "id_food_ingredient": 74,
+          "id_food": 16,
+          "id_ingredient": 1,
+          "quantity": "500",
+          "note": null,
+          "ingredients": {
+            "id_ingredient": 1,
+            "name": "Thịt ba chỉ",
+            "unit": "g",
+            "created_at": "2026-10-05T21:52:02.000Z",
+            "updated_at": "2026-10-05T21:52:02.000Z"
+          }
+        }
+      ],
+      "recipe_steps": [
+        {
+          "id_recipe_step": 46,
+          "id_food": 16,
+          "step_number": 1,
+          "instruction": "Rửa sạch thịt ba chỉ."
+        },
+        {
+          "id_recipe_step": 47,
+          "id_food": 16,
+          "step_number": 2,
+          "instruction": "Đun nước cùng gừng và một ít muối."
+        },
+        {
+          "id_recipe_step": 48,
+          "id_food": 16,
+          "step_number": 3,
+          "instruction": "Luộc thịt chín rồi để nguội và thái lát."
+        }
+      ]
+    },
+    {
+      "id_food": 17,
+      "id_category": 1,
+      "name": "Đậu hũ sốt cà chua",
+      "slug": "dau-hu-sot-ca-chua",
+      "description": "Đậu hũ mềm sốt cùng cà chua.",
+      "image": "/images/foods/dau-hu-sot-ca-chua.jpg",
+      "cooking_time": 25,
+      "servings": 3,
+      "status": "active",
+      "created_at": "2026-10-05T21:52:02.000Z",
+      "updated_at": "2026-10-05T21:52:02.000Z",
+      "food_ingredients": [
+        {
+          "id_food_ingredient": 78,
+          "id_food": 17,
+          "id_ingredient": 30,
+          "quantity": "4",
+          "note": null,
+          "ingredients": {
+            "id_ingredient": 30,
+            "name": "Đậu hũ",
+            "unit": "miếng",
+            "created_at": "2026-10-05T21:52:02.000Z",
+            "updated_at": "2026-10-05T21:52:02.000Z"
+          }
+        },
+        {
+          "id_food_ingredient": 79,
+          "id_food": 17,
+          "id_ingredient": 19,
+          "quantity": "300",
+          "note": null,
+          "ingredients": {
+            "id_ingredient": 19,
+            "name": "Cà chua",
+            "unit": "g",
+            "created_at": "2026-10-05T21:52:02.000Z",
+            "updated_at": "2026-10-05T21:52:02.000Z"
+          }
+        }
+      ],
+      "recipe_steps": [
+        {
+          "id_recipe_step": 49,
+          "id_food": 17,
+          "step_number": 1,
+          "instruction": "Cắt đậu hũ thành miếng và chiên sơ."
+        },
+        {
+          "id_recipe_step": 50,
+          "id_food": 17,
+          "step_number": 2,
+          "instruction": "Xào cà chua đến khi mềm."
+        },
+        {
+          "id_recipe_step": 51,
+          "id_food": 17,
+          "step_number": 3,
+          "instruction": "Cho đậu hũ vào sốt cà chua và nêm gia vị."
+        }
+      ]
+    },
+    {
+      "id_food": 18,
+      "id_category": 5,
+      "name": "Gà chiên nước mắm",
+      "slug": "ga-chien-nuoc-mam",
+      "description": "Gà chiên vàng phủ sốt nước mắm tỏi.",
+      "image": "/images/foods/ga-chien-nuoc-mam.jpg",
+      "cooking_time": 40,
+      "servings": 4,
+      "status": "active",
+      "created_at": "2026-10-05T21:52:02.000Z",
+      "updated_at": "2026-10-05T21:52:02.000Z",
+      "food_ingredients": [
+        {
+          "id_food_ingredient": 83,
+          "id_food": 18,
+          "id_ingredient": 10,
+          "quantity": "600",
+          "note": null,
+          "ingredients": {
+            "id_ingredient": 10,
+            "name": "Thịt gà",
+            "unit": "g",
+            "created_at": "2026-10-05T21:52:02.000Z",
+            "updated_at": "2026-10-05T21:52:02.000Z"
+          }
+        }
+      ],
+      "recipe_steps": [
+        {
+          "id_recipe_step": 52,
+          "id_food": 18,
+          "step_number": 1,
+          "instruction": "Rửa sạch gà và để ráo."
+        },
+        {
+          "id_recipe_step": 53,
+          "id_food": 18,
+          "step_number": 2,
+          "instruction": "Chiên gà đến khi vàng giòn."
+        },
+        {
+          "id_recipe_step": 54,
+          "id_food": 18,
+          "step_number": 3,
+          "instruction": "Đảo gà với sốt nước mắm, đường và tỏi."
+        }
+      ]
+    },
+    {
+      "id_food": 19,
+      "id_category": 2,
+      "name": "Canh rau ngót thịt bằm",
+      "slug": "canh-rau-ngot-thit-bam",
+      "description": "Rau ngót nấu thịt bằm ngọt nước, dễ ăn cho bữa cơm gia đình.",
+      "image": "/images/foods/canh-rau-ngot-thit-bam.jpg",
+      "cooking_time": 25,
+      "servings": 4,
+      "status": "active",
+      "created_at": "2026-10-14T07:00:00.000Z",
+      "updated_at": "2026-10-14T07:00:00.000Z",
+      "food_ingredients": [
+        {
+          "id_food_ingredient": 99,
+          "id_food": 19,
+          "id_ingredient": 31,
+          "quantity": "300",
+          "note": null,
+          "ingredients": {
+            "id_ingredient": 31,
+            "name": "Rau ngót",
+            "unit": "g",
+            "created_at": "2026-10-14T07:00:00.000Z",
+            "updated_at": "2026-10-14T07:00:00.000Z"
+          }
+        },
+        {
+          "id_food_ingredient": 100,
+          "id_food": 19,
+          "id_ingredient": 22,
+          "quantity": "150",
+          "note": null,
+          "ingredients": {
+            "id_ingredient": 22,
+            "name": "Thịt heo bằm",
+            "unit": "g",
+            "created_at": "2026-10-05T21:52:02.000Z",
+            "updated_at": "2026-10-05T21:52:02.000Z"
+          }
+        }
+      ],
+      "recipe_steps": [
+        {
+          "id_recipe_step": 55,
+          "id_food": 19,
+          "step_number": 1,
+          "instruction": "Rửa sạch rau ngót, vò nhẹ cho rau mềm và thịt bằm ướp ít nước mắm."
+        },
+        {
+          "id_recipe_step": 56,
+          "id_food": 19,
+          "step_number": 2,
+          "instruction": "Phi thơm hành, xào thịt bằm săn rồi thêm nước vào đun sôi."
+        },
+        {
+          "id_recipe_step": 57,
+          "id_food": 19,
+          "step_number": 3,
+          "instruction": "Cho rau ngót vào nấu chín, nêm vừa ăn rồi tắt bếp."
+        }
+      ]
+    },
+    {
+      "id_food": 20,
+      "id_category": 2,
+      "name": "Canh mướp tôm",
+      "slug": "canh-muop-tom",
+      "description": "Canh mướp nấu tôm thanh ngọt, hợp những ngày cần món nhẹ bụng.",
+      "image": "/images/foods/canh-muop-tom.jpg",
+      "cooking_time": 20,
+      "servings": 4,
+      "status": "active",
+      "created_at": "2026-10-14T07:00:00.000Z",
+      "updated_at": "2026-10-14T07:00:00.000Z",
+      "food_ingredients": [
+        {
+          "id_food_ingredient": 101,
+          "id_food": 20,
+          "id_ingredient": 32,
+          "quantity": "300",
+          "note": null,
+          "ingredients": {
+            "id_ingredient": 32,
+            "name": "Mướp",
+            "unit": "g",
+            "created_at": "2026-10-14T07:00:00.000Z",
+            "updated_at": "2026-10-14T07:00:00.000Z"
+          }
+        },
+        {
+          "id_food_ingredient": 102,
+          "id_food": 20,
+          "id_ingredient": 33,
+          "quantity": "200",
+          "note": null,
+          "ingredients": {
+            "id_ingredient": 33,
+            "name": "Tôm",
+            "unit": "g",
+            "created_at": "2026-10-14T07:00:00.000Z",
+            "updated_at": "2026-10-14T07:00:00.000Z"
+          }
+        }
+      ],
+      "recipe_steps": [
+        {
+          "id_recipe_step": 58,
+          "id_food": 20,
+          "step_number": 1,
+          "instruction": "Gọt mướp, cắt miếng vừa ăn; tôm bóc vỏ và ướp nhẹ."
+        },
+        {
+          "id_recipe_step": 59,
+          "id_food": 20,
+          "step_number": 2,
+          "instruction": "Xào sơ tôm cho thơm rồi thêm nước vào đun sôi."
+        },
+        {
+          "id_recipe_step": 60,
+          "id_food": 20,
+          "step_number": 3,
+          "instruction": "Cho mướp vào nấu vừa chín, nêm gia vị và dùng nóng."
+        }
+      ]
+    },
+    {
+      "id_food": 21,
+      "id_category": 2,
+      "name": "Canh khổ qua nhồi thịt",
+      "slug": "canh-kho-qua-nhoi-thit",
+      "description": "Khổ qua nhồi thịt nấu mềm, vị đắng nhẹ và nước dùng trong.",
+      "image": "/images/foods/canh-kho-qua-nhoi-thit.jpg",
+      "cooking_time": 45,
+      "servings": 4,
+      "status": "active",
+      "created_at": "2026-10-14T07:00:00.000Z",
+      "updated_at": "2026-10-14T07:00:00.000Z",
+      "food_ingredients": [
+        {
+          "id_food_ingredient": 103,
+          "id_food": 21,
+          "id_ingredient": 34,
+          "quantity": "400",
+          "note": null,
+          "ingredients": {
+            "id_ingredient": 34,
+            "name": "Khổ qua",
+            "unit": "g",
+            "created_at": "2026-10-14T07:00:00.000Z",
+            "updated_at": "2026-10-14T07:00:00.000Z"
+          }
+        },
+        {
+          "id_food_ingredient": 104,
+          "id_food": 21,
+          "id_ingredient": 22,
+          "quantity": "250",
+          "note": null,
+          "ingredients": {
+            "id_ingredient": 22,
+            "name": "Thịt heo bằm",
+            "unit": "g",
+            "created_at": "2026-10-05T21:52:02.000Z",
+            "updated_at": "2026-10-05T21:52:02.000Z"
+          }
+        },
+        {
+          "id_food_ingredient": 105,
+          "id_food": 21,
+          "id_ingredient": 35,
+          "quantity": "50",
+          "note": null,
+          "ingredients": {
+            "id_ingredient": 35,
+            "name": "Bún tàu",
+            "unit": "g",
+            "created_at": "2026-10-14T07:00:00.000Z",
+            "updated_at": "2026-10-14T07:00:00.000Z"
+          }
+        }
+      ],
+      "recipe_steps": [
+        {
+          "id_recipe_step": 61,
+          "id_food": 21,
+          "step_number": 1,
+          "instruction": "Làm sạch khổ qua, bỏ ruột; trộn thịt bằm với bún tàu và gia vị."
+        },
+        {
+          "id_recipe_step": 62,
+          "id_food": 21,
+          "step_number": 2,
+          "instruction": "Nhồi nhân vào khổ qua rồi cho vào nồi nước đang sôi."
+        },
+        {
+          "id_recipe_step": 63,
+          "id_food": 21,
+          "step_number": 3,
+          "instruction": "Hầm đến khi khổ qua mềm, nêm lại nước dùng cho vừa ăn."
+        }
+      ]
+    },
+    {
+      "id_food": 22,
+      "id_category": 2,
+      "name": "Canh bí xanh tôm",
+      "slug": "canh-bi-xanh-tom",
+      "description": "Bí xanh mềm mát nấu cùng tôm, nước canh ngọt tự nhiên.",
+      "image": "/images/foods/canh-bi-xanh-tom.jpg",
+      "cooking_time": 25,
+      "servings": 4,
+      "status": "active",
+      "created_at": "2026-10-14T07:00:00.000Z",
+      "updated_at": "2026-10-14T07:00:00.000Z",
+      "food_ingredients": [
+        {
+          "id_food_ingredient": 106,
+          "id_food": 22,
+          "id_ingredient": 36,
+          "quantity": "400",
+          "note": null,
+          "ingredients": {
+            "id_ingredient": 36,
+            "name": "Bí xanh",
+            "unit": "g",
+            "created_at": "2026-10-14T07:00:00.000Z",
+            "updated_at": "2026-10-14T07:00:00.000Z"
+          }
+        },
+        {
+          "id_food_ingredient": 107,
+          "id_food": 22,
+          "id_ingredient": 33,
+          "quantity": "150",
+          "note": null,
+          "ingredients": {
+            "id_ingredient": 33,
+            "name": "Tôm",
+            "unit": "g",
+            "created_at": "2026-10-14T07:00:00.000Z",
+            "updated_at": "2026-10-14T07:00:00.000Z"
+          }
+        }
+      ],
+      "recipe_steps": [
+        {
+          "id_recipe_step": 64,
+          "id_food": 22,
+          "step_number": 1,
+          "instruction": "Gọt bí xanh, cắt lát; tôm làm sạch và băm hoặc để nguyên con."
+        },
+        {
+          "id_recipe_step": 65,
+          "id_food": 22,
+          "step_number": 2,
+          "instruction": "Xào sơ tôm rồi thêm nước vào nấu sôi."
+        },
+        {
+          "id_recipe_step": 66,
+          "id_food": 22,
+          "step_number": 3,
+          "instruction": "Cho bí xanh vào nấu mềm, nêm gia vị và rắc tiêu nếu thích."
+        }
+      ]
+    },
+    {
+      "id_food": 23,
+      "id_category": 2,
+      "name": "Canh rong biển đậu hũ",
+      "slug": "canh-rong-bien-dau-hu",
+      "description": "Rong biển và đậu hũ mềm tạo món canh nhẹ, nhanh và thanh.",
+      "image": "/images/foods/canh-rong-bien-dau-hu.jpg",
+      "cooking_time": 15,
+      "servings": 3,
+      "status": "active",
+      "created_at": "2026-10-14T07:00:00.000Z",
+      "updated_at": "2026-10-14T07:00:00.000Z",
+      "food_ingredients": [
+        {
+          "id_food_ingredient": 108,
+          "id_food": 23,
+          "id_ingredient": 37,
+          "quantity": "30",
+          "note": null,
+          "ingredients": {
+            "id_ingredient": 37,
+            "name": "Rong biển",
+            "unit": "g",
+            "created_at": "2026-10-14T07:00:00.000Z",
+            "updated_at": "2026-10-14T07:00:00.000Z"
+          }
+        },
+        {
+          "id_food_ingredient": 109,
+          "id_food": 23,
+          "id_ingredient": 30,
+          "quantity": "2",
+          "note": null,
+          "ingredients": {
+            "id_ingredient": 30,
+            "name": "Đậu hũ",
+            "unit": "miếng",
+            "created_at": "2026-10-05T21:52:02.000Z",
+            "updated_at": "2026-10-05T21:52:02.000Z"
+          }
+        }
+      ],
+      "recipe_steps": [
+        {
+          "id_recipe_step": 67,
+          "id_food": 23,
+          "step_number": 1,
+          "instruction": "Ngâm rong biển cho nở, rửa sạch; cắt đậu hũ thành miếng nhỏ."
+        },
+        {
+          "id_recipe_step": 68,
+          "id_food": 23,
+          "step_number": 2,
+          "instruction": "Đun nước dùng, cho đậu hũ vào nấu nhẹ lửa."
+        },
+        {
+          "id_recipe_step": 69,
+          "id_food": 23,
+          "step_number": 3,
+          "instruction": "Thêm rong biển, nêm vừa ăn và tắt bếp ngay khi sôi lại."
+        }
+      ]
+    },
+    {
+      "id_food": 24,
+      "id_category": 2,
+      "name": "Canh khoai mỡ thịt bằm",
+      "slug": "canh-khoai-mo-thit-bam",
+      "description": "Khoai mỡ sánh mềm nấu thịt bằm, thơm béo và dễ ăn.",
+      "image": "/images/foods/canh-khoai-mo-thit-bam.jpg",
+      "cooking_time": 30,
+      "servings": 4,
+      "status": "active",
+      "created_at": "2026-10-14T07:00:00.000Z",
+      "updated_at": "2026-10-14T07:00:00.000Z",
+      "food_ingredients": [
+        {
+          "id_food_ingredient": 110,
+          "id_food": 24,
+          "id_ingredient": 38,
+          "quantity": "400",
+          "note": null,
+          "ingredients": {
+            "id_ingredient": 38,
+            "name": "Khoai mỡ",
+            "unit": "g",
+            "created_at": "2026-10-14T07:00:00.000Z",
+            "updated_at": "2026-10-14T07:00:00.000Z"
+          }
+        },
+        {
+          "id_food_ingredient": 111,
+          "id_food": 24,
+          "id_ingredient": 22,
+          "quantity": "150",
+          "note": null,
+          "ingredients": {
+            "id_ingredient": 22,
+            "name": "Thịt heo bằm",
+            "unit": "g",
+            "created_at": "2026-10-05T21:52:02.000Z",
+            "updated_at": "2026-10-05T21:52:02.000Z"
+          }
+        }
+      ],
+      "recipe_steps": [
+        {
+          "id_recipe_step": 70,
+          "id_food": 24,
+          "step_number": 1,
+          "instruction": "Gọt khoai mỡ, bào hoặc đập dập; thịt bằm ướp ít gia vị."
+        },
+        {
+          "id_recipe_step": 71,
+          "id_food": 24,
+          "step_number": 2,
+          "instruction": "Xào thịt bằm cho săn rồi thêm nước vào đun sôi."
+        },
+        {
+          "id_recipe_step": 72,
+          "id_food": 24,
+          "step_number": 3,
+          "instruction": "Cho khoai mỡ vào khuấy nhẹ đến khi canh sánh và chín mềm."
+        }
+      ]
+    },
+    {
+      "id_food": 25,
+      "id_category": 2,
+      "name": "Canh cải chua sườn",
+      "slug": "canh-cai-chua-suon",
+      "description": "Cải chua nấu sườn có vị chua dịu, ăn rất bắt cơm.",
+      "image": "/images/foods/canh-cai-chua-suon.jpg",
+      "cooking_time": 40,
+      "servings": 4,
+      "status": "active",
+      "created_at": "2026-10-14T07:00:00.000Z",
+      "updated_at": "2026-10-14T07:00:00.000Z",
+      "food_ingredients": [
+        {
+          "id_food_ingredient": 112,
+          "id_food": 25,
+          "id_ingredient": 39,
+          "quantity": "300",
+          "note": null,
+          "ingredients": {
+            "id_ingredient": 39,
+            "name": "Cải chua",
+            "unit": "g",
+            "created_at": "2026-10-14T07:00:00.000Z",
+            "updated_at": "2026-10-14T07:00:00.000Z"
+          }
+        },
+        {
+          "id_food_ingredient": 113,
+          "id_food": 25,
+          "id_ingredient": 11,
+          "quantity": "300",
+          "note": null,
+          "ingredients": {
+            "id_ingredient": 11,
+            "name": "Sườn non",
+            "unit": "g",
+            "created_at": "2026-10-05T21:52:02.000Z",
+            "updated_at": "2026-10-05T21:52:02.000Z"
+          }
+        }
+      ],
+      "recipe_steps": [
+        {
+          "id_recipe_step": 73,
+          "id_food": 25,
+          "step_number": 1,
+          "instruction": "Chần sườn qua nước sôi, rửa sạch bọt; cải chua cắt vừa ăn."
+        },
+        {
+          "id_recipe_step": 74,
+          "id_food": 25,
+          "step_number": 2,
+          "instruction": "Hầm sườn đến khi mềm và nước dùng ngọt."
+        },
+        {
+          "id_recipe_step": 75,
+          "id_food": 25,
+          "step_number": 3,
+          "instruction": "Cho cải chua vào nấu thêm vài phút, nêm lại cho vừa miệng."
+        }
+      ]
+    },
+    {
+      "id_food": 26,
+      "id_category": 7,
+      "name": "Cá lóc kho tiêu",
+      "slug": "ca-loc-kho-tieu",
+      "description": "Cá lóc kho tiêu cay thơm, nước kho sánh đậm vị.",
+      "image": "/images/foods/ca-loc-kho-tieu.jpg",
+      "cooking_time": 45,
+      "servings": 4,
+      "status": "active",
+      "created_at": "2026-10-14T07:00:00.000Z",
+      "updated_at": "2026-10-14T07:00:00.000Z",
+      "food_ingredients": [
+        {
+          "id_food_ingredient": 114,
+          "id_food": 26,
+          "id_ingredient": 17,
+          "quantity": "500",
+          "note": null,
+          "ingredients": {
+            "id_ingredient": 17,
+            "name": "Cá lóc",
+            "unit": "g",
+            "created_at": "2026-10-05T21:52:02.000Z",
+            "updated_at": "2026-10-05T21:52:02.000Z"
+          }
+        },
+        {
+          "id_food_ingredient": 115,
+          "id_food": 26,
+          "id_ingredient": 40,
+          "quantity": "5",
+          "note": null,
+          "ingredients": {
+            "id_ingredient": 40,
+            "name": "Tiêu",
+            "unit": "g",
+            "created_at": "2026-10-14T07:00:00.000Z",
+            "updated_at": "2026-10-14T07:00:00.000Z"
+          }
+        },
+        {
+          "id_food_ingredient": 116,
+          "id_food": 26,
+          "id_ingredient": 41,
+          "quantity": "20",
+          "note": null,
+          "ingredients": {
+            "id_ingredient": 41,
+            "name": "Hành tím",
+            "unit": "g",
+            "created_at": "2026-10-14T07:00:00.000Z",
+            "updated_at": "2026-10-14T07:00:00.000Z"
+          }
+        }
+      ],
+      "recipe_steps": [
+        {
+          "id_recipe_step": 76,
+          "id_food": 26,
+          "step_number": 1,
+          "instruction": "Cá lóc làm sạch, cắt khúc và ướp với nước mắm, tiêu, hành tím."
+        },
+        {
+          "id_recipe_step": 77,
+          "id_food": 26,
+          "step_number": 2,
+          "instruction": "Thắng màu nhẹ rồi cho cá vào kho với lửa vừa."
+        },
+        {
+          "id_recipe_step": 78,
+          "id_food": 26,
+          "step_number": 3,
+          "instruction": "Kho đến khi nước sánh lại, rắc thêm tiêu và dùng với cơm nóng."
+        }
+      ]
+    },
+    {
+      "id_food": 27,
+      "id_category": 7,
+      "name": "Thịt kho mắm ruốc",
+      "slug": "thit-kho-mam-ruoc",
+      "description": "Thịt ba chỉ kho mắm ruốc thơm sả, mặn ngọt đậm đà.",
+      "image": "/images/foods/thit-kho-mam-ruoc.jpg",
+      "cooking_time": 35,
+      "servings": 4,
+      "status": "active",
+      "created_at": "2026-10-14T07:00:00.000Z",
+      "updated_at": "2026-10-14T07:00:00.000Z",
+      "food_ingredients": [
+        {
+          "id_food_ingredient": 117,
+          "id_food": 27,
+          "id_ingredient": 1,
+          "quantity": "500",
+          "note": null,
+          "ingredients": {
+            "id_ingredient": 1,
+            "name": "Thịt ba chỉ",
+            "unit": "g",
+            "created_at": "2026-10-05T21:52:02.000Z",
+            "updated_at": "2026-10-05T21:52:02.000Z"
+          }
+        },
+        {
+          "id_food_ingredient": 118,
+          "id_food": 27,
+          "id_ingredient": 42,
+          "quantity": "30",
+          "note": null,
+          "ingredients": {
+            "id_ingredient": 42,
+            "name": "Mắm ruốc",
+            "unit": "g",
+            "created_at": "2026-10-14T07:00:00.000Z",
+            "updated_at": "2026-10-14T07:00:00.000Z"
+          }
+        },
+        {
+          "id_food_ingredient": 119,
+          "id_food": 27,
+          "id_ingredient": 43,
+          "quantity": "40",
+          "note": null,
+          "ingredients": {
+            "id_ingredient": 43,
+            "name": "Sả",
+            "unit": "g",
+            "created_at": "2026-10-14T07:00:00.000Z",
+            "updated_at": "2026-10-14T07:00:00.000Z"
+          }
+        }
+      ],
+      "recipe_steps": [
+        {
+          "id_recipe_step": 79,
+          "id_food": 27,
+          "step_number": 1,
+          "instruction": "Thịt ba chỉ thái nhỏ, sả băm nhuyễn và mắm ruốc pha loãng."
+        },
+        {
+          "id_recipe_step": 80,
+          "id_food": 27,
+          "step_number": 2,
+          "instruction": "Rang thịt cho ra bớt mỡ rồi cho sả vào đảo thơm."
+        },
+        {
+          "id_recipe_step": 81,
+          "id_food": 27,
+          "step_number": 3,
+          "instruction": "Thêm mắm ruốc, đường và chút nước, kho đến khi thịt thấm."
+        }
+      ]
+    },
+    {
+      "id_food": 28,
+      "id_category": 7,
+      "name": "Tôm rim thịt ba chỉ",
+      "slug": "tom-rim-thit-ba-chi",
+      "description": "Tôm rim cùng thịt ba chỉ có màu đẹp, vị mặn ngọt hài hòa.",
+      "image": "/images/foods/tom-rim-thit-ba-chi.jpg",
+      "cooking_time": 30,
+      "servings": 4,
+      "status": "active",
+      "created_at": "2026-10-14T07:00:00.000Z",
+      "updated_at": "2026-10-14T07:00:00.000Z",
+      "food_ingredients": [
+        {
+          "id_food_ingredient": 120,
+          "id_food": 28,
+          "id_ingredient": 33,
+          "quantity": "300",
+          "note": null,
+          "ingredients": {
+            "id_ingredient": 33,
+            "name": "Tôm",
+            "unit": "g",
+            "created_at": "2026-10-14T07:00:00.000Z",
+            "updated_at": "2026-10-14T07:00:00.000Z"
+          }
+        },
+        {
+          "id_food_ingredient": 121,
+          "id_food": 28,
+          "id_ingredient": 1,
+          "quantity": "200",
+          "note": null,
+          "ingredients": {
+            "id_ingredient": 1,
+            "name": "Thịt ba chỉ",
+            "unit": "g",
+            "created_at": "2026-10-05T21:52:02.000Z",
+            "updated_at": "2026-10-05T21:52:02.000Z"
+          }
+        }
+      ],
+      "recipe_steps": [
+        {
+          "id_recipe_step": 82,
+          "id_food": 28,
+          "step_number": 1,
+          "instruction": "Tôm rửa sạch, thịt ba chỉ thái mỏng và ướp với nước mắm."
+        },
+        {
+          "id_recipe_step": 83,
+          "id_food": 28,
+          "step_number": 2,
+          "instruction": "Rang thịt trước cho săn rồi cho tôm vào đảo đều."
+        },
+        {
+          "id_recipe_step": 84,
+          "id_food": 28,
+          "step_number": 3,
+          "instruction": "Rim nhỏ lửa đến khi nước sốt áo đều tôm thịt."
+        }
+      ]
+    },
+    {
+      "id_food": 29,
+      "id_category": 7,
+      "name": "Sườn kho thơm",
+      "slug": "suon-kho-thom",
+      "description": "Sườn kho thơm mềm, vị chua ngọt nhẹ rất đưa cơm.",
+      "image": "/images/foods/suon-kho-thom.jpg",
+      "cooking_time": 40,
+      "servings": 4,
+      "status": "active",
+      "created_at": "2026-10-14T07:00:00.000Z",
+      "updated_at": "2026-10-14T07:00:00.000Z",
+      "food_ingredients": [
+        {
+          "id_food_ingredient": 122,
+          "id_food": 29,
+          "id_ingredient": 11,
+          "quantity": "500",
+          "note": null,
+          "ingredients": {
+            "id_ingredient": 11,
+            "name": "Sườn non",
+            "unit": "g",
+            "created_at": "2026-10-05T21:52:02.000Z",
+            "updated_at": "2026-10-05T21:52:02.000Z"
+          }
+        },
+        {
+          "id_food_ingredient": 123,
+          "id_food": 29,
+          "id_ingredient": 13,
+          "quantity": "200",
+          "note": null,
+          "ingredients": {
+            "id_ingredient": 13,
+            "name": "Thơm",
+            "unit": "g",
+            "created_at": "2026-10-05T21:52:02.000Z",
+            "updated_at": "2026-10-05T21:52:02.000Z"
+          }
+        }
+      ],
+      "recipe_steps": [
+        {
+          "id_recipe_step": 85,
+          "id_food": 29,
+          "step_number": 1,
+          "instruction": "Chặt sườn vừa ăn, chần sơ và ướp gia vị."
+        },
+        {
+          "id_recipe_step": 86,
+          "id_food": 29,
+          "step_number": 2,
+          "instruction": "Áp chảo sườn cho săn rồi thêm thơm và ít nước."
+        },
+        {
+          "id_recipe_step": 87,
+          "id_food": 29,
+          "step_number": 3,
+          "instruction": "Kho nhỏ lửa đến khi sườn mềm, nước kho sánh lại."
+        }
+      ]
+    },
+    {
+      "id_food": 30,
+      "id_category": 7,
+      "name": "Bò kho cà rốt",
+      "slug": "bo-kho-ca-rot",
+      "description": "Bò kho cà rốt thơm mềm, dùng với cơm hoặc bánh mì đều ngon.",
+      "image": "/images/foods/bo-kho-ca-rot.jpg",
+      "cooking_time": 60,
+      "servings": 4,
+      "status": "active",
+      "created_at": "2026-10-14T07:00:00.000Z",
+      "updated_at": "2026-10-20T15:56:41.000Z",
+      "food_ingredients": [
+        {
+          "id_food_ingredient": 124,
+          "id_food": 30,
+          "id_ingredient": 15,
+          "quantity": "500",
+          "note": null,
+          "ingredients": {
+            "id_ingredient": 15,
+            "name": "Thịt bò",
+            "unit": "g",
+            "created_at": "2026-10-05T21:52:02.000Z",
+            "updated_at": "2026-10-05T21:52:02.000Z"
+          }
+        },
+        {
+          "id_food_ingredient": 125,
+          "id_food": 30,
+          "id_ingredient": 28,
+          "quantity": "300",
+          "note": null,
+          "ingredients": {
+            "id_ingredient": 28,
+            "name": "Cà rốt",
+            "unit": "g",
+            "created_at": "2026-10-05T21:52:02.000Z",
+            "updated_at": "2026-10-05T21:52:02.000Z"
+          }
+        },
+        {
+          "id_food_ingredient": 126,
+          "id_food": 30,
+          "id_ingredient": 43,
+          "quantity": "30",
+          "note": null,
+          "ingredients": {
+            "id_ingredient": 43,
+            "name": "Sả",
+            "unit": "g",
+            "created_at": "2026-10-14T07:00:00.000Z",
+            "updated_at": "2026-10-14T07:00:00.000Z"
+          }
+        }
+      ],
+      "recipe_steps": [
+        {
+          "id_recipe_step": 88,
+          "id_food": 30,
+          "step_number": 1,
+          "instruction": "Thịt bò cắt miếng, ướp với sả và gia vị bò kho."
+        },
+        {
+          "id_recipe_step": 89,
+          "id_food": 30,
+          "step_number": 2,
+          "instruction": "Xào thịt cho săn rồi thêm nước hầm đến khi mềm."
+        },
+        {
+          "id_recipe_step": 90,
+          "id_food": 30,
+          "step_number": 3,
+          "instruction": "Cho cà rốt vào nấu chín, nêm lại và dùng nóng."
+        }
+      ]
+    },
+    {
+      "id_food": 31,
+      "id_category": 7,
+      "name": "Cá basa kho nghệ",
+      "slug": "ca-basa-kho-nghe",
+      "description": "Cá basa kho nghệ có màu vàng đẹp, thơm và ít tanh.",
+      "image": "/images/foods/ca-basa-kho-nghe.jpg",
+      "cooking_time": 35,
+      "servings": 4,
+      "status": "active",
+      "created_at": "2026-10-14T07:00:00.000Z",
+      "updated_at": "2026-10-14T07:00:00.000Z",
+      "food_ingredients": [
+        {
+          "id_food_ingredient": 127,
+          "id_food": 31,
+          "id_ingredient": 8,
+          "quantity": "500",
+          "note": null,
+          "ingredients": {
+            "id_ingredient": 8,
+            "name": "Cá basa",
+            "unit": "g",
+            "created_at": "2026-10-05T21:52:02.000Z",
+            "updated_at": "2026-10-05T21:52:02.000Z"
+          }
+        },
+        {
+          "id_food_ingredient": 128,
+          "id_food": 31,
+          "id_ingredient": 44,
+          "quantity": "30",
+          "note": null,
+          "ingredients": {
+            "id_ingredient": 44,
+            "name": "Nghệ",
+            "unit": "g",
+            "created_at": "2026-10-14T07:00:00.000Z",
+            "updated_at": "2026-10-14T07:00:00.000Z"
+          }
+        }
+      ],
+      "recipe_steps": [
+        {
+          "id_recipe_step": 91,
+          "id_food": 31,
+          "step_number": 1,
+          "instruction": "Cá basa rửa sạch, cắt khúc và ướp với nghệ, nước mắm."
+        },
+        {
+          "id_recipe_step": 92,
+          "id_food": 31,
+          "step_number": 2,
+          "instruction": "Cho cá vào nồi cùng ít nước màu và kho lửa nhỏ."
+        },
+        {
+          "id_recipe_step": 93,
+          "id_food": 31,
+          "step_number": 3,
+          "instruction": "Kho đến khi cá thấm, nước kho sệt và thơm mùi nghệ."
+        }
+      ]
+    },
+    {
+      "id_food": 32,
+      "id_category": 7,
+      "name": "Gà kho sả ớt",
+      "slug": "ga-kho-sa-ot",
+      "description": "Gà kho sả ớt thơm cay nhẹ, hợp bữa cơm ngày mưa.",
+      "image": "/images/foods/ga-kho-sa-ot.jpg",
+      "cooking_time": 40,
+      "servings": 4,
+      "status": "active",
+      "created_at": "2026-10-14T07:00:00.000Z",
+      "updated_at": "2026-10-14T07:00:00.000Z",
+      "food_ingredients": [
+        {
+          "id_food_ingredient": 129,
+          "id_food": 32,
+          "id_ingredient": 10,
+          "quantity": "600",
+          "note": null,
+          "ingredients": {
+            "id_ingredient": 10,
+            "name": "Thịt gà",
+            "unit": "g",
+            "created_at": "2026-10-05T21:52:02.000Z",
+            "updated_at": "2026-10-05T21:52:02.000Z"
+          }
+        },
+        {
+          "id_food_ingredient": 130,
+          "id_food": 32,
+          "id_ingredient": 43,
+          "quantity": "50",
+          "note": null,
+          "ingredients": {
+            "id_ingredient": 43,
+            "name": "Sả",
+            "unit": "g",
+            "created_at": "2026-10-14T07:00:00.000Z",
+            "updated_at": "2026-10-14T07:00:00.000Z"
+          }
+        },
+        {
+          "id_food_ingredient": 131,
+          "id_food": 32,
+          "id_ingredient": 12,
+          "quantity": "100",
+          "note": null,
+          "ingredients": {
+            "id_ingredient": 12,
+            "name": "Ớt chuông",
+            "unit": "g",
+            "created_at": "2026-10-05T21:52:02.000Z",
+            "updated_at": "2026-10-05T21:52:02.000Z"
+          }
+        }
+      ],
+      "recipe_steps": [
+        {
+          "id_recipe_step": 94,
+          "id_food": 32,
+          "step_number": 1,
+          "instruction": "Gà chặt miếng vừa ăn, ướp với sả băm và gia vị."
+        },
+        {
+          "id_recipe_step": 95,
+          "id_food": 32,
+          "step_number": 2,
+          "instruction": "Phi thơm sả rồi cho gà vào đảo săn."
+        },
+        {
+          "id_recipe_step": 96,
+          "id_food": 32,
+          "step_number": 3,
+          "instruction": "Kho nhỏ lửa đến khi gà chín mềm và nước kho cạn vừa."
+        }
+      ]
+    },
+    {
+      "id_food": 33,
+      "id_category": 4,
+      "name": "Mực xào cần tây",
+      "slug": "muc-xao-can-tay",
+      "description": "Mực xào cần tây giòn ngọt, thơm mùi rau cần và hành tây.",
+      "image": "/images/foods/muc-xao-can-tay.jpg",
+      "cooking_time": 20,
+      "servings": 3,
+      "status": "active",
+      "created_at": "2026-10-14T07:00:00.000Z",
+      "updated_at": "2026-10-20T15:56:41.000Z",
+      "food_ingredients": [
+        {
+          "id_food_ingredient": 132,
+          "id_food": 33,
+          "id_ingredient": 45,
+          "quantity": "400",
+          "note": null,
+          "ingredients": {
+            "id_ingredient": 45,
+            "name": "Mực",
+            "unit": "g",
+            "created_at": "2026-10-14T07:00:00.000Z",
+            "updated_at": "2026-10-14T07:00:00.000Z"
+          }
+        },
+        {
+          "id_food_ingredient": 133,
+          "id_food": 33,
+          "id_ingredient": 46,
+          "quantity": "150",
+          "note": null,
+          "ingredients": {
+            "id_ingredient": 46,
+            "name": "Cần tây",
+            "unit": "g",
+            "created_at": "2026-10-14T07:00:00.000Z",
+            "updated_at": "2026-10-14T07:00:00.000Z"
+          }
+        },
+        {
+          "id_food_ingredient": 134,
+          "id_food": 33,
+          "id_ingredient": 14,
+          "quantity": "100",
+          "note": null,
+          "ingredients": {
+            "id_ingredient": 14,
+            "name": "Hành tây",
+            "unit": "g",
+            "created_at": "2026-10-05T21:52:02.000Z",
+            "updated_at": "2026-10-05T21:52:02.000Z"
+          }
+        }
+      ],
+      "recipe_steps": [
+        {
+          "id_recipe_step": 97,
+          "id_food": 33,
+          "step_number": 1,
+          "instruction": "Làm sạch mực, khứa nhẹ và cắt miếng; cần tây cắt khúc."
+        },
+        {
+          "id_recipe_step": 98,
+          "id_food": 33,
+          "step_number": 2,
+          "instruction": "Xào mực nhanh trên lửa lớn cho săn."
+        },
+        {
+          "id_recipe_step": 99,
+          "id_food": 33,
+          "step_number": 3,
+          "instruction": "Thêm cần tây, hành tây vào đảo đều rồi nêm vừa ăn."
+        }
+      ]
+    },
+    {
+      "id_food": 34,
+      "id_category": 4,
+      "name": "Tôm xào bông cải",
+      "slug": "tom-xao-bong-cai",
+      "description": "Tôm xào bông cải xanh giòn, màu sắc bắt mắt và giàu dinh dưỡng.",
+      "image": "/images/foods/tom-xao-bong-cai.jpg",
+      "cooking_time": 25,
+      "servings": 3,
+      "status": "active",
+      "created_at": "2026-10-14T07:00:00.000Z",
+      "updated_at": "2026-10-14T07:00:00.000Z",
+      "food_ingredients": [
+        {
+          "id_food_ingredient": 135,
+          "id_food": 34,
+          "id_ingredient": 33,
+          "quantity": "300",
+          "note": null,
+          "ingredients": {
+            "id_ingredient": 33,
+            "name": "Tôm",
+            "unit": "g",
+            "created_at": "2026-10-14T07:00:00.000Z",
+            "updated_at": "2026-10-14T07:00:00.000Z"
+          }
+        },
+        {
+          "id_food_ingredient": 136,
+          "id_food": 34,
+          "id_ingredient": 29,
+          "quantity": "300",
+          "note": null,
+          "ingredients": {
+            "id_ingredient": 29,
+            "name": "Bông cải xanh",
+            "unit": "g",
+            "created_at": "2026-10-05T21:52:02.000Z",
+            "updated_at": "2026-10-05T21:52:02.000Z"
+          }
+        },
+        {
+          "id_food_ingredient": 137,
+          "id_food": 34,
+          "id_ingredient": 28,
+          "quantity": "100",
+          "note": null,
+          "ingredients": {
+            "id_ingredient": 28,
+            "name": "Cà rốt",
+            "unit": "g",
+            "created_at": "2026-10-05T21:52:02.000Z",
+            "updated_at": "2026-10-05T21:52:02.000Z"
+          }
+        }
+      ],
+      "recipe_steps": [
+        {
+          "id_recipe_step": 100,
+          "id_food": 34,
+          "step_number": 1,
+          "instruction": "Bông cải tách nhánh, chần sơ; tôm làm sạch."
+        },
+        {
+          "id_recipe_step": 101,
+          "id_food": 34,
+          "step_number": 2,
+          "instruction": "Xào tôm với tỏi cho thơm và vừa chín."
+        },
+        {
+          "id_recipe_step": 102,
+          "id_food": 34,
+          "step_number": 3,
+          "instruction": "Cho rau củ vào đảo nhanh, nêm gia vị rồi tắt bếp."
+        }
+      ]
+    },
+    {
+      "id_food": 35,
+      "id_category": 4,
+      "name": "Gà xào mướp",
+      "slug": "ga-xao-muop",
+      "description": "Thịt gà xào mướp mềm ngọt, chế biến nhanh cho bữa tối.",
+      "image": "/images/foods/ga-xao-muop.jpg",
+      "cooking_time": 25,
+      "servings": 3,
+      "status": "active",
+      "created_at": "2026-10-14T07:00:00.000Z",
+      "updated_at": "2026-10-14T07:00:00.000Z",
+      "food_ingredients": [
+        {
+          "id_food_ingredient": 138,
+          "id_food": 35,
+          "id_ingredient": 10,
+          "quantity": "350",
+          "note": null,
+          "ingredients": {
+            "id_ingredient": 10,
+            "name": "Thịt gà",
+            "unit": "g",
+            "created_at": "2026-10-05T21:52:02.000Z",
+            "updated_at": "2026-10-05T21:52:02.000Z"
+          }
+        },
+        {
+          "id_food_ingredient": 139,
+          "id_food": 35,
+          "id_ingredient": 32,
+          "quantity": "300",
+          "note": null,
+          "ingredients": {
+            "id_ingredient": 32,
+            "name": "Mướp",
+            "unit": "g",
+            "created_at": "2026-10-14T07:00:00.000Z",
+            "updated_at": "2026-10-14T07:00:00.000Z"
+          }
+        }
+      ],
+      "recipe_steps": [
+        {
+          "id_recipe_step": 103,
+          "id_food": 35,
+          "step_number": 1,
+          "instruction": "Thịt gà thái miếng mỏng, ướp với chút nước mắm."
+        },
+        {
+          "id_recipe_step": 104,
+          "id_food": 35,
+          "step_number": 2,
+          "instruction": "Xào gà cho săn rồi cho mướp vào đảo đều."
+        },
+        {
+          "id_recipe_step": 105,
+          "id_food": 35,
+          "step_number": 3,
+          "instruction": "Nêm lại gia vị, xào đến khi mướp vừa chín tới."
+        }
+      ]
+    },
+    {
+      "id_food": 36,
+      "id_category": 4,
+      "name": "Bò xào bông cải",
+      "slug": "bo-xao-bong-cai",
+      "description": "Bò xào bông cải mềm giòn, món nhanh gọn cho ngày bận.",
+      "image": "/images/foods/bo-xao-bong-cai.jpg",
+      "cooking_time": 25,
+      "servings": 3,
+      "status": "active",
+      "created_at": "2026-10-14T07:00:00.000Z",
+      "updated_at": "2026-10-14T07:00:00.000Z",
+      "food_ingredients": [
+        {
+          "id_food_ingredient": 140,
+          "id_food": 36,
+          "id_ingredient": 15,
+          "quantity": "400",
+          "note": null,
+          "ingredients": {
+            "id_ingredient": 15,
+            "name": "Thịt bò",
+            "unit": "g",
+            "created_at": "2026-10-05T21:52:02.000Z",
+            "updated_at": "2026-10-05T21:52:02.000Z"
+          }
+        },
+        {
+          "id_food_ingredient": 141,
+          "id_food": 36,
+          "id_ingredient": 29,
+          "quantity": "300",
+          "note": null,
+          "ingredients": {
+            "id_ingredient": 29,
+            "name": "Bông cải xanh",
+            "unit": "g",
+            "created_at": "2026-10-05T21:52:02.000Z",
+            "updated_at": "2026-10-05T21:52:02.000Z"
+          }
+        }
+      ],
+      "recipe_steps": [
+        {
+          "id_recipe_step": 106,
+          "id_food": 36,
+          "step_number": 1,
+          "instruction": "Thịt bò thái mỏng, ướp dầu hào và tiêu; bông cải chần sơ."
+        },
+        {
+          "id_recipe_step": 107,
+          "id_food": 36,
+          "step_number": 2,
+          "instruction": "Xào bò nhanh trên lửa lớn rồi trút ra."
+        },
+        {
+          "id_recipe_step": 108,
+          "id_food": 36,
+          "step_number": 3,
+          "instruction": "Xào bông cải, cho bò vào đảo lại và nêm vừa ăn."
+        }
+      ]
+    },
+    {
+      "id_food": 37,
+      "id_category": 4,
+      "name": "Nui xào bò",
+      "slug": "nui-xao-bo",
+      "description": "Nui xào bò sốt cà chua là món no bụng, hợp cả bữa sáng.",
+      "image": "/images/foods/nui-xao-bo.jpg",
+      "cooking_time": 30,
+      "servings": 3,
+      "status": "active",
+      "created_at": "2026-10-14T07:00:00.000Z",
+      "updated_at": "2026-10-14T07:00:00.000Z",
+      "food_ingredients": [
+        {
+          "id_food_ingredient": 142,
+          "id_food": 37,
+          "id_ingredient": 47,
+          "quantity": "250",
+          "note": null,
+          "ingredients": {
+            "id_ingredient": 47,
+            "name": "Nui",
+            "unit": "g",
+            "created_at": "2026-10-14T07:00:00.000Z",
+            "updated_at": "2026-10-14T07:00:00.000Z"
+          }
+        },
+        {
+          "id_food_ingredient": 143,
+          "id_food": 37,
+          "id_ingredient": 15,
+          "quantity": "250",
+          "note": null,
+          "ingredients": {
+            "id_ingredient": 15,
+            "name": "Thịt bò",
+            "unit": "g",
+            "created_at": "2026-10-05T21:52:02.000Z",
+            "updated_at": "2026-10-05T21:52:02.000Z"
+          }
+        },
+        {
+          "id_food_ingredient": 144,
+          "id_food": 37,
+          "id_ingredient": 19,
+          "quantity": "150",
+          "note": null,
+          "ingredients": {
+            "id_ingredient": 19,
+            "name": "Cà chua",
+            "unit": "g",
+            "created_at": "2026-10-05T21:52:02.000Z",
+            "updated_at": "2026-10-05T21:52:02.000Z"
+          }
+        }
+      ],
+      "recipe_steps": [
+        {
+          "id_recipe_step": 109,
+          "id_food": 37,
+          "step_number": 1,
+          "instruction": "Luộc nui vừa chín tới, xả nước lạnh và để ráo."
+        },
+        {
+          "id_recipe_step": 110,
+          "id_food": 37,
+          "step_number": 2,
+          "instruction": "Xào bò với cà chua cho thành sốt nhẹ."
+        },
+        {
+          "id_recipe_step": 111,
+          "id_food": 37,
+          "step_number": 3,
+          "instruction": "Cho nui vào đảo đều, nêm lại và dùng khi còn nóng."
+        }
+      ]
+    },
+    {
+      "id_food": 38,
+      "id_category": 4,
+      "name": "Cải chua xào trứng",
+      "slug": "cai-chua-xao-trung",
+      "description": "Cải chua xào trứng chua nhẹ, béo thơm và rất nhanh.",
+      "image": "/images/foods/cai-chua-xao-trung.jpg",
+      "cooking_time": 15,
+      "servings": 2,
+      "status": "active",
+      "created_at": "2026-10-14T07:00:00.000Z",
+      "updated_at": "2026-10-14T07:00:00.000Z",
+      "food_ingredients": [
+        {
+          "id_food_ingredient": 145,
+          "id_food": 38,
+          "id_ingredient": 39,
+          "quantity": "300",
+          "note": null,
+          "ingredients": {
+            "id_ingredient": 39,
+            "name": "Cải chua",
+            "unit": "g",
+            "created_at": "2026-10-14T07:00:00.000Z",
+            "updated_at": "2026-10-14T07:00:00.000Z"
+          }
+        },
+        {
+          "id_food_ingredient": 146,
+          "id_food": 38,
+          "id_ingredient": 2,
+          "quantity": "3",
+          "note": null,
+          "ingredients": {
+            "id_ingredient": 2,
+            "name": "Trứng gà",
+            "unit": "quả",
+            "created_at": "2026-10-05T21:52:02.000Z",
+            "updated_at": "2026-10-05T21:52:02.000Z"
+          }
+        }
+      ],
+      "recipe_steps": [
+        {
+          "id_recipe_step": 112,
+          "id_food": 38,
+          "step_number": 1,
+          "instruction": "Rửa cải chua cho bớt mặn rồi cắt nhỏ."
+        },
+        {
+          "id_recipe_step": 113,
+          "id_food": 38,
+          "step_number": 2,
+          "instruction": "Xào cải chua cho ráo và thơm."
+        },
+        {
+          "id_recipe_step": 114,
+          "id_food": 38,
+          "step_number": 3,
+          "instruction": "Đổ trứng đã đánh vào, đảo đều đến khi trứng chín."
+        }
+      ]
+    },
+    {
+      "id_food": 39,
+      "id_category": 3,
+      "name": "Mướp xào tỏi",
+      "slug": "muop-xao-toi",
+      "description": "Mướp xào tỏi mềm ngọt, món rau đơn giản cho bữa cơm.",
+      "image": "/images/foods/muop-xao-toi.jpg",
+      "cooking_time": 15,
+      "servings": 3,
+      "status": "active",
+      "created_at": "2026-10-14T07:00:00.000Z",
+      "updated_at": "2026-10-14T07:00:00.000Z",
+      "food_ingredients": [
+        {
+          "id_food_ingredient": 147,
+          "id_food": 39,
+          "id_ingredient": 32,
+          "quantity": "400",
+          "note": null,
+          "ingredients": {
+            "id_ingredient": 32,
+            "name": "Mướp",
+            "unit": "g",
+            "created_at": "2026-10-14T07:00:00.000Z",
+            "updated_at": "2026-10-14T07:00:00.000Z"
+          }
+        },
+        {
+          "id_food_ingredient": 148,
+          "id_food": 39,
+          "id_ingredient": 48,
+          "quantity": "20",
+          "note": null,
+          "ingredients": {
+            "id_ingredient": 48,
+            "name": "Tỏi",
+            "unit": "g",
+            "created_at": "2026-10-14T07:00:00.000Z",
+            "updated_at": "2026-10-14T07:00:00.000Z"
+          }
+        }
+      ],
+      "recipe_steps": [
+        {
+          "id_recipe_step": 115,
+          "id_food": 39,
+          "step_number": 1,
+          "instruction": "Gọt mướp, cắt lát vừa ăn; tỏi băm nhỏ."
+        },
+        {
+          "id_recipe_step": 116,
+          "id_food": 39,
+          "step_number": 2,
+          "instruction": "Phi thơm tỏi với ít dầu ăn."
+        },
+        {
+          "id_recipe_step": 117,
+          "id_food": 39,
+          "step_number": 3,
+          "instruction": "Cho mướp vào xào nhanh, nêm vừa ăn và tắt bếp."
+        }
+      ]
+    },
+    {
+      "id_food": 40,
+      "id_category": 5,
+      "name": "Đậu hũ chiên sả",
+      "slug": "dau-hu-chien-sa",
+      "description": "Đậu hũ chiên vàng áo sả thơm, ăn kèm nước tương rất hợp.",
+      "image": "/images/foods/dau-hu-chien-sa.jpg",
+      "cooking_time": 20,
+      "servings": 3,
+      "status": "active",
+      "created_at": "2026-10-14T07:00:00.000Z",
+      "updated_at": "2026-10-20T15:56:41.000Z",
+      "food_ingredients": [
+        {
+          "id_food_ingredient": 149,
+          "id_food": 40,
+          "id_ingredient": 30,
+          "quantity": "4",
+          "note": null,
+          "ingredients": {
+            "id_ingredient": 30,
+            "name": "Đậu hũ",
+            "unit": "miếng",
+            "created_at": "2026-10-05T21:52:02.000Z",
+            "updated_at": "2026-10-05T21:52:02.000Z"
+          }
+        },
+        {
+          "id_food_ingredient": 150,
+          "id_food": 40,
+          "id_ingredient": 43,
+          "quantity": "40",
+          "note": null,
+          "ingredients": {
+            "id_ingredient": 43,
+            "name": "Sả",
+            "unit": "g",
+            "created_at": "2026-10-14T07:00:00.000Z",
+            "updated_at": "2026-10-14T07:00:00.000Z"
+          }
+        }
+      ],
+      "recipe_steps": [
+        {
+          "id_recipe_step": 118,
+          "id_food": 40,
+          "step_number": 1,
+          "instruction": "Cắt đậu hũ miếng vừa ăn và để ráo nước."
+        },
+        {
+          "id_recipe_step": 119,
+          "id_food": 40,
+          "step_number": 2,
+          "instruction": "Chiên đậu hũ vàng đều các mặt."
+        },
+        {
+          "id_recipe_step": 120,
+          "id_food": 40,
+          "step_number": 3,
+          "instruction": "Phi sả thơm, đảo đậu hũ với sả và chút gia vị."
+        }
+      ]
+    },
+    {
+      "id_food": 41,
+      "id_category": 5,
+      "name": "Chả cá chiên thì là",
+      "slug": "cha-ca-chien-thi-la",
+      "description": "Chả cá chiên thơm thì là, bên ngoài vàng giòn bên trong dai mềm.",
+      "image": "/images/foods/cha-ca-chien-thi-la.jpg",
+      "cooking_time": 25,
+      "servings": 3,
+      "status": "active",
+      "created_at": "2026-10-14T07:00:00.000Z",
+      "updated_at": "2026-10-14T07:00:00.000Z",
+      "food_ingredients": [
+        {
+          "id_food_ingredient": 151,
+          "id_food": 41,
+          "id_ingredient": 49,
+          "quantity": "400",
+          "note": null,
+          "ingredients": {
+            "id_ingredient": 49,
+            "name": "Chả cá",
+            "unit": "g",
+            "created_at": "2026-10-14T07:00:00.000Z",
+            "updated_at": "2026-10-14T07:00:00.000Z"
+          }
+        },
+        {
+          "id_food_ingredient": 152,
+          "id_food": 41,
+          "id_ingredient": 50,
+          "quantity": "30",
+          "note": null,
+          "ingredients": {
+            "id_ingredient": 50,
+            "name": "Thì là",
+            "unit": "g",
+            "created_at": "2026-10-14T07:00:00.000Z",
+            "updated_at": "2026-10-14T07:00:00.000Z"
+          }
+        }
+      ],
+      "recipe_steps": [
+        {
+          "id_recipe_step": 121,
+          "id_food": 41,
+          "step_number": 1,
+          "instruction": "Trộn chả cá với thì là cắt nhỏ và chút tiêu."
+        },
+        {
+          "id_recipe_step": 122,
+          "id_food": 41,
+          "step_number": 2,
+          "instruction": "Nặn thành miếng vừa ăn."
+        },
+        {
+          "id_recipe_step": 123,
+          "id_food": 41,
+          "step_number": 3,
+          "instruction": "Chiên ngập dầu vừa đến khi chả cá vàng thơm."
+        }
+      ]
+    },
+    {
+      "id_food": 42,
+      "id_category": 5,
+      "name": "Tôm chiên bột",
+      "slug": "tom-chien-bot",
+      "description": "Tôm chiên bột giòn rụm, phù hợp làm món mặn hoặc ăn chơi.",
+      "image": "/images/foods/tom-chien-bot.jpg",
+      "cooking_time": 25,
+      "servings": 3,
+      "status": "active",
+      "created_at": "2026-10-14T07:00:00.000Z",
+      "updated_at": "2026-10-14T07:00:00.000Z",
+      "food_ingredients": [
+        {
+          "id_food_ingredient": 153,
+          "id_food": 42,
+          "id_ingredient": 33,
+          "quantity": "400",
+          "note": null,
+          "ingredients": {
+            "id_ingredient": 33,
+            "name": "Tôm",
+            "unit": "g",
+            "created_at": "2026-10-14T07:00:00.000Z",
+            "updated_at": "2026-10-14T07:00:00.000Z"
+          }
+        },
+        {
+          "id_food_ingredient": 154,
+          "id_food": 42,
+          "id_ingredient": 51,
+          "quantity": "150",
+          "note": null,
+          "ingredients": {
+            "id_ingredient": 51,
+            "name": "Bột chiên giòn",
+            "unit": "g",
+            "created_at": "2026-10-14T07:00:00.000Z",
+            "updated_at": "2026-10-14T07:00:00.000Z"
+          }
+        }
+      ],
+      "recipe_steps": [
+        {
+          "id_recipe_step": 124,
+          "id_food": 42,
+          "step_number": 1,
+          "instruction": "Tôm bóc vỏ, chừa đuôi và thấm khô."
+        },
+        {
+          "id_recipe_step": 125,
+          "id_food": 42,
+          "step_number": 2,
+          "instruction": "Pha bột chiên giòn theo hướng dẫn, nhúng tôm vào bột."
+        },
+        {
+          "id_recipe_step": 126,
+          "id_food": 42,
+          "step_number": 3,
+          "instruction": "Chiên tôm trong dầu nóng đến khi vàng giòn."
+        }
+      ]
+    },
+    {
+      "id_food": 43,
+      "id_category": 5,
+      "name": "Cánh gà chiên giòn",
+      "slug": "canh-ga-chien-gion",
+      "description": "Cánh gà chiên giòn vàng, thịt bên trong mềm ngọt.",
+      "image": "/images/foods/canh-ga-chien-gion.jpg",
+      "cooking_time": 35,
+      "servings": 4,
+      "status": "active",
+      "created_at": "2026-10-14T07:00:00.000Z",
+      "updated_at": "2026-10-20T10:14:15.000Z",
+      "food_ingredients": [
+        {
+          "id_food_ingredient": 155,
+          "id_food": 43,
+          "id_ingredient": 52,
+          "quantity": "600",
+          "note": null,
+          "ingredients": {
+            "id_ingredient": 52,
+            "name": "Cánh gà",
+            "unit": "g",
+            "created_at": "2026-10-14T07:00:00.000Z",
+            "updated_at": "2026-10-14T07:00:00.000Z"
+          }
+        },
+        {
+          "id_food_ingredient": 156,
+          "id_food": 43,
+          "id_ingredient": 51,
+          "quantity": "150",
+          "note": null,
+          "ingredients": {
+            "id_ingredient": 51,
+            "name": "Bột chiên giòn",
+            "unit": "g",
+            "created_at": "2026-10-14T07:00:00.000Z",
+            "updated_at": "2026-10-14T07:00:00.000Z"
+          }
+        }
+      ],
+      "recipe_steps": [
+        {
+          "id_recipe_step": 127,
+          "id_food": 43,
+          "step_number": 1,
+          "instruction": "Cánh gà rửa sạch, khứa nhẹ và ướp gia vị."
+        },
+        {
+          "id_recipe_step": 128,
+          "id_food": 43,
+          "step_number": 2,
+          "instruction": "Áo cánh gà với bột chiên giòn."
+        },
+        {
+          "id_recipe_step": 129,
+          "id_food": 43,
+          "step_number": 3,
+          "instruction": "Chiên lửa vừa đến khi cánh gà chín vàng đều."
+        }
+      ]
+    },
+    {
+      "id_food": 44,
+      "id_category": 5,
+      "name": "Trứng chiên thịt bằm",
+      "slug": "trung-chien-thit-bam",
+      "description": "Trứng chiên thịt bằm mềm thơm, dễ làm và rất hao cơm.",
+      "image": "/images/foods/trung-chien-thit-bam.jpg",
+      "cooking_time": 15,
+      "servings": 3,
+      "status": "active",
+      "created_at": "2026-10-14T07:00:00.000Z",
+      "updated_at": "2026-10-14T07:00:00.000Z",
+      "food_ingredients": [
+        {
+          "id_food_ingredient": 157,
+          "id_food": 44,
+          "id_ingredient": 2,
+          "quantity": "4",
+          "note": null,
+          "ingredients": {
+            "id_ingredient": 2,
+            "name": "Trứng gà",
+            "unit": "quả",
+            "created_at": "2026-10-05T21:52:02.000Z",
+            "updated_at": "2026-10-05T21:52:02.000Z"
+          }
+        },
+        {
+          "id_food_ingredient": 158,
+          "id_food": 44,
+          "id_ingredient": 22,
+          "quantity": "150",
+          "note": null,
+          "ingredients": {
+            "id_ingredient": 22,
+            "name": "Thịt heo bằm",
+            "unit": "g",
+            "created_at": "2026-10-05T21:52:02.000Z",
+            "updated_at": "2026-10-05T21:52:02.000Z"
+          }
+        }
+      ],
+      "recipe_steps": [
+        {
+          "id_recipe_step": 130,
+          "id_food": 44,
+          "step_number": 1,
+          "instruction": "Đánh trứng với thịt bằm, hành lá và gia vị."
+        },
+        {
+          "id_recipe_step": 131,
+          "id_food": 44,
+          "step_number": 2,
+          "instruction": "Làm nóng chảo dầu rồi đổ hỗn hợp trứng vào."
+        },
+        {
+          "id_recipe_step": 132,
+          "id_food": 44,
+          "step_number": 3,
+          "instruction": "Chiên vàng hai mặt, cắt miếng và dùng nóng."
+        }
+      ]
+    },
+    {
+      "id_food": 45,
+      "id_category": 5,
+      "name": "Cá rô phi chiên giòn",
+      "slug": "ca-ro-phi-chien-gion",
+      "description": "Cá rô phi chiên giòn, chấm nước mắm tỏi ớt rất ngon.",
+      "image": "/images/foods/ca-ro-phi-chien-gion.jpg",
+      "cooking_time": 30,
+      "servings": 4,
+      "status": "active",
+      "created_at": "2026-10-14T07:00:00.000Z",
+      "updated_at": "2026-10-20T10:14:15.000Z",
+      "food_ingredients": [
+        {
+          "id_food_ingredient": 159,
+          "id_food": 45,
+          "id_ingredient": 53,
+          "quantity": "600",
+          "note": null,
+          "ingredients": {
+            "id_ingredient": 53,
+            "name": "Cá rô phi",
+            "unit": "g",
+            "created_at": "2026-10-14T07:00:00.000Z",
+            "updated_at": "2026-10-14T07:00:00.000Z"
+          }
+        }
+      ],
+      "recipe_steps": [
+        {
+          "id_recipe_step": 133,
+          "id_food": 45,
+          "step_number": 1,
+          "instruction": "Làm sạch cá, khứa vài đường và thấm khô."
+        },
+        {
+          "id_recipe_step": 134,
+          "id_food": 45,
+          "step_number": 2,
+          "instruction": "Ướp cá với ít muối rồi chiên trong dầu nóng."
+        },
+        {
+          "id_recipe_step": 135,
+          "id_food": 45,
+          "step_number": 3,
+          "instruction": "Chiên đến khi cá vàng giòn hai mặt và để ráo dầu."
+        }
+      ]
+    },
+    {
+      "id_food": 46,
+      "id_category": 6,
+      "name": "Bầu luộc chấm trứng",
+      "slug": "bau-luoc-cham-trung",
+      "description": "Bầu luộc mềm ngọt, ăn cùng trứng luộc và nước mắm rất thanh.",
+      "image": "/images/foods/bau-luoc-cham-trung.jpg",
+      "cooking_time": 20,
+      "servings": 3,
+      "status": "active",
+      "created_at": "2026-10-14T07:00:00.000Z",
+      "updated_at": "2026-10-14T07:00:00.000Z",
+      "food_ingredients": [
+        {
+          "id_food_ingredient": 160,
+          "id_food": 46,
+          "id_ingredient": 54,
+          "quantity": "500",
+          "note": null,
+          "ingredients": {
+            "id_ingredient": 54,
+            "name": "Bầu",
+            "unit": "g",
+            "created_at": "2026-10-14T07:00:00.000Z",
+            "updated_at": "2026-10-14T07:00:00.000Z"
+          }
+        },
+        {
+          "id_food_ingredient": 161,
+          "id_food": 46,
+          "id_ingredient": 2,
+          "quantity": "2",
+          "note": null,
+          "ingredients": {
+            "id_ingredient": 2,
+            "name": "Trứng gà",
+            "unit": "quả",
+            "created_at": "2026-10-05T21:52:02.000Z",
+            "updated_at": "2026-10-05T21:52:02.000Z"
+          }
+        }
+      ],
+      "recipe_steps": [
+        {
+          "id_recipe_step": 136,
+          "id_food": 46,
+          "step_number": 1,
+          "instruction": "Gọt bầu, cắt miếng vừa ăn; luộc trứng chín."
+        },
+        {
+          "id_recipe_step": 137,
+          "id_food": 46,
+          "step_number": 2,
+          "instruction": "Đun sôi nước, cho bầu vào luộc vừa chín."
+        },
+        {
+          "id_recipe_step": 138,
+          "id_food": 46,
+          "step_number": 3,
+          "instruction": "Vớt bầu ra, dùng cùng trứng luộc và nước chấm."
+        }
+      ]
+    },
+    {
+      "id_food": 47,
+      "id_category": 6,
+      "name": "Rau lang luộc",
+      "slug": "rau-lang-luoc",
+      "description": "Rau lang luộc xanh mềm, món rau dân dã cho bữa cơm nhà.",
+      "image": "/images/foods/rau-lang-luoc.jpg",
+      "cooking_time": 15,
+      "servings": 3,
+      "status": "active",
+      "created_at": "2026-10-14T07:00:00.000Z",
+      "updated_at": "2026-10-14T07:00:00.000Z",
+      "food_ingredients": [
+        {
+          "id_food_ingredient": 162,
+          "id_food": 47,
+          "id_ingredient": 55,
+          "quantity": "500",
+          "note": null,
+          "ingredients": {
+            "id_ingredient": 55,
+            "name": "Rau lang",
+            "unit": "g",
+            "created_at": "2026-10-14T07:00:00.000Z",
+            "updated_at": "2026-10-14T07:00:00.000Z"
+          }
+        }
+      ],
+      "recipe_steps": [
+        {
+          "id_recipe_step": 139,
+          "id_food": 47,
+          "step_number": 1,
+          "instruction": "Nhặt rau lang, rửa nhiều lần cho sạch đất cát."
+        },
+        {
+          "id_recipe_step": 140,
+          "id_food": 47,
+          "step_number": 2,
+          "instruction": "Đun nước thật sôi rồi cho rau vào luộc."
+        },
+        {
+          "id_recipe_step": 141,
+          "id_food": 47,
+          "step_number": 3,
+          "instruction": "Vớt rau khi vừa chín, giữ nước luộc làm canh nếu thích."
+        }
+      ]
+    },
+    {
+      "id_food": 48,
+      "id_category": 6,
+      "name": "Gà luộc lá chanh",
+      "slug": "ga-luoc-la-chanh",
+      "description": "Gà luộc da vàng, thịt ngọt, rắc lá chanh thơm nhẹ.",
+      "image": "/images/foods/ga-luoc-la-chanh.jpg",
+      "cooking_time": 45,
+      "servings": 4,
+      "status": "active",
+      "created_at": "2026-10-14T07:00:00.000Z",
+      "updated_at": "2026-10-14T07:00:00.000Z",
+      "food_ingredients": [
+        {
+          "id_food_ingredient": 163,
+          "id_food": 48,
+          "id_ingredient": 10,
+          "quantity": "800",
+          "note": null,
+          "ingredients": {
+            "id_ingredient": 10,
+            "name": "Thịt gà",
+            "unit": "g",
+            "created_at": "2026-10-05T21:52:02.000Z",
+            "updated_at": "2026-10-05T21:52:02.000Z"
+          }
+        },
+        {
+          "id_food_ingredient": 164,
+          "id_food": 48,
+          "id_ingredient": 56,
+          "quantity": "10",
+          "note": null,
+          "ingredients": {
+            "id_ingredient": 56,
+            "name": "Lá chanh",
+            "unit": "g",
+            "created_at": "2026-10-14T07:00:00.000Z",
+            "updated_at": "2026-10-14T07:00:00.000Z"
+          }
+        }
+      ],
+      "recipe_steps": [
+        {
+          "id_recipe_step": 142,
+          "id_food": 48,
+          "step_number": 1,
+          "instruction": "Rửa sạch gà, cho vào nồi cùng nước và ít muối."
+        },
+        {
+          "id_recipe_step": 143,
+          "id_food": 48,
+          "step_number": 2,
+          "instruction": "Luộc lửa vừa đến khi gà chín, ủ thêm vài phút."
+        },
+        {
+          "id_recipe_step": 144,
+          "id_food": 48,
+          "step_number": 3,
+          "instruction": "Chặt gà ra đĩa, rắc lá chanh thái chỉ lên trên."
+        }
+      ]
+    },
+    {
+      "id_food": 49,
+      "id_category": 6,
+      "name": "Thịt heo luộc cuốn rau",
+      "slug": "thit-heo-luoc-cuon-rau",
+      "description": "Thịt heo luộc cuốn rau sống, chấm mắm nêm hoặc nước mắm chua ngọt.",
+      "image": "/images/foods/thit-heo-luoc-cuon-rau.jpg",
+      "cooking_time": 35,
+      "servings": 4,
+      "status": "active",
+      "created_at": "2026-10-14T07:00:00.000Z",
+      "updated_at": "2026-10-14T07:00:00.000Z",
+      "food_ingredients": [
+        {
+          "id_food_ingredient": 165,
+          "id_food": 49,
+          "id_ingredient": 1,
+          "quantity": "500",
+          "note": null,
+          "ingredients": {
+            "id_ingredient": 1,
+            "name": "Thịt ba chỉ",
+            "unit": "g",
+            "created_at": "2026-10-05T21:52:02.000Z",
+            "updated_at": "2026-10-05T21:52:02.000Z"
+          }
+        },
+        {
+          "id_food_ingredient": 166,
+          "id_food": 49,
+          "id_ingredient": 57,
+          "quantity": "200",
+          "note": null,
+          "ingredients": {
+            "id_ingredient": 57,
+            "name": "Dưa leo",
+            "unit": "g",
+            "created_at": "2026-10-14T07:00:00.000Z",
+            "updated_at": "2026-10-14T07:00:00.000Z"
+          }
+        },
+        {
+          "id_food_ingredient": 167,
+          "id_food": 49,
+          "id_ingredient": 58,
+          "quantity": "200",
+          "note": null,
+          "ingredients": {
+            "id_ingredient": 58,
+            "name": "Xà lách",
+            "unit": "g",
+            "created_at": "2026-10-14T07:00:00.000Z",
+            "updated_at": "2026-10-14T07:00:00.000Z"
+          }
+        }
+      ],
+      "recipe_steps": [
+        {
+          "id_recipe_step": 145,
+          "id_food": 49,
+          "step_number": 1,
+          "instruction": "Luộc thịt ba chỉ với ít muối và hành tím đến khi chín."
+        },
+        {
+          "id_recipe_step": 146,
+          "id_food": 49,
+          "step_number": 2,
+          "instruction": "Thái thịt mỏng, rửa sạch rau sống và dưa leo."
+        },
+        {
+          "id_recipe_step": 147,
+          "id_food": 49,
+          "step_number": 3,
+          "instruction": "Cuốn thịt với rau, dùng cùng nước chấm tùy thích."
+        }
+      ]
+    },
+    {
+      "id_food": 50,
+      "id_category": 6,
+      "name": "Bắp cải luộc",
+      "slug": "bap-cai-luoc",
+      "description": "Bắp cải luộc ngọt giòn, món rau nhanh cho mọi bữa cơm.",
+      "image": "/images/foods/bap-cai-luoc.jpg",
+      "cooking_time": 15,
+      "servings": 3,
+      "status": "active",
+      "created_at": "2026-10-14T07:00:00.000Z",
+      "updated_at": "2026-10-14T07:00:00.000Z",
+      "food_ingredients": [
+        {
+          "id_food_ingredient": 168,
+          "id_food": 50,
+          "id_ingredient": 59,
+          "quantity": "500",
+          "note": null,
+          "ingredients": {
+            "id_ingredient": 59,
+            "name": "Bắp cải",
+            "unit": "g",
+            "created_at": "2026-10-14T07:00:00.000Z",
+            "updated_at": "2026-10-14T07:00:00.000Z"
+          }
+        }
+      ],
+      "recipe_steps": [
+        {
+          "id_recipe_step": 148,
+          "id_food": 50,
+          "step_number": 1,
+          "instruction": "Tách bắp cải, rửa sạch và cắt miếng vừa ăn."
+        },
+        {
+          "id_recipe_step": 149,
+          "id_food": 50,
+          "step_number": 2,
+          "instruction": "Đun sôi nước với chút muối rồi cho bắp cải vào."
+        },
+        {
+          "id_recipe_step": 150,
+          "id_food": 50,
+          "step_number": 3,
+          "instruction": "Luộc vừa chín, vớt ra để ráo và dùng nóng."
+        }
+      ]
+    }
+  ],
+  "ingredients": [
+    {
+      "id_ingredient": 1,
+      "name": "Thịt ba chỉ",
+      "unit": "g",
+      "created_at": "2026-10-05T21:52:02.000Z",
+      "updated_at": "2026-10-05T21:52:02.000Z"
+    },
+    {
+      "id_ingredient": 2,
+      "name": "Trứng gà",
+      "unit": "quả",
+      "created_at": "2026-10-05T21:52:02.000Z",
+      "updated_at": "2026-10-05T21:52:02.000Z"
+    },
+    {
+      "id_ingredient": 8,
+      "name": "Cá basa",
+      "unit": "g",
+      "created_at": "2026-10-05T21:52:02.000Z",
+      "updated_at": "2026-10-05T21:52:02.000Z"
+    },
+    {
+      "id_ingredient": 10,
+      "name": "Thịt gà",
+      "unit": "g",
+      "created_at": "2026-10-05T21:52:02.000Z",
+      "updated_at": "2026-10-05T21:52:02.000Z"
+    },
+    {
+      "id_ingredient": 11,
+      "name": "Sườn non",
+      "unit": "g",
+      "created_at": "2026-10-05T21:52:02.000Z",
+      "updated_at": "2026-10-05T21:52:02.000Z"
+    },
+    {
+      "id_ingredient": 12,
+      "name": "Ớt chuông",
+      "unit": "g",
+      "created_at": "2026-10-05T21:52:02.000Z",
+      "updated_at": "2026-10-05T21:52:02.000Z"
+    },
+    {
+      "id_ingredient": 13,
+      "name": "Thơm",
+      "unit": "g",
+      "created_at": "2026-10-05T21:52:02.000Z",
+      "updated_at": "2026-10-05T21:52:02.000Z"
+    },
+    {
+      "id_ingredient": 14,
+      "name": "Hành tây",
+      "unit": "g",
+      "created_at": "2026-10-05T21:52:02.000Z",
+      "updated_at": "2026-10-05T21:52:02.000Z"
+    },
+    {
+      "id_ingredient": 15,
+      "name": "Thịt bò",
+      "unit": "g",
+      "created_at": "2026-10-05T21:52:02.000Z",
+      "updated_at": "2026-10-05T21:52:02.000Z"
+    },
+    {
+      "id_ingredient": 17,
+      "name": "Cá lóc",
+      "unit": "g",
+      "created_at": "2026-10-05T21:52:02.000Z",
+      "updated_at": "2026-10-05T21:52:02.000Z"
+    },
+    {
+      "id_ingredient": 19,
+      "name": "Cà chua",
+      "unit": "g",
+      "created_at": "2026-10-05T21:52:02.000Z",
+      "updated_at": "2026-10-05T21:52:02.000Z"
+    },
+    {
+      "id_ingredient": 20,
+      "name": "Giá đỗ",
+      "unit": "g",
+      "created_at": "2026-10-05T21:52:02.000Z",
+      "updated_at": "2026-10-05T21:52:02.000Z"
+    },
+    {
+      "id_ingredient": 21,
+      "name": "Bí đỏ",
+      "unit": "g",
+      "created_at": "2026-10-05T21:52:02.000Z",
+      "updated_at": "2026-10-05T21:52:02.000Z"
+    },
+    {
+      "id_ingredient": 22,
+      "name": "Thịt heo bằm",
+      "unit": "g",
+      "created_at": "2026-10-05T21:52:02.000Z",
+      "updated_at": "2026-10-05T21:52:02.000Z"
+    },
+    {
+      "id_ingredient": 23,
+      "name": "Cải xanh",
+      "unit": "g",
+      "created_at": "2026-10-05T21:52:02.000Z",
+      "updated_at": "2026-10-05T21:52:02.000Z"
+    },
+    {
+      "id_ingredient": 24,
+      "name": "Rau muống",
+      "unit": "g",
+      "created_at": "2026-10-05T21:52:02.000Z",
+      "updated_at": "2026-10-05T21:52:02.000Z"
+    },
+    {
+      "id_ingredient": 26,
+      "name": "Cải thìa",
+      "unit": "g",
+      "created_at": "2026-10-05T21:52:02.000Z",
+      "updated_at": "2026-10-05T21:52:02.000Z"
+    },
+    {
+      "id_ingredient": 27,
+      "name": "Đậu que",
+      "unit": "g",
+      "created_at": "2026-10-05T21:52:02.000Z",
+      "updated_at": "2026-10-05T21:52:02.000Z"
+    },
+    {
+      "id_ingredient": 28,
+      "name": "Cà rốt",
+      "unit": "g",
+      "created_at": "2026-10-05T21:52:02.000Z",
+      "updated_at": "2026-10-05T21:52:02.000Z"
+    },
+    {
+      "id_ingredient": 29,
+      "name": "Bông cải xanh",
+      "unit": "g",
+      "created_at": "2026-10-05T21:52:02.000Z",
+      "updated_at": "2026-10-05T21:52:02.000Z"
+    },
+    {
+      "id_ingredient": 30,
+      "name": "Đậu hũ",
+      "unit": "miếng",
+      "created_at": "2026-10-05T21:52:02.000Z",
+      "updated_at": "2026-10-05T21:52:02.000Z"
+    },
+    {
+      "id_ingredient": 31,
+      "name": "Rau ngót",
+      "unit": "g",
+      "created_at": "2026-10-14T07:00:00.000Z",
+      "updated_at": "2026-10-14T07:00:00.000Z"
+    },
+    {
+      "id_ingredient": 32,
+      "name": "Mướp",
+      "unit": "g",
+      "created_at": "2026-10-14T07:00:00.000Z",
+      "updated_at": "2026-10-14T07:00:00.000Z"
+    },
+    {
+      "id_ingredient": 33,
+      "name": "Tôm",
+      "unit": "g",
+      "created_at": "2026-10-14T07:00:00.000Z",
+      "updated_at": "2026-10-14T07:00:00.000Z"
+    },
+    {
+      "id_ingredient": 34,
+      "name": "Khổ qua",
+      "unit": "g",
+      "created_at": "2026-10-14T07:00:00.000Z",
+      "updated_at": "2026-10-14T07:00:00.000Z"
+    },
+    {
+      "id_ingredient": 35,
+      "name": "Bún tàu",
+      "unit": "g",
+      "created_at": "2026-10-14T07:00:00.000Z",
+      "updated_at": "2026-10-14T07:00:00.000Z"
+    },
+    {
+      "id_ingredient": 36,
+      "name": "Bí xanh",
+      "unit": "g",
+      "created_at": "2026-10-14T07:00:00.000Z",
+      "updated_at": "2026-10-14T07:00:00.000Z"
+    },
+    {
+      "id_ingredient": 37,
+      "name": "Rong biển",
+      "unit": "g",
+      "created_at": "2026-10-14T07:00:00.000Z",
+      "updated_at": "2026-10-14T07:00:00.000Z"
+    },
+    {
+      "id_ingredient": 38,
+      "name": "Khoai mỡ",
+      "unit": "g",
+      "created_at": "2026-10-14T07:00:00.000Z",
+      "updated_at": "2026-10-14T07:00:00.000Z"
+    },
+    {
+      "id_ingredient": 39,
+      "name": "Cải chua",
+      "unit": "g",
+      "created_at": "2026-10-14T07:00:00.000Z",
+      "updated_at": "2026-10-14T07:00:00.000Z"
+    },
+    {
+      "id_ingredient": 40,
+      "name": "Tiêu",
+      "unit": "g",
+      "created_at": "2026-10-14T07:00:00.000Z",
+      "updated_at": "2026-10-14T07:00:00.000Z"
+    },
+    {
+      "id_ingredient": 41,
+      "name": "Hành tím",
+      "unit": "g",
+      "created_at": "2026-10-14T07:00:00.000Z",
+      "updated_at": "2026-10-14T07:00:00.000Z"
+    },
+    {
+      "id_ingredient": 42,
+      "name": "Mắm ruốc",
+      "unit": "g",
+      "created_at": "2026-10-14T07:00:00.000Z",
+      "updated_at": "2026-10-14T07:00:00.000Z"
+    },
+    {
+      "id_ingredient": 43,
+      "name": "Sả",
+      "unit": "g",
+      "created_at": "2026-10-14T07:00:00.000Z",
+      "updated_at": "2026-10-14T07:00:00.000Z"
+    },
+    {
+      "id_ingredient": 44,
+      "name": "Nghệ",
+      "unit": "g",
+      "created_at": "2026-10-14T07:00:00.000Z",
+      "updated_at": "2026-10-14T07:00:00.000Z"
+    },
+    {
+      "id_ingredient": 45,
+      "name": "Mực",
+      "unit": "g",
+      "created_at": "2026-10-14T07:00:00.000Z",
+      "updated_at": "2026-10-14T07:00:00.000Z"
+    },
+    {
+      "id_ingredient": 46,
+      "name": "Cần tây",
+      "unit": "g",
+      "created_at": "2026-10-14T07:00:00.000Z",
+      "updated_at": "2026-10-14T07:00:00.000Z"
+    },
+    {
+      "id_ingredient": 47,
+      "name": "Nui",
+      "unit": "g",
+      "created_at": "2026-10-14T07:00:00.000Z",
+      "updated_at": "2026-10-14T07:00:00.000Z"
+    },
+    {
+      "id_ingredient": 48,
+      "name": "Tỏi",
+      "unit": "g",
+      "created_at": "2026-10-14T07:00:00.000Z",
+      "updated_at": "2026-10-14T07:00:00.000Z"
+    },
+    {
+      "id_ingredient": 49,
+      "name": "Chả cá",
+      "unit": "g",
+      "created_at": "2026-10-14T07:00:00.000Z",
+      "updated_at": "2026-10-14T07:00:00.000Z"
+    },
+    {
+      "id_ingredient": 50,
+      "name": "Thì là",
+      "unit": "g",
+      "created_at": "2026-10-14T07:00:00.000Z",
+      "updated_at": "2026-10-14T07:00:00.000Z"
+    },
+    {
+      "id_ingredient": 51,
+      "name": "Bột chiên giòn",
+      "unit": "g",
+      "created_at": "2026-10-14T07:00:00.000Z",
+      "updated_at": "2026-10-14T07:00:00.000Z"
+    },
+    {
+      "id_ingredient": 52,
+      "name": "Cánh gà",
+      "unit": "g",
+      "created_at": "2026-10-14T07:00:00.000Z",
+      "updated_at": "2026-10-14T07:00:00.000Z"
+    },
+    {
+      "id_ingredient": 53,
+      "name": "Cá rô phi",
+      "unit": "g",
+      "created_at": "2026-10-14T07:00:00.000Z",
+      "updated_at": "2026-10-14T07:00:00.000Z"
+    },
+    {
+      "id_ingredient": 54,
+      "name": "Bầu",
+      "unit": "g",
+      "created_at": "2026-10-14T07:00:00.000Z",
+      "updated_at": "2026-10-14T07:00:00.000Z"
+    },
+    {
+      "id_ingredient": 55,
+      "name": "Rau lang",
+      "unit": "g",
+      "created_at": "2026-10-14T07:00:00.000Z",
+      "updated_at": "2026-10-14T07:00:00.000Z"
+    },
+    {
+      "id_ingredient": 56,
+      "name": "Lá chanh",
+      "unit": "g",
+      "created_at": "2026-10-14T07:00:00.000Z",
+      "updated_at": "2026-10-14T07:00:00.000Z"
+    },
+    {
+      "id_ingredient": 57,
+      "name": "Dưa leo",
+      "unit": "g",
+      "created_at": "2026-10-14T07:00:00.000Z",
+      "updated_at": "2026-10-14T07:00:00.000Z"
+    },
+    {
+      "id_ingredient": 58,
+      "name": "Xà lách",
+      "unit": "g",
+      "created_at": "2026-10-14T07:00:00.000Z",
+      "updated_at": "2026-10-14T07:00:00.000Z"
+    },
+    {
+      "id_ingredient": 59,
+      "name": "Bắp cải",
+      "unit": "g",
+      "created_at": "2026-10-14T07:00:00.000Z",
+      "updated_at": "2026-10-14T07:00:00.000Z"
+    }
+  ]
+}

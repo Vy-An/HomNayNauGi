@@ -1,0 +1,8 @@
+{
+  "compilerOptions": {
+    "outDir": "public/js",
+    "rootDir": "src/",
+    "target": "ES2025",
+    "allowSyntheticDefaultImports": true
+  }
+}

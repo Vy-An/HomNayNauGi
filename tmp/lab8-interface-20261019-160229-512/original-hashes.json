@@ -1,0 +1,122 @@
+﻿[
+    {
+        "path":  "dist\\laptop_ds.js",
+        "sha256":  "0F1FE66F42E52A29F0BC9C9DDFCCEA057349C74E4D939C16F9CD545E14F192D9"
+    },
+    {
+        "path":  "dist\\laptop_sua.js",
+        "sha256":  "B6AFD67BB2A033D545B7705A511A8BA4CB097C8A18362F1C899D42D336E390B2"
+    },
+    {
+        "path":  "dist\\laptop_them.js",
+        "sha256":  "3BE41EB35AB702F0E030B30C6B67AD9B2A854CC2721D8D2B2A86BEE10FD8BB0B"
+    },
+    {
+        "path":  "dist\\mang_lodash.html",
+        "sha256":  "D0C69B4F13AB7CCD39BF952BA66DC9D4F43897E83D744E0CEC290F1D38526AE8"
+    },
+    {
+        "path":  "dist\\mang_lodash.js",
+        "sha256":  "F4384A9D40E50149C7EB5BABEFE321BD387C4A70BF32FC457DD06F530E94EE34"
+    },
+    {
+        "path":  "dist\\chunks\\module_laptop-B9Wx0ZVO.js",
+        "sha256":  "7D3AF324B0F6A3C4E260C816CB56592F458173ECD4AEC8EBFE687B72C60221DC"
+    },
+    {
+        "path":  "public\\css\\style.css",
+        "sha256":  "DBF95B1E8226746F51428401F523E76A77B081DEB861FDE62FFCEEB13ED58D7A"
+    },
+    {
+        "path":  "public\\js\\base.js",
+        "sha256":  "ED39A9F342C6536F8B62D4C991347E713CBFDD9B58038FD4BA43F9DCB45F02D7"
+    },
+    {
+        "path":  "public\\js\\laptop_ds.js",
+        "sha256":  "0F1FE66F42E52A29F0BC9C9DDFCCEA057349C74E4D939C16F9CD545E14F192D9"
+    },
+    {
+        "path":  "public\\js\\laptop_sua.js",
+        "sha256":  "B6AFD67BB2A033D545B7705A511A8BA4CB097C8A18362F1C899D42D336E390B2"
+    },
+    {
+        "path":  "public\\js\\laptop_them.js",
+        "sha256":  "3BE41EB35AB702F0E030B30C6B67AD9B2A854CC2721D8D2B2A86BEE10FD8BB0B"
+    },
+    {
+        "path":  "public\\js\\mang_lodash.js",
+        "sha256":  "F4384A9D40E50149C7EB5BABEFE321BD387C4A70BF32FC457DD06F530E94EE34"
+    },
+    {
+        "path":  "public\\js\\module_laptop.js",
+        "sha256":  "81916C5D61D6477148EC948197F2428E3D539FA889530715EECACA9876D92E12"
+    },
+    {
+        "path":  "public\\js\\chunks\\module_laptop-B9Wx0ZVO.js",
+        "sha256":  "7D3AF324B0F6A3C4E260C816CB56592F458173ECD4AEC8EBFE687B72C60221DC"
+    },
+    {
+        "path":  "scripts\\copy-build.mjs",
+        "sha256":  "A84D86A8FC8C81C3F3FAA95EB1AECBDF4BCDDE06CA3F5B683DCBB68037ECEC45"
+    },
+    {
+        "path":  "src\\base.ts",
+        "sha256":  "489DF72ADCF42BD18EDFF3BF76E98744BCAEF51FA7F74B666111276DB935B769"
+    },
+    {
+        "path":  "src\\laptop_ds.ts",
+        "sha256":  "451D9B67E7BF62C993971CDB790D6204CAD00F537D5C85A789BFD461A9136DC0"
+    },
+    {
+        "path":  "src\\laptop_sua.ts",
+        "sha256":  "0BE4085EFC711A1A3E0B7B8370C4D9D29AF9CB4CC85AA44B5B18D9D86B391137"
+    },
+    {
+        "path":  "src\\laptop_them.ts",
+        "sha256":  "26226FB088A74495582BC89ED20A36B999D106E8E514ECF81AE153F7712C592B"
+    },
+    {
+        "path":  "src\\mang_lodash.ts",
+        "sha256":  "DE0748B51C4A6216BB78D78736B96370C686DB1F9160854D8569CC6DCECFB648"
+    },
+    {
+        "path":  "src\\module_laptop.ts",
+        "sha256":  "D60AF6BE4C17FF4B23C17615F368B25AC84E152639CB9ABF731E7688E48F87E9"
+    },
+    {
+        "path":  ".gitignore",
+        "sha256":  "790E3169BC19B046FE55BA1DA6D13B976C28363C8C00462A2195FE5FAF260910"
+    },
+    {
+        "path":  "laptop_ds.html",
+        "sha256":  "56339467BD40FF5E5D0FE12F8B25E68607EDAE44934CCBD7BA2274156764F449"
+    },
+    {
+        "path":  "laptop_sua.html",
+        "sha256":  "20A5DE1B11219F9EE163DB1395673EBFF3DED47B99ADCF661EF30FE796AC05CA"
+    },
+    {
+        "path":  "laptop_them.html",
+        "sha256":  "2C8F04594135805C7A6E6FDC5439FD72A73C1036ED0EE523D7332E1E84706DE6"
+    },
+    {
+        "path":  "mang_lodash.html",
+        "sha256":  "7C40D94047B9FA55E562EA4E2200F4033C01C9F241C09D91B09F693287435983"
+    },
+    {
+        "path":  "package-lock.json",
+        "sha256":  "E7515FAC6042B84BC8D7229C17906F61B71EA22953D640A87C3647E4AB5B7F86"
+    },
+    {
+        "path":  "package.json",
+        "sha256":  "1F84BA3078508862870F8B238F06212DC651AFCD2FA9FAB0198988D23B574D0F"
+    },
+    {
+        "path":  "tsconfig.json",
+        "sha256":  "0F784BF9F1B6EC7B460DE9ACBF196B8DA52B6153264F0E0E987C929318E5908E"
+    },
+    {
+        "path":  "vite.config.js",
+        "sha256":  "EF4857D687EAEB452E785F7012C130E504A20FC74580D2BE67049800059283E2"
+    }
+]

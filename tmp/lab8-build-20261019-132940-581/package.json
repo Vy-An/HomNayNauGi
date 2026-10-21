@@ -1,0 +1,16 @@
+{
+  "name": "lab8-ps47415-nguyensidang",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "vite --host 127.0.0.1",
+    "compile": "tsc -p tsconfig.json",
+    "prebuild": "npm run compile",
+    "build": "vite build"
+  },
+  "devDependencies": {
+    "typescript": "7.0.2",
+    "vite": "7.3.7"
+  }
+}

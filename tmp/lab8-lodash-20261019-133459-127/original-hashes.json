@@ -1,0 +1,94 @@
+﻿[
+    {
+        "path":  "dist\\laptop_ds.js",
+        "sha256":  "0F1FE66F42E52A29F0BC9C9DDFCCEA057349C74E4D939C16F9CD545E14F192D9"
+    },
+    {
+        "path":  "dist\\laptop_sua.js",
+        "sha256":  "B6AFD67BB2A033D545B7705A511A8BA4CB097C8A18362F1C899D42D336E390B2"
+    },
+    {
+        "path":  "dist\\laptop_them.js",
+        "sha256":  "3BE41EB35AB702F0E030B30C6B67AD9B2A854CC2721D8D2B2A86BEE10FD8BB0B"
+    },
+    {
+        "path":  "dist\\chunks\\module_laptop-B9Wx0ZVO.js",
+        "sha256":  "7D3AF324B0F6A3C4E260C816CB56592F458173ECD4AEC8EBFE687B72C60221DC"
+    },
+    {
+        "path":  "public\\css\\style.css",
+        "sha256":  "DBF95B1E8226746F51428401F523E76A77B081DEB861FDE62FFCEEB13ED58D7A"
+    },
+    {
+        "path":  "public\\js\\base.js",
+        "sha256":  "ED39A9F342C6536F8B62D4C991347E713CBFDD9B58038FD4BA43F9DCB45F02D7"
+    },
+    {
+        "path":  "public\\js\\laptop_ds.js",
+        "sha256":  "9D3C1A2C070BD25A5EBB43DCBAFCDA6E77906E9B8E6A07D287F868F3CA1C4063"
+    },
+    {
+        "path":  "public\\js\\laptop_sua.js",
+        "sha256":  "6346D3F93D44BA43DFB6D9D1C375D96EE18DACD76B32848F548A2245E39CF2CE"
+    },
+    {
+        "path":  "public\\js\\laptop_them.js",
+        "sha256":  "F63403DE88264E70CD645BF0E635A48748A4060AF8A2F790895FB4080DD5AFBF"
+    },
+    {
+        "path":  "public\\js\\module_laptop.js",
+        "sha256":  "81916C5D61D6477148EC948197F2428E3D539FA889530715EECACA9876D92E12"
+    },
+    {
+        "path":  "src\\base.ts",
+        "sha256":  "489DF72ADCF42BD18EDFF3BF76E98744BCAEF51FA7F74B666111276DB935B769"
+    },
+    {
+        "path":  "src\\laptop_ds.ts",
+        "sha256":  "451D9B67E7BF62C993971CDB790D6204CAD00F537D5C85A789BFD461A9136DC0"
+    },
+    {
+        "path":  "src\\laptop_sua.ts",
+        "sha256":  "0BE4085EFC711A1A3E0B7B8370C4D9D29AF9CB4CC85AA44B5B18D9D86B391137"
+    },
+    {
+        "path":  "src\\laptop_them.ts",
+        "sha256":  "26226FB088A74495582BC89ED20A36B999D106E8E514ECF81AE153F7712C592B"
+    },
+    {
+        "path":  "src\\module_laptop.ts",
+        "sha256":  "D60AF6BE4C17FF4B23C17615F368B25AC84E152639CB9ABF731E7688E48F87E9"
+    },
+    {
+        "path":  ".gitignore",
+        "sha256":  "790E3169BC19B046FE55BA1DA6D13B976C28363C8C00462A2195FE5FAF260910"
+    },
+    {
+        "path":  "laptop_ds.html",
+        "sha256":  "56339467BD40FF5E5D0FE12F8B25E68607EDAE44934CCBD7BA2274156764F449"
+    },
+    {
+        "path":  "laptop_sua.html",
+        "sha256":  "20A5DE1B11219F9EE163DB1395673EBFF3DED47B99ADCF661EF30FE796AC05CA"
+    },
+    {
+        "path":  "laptop_them.html",
+        "sha256":  "2C8F04594135805C7A6E6FDC5439FD72A73C1036ED0EE523D7332E1E84706DE6"
+    },
+    {
+        "path":  "package-lock.json",
+        "sha256":  "FB5EA223A858D99D8DA7BBEDA7028BD2B38B2A19243CEF047EA169F560778799"
+    },
+    {
+        "path":  "package.json",
+        "sha256":  "7CC907C4744675BCEB7AC30FD8CA107EF12808318E72599718E87F2C67DDA9F0"
+    },
+    {
+        "path":  "tsconfig.json",
+        "sha256":  "0F784BF9F1B6EC7B460DE9ACBF196B8DA52B6153264F0E0E987C929318E5908E"
+    },
+    {
+        "path":  "vite.config.js",
+        "sha256":  "33D9783D180C38F8EEDF97FA5F50EDB6B61C9CEB92AD80D6DAF48E6620349C92"
+    }
+]

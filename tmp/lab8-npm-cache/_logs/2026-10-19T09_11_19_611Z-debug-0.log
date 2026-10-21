@@ -1,0 +1,110 @@
+0 verbose cli C:\Program Files\nodejs\node.exe C:\Program Files\nodejs\node_modules\npm\bin\npm-cli.js
+1 info using npm@11.12.1
+2 info using node@v24.15.0
+3 silly config load:file:C:\Program Files\nodejs\node_modules\npm\npmrc
+4 silly config load:file:C:\Users\Admin\Documents\FPT\project-team\HomNayNauGi\tmp\lab8-ui-checks\.npmrc
+5 silly config load:file:C:\Users\Admin\.npmrc
+6 silly config load:file:C:\Users\Admin\Documents\FPT\project-team\HomNayNauGi\tmp\lab8-ui-checks\etc\npmrc
+7 verbose title npm install happy-dom
+8 verbose argv "install" "--prefix" "C:\\Users\\Admin\\Documents\\FPT\\project-team\\HomNayNauGi\\tmp\\lab8-ui-checks" "--cache" "C:\\Users\\Admin\\Documents\\FPT\\project-team\\HomNayNauGi\\tmp\\lab8-npm-cache" "--no-save" "--package-lock" "false" "--no-audit" "--no-fund" "happy-dom"
+9 verbose logfile logs-max:10 dir:C:\Users\Admin\Documents\FPT\project-team\HomNayNauGi\tmp\lab8-npm-cache\_logs\2026-10-19T09_11_19_611Z-
+10 verbose logfile C:\Users\Admin\Documents\FPT\project-team\HomNayNauGi\tmp\lab8-npm-cache\_logs\2026-10-19T09_11_19_611Z-debug-0.log
+11 silly logfile done cleaning log files
+12 silly packumentCache heap:2348810240 maxSize:587202560 maxEntrySize:293601280
+13 silly idealTree buildDeps
+14 silly fetch manifest happy-dom@*
+15 silly packumentCache full:https://registry.npmjs.org/happy-dom cache-miss
+16 http fetch GET 200 https://registry.npmjs.org/happy-dom 135853ms (cache miss)
+17 silly packumentCache full:https://registry.npmjs.org/happy-dom set size:undefined disposed:false
+18 silly placeDep ROOT happy-dom@21.0.3 OK for:  want: *
+19 silly fetch manifest ws@^8.21.0
+20 silly packumentCache full:https://registry.npmjs.org/ws cache-miss
+21 silly fetch manifest entities@^7.0.1
+22 silly packumentCache full:https://registry.npmjs.org/entities cache-miss
+23 silly fetch manifest @types/ws@^8.18.1
+24 silly packumentCache full:https://registry.npmjs.org/@types%2fws cache-miss
+25 silly fetch manifest @types/node@>=20.0.0
+26 silly packumentCache full:https://registry.npmjs.org/@types%2fnode cache-miss
+27 silly fetch manifest whatwg-mimetype@^3.0.0
+28 silly packumentCache full:https://registry.npmjs.org/whatwg-mimetype cache-miss
+29 silly fetch manifest buffer-image-size@^0.6.4
+30 silly packumentCache full:https://registry.npmjs.org/buffer-image-size cache-miss
+31 silly fetch manifest @types/whatwg-mimetype@^3.0.2
+32 silly packumentCache full:https://registry.npmjs.org/@types%2fwhatwg-mimetype cache-miss
+33 http fetch GET 200 https://registry.npmjs.org/@types%2fnode 356ms (cache revalidated)
+34 silly packumentCache full:https://registry.npmjs.org/@types%2fnode set size:11180437 disposed:false
+35 http fetch GET 200 https://registry.npmjs.org/buffer-image-size 618ms (cache miss)
+36 silly packumentCache full:https://registry.npmjs.org/buffer-image-size set size:undefined disposed:false
+37 http fetch GET 200 https://registry.npmjs.org/whatwg-mimetype 656ms (cache miss)
+38 silly packumentCache full:https://registry.npmjs.org/whatwg-mimetype set size:undefined disposed:false
+39 http fetch GET 200 https://registry.npmjs.org/@types%2fwhatwg-mimetype 666ms (cache miss)
+40 silly packumentCache full:https://registry.npmjs.org/@types%2fwhatwg-mimetype set size:undefined disposed:false
+41 http fetch GET 200 https://registry.npmjs.org/entities 698ms (cache miss)
+42 silly packumentCache full:https://registry.npmjs.org/entities set size:undefined disposed:false
+43 http fetch GET 200 https://registry.npmjs.org/ws 710ms (cache miss)
+44 silly packumentCache full:https://registry.npmjs.org/ws set size:undefined disposed:false
+45 http fetch GET 200 https://registry.npmjs.org/@types%2fws 723ms (cache miss)
+46 silly packumentCache full:https://registry.npmjs.org/@types%2fws set size:undefined disposed:false
+47 silly fetch manifest bufferutil@^4.0.1
+48 silly packumentCache full:https://registry.npmjs.org/bufferutil cache-miss
+49 http fetch GET 200 https://registry.npmjs.org/bufferutil 97ms (cache miss)
+50 silly packumentCache full:https://registry.npmjs.org/bufferutil set size:undefined disposed:false
+51 silly fetch manifest utf-8-validate@>=5.0.2
+52 silly packumentCache full:https://registry.npmjs.org/utf-8-validate cache-miss
+53 http fetch GET 200 https://registry.npmjs.org/utf-8-validate 151ms (cache miss)
+54 silly packumentCache full:https://registry.npmjs.org/utf-8-validate set size:undefined disposed:false
+55 silly placeDep ROOT @types/node@26.6.5 OK for: happy-dom@21.0.3 want: >=20.0.0
+56 silly placeDep ROOT @types/whatwg-mimetype@3.0.2 OK for: happy-dom@21.0.3 want: ^3.0.2
+57 silly placeDep ROOT @types/ws@8.18.2 OK for: happy-dom@21.0.3 want: ^8.18.1
+58 silly placeDep ROOT buffer-image-size@0.6.4 OK for: happy-dom@21.0.3 want: ^0.6.4
+59 silly placeDep ROOT entities@7.0.1 OK for: happy-dom@21.0.3 want: ^7.0.1
+60 silly placeDep ROOT whatwg-mimetype@3.0.0 OK for: happy-dom@21.0.3 want: ^3.0.0
+61 silly placeDep ROOT ws@8.22.0 OK for: happy-dom@21.0.3 want: ^8.21.0
+62 silly fetch manifest undici-types@~8.9.0
+63 silly packumentCache full:https://registry.npmjs.org/undici-types cache-miss
+64 http fetch GET 200 https://registry.npmjs.org/undici-types 104ms (cache miss)
+65 silly packumentCache full:https://registry.npmjs.org/undici-types set size:undefined disposed:false
+66 silly placeDep ROOT undici-types@8.9.0 OK for: @types/node@26.6.5 want: ~8.9.0
+67 silly reify moves {}
+68 http cache undici-types@https://registry.npmjs.org/undici-types/-/undici-types-8.9.0.tgz 0ms (cache hit)
+69 http cache ws@https://registry.npmjs.org/ws/-/ws-8.22.0.tgz 0ms (cache hit)
+70 http cache whatwg-mimetype@https://registry.npmjs.org/whatwg-mimetype/-/whatwg-mimetype-3.0.0.tgz 0ms (cache hit)
+71 http cache entities@https://registry.npmjs.org/entities/-/entities-7.0.1.tgz 0ms (cache hit)
+72 http cache buffer-image-size@https://registry.npmjs.org/buffer-image-size/-/buffer-image-size-0.6.4.tgz 0ms (cache hit)
+73 http cache happy-dom@https://registry.npmjs.org/happy-dom/-/happy-dom-21.0.3.tgz 0ms (cache hit)
+74 silly tarball no local data for undici-types@https://registry.npmjs.org/undici-types/-/undici-types-8.9.0.tgz. Extracting by manifest.
+75 silly tarball no local data for ws@https://registry.npmjs.org/ws/-/ws-8.22.0.tgz. Extracting by manifest.
+76 silly tarball no local data for whatwg-mimetype@https://registry.npmjs.org/whatwg-mimetype/-/whatwg-mimetype-3.0.0.tgz. Extracting by manifest.
+77 silly tarball no local data for entities@https://registry.npmjs.org/entities/-/entities-7.0.1.tgz. Extracting by manifest.
+78 silly tarball no local data for buffer-image-size@https://registry.npmjs.org/buffer-image-size/-/buffer-image-size-0.6.4.tgz. Extracting by manifest.
+79 http cache @types/ws@https://registry.npmjs.org/@types/ws/-/ws-8.18.2.tgz 0ms (cache hit)
+80 http cache @types/whatwg-mimetype@https://registry.npmjs.org/@types/whatwg-mimetype/-/whatwg-mimetype-3.0.2.tgz 0ms (cache hit)
+81 http cache @types/node@https://registry.npmjs.org/@types/node/-/node-26.6.5.tgz 0ms (cache hit)
+82 silly tarball no local data for happy-dom@https://registry.npmjs.org/happy-dom/-/happy-dom-21.0.3.tgz. Extracting by manifest.
+83 silly tarball no local data for @types/ws@https://registry.npmjs.org/@types/ws/-/ws-8.18.2.tgz. Extracting by manifest.
+84 silly tarball no local data for @types/whatwg-mimetype@https://registry.npmjs.org/@types/whatwg-mimetype/-/whatwg-mimetype-3.0.2.tgz. Extracting by manifest.
+85 silly tarball no local data for @types/node@https://registry.npmjs.org/@types/node/-/node-26.6.5.tgz. Extracting by manifest.
+86 http fetch GET 200 https://registry.npmjs.org/@types/ws/-/ws-8.18.2.tgz 152ms (cache miss)
+87 http fetch GET 200 https://registry.npmjs.org/whatwg-mimetype/-/whatwg-mimetype-3.0.0.tgz 216ms (cache miss)
+88 http fetch GET 200 https://registry.npmjs.org/@types/whatwg-mimetype/-/whatwg-mimetype-3.0.2.tgz 313ms (cache miss)
+89 http fetch GET 200 https://registry.npmjs.org/buffer-image-size/-/buffer-image-size-0.6.4.tgz 380ms (cache miss)
+90 http fetch GET 200 https://registry.npmjs.org/ws/-/ws-8.22.0.tgz 426ms (cache miss)
+91 http fetch GET 200 https://registry.npmjs.org/undici-types/-/undici-types-8.9.0.tgz 464ms (cache miss)
+92 http fetch GET 200 https://registry.npmjs.org/entities/-/entities-7.0.1.tgz 1914ms (cache miss)
+93 http fetch GET 200 https://registry.npmjs.org/@types/node/-/node-26.6.5.tgz 4679ms (cache miss)
+94 http fetch GET 200 https://registry.npmjs.org/happy-dom/-/happy-dom-21.0.3.tgz 20794ms (cache miss)
+95 silly ADD node_modules/undici-types
+96 silly ADD node_modules/ws
+97 silly ADD node_modules/whatwg-mimetype
+98 silly ADD node_modules/entities
+99 silly ADD node_modules/buffer-image-size
+100 silly ADD node_modules/@types/ws
+101 silly ADD node_modules/@types/whatwg-mimetype
+102 silly ADD node_modules/@types/node
+103 silly ADD node_modules/happy-dom
+104 verbose cwd C:\Users\Admin\Documents\FPT\project-team\HomNayNauGi
+105 verbose os Windows_NT 10.0.22621
+106 verbose node v24.15.0
+107 verbose npm  v11.12.1
+108 verbose exit 0
+109 info ok
